@@ -7,9 +7,9 @@
 [Contact](https://www.google.com)
 
 <a href="https://gum.co/VPSV">
-<img src="images/mvvmswiftui.png">
+<img src="images/mvvmswiftui.png" width=50% height=50%>
 </a>
 
 <a href="https://gum.co/QOIq">
-<img src="images/arkitforios.png">
+<img src="images/arkitforios.png" width=50% height=50%>
 </a>
