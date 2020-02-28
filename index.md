@@ -3,8 +3,11 @@
 [Home](https://azamsharp.github.io)
 [Courses](https://www.udemy.com/user/mohammad-azam-2/)
 [Books](/books)
+[Blog](https://medium.com/@azamsharp)
+[YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
 [Speaking](/speaking)
 [Contact](/contact)
+
 
 <img src="images/azam.jpg">
 
@@ -12,7 +15,7 @@ Mohammad Azam is a veteran developer who has been professionally writing softwar
 
 Azam is also an international speaker and has been professionally speaking since 2006. In his spare time Azam likes to exercise and plan his next adventure to the unknown corners of the world. 
 
-Twitter: https://twitter.com/azamsharp
 
-Udemy: https://www.udemy.com/user/mohammad-azam-2/
-
+[Twitter](https://twitter.com/azamsharp)
+[LinkedIn](https://www.linkedin.com/in/mohammad-azam-5537993/)
+[Udemy](https://www.udemy.com/user/mohammad-azam-2/)
