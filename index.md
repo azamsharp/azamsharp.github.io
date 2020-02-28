@@ -1,10 +1,10 @@
 # AzamSharp
 
-[Home](https://www.google.com)
+[Home](https://azamsharp.github.io)
 [Courses](https://www.udemy.com/user/mohammad-azam-2/)
 [Books](/books)
-[Speaking](https://www.google.com)
-[Contact](https://www.google.com)
+[Speaking](/speaking)
+[Contact](/contact)
 
 
 
