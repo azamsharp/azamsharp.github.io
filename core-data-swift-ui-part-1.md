@@ -1,13 +1,8 @@
-# Integrating Core Data with SwiftUI Part 1
+# Core Data with SwiftUI Part 1
 
-Core Data is an object graph 
-
+In this post, you will learn how to integrate Core Data with your SwiftUI application using MVVM Design Pattern. You will also learn how to decouple your views with models by creating an abstraction for Core Data.     
 
 ---
-
-### Architecture 
-
-The declarative nature of SwiftUI allows it to blend nicely with MVVM Design Pattern. 
 
 ### Getting Started 
 
@@ -112,7 +107,9 @@ class PostListViewModel: ObservableObject {
     }
     
     func fetchAllPosts() {
-        self.posts = CoreDataManager.shared.getAllPosts().map(PostViewModel.init)
+        DispatchQueue.main.async {
+             self.posts = CoreDataManager.shared.getAllPosts().map(PostViewModel.init)
+        }
     }
     
 }
@@ -202,7 +199,34 @@ Now, that we have data in the database. Next step is to display the data in the 
 
 ### Displaying Posts 
 
+The view will use the view model to fetch all the posts from the SQLite and then display them on the screen. Our view implementation is very simple as shown below: 
 
+``` swift
+struct ContentView: View {
+    
+    @ObservedObject private var postListVM = PostListViewModel()
+    
+    var body: some View {
+        
+        List(postListVM.posts, id: \.title) { post in
+            Text(post.title)
+        }
+        
+            .onAppear() {
+                self.postListVM.fetchAllPosts()
+        }
+        
+    }
+}
+```
+
+> We have used title as the id for the List. In an actual application your model should have a unique identifier. 
+
+You can download the source code from the [GitHub repository](https://github.com/azamsharp/BlogApp). 
+
+### Conclusion 
+
+In this post, we learned how to setup Core Data for a  SwiftUI app using MVVM Design Pattern. In the next post, we will cover the remaining CRUD operations, including create, update and delete. 
 
 
 
