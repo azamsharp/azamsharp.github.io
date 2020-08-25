@@ -29,6 +29,8 @@ Click on the **Add Entity** button to add an entity to the data model. Change th
 
 ![Core Data Adding Entity](images/core-data-img-2.png)
 
+> You can also configure an attribute to make sure it is not optional or has a default value. In this app title, body and isPublished are non-optional. Also, isPublished has a default value of true.  
+
 Apart from adding attributes to an entity, also make sure that your class **Codegen** option is set to **Class Definition**. This means that Xcode will automatically create a class associated with your entity. 
 
 > When you are using the code generation option then make sure that you do not modify the main implementation of the class manually. The reason is that it will be overridden on the next code generation execution. If you do want to add additional behavior to the entity class then consider writing an extension.   
@@ -94,6 +96,114 @@ Inside the **getAllPosts** function, we create an instance of **NSFetchRequest**
 Next, we need to create our View Models which will use the CoreDataManager to get the posts and then return it to the view. 
 
 ### Implementing ViewModels
+
+There are several different ways of implementing ViewModels for your application. We usually recommend one ViewModel per screen, which may or may not contain other child view models. 
+
+We will be implementing two view models. The parent view model **PostListViewModel** will represent the entire screen, responsible for displaying all the posts. PostListViewModel will also be responsible for fetching all the posts using the CoreDataManager. 
+
+``` swift
+class PostListViewModel: ObservableObject {
+    
+    @Published
+    var posts = [PostViewModel]()
+    
+    init() {
+        fetchAllPosts()
+    }
+    
+    func fetchAllPosts() {
+        self.posts = CoreDataManager.shared.getAllPosts().map(PostViewModel.init)
+    }
+    
+}
+```
+
+> You can also add constructor dependency injection to your PostListViewModel. This will help during testing and mocking the PostListViewModel. 
+
+The child view model **PostViewModel** will represent each post. PostViewModel does not contain any behavior but just represents the data to be displayed on the screen. 
+
+``` swift
+class PostViewModel {
+    
+    var post: Post
+    
+    init(post: Post) {
+        self.post = post
+    }
+    
+    var title: String {
+        self.post.title ?? ""
+    }
+    
+    var body: String {
+        self.post.body ?? ""
+    }
+    
+    var published: Bool {
+        self.post.isPublished
+    } 
+}
+```
+
+> PostViewModel will only expose the properties needed by the view. This means that the model can have dozen properties but view model only uses a handful, because it is required by the view. 
+
+### Inserting Data Using SQL
+
+In order to use SQL to add few dummy posts, we must first find out the path of the SQLite database file. Open AppDelegate.swift and print the storeDescription.url property. 
+
+``` swift
+let container = NSPersistentContainer(name: "BlogApp")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            
+            print(storeDescription.url) 
+```
+
+The storeDescription.url property is going to print the location of the physical SQLite file. 
+
+![SQLite File Path](images/cd-img-3.png)
+
+If you go to that location, you will find the BlogApp.sqlite file as shown below in the screenshot. 
+
+![BlogApp.sqlite File](images/cd-image-4.png)
+
+Once, you reach the correct location of the SQLite file, you can run ```sqlite3 BlogApp.sqlite``` to start the SQLite CLI. 
+
+Now run ```.tables``` to view all the tables in the BlogApp database. 
+
+```
+sqlite> .tables
+ZPOST Z_METADATA    Z_MODELCACHE  Z_PRIMARYKEY
+```
+
+The table called ZPOST is our table. Let's see what is inside that table. 
+
+```
+sqlite> select * from zpost;
+sqlite> 
+```
+As expected, the table is completely empty. Let's add few dummy records in the database using the SQL INSERT command. 
+
+![SQLite Insert Data](images/cd-img-5.png)
+
+You can also copy/paste the steps from the code below: 
+
+
+``` sql
+sqlite> .schema ZPOST
+CREATE TABLE ZPOST ( Z_PK INTEGER PRIMARY KEY, Z_ENT INTEGER, Z_OPT INTEGER, ZISPUBLISHED INTEGER, ZBODY VARCHAR, ZTITLE VARCHAR );
+sqlite> INSERT INTO ZPOST(ZTITLE, ZBODY) VALUES('Hello Core Data','Core Data is
+a object graph...')
+   ...> ;
+sqlite> SELECT * FROM ZPOST;
+1||||Core Data is a object graph...|Hello Core Data
+```
+
+Now, that we have data in the database. Next step is to display the data in the SwiftUI view. 
+
+### Displaying Posts 
+
+
+
 
 
 
