@@ -14,11 +14,39 @@ In this post, you will learn how to integrate Core Data with your SwiftUI applic
 
 ### Getting Started 
 
-Create a brand new **Single View Application** and make sure to select **SwiftUI** as the **User Interface** and check the **Use Core Data** checkbox. This will setup basic Core Data setup for your application.  
+Create a brand new **Single View Application** and make sure to select **SwiftUI** as the **User Interface** and check the **Use Core Data** checkbox. This will add basic Core Data setup for your application.  
 
 ![Core Data SwiftUI Template](images/core-data-1.png)
 
 If you open the **AppDelegate.swift** file you will see the setup for Core Data.  
+
+``` swift
+ let container = NSPersistentContainer(name: "BlogApp")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            
+            print(storeDescription.url)
+            
+            if let error = error as NSError? {
+               
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+
+ func saveContext () {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
+        
+```
 
 Apart from creating the persistentContainer, Xcode will also create an empty data model file. The name of the file will be based on the Xcode project. This means for our app, the data model file will be called **BlogApp.xdatamodeld**. In the next section we will add entities to our Core Data model. 
 
@@ -26,7 +54,7 @@ Apart from creating the persistentContainer, Xcode will also create an empty dat
 
 ### Adding Entities 
 
-Entities define the data persisted to the database. Entities can be standalone or it can also have relationship with other entities. Currently, we are going to only look at standalone entities. 
+Entities define the data persisted to the database. Entities can be standalone or it can also have relationship with other entities. For now, we are going to only look at a single standalone entity. 
 
 Click on the **Add Entity** button to add an entity to the data model. Change the name of entity to **Post**. In the right pane you can add attributes/properties to an entity. 
 
@@ -36,7 +64,7 @@ Click on the **Add Entity** button to add an entity to the data model. Change th
 
 Apart from adding attributes to an entity, also make sure that your class **Codegen** option is set to **Class Definition**. This means that Xcode will automatically create a class associated with your entity. 
 
-> When you are using the code generation option then make sure that you do not modify the main implementation of the class manually. The reason is that it will be overridden on the next code generation execution. If you do want to add additional behavior to the entity class then consider writing an extension.   
+> When you are using the code generation option then make sure that you do not modify the main implementation file for the entity class. The reason is that it will be overridden on the next code generation execution. If you want to add additional behavior to the entity class then consider writing an extension.   
 
 In the next section we will start implementing our CoreDataManager, which will allow us to interact with our database through managed object context. 
 
