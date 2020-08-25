@@ -1,6 +1,5 @@
-# Getting Started with SwiftUI Using MVVM Design Pattern 
+# Understanding MVVM Design Pattern
 
-SwiftUI declarative nature allows it to work well with MVVM Design Pattern. 
 
 
 ## Model: 
