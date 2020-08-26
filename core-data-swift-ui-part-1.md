@@ -1,5 +1,5 @@
 [Home](https://azamsharp.github.io)
-[Courses](https://www.udemy.com/user/mohammad-azam-2/)
+[Courses](/courses)
 [Books](/books)
 [Articles](/articles)
 [YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
@@ -18,7 +18,7 @@ Create a brand new **Single View Application** and make sure to select **SwiftUI
 
 ![Core Data SwiftUI Template](images/core-data-1.png)
 
-If you open the **AppDelegate.swift** file you will see the setup for Core Data.  
+If you open the **AppDelegate.swift** file you will see the setup for Core Data as shown below:  
 
 ``` swift
  let container = NSPersistentContainer(name: "BlogApp")
@@ -48,21 +48,21 @@ If you open the **AppDelegate.swift** file you will see the setup for Core Data.
         
 ```
 
-Apart from creating the persistentContainer, Xcode will also create an empty data model file. The name of the file will be based on the Xcode project. This means for our app, the data model file will be called **BlogApp.xdatamodeld**. In the next section we will add entities to our Core Data model. 
+Apart from creating the persistentContainer, Xcode will also create an empty data model file. The data model contains all the entities Core Data will use to persist information. The name of the file will be based on the Xcode project. This means for our app, the data model file will be called **BlogApp.xdatamodeld**. In the next section we will add entities to our Core Data model. 
 
-> Core Data stores the object graph in SQLite database by default but it can be changed to use any other persistent medium. 
+> Core Data stores the object graph in SQLite database by default, but it can be changed to use any other persistent medium. 
 
 ### Adding Entities 
 
-Entities define the data persisted to the database. Entities can be standalone or it can also have relationship with other entities. For now, we are going to only look at a single standalone entity. 
+Entities define the data persisted to the database. Entities can be standalone or it can have relationship with other entities. For now, we are going to look at a single standalone entity. 
 
 Click on the **Add Entity** button to add an entity to the data model. Change the name of entity to **Post**. In the right pane you can add attributes/properties to an entity. 
 
 ![Core Data Adding Entity](images/core-data-img-2.png)
 
-> You can also configure an attribute to make sure it is not optional or has a default value. In this app title, body and isPublished are non-optional. Also, isPublished has a default value of true.  
+> You can also configure attributes to make sure they  are not optional or have a default value. In this app title, body and isPublished attributes are non-optional. Also, isPublished has a default value of true.  
 
-Apart from adding attributes to an entity, also make sure that your class **Codegen** option is set to **Class Definition**. This means that Xcode will automatically create a class associated with your entity. 
+Apart from adding attributes to an entity you also need to make sure that your class **Codegen** option is set to **Class Definition**. This means that Xcode will automatically create a class associated with your Core Data entity. 
 
 > When you are using the code generation option then make sure that you do not modify the main implementation file for the entity class. The reason is that it will be overridden on the next code generation execution. If you want to add additional behavior to the entity class then consider writing an extension.   
 
@@ -72,9 +72,9 @@ In the next section we will start implementing our CoreDataManager, which will a
 
 The main purpose of **Core Data Manager** is to provide a layer of abstraction between the **View Model** and the **View**.
 
-> SwiftUI consists of a @FetchRequest property wrapper, which can be used directly from the view to access the database through Core Data. Unfortunately, this creates a very tight coupling between the model and view, prevents reusability and creating maintenance issues down the road. 
+> SwiftUI consists of a @FetchRequest property wrapper, which can be used directly from the view to access the database through Core Data. Unfortunately, this creates a very tight coupling between the model and the view and prevents reusability. 
 
-We will start by creating a single instance of CoreDataManager using the Singleton design pattern. CoreDataManager will have a dependency on NSManagedObjectContext, which will be injected in the initializer.  
+We will start by creating a single instance of CoreDataManager using the Singleton design pattern. CoreDataManager will have a dependency on NSManagedObjectContext, which will be injected into the initializer.  
 
 ```swift
 class CoreDataManager {

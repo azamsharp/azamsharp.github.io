@@ -1,7 +1,7 @@
 # Articles 
 
 [Home](https://azamsharp.github.io)
-[Courses](https://www.udemy.com/user/mohammad-azam-2/)
+[Courses](/courses)
 [Books](/books)
 [Articles](/articles)
 [YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
