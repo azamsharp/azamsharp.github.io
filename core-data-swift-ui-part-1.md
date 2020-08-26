@@ -235,7 +235,7 @@ Now, that we have data in the database. Next step is to display the data in the 
 
 ### Displaying Posts 
 
-The view will use the view model to fetch all the posts from the SQLite and then display them on the screen. Our view implementation is very simple as shown below: 
+The view will use the view model to fetch all the posts from the SQLite database and then display them on the screen. Our view implementation is very simple as shown below: 
 
 ``` swift
 struct ContentView: View {
