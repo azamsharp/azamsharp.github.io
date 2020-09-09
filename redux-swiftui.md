@@ -174,4 +174,5 @@ Redux is a very common pattern used extensively in web apps. It is exciting to s
 ### References
 1. [Redux](https://redux.js.org/)
 2. [Redux Flow Diagram](https://res.cloudinary.com/practicaldev/image/fetch/s--m5BdPzhS--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_66%2Cw_880/https://i.imgur.com/riadAin.gif)
+3. [SwiftUIFlux](https://github.com/Dimillian/SwiftUIFlux)
  
