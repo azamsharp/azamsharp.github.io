@@ -8,6 +8,12 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Surviving a Coding Bootcamp](surviving-coding-bootcamp) 
+
+After training 100s of developers at multiple bootcamps, I believe it is my responsibility to share my learnings on what makes an excellent student and what steps you can take to survive and thrive in an intensive software development bootcamp.
+
+---
+
 ### [Global State Management for SwiftUI Apps Using Redux (Introduction)](redux-swiftui)
 
 State management is an essential part of any SwiftUI application. SwiftUI provides several built-in ways for managing state, which includes @State, @EnvironmentObject, @Binding and @StateObject.
