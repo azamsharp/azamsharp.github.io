@@ -8,6 +8,14 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Asynchronous Requests Using SwiftUI and Redux Middlewares](async-request-redux-swift) 
+
+In the [last post](redux-swiftui), we discussed how to implement Redux design pattern in SwiftUI application. One of the most common operations in an iOS app is to perform asynchronous requests and display the result on the user interface. 
+
+In Redux architecture, middleware are used to fetch data from an API and later dispatch an action updating the store. In this post, you will learn how to implement the middleware flow in Redux. 
+
+___ 
+
 ### [Surviving a Coding Bootcamp](surviving-coding-bootcamp) 
 
 After training 100s of developers at multiple bootcamps, I believe it is my responsibility to share my learnings on what makes an excellent student and what steps you can take to survive and thrive in an intensive software development bootcamp.
