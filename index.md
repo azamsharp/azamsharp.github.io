@@ -7,6 +7,7 @@
 [YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
 [Speaking](/speaking)
 [Contact](/contact)
+[Deals](/deals)
 
 
 <img src="images/azam.jpg">
