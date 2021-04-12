@@ -10,7 +10,7 @@
 
 1) [Building Augmented Reality Apps in ARKit @ 360iDev](https://360idev.com/session-videos/?vimeography_gallery=8&vimeography_video=322048244)
 
-2) [trySwift World]https://www.tryswift.co/world/
+2) [trySwift World](https://www.tryswift.co/world/) 
 
 3) [Taming the Massive View Controllers @ AltConf](https://academy.realm.io/posts/taming-massive-controller-altconf-2017-azam/)
 
