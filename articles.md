@@ -8,6 +8,11 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Customizing Buttons in SwiftUI iOS 15](buttons-ios15.md) 
+
+Buttons are an important part of any iOS application and in iOS 15, SwiftUI introduces several different ways to implement and customize buttons views. In this article we are going to learn about all the new ways you can customize your buttons.
+
+
 ### [Asynchronous Requests Using SwiftUI and Redux Middlewares](async-request-redux-swift) 
 
 In the [last post](redux-swiftui), we discussed how to implement Redux design pattern in SwiftUI application. One of the most common operations in an iOS app is to perform asynchronous requests and display the result on the user interface. 
