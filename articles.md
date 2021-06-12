@@ -23,6 +23,12 @@ Apple introduced tons of new features in Swift and SwiftUI. This includes Async/
 At WWDC 2021, Apple unveiled tons of new SwiftUI features that will allow developers to create iOS apps even more fluently. One of the most anticipated features is the ability to display images using the Image view. In previous versions of SwiftUI, this was not possible and had to be implemented using custom code.
 In iOS 15 and Xcode 13, Apple introduced AsyncImage, which allows you to download an image using just the URL. In this article, we will look at how to use AsyncImage in our SwiftUI applications.
 
+### [Decoupling SwiftUI Views for Reusability](decouple-swiftui-views) 
+
+When designing SwiftUI applications it is extremely important to make sure that the views are decoupled and reusable. Tightly coupled views are harder to maintain, reuse and can result in future complications.
+In this post, I will demonstrate how to implement decoupled views that can be reused in SwiftUI applications.
+
+
 ### [Asynchronous Requests Using SwiftUI and Redux Middlewares](async-request-redux-swift) 
 
 In the [last post](redux-swiftui), we discussed how to implement Redux design pattern in SwiftUI application. One of the most common operations in an iOS app is to perform asynchronous requests and display the result on the user interface. 

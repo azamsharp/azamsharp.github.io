@@ -106,4 +106,6 @@ If you liked this article and want to support my work then check out my Udemy co
 
 **If you liked my article and want to support my work then consider checking out my courses on Udemy. I have many courses on iOS development, including SwiftUI, GraphQL, Vapor, Test Driven Development, MVVM and much much more.**
 
-[Check out my Udemy courses](https://www.udemy.com/user/mohammad-azam-2/)
+<a href = "http://www.azamsharp.com/courses">
+<img src="images/banner.png"> 
+</a>
