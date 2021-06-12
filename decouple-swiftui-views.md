@@ -209,8 +209,10 @@ Enjoy coding!
 - [Video - Decoupling SwiftUI Views for Reusability](https://youtu.be/JTSIb_atM1A)
 
 
+<center>
 <a href = "http://www.azamsharp.com/courses">
 <img src="images/banner.png"> 
 </a>
+</center>
 
 

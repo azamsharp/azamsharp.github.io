@@ -8,8 +8,6 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-
-
 ### [Customizing Buttons in SwiftUI iOS 15](buttons-ios15.md) 
 
 Buttons are an important part of any iOS application and in iOS 15, SwiftUI introduces several different ways to implement and customize buttons views. In this article we are going to learn about all the new ways you can customize your buttons.

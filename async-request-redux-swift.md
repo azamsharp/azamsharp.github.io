@@ -243,6 +243,8 @@ You can download the complete project from GitHub using the link below:
 
 In this post, you learned how to use middleware to perform asynchronous request and then update the global store with data. 
 
+<center>
 <a href = "http://www.azamsharp.com/courses">
 <img src="images/banner.png"> 
 </a>
+</center>
