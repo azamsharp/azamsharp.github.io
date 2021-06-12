@@ -8,15 +8,20 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [Understanding AsyncImage in SwiftUI](async-image.md) 
 
-At WWDC 2021, Apple unveiled tons of new SwiftUI features that will allow developers to create iOS apps even more fluently. One of the most anticipated features is the ability to display images using the Image view. In previous versions of SwiftUI, this was not possible and had to be implemented using custom code.
-In iOS 15 and Xcode 13, Apple introduced AsyncImage, which allows you to download an image using just the URL. In this article, we will look at how to use AsyncImage in our SwiftUI applications.
 
 ### [Customizing Buttons in SwiftUI iOS 15](buttons-ios15.md) 
 
 Buttons are an important part of any iOS application and in iOS 15, SwiftUI introduces several different ways to implement and customize buttons views. In this article we are going to learn about all the new ways you can customize your buttons.
 
+### [Stocks App Using Async/Await, Pull To Refresh and Continuation in SwiftUI for iOS 15](stocks-app.md) 
+
+Apple introduced tons of new features in Swift and SwiftUI. This includes Async/Await, Pull to Refresh, Continuation, Text Formatters etc. In this article, we are going to combine all the features together and build a stocks application.
+
+### [Understanding AsyncImage in SwiftUI](async-image.md) 
+
+At WWDC 2021, Apple unveiled tons of new SwiftUI features that will allow developers to create iOS apps even more fluently. One of the most anticipated features is the ability to display images using the Image view. In previous versions of SwiftUI, this was not possible and had to be implemented using custom code.
+In iOS 15 and Xcode 13, Apple introduced AsyncImage, which allows you to download an image using just the URL. In this article, we will look at how to use AsyncImage in our SwiftUI applications.
 
 ### [Asynchronous Requests Using SwiftUI and Redux Middlewares](async-request-redux-swift) 
 
