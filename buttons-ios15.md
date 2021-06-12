@@ -207,8 +207,10 @@ Items in the control group as aligned very close to each other, since they tight
 As you can see there are lot of changes in iOS 15 that makes working with buttons easier and more intuitive. I hope you are really excited about these changes and it will help your future projects.
 
 
+<center>
 <a href = "http://www.azamsharp.com/courses">
 <img src="images/banner.png"> 
 </a>
+</center>
 
  

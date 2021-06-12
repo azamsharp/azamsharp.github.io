@@ -264,9 +264,11 @@ You can download the source code from the [GitHub repository](https://github.com
 
 In this post, we learned how to setup Core Data for a  SwiftUI app using MVVM Design Pattern. In the next post, we will cover the remaining CRUD operations, including create, update and delete. 
 
+<center>
 <a href = "http://www.azamsharp.com/courses">
 <img src="images/banner.png"> 
 </a>
+</center>
 
 
 
