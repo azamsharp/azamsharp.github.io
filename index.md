@@ -1,5 +1,9 @@
 # AzamSharp
 
+<head>
+<link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="/feed.xml">
+</head>
+
 [Home](https://azamsharp.github.io)
 [Courses](/courses)
 [Books](/books)
