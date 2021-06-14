@@ -1,0 +1,5 @@
+plugins:
+  - jekyll-feed
+title: AzamSharp 
+description: Blog about iOS development and musings on technology
+author: Mohammad Azam
