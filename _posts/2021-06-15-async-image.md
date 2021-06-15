@@ -175,6 +175,6 @@ AsyncImage is a welcome feature in SwiftUI that reduces the amount of custom cod
 
 <center>
 <a href = "http://www.azamsharp.com/courses">
-<img src="images/banner.png"> 
+<img src="https://raw.githubusercontent.com/azamsharp/azamsharp.github.io/master/_posts/images/banner.png"> 
 </a>
 </center>
