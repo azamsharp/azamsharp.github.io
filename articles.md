@@ -8,13 +8,13 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [Beginning Async/Await in iOS 15 and Swift 5.5 ](_posts/2021-06-16-async-await.md)
+### [Beginning Async/Await in iOS 15 and Swift 5.5 ](_posts/2021-06-16-Beginning-Async-Await-in-iOS-15-and-Swift-5.5.md)
 
 Asynchronous programming is a common requirement of any iOS application. The ability to perform task on a separate thread and not disturbing or blocking the user interface is always considered a good practice. In iOS 15 and Swift 5.5 Apple introduced async/await feature, which allows developers to easily implement asynchronous tasks with increased clarity and less lines of code. 
 
 In this article, we are going to take a look at how you can use async/await, continuation and actors in your iOS application. 
 
-### [Customizing Buttons in SwiftUI iOS 15](_posts/2021-06-15-buttons-ios15.md) 
+### [Customizing Buttons in SwiftUI iOS 15](_posts/2021-06-15-Customizing-Buttons-in-SwiftUI.md) 
 
 Buttons are an important part of any iOS application and in iOS 15, SwiftUI introduces several different ways to implement and customize buttons views. In this article we are going to learn about all the new ways you can customize your buttons.
 
@@ -22,12 +22,12 @@ Buttons are an important part of any iOS application and in iOS 15, SwiftUI intr
 
 Apple introduced tons of new features in Swift and SwiftUI. This includes Async/Await, Pull to Refresh, Continuation, Text Formatters etc. In this article, we are going to combine all the features together and build a stocks application.
 
-### [Understanding AsyncImage in SwiftUI](_posts/2021-06-15-async-image.md) 
+### [Understanding AsyncImage in SwiftUI](_posts/2021-06-15-Understanding-AsyncImage-in-SwiftUI.md) 
 
 At WWDC 2021, Apple unveiled tons of new SwiftUI features that will allow developers to create iOS apps even more fluently. One of the most anticipated features is the ability to display images using the Image view. In previous versions of SwiftUI, this was not possible and had to be implemented using custom code.
 In iOS 15 and Xcode 13, Apple introduced AsyncImage, which allows you to download an image using just the URL. In this article, we will look at how to use AsyncImage in our SwiftUI applications.
 
-### [Decoupling SwiftUI Views for Reusability](_posts/2021-06-15-decouple-swiftui-views) 
+### [Decoupling SwiftUI Views for Reusability](_posts/2021-06-15-Decouple-SwiftUI-Views-for-Reusability) 
 
 When designing SwiftUI applications it is extremely important to make sure that the views are decoupled and reusable. Tightly coupled views are harder to maintain, reuse and can result in future complications.
 In this post, I will demonstrate how to implement decoupled views that can be reused in SwiftUI applications.
