@@ -9,9 +9,9 @@
 [Contact](/contact)
 
 <a href="https://gum.co/VPSV">
-<img src="_posts/images/mvvmswiftui.png" width="50%" height="50%">
+<img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/mvvmswiftui.png?raw=true" width="50%" height="50%">
 </a>
 
 <a href="https://gum.co/QOIq">
-<img src="_posts/images/arkitforios.png" width="50%" height="50%">
+<img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/arkitforios.png?raw=true" width="50%" height="50%">
 </a>
