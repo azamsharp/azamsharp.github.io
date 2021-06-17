@@ -16,7 +16,7 @@ In this post, you will learn how to integrate Core Data with your SwiftUI applic
 
 Create a brand new **Single View Application** and make sure to select **SwiftUI** as the **User Interface** and check the **Use Core Data** checkbox. This will add basic Core Data setup for your application.  
 
-![Core Data SwiftUI Template](images/core-data-1.png)
+![Core Data SwiftUI Template](/images/core-data-1.png)
 
 If you open the **AppDelegate.swift** file you will see the setup for Core Data as shown below:  
 
@@ -193,11 +193,11 @@ let container = NSPersistentContainer(name: "BlogApp")
 
 The storeDescription.url property is going to print the location of the physical SQLite file. 
 
-![SQLite File Path](images/cd-img-3.png)
+![SQLite File Path](/images/cd-img-3.png)
 
 If you go to that location, you will find the BlogApp.sqlite file as shown below in the screenshot. 
 
-![BlogApp.sqlite File](images/cd-image-4.png)
+![BlogApp.sqlite File](/images/cd-image-4.png)
 
 Once, you reach the correct location of the SQLite file, you can run ```sqlite3 BlogApp.sqlite``` to start the SQLite CLI. 
 
@@ -216,7 +216,7 @@ sqlite>
 ```
 As expected, the table is completely empty. Let's add few dummy records in the database using the SQL INSERT command. 
 
-![SQLite Insert Data](images/cd-img-5.png)
+![SQLite Insert Data](/images/cd-img-5.png)
 
 You can also copy/paste the steps from the code below: 
 

@@ -22,7 +22,7 @@ struct LearnAsyncImage: View {
 
 The result is shown below: 
 
-![Async Image 1](images/async-image-1.png)
+![Async Image 1](/images/async-image-1.png)
 
 Pretty simple, right?
 
@@ -165,7 +165,7 @@ The new task modifier allows us to execute the code when the view appears and th
 The result is shown below:
 
 
-![Async Image 1](images/async-image-3.gif)
+![Async Image 1](/images/async-image-3.gif)
 
 # Conclusion 
 

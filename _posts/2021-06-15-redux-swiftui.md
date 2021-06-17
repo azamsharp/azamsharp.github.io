@@ -23,7 +23,7 @@ There are other concepts including Action Types, Action Creators and Middleware,
 
 Here is the basic Redux Flow Diagram to show different components in action. 
 
-![Redux Flow Diagram](images/redux-flow.gif)
+![Redux Flow Diagram](/images/redux-flow.gif)
 
 ### Setting Up Store
 

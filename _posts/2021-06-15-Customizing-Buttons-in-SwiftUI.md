@@ -34,7 +34,7 @@ Button {
 
 The result is shown below:
 
-![Button Image](images/button-ios-15-2.png)
+![Button Image](/images/button-ios-15-2.png)
 
 The new **.bordered** buttonStyle automatically makes the button with rounded corners automatically. If we had to add some background color then we can use the **.tint** modifier along with the **.controlProminence** modifier as shown below:
 
@@ -53,7 +53,7 @@ Button {
 
 The result is shown below:
 
-![Button Image](images/button-ios-15-1.png)
+![Button Image](/images/button-ios-15-1.png)
 
 By setting the value of controlProminence to .increased we are conveying that this button is important and represents the primary action button on the current view.
 
@@ -82,7 +82,7 @@ One of the really powerful thing about **.buttonStyle** modifier is that you can
 
 The **.buttonStyle** modifier is applied to all the buttons inside the List view. All the buttons share the common style with only few lines of code. The result is shown below:
 
-![Button Image](images/button-ios-15-3.png)
+![Button Image](/images/button-ios-15-3.png)
 
 Pretty neat right!
 
@@ -126,7 +126,7 @@ Button(role: .destructive) {
 
 The button will be displayed as shown below:
 
-![Button Image](images/button-ios-15-4.png)
+![Button Image](/images/button-ios-15-4.png)
 
 ### Confirmation Dialogs 
 
@@ -171,7 +171,7 @@ Toggle view is also gaining a new style called .button. This allows you to use t
 
 The result is shown below:
 
-![Button Image](images/button-ios-15-6.gif)
+![Button Image](/images/button-ios-15-6.gif)
 
 ### Control Group 
 
@@ -200,7 +200,7 @@ iOS 15 also introduces Control Group view which is used to keep related controls
 
 Items in the control group as aligned very close to each other, since they tightly represents a particular segment of the application.
 
-![Button Image](images/button-ios-15-7.png)
+![Button Image](/images/button-ios-15-7.png)
 
 ### Conclusion 
 

@@ -37,7 +37,7 @@ NavigationView {
 
 Inside the List view, we used a NavigationLink which consists of the destination and the label. The label is used to display the view for the NavigationLink. The result is shown below:
 
-![Reusable SwiftUI Views](images/decouple-swiftui-views-1.gif)
+![Reusable SwiftUI Views](/images/decouple-swiftui-views-1.gif)
 
 The code works as expected but it is not reusable. If we want to display a list of customers in other parts of the application then we will have to copy/paste the code in several places. Not only copying and pasting is considered a bad practice but it has future implications. This means if you plan to update the code for displaying a list, then you will have to update it on multiple places.
 
@@ -166,7 +166,7 @@ struct ContentView: View {
 
 The output is shown below:
 
-![Reusable SwiftUI Views](images/reusable-swiftui-views-2.png)
+![Reusable SwiftUI Views](/images/reusable-swiftui-views-2.png)
 
 The final part is to add navigation when the customer is selected. The caller (ContentView) can decide where to go after the value is selected. This is shown in the implementation below:
 

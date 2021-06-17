@@ -98,7 +98,7 @@ struct ContentView: View {
 
 The result is shown below:
 
-![Stocks App](images/stocks-app-1.gif)
+![Stocks App](/images/stocks-app-1.gif)
 
 Happy coding!
 
