@@ -21,7 +21,7 @@ In the previous version of iOS, if we had to create a nice looking large rounded
 
 The result is shown below:
 
-![Button Image](/_posts/images/button-ios-15-1.png)
+![Button Image](/images/button-ios-15-1.png)
 
 In iOS 15, if we have to write the same button then we can implement it using the following code:
 
