@@ -48,3 +48,9 @@ User Groups is an excellent way to meet people and make connections. Even if you
 The habit that you have formed during the course of a bootcamp will play a vital role in structuring your life. Make sure you practice every single day. Learn something new every day. Read books and blogs and absorb as much knowledge as you can.
 
 I have been developing applications for over a decade but I still wake up excited every morning, eager to learn something new. I hope that you stay curious and passionate throughout this never ending journey.
+
+<center>
+<a href = "http://www.azamsharp.com/courses">
+<img src="https://raw.githubusercontent.com/azamsharp/azamsharp.github.io/master/_posts/images/banner.png"> 
+</a>
+</center>

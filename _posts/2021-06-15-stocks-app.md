@@ -108,6 +108,6 @@ If you liked this article and want to support my work then check out my Udemy co
 
 <center>
 <a href = "http://www.azamsharp.com/courses">
-<img src="images/banner.png"> 
+<img src="https://raw.githubusercontent.com/azamsharp/azamsharp.github.io/master/_posts/images/banner.png"> 
 </a>
 </center>

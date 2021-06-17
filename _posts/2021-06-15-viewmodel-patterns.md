@@ -93,6 +93,6 @@ I believe that the declarative frameworks like SwiftUI, Flutter and React can ta
 
 <center>
 <a href = "http://www.azamsharp.com/courses">
-<img src="images/banner.png"> 
+<img src="https://raw.githubusercontent.com/azamsharp/azamsharp.github.io/master/_posts/images/banner.png"> 
 </a>
 </center>

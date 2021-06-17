@@ -21,7 +21,7 @@ In the previous version of iOS, if we had to create a nice looking large rounded
 
 The result is shown below:
 
-![Button Image](images/button-ios-15-1.png)
+![Button Image](/_posts/images/button-ios-15-1.png)
 
 In iOS 15, if we have to write the same button then we can implement it using the following code:
 
@@ -209,7 +209,7 @@ As you can see there are lot of changes in iOS 15 that makes working with button
 
 <center>
 <a href = "http://www.azamsharp.com/courses">
-<img src="images/banner.png"> 
+<img src="https://raw.githubusercontent.com/azamsharp/azamsharp.github.io/master/_posts/images/banner.png"> 
 </a>
 </center>
 
