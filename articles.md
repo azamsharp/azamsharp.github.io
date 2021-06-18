@@ -8,7 +8,7 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [Data Modeling Using Enums](_posts/2021-06-17-Data-Modeling-Using-Enums)
+### [Data Modeling Using Enums](_posts/2021-06-17-Data-Modeling-Using-Enums.md)
 Application domain objects are the building blocks of any system. The domain represents the entities and the connections betweens entities of the app. The domain is also used to map the real world into our system. 
 
 There are many ways of implementing domain objects. In this article we will learn how to model objects using Swift enum type. 
