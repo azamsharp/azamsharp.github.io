@@ -8,6 +8,12 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Data Modeling Using Enums](_posts/2021-06-17-Data-Modeling-Using-Enums)
+Application domain objects are the building blocks of any system. The domain represents the entities and the connections betweens entities of the app. The domain is also used to map the real world into our system. 
+
+There are many ways of implementing domain objects. In this article we will learn how to model objects using Swift enum type. 
+
+
 ### [Beginning Async/Await in iOS 15 and Swift 5.5 ](_posts/2021-06-16-Beginning-Async-Await-in-iOS-15-and-Swift-5.5.md)
 
 Asynchronous programming is a common requirement of any iOS application. The ability to perform task on a separate thread and not disturbing or blocking the user interface is always considered a good practice. In iOS 15 and Swift 5.5 Apple introduced async/await feature, which allows developers to easily implement asynchronous tasks with increased clarity and less lines of code. 
