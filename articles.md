@@ -8,6 +8,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Lazy Properties in Swift](_posts/2021-06-21-lazy.md)
+Swift language allows you to create several different types of properties, including computed, property observers and even lazy properties. In this article, we will learn how lazy properties can provide performance benefits for time consuming calculations. 
+
 ### [Data Modeling Using Enums](_posts/2021-06-17-Data-Modeling-Using-Enums.md)
 Application domain objects are the building blocks of any system. The domain represents the entities and the connections betweens entities of the app. The domain is also used to map the real world into our system. 
 
