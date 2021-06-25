@@ -8,7 +8,7 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [Understanding Task Modifier in Swift ](2021-06-25-Understanding-Task-Modifier-in-Swift.md)
+### [Understanding Task Modifier in Swift ](_posts/2021-06-25-Understanding-Task-Modifier-in-Swift.md)
 As a developer who has worked in React, Flutter and SwiftUI, it is always nice to see that how many SwiftUI features are inspired from existing platforms. All three major platforms (React, Flutter and SwiftUI) have adopted a declarative approach for building user interfaces. This means you can easily transfer your knowledge between React, Flutter and SwiftUI. 
 
 In iOS 15 a new task modifier has been introduced, which can be used to perform an operation when the view appears and cancelled when the view disappears. In this post, I will talk about the new task modifier and how it can be used to handle dependencies. 
