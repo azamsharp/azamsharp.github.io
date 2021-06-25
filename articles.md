@@ -8,6 +8,12 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Understanding Task Modifier in Swift ](2021-06-25-Understanding-Task-Modifier-in-Swift.md)
+As a developer who has worked in React, Flutter and SwiftUI, it is always nice to see that how many SwiftUI features are inspired from existing platforms. All three major platforms (React, Flutter and SwiftUI) have adopted a declarative approach for building user interfaces. This means you can easily transfer your knowledge between React, Flutter and SwiftUI. 
+
+In iOS 15 a new task modifier has been introduced, which can be used to perform an operation when the view appears and cancelled when the view disappears. In this post, I will talk about the new task modifier and how it can be used to handle dependencies. 
+
+
 ### [Lazy Properties in Swift](_posts/2021-06-21-lazy.md)
 Swift language allows you to create several different types of properties, including computed, property observers and even lazy properties. In this article, we will learn how lazy properties can provide performance benefits for time consuming calculations. 
 
@@ -36,13 +42,13 @@ Apple introduced tons of new features in Swift and SwiftUI. This includes Async/
 At WWDC 2021, Apple unveiled tons of new SwiftUI features that will allow developers to create iOS apps even more fluently. One of the most anticipated features is the ability to display images using the Image view. In previous versions of SwiftUI, this was not possible and had to be implemented using custom code.
 In iOS 15 and Xcode 13, Apple introduced AsyncImage, which allows you to download an image using just the URL. In this article, we will look at how to use AsyncImage in our SwiftUI applications.
 
-### [Decoupling SwiftUI Views for Reusability](_posts/2021-06-15-Decouple-SwiftUI-Views-for-Reusability) 
+### [Decoupling SwiftUI Views for Reusability](_posts/2021-06-15-Decouple-SwiftUI-Views-for-Reusability.md) 
 
 When designing SwiftUI applications it is extremely important to make sure that the views are decoupled and reusable. Tightly coupled views are harder to maintain, reuse and can result in future complications.
 In this post, I will demonstrate how to implement decoupled views that can be reused in SwiftUI applications.
 
 
-### [Asynchronous Requests Using SwiftUI and Redux Middlewares](_posts/2021-06-15-async-request-redux-swift) 
+### [Asynchronous Requests Using SwiftUI and Redux Middlewares](_posts/2021-06-15-async-request-redux-swift.md) 
 
 In the [last post](redux-swiftui), we discussed how to implement Redux design pattern in SwiftUI application. One of the most common operations in an iOS app is to perform asynchronous requests and display the result on the user interface. 
 
@@ -50,7 +56,7 @@ In Redux architecture, middleware are used to fetch data from an API and later d
 
 ___ 
 
-### [Surviving a Coding Bootcamp](_posts/2021-06-15-surviving-coding-bootcamp) 
+### [Surviving a Coding Bootcamp](_posts/2021-06-15-Surviving-the-Coding-Bootcamp.md) 
 
 After training 100s of developers at multiple bootcamps, I believe it is my responsibility to share my learnings on what makes an excellent student and what steps you can take to survive and thrive in an intensive software development bootcamp.
 
