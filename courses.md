@@ -12,6 +12,10 @@ If you want to support my work then please consider buying one of my courses bel
 
 [Patreon](https://www.patreon.com/azamsharp)
 
+[React for Absolute Beginners](https://www.udemy.com/course/react-for-the-absolute-beginner-reactjs-app-fundamentals/?referralCode=F498F5C907D004D3B16C)
+
+[Swift for Intermediate and Advanced Developers](https://www.udemy.com/course/swift-for-intermediate-and-advanced-ios-developers/?referralCode=2F0103424A4D82742C72)
+
 [GraphQL with iOS and SwiftUI: The Complete Developers Guide](https://www.udemy.com/course/graphql-in-ios-using-swift/?referralCode=9A2C826D12F2E863275E)
 
 [Passive Income for Developers](https://www.udemy.com/course/passive-income-for-developers/?referralCode=C970A66370FC096B0974)
