@@ -62,7 +62,7 @@ After training 100s of developers at multiple bootcamps, I believe it is my resp
 
 ---
 
-### [Global State Management for SwiftUI Apps Using Redux (Introduction)](_posts/2021-06-15-redux-swiftui)
+### [Global State Management for SwiftUI Apps Using Redux (Introduction)](_posts/2021-06-15-redux-swiftui.md)
 
 State management is an essential part of any SwiftUI application. SwiftUI provides several built-in ways for managing state, which includes @State, @EnvironmentObject, @Binding and @StateObject.
 
@@ -71,12 +71,12 @@ State management is an essential part of any SwiftUI application. SwiftUI provid
 ___
 
 
-### [ViewModel Patterns](_posts/2021-06-15-viewmodel-patterns)
+### [ViewModel Patterns](_posts/2021-06-15-viewmodel-patterns.md)
 MVVM Design Pattern allows us to write clean, modular apps where each screen can be controlled by one parent ViewModel. In this post, I will go over several common ViewModel patterns when implementing apps using MVVM pattern. 
 
 ---
 
-### [Core Data with SwiftUI Part 1](_posts/2021-06-15-core-data-swift-ui-part-1)
+### [Core Data with SwiftUI Part 1](_posts/2021-06-15-core-data-swift-ui-part-1.md)
 
 In this post, you will learn how to integrate Core Data with your SwiftUI application using MVVM Design Pattern. You will also learn how to decouple your views with models by creating an abstraction for Core Data. 
 
