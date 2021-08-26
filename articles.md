@@ -8,6 +8,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Introduction to Microservices](_posts/2021-08-26-intro-microservices.md)
+Microservices allow you to break down your application into smaller pieces. Each piece, known as a microservice is responsible for handling a particular aspect of your application. In this article, you are going to learn about the concepts of microservices.  
+
 ### [Understanding Task Modifier in Swift ](_posts/2021-06-25-Understanding-Task-Modifier-in-Swift.md)
 As a developer who has worked in React, Flutter and SwiftUI, it is always nice to see that how many SwiftUI features are inspired from existing platforms. All three major platforms (React, Flutter and SwiftUI) have adopted a declarative approach for building user interfaces. This means you can easily transfer your knowledge between React, Flutter and SwiftUI. 
 
