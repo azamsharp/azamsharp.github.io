@@ -8,6 +8,11 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Building a Rating View in SwiftUI](_posts/2021-08-27-building-swiftui-rating-view.md)
+In this post, you will learn how to build a Rating view in SwiftUI. Rating view will allow you to select a star rating and get access to the integer value of the rating. 
+
+
+
 ### [Loading UIKit View into SwiftUI App](_posts/2021-08-26-activity-view-swiftui.md)
 
 In this post, you will learn how to load a UIKit view into SwiftUI application. Consider a scenario that you want to display a loading indicator in a SwiftUI app. UIKit has an `UIActivityIndicatorView` control that can be used to display loading indicators. Let's see how we can load the `UIActivityIndicatorView` in a SwiftUI application. 
