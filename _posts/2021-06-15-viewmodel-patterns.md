@@ -6,7 +6,9 @@ MVVM Design Pattern allows us to write clean, modular apps where each screen can
 
 The Screen ViewModel represents an entire screen of the app. It can also consists of child ViewModels, which may represent separate parts of the screen. Here is an illustration of sample usage for Screen ViewModel pattern.    
 
-<img src="images/screen-view-model.png" width="350">
+
+![Microservices](/images/screen-view-model.png)
+
 
 ``` swift
 class TaskListViewModel: ObservableObject {
@@ -19,7 +21,8 @@ class TaskListViewModel: ObservableObject {
 
 The ReadOnly ViewModel pattern is used to provide the View with read only information. The information is usually extracted from a model object and then exposed to the view as ViewModel properties. The main purpose ReadOnly ViewModel is to format the information, which matches the View requirements. 
 
-<img src="images/readonly-vm.png" width="350">
+![Microservices](/images/readonly-vm.png)
+
 
 
 In the illustration above we are using Screen ViewModel, as well as ReadOnly child ViewModel. The purpose of TripViewModel (ReadOnly) is to extract the information from the model and present it on the view. TripViewModel controls the data presented for each trip, while TripListViewModel controls everything that happens on the screen and may also contain behaviors. 
@@ -53,7 +56,8 @@ class TaskListViewModel: ObservableObject {
 
 The ViewState ViewModel is responsible for collecting information from the View and populating the ViewModel. 
 
-<img src="images/viewstate-vm.png" width="350">
+
+![Microservices](/images/viewstate-vm.png)
 
 After populating the ViewState ViewModel, it can be used by Screen ViewModel to transfer the data to the Model and then eventually to the persistence layer. 
 
