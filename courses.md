@@ -12,6 +12,12 @@ If you want to support my work then please consider buying one of my courses bel
 
 [Patreon](https://www.patreon.com/azamsharp)
 
+[Test Driven Development in iOS Using Swift](https://www.udemy.com/course/test-driven-development-in-ios-using-swift/?referralCode=07649C41E6E184CE86B3)
+
+[SwiftUI Cookbook - Over 100 Recipes for Building iOS Apps](https://www.udemy.com/course/swiftui-cookbook-over-100-recipes-for-building-ios-apps/?referralCode=06ADC26414C593DE91B4)
+
+[Async/Await and Actors - Concurrency in Swift](https://www.udemy.com/course/asyncawait-and-actors-concurrency-in-swift/?referralCode=BE09E803E9E7CBF7F368)
+
 [React for Absolute Beginners](https://www.udemy.com/course/react-for-the-absolute-beginner-reactjs-app-fundamentals/?referralCode=F498F5C907D004D3B16C)
 
 [Swift for Intermediate and Advanced Developers](https://www.udemy.com/course/swift-for-intermediate-and-advanced-ios-developers/?referralCode=2F0103424A4D82742C72)
