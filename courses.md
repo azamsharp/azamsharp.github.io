@@ -40,6 +40,9 @@ If you want to support my work then please consider buying one of my courses bel
 
 [The Complete Hands-On SwiftUI Apps Using Firebase](https://www.udemy.com/course/the-complete-hands-on-swiftui-apps-using-firebase/?referralCode=688190DEB57CD2E86A8F)
 
+[Blockchain Programming Using JavaScript](https://www.udemy.com/course/blockchain-programming-using-javascript/?referralCode=983CDE7536B9E6108B97)
+
+[Blockchain Programming Using Swift](https://www.udemy.com/course/blockchain-programming-in-ios-using-swift/?referralCode=1815A8641328DBA300BF)
 
 [MVVM Design Pattern in SwiftUI](https://www.udemy.com/course/mvvm-design-pattern-in-swiftui/?referralCode=DBCF3B88D25104DA4FB2)
 
