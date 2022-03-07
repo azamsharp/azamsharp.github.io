@@ -12,6 +12,8 @@ If you want to support my work then please consider buying one of my courses bel
 
 [Patreon](https://www.patreon.com/azamsharp)
 
+[Programming macOS Using SwiftUI - Project Based Learning](https://www.udemy.com/course/programming-macos-using-swiftui-project-based-learning/?referralCode=341C56D773F7C838A545)
+
 [Test Driven Development in iOS Using Swift](https://www.udemy.com/course/test-driven-development-in-ios-using-swift/?referralCode=07649C41E6E184CE86B3)
 
 [SwiftUI Cookbook - Over 100 Recipes for Building iOS Apps](https://www.udemy.com/course/swiftui-cookbook-over-100-recipes-for-building-ios-apps/?referralCode=06ADC26414C593DE91B4)
