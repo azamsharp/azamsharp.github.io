@@ -6,11 +6,13 @@
 
 [Home](https://azamsharp.github.io)
 [Courses](courses)
+[Deals](deals)
 [Books](books)
 [Articles](articles)
 [YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
 [Speaking](speaking)
 [Contact](contact)
+
 
 
 
