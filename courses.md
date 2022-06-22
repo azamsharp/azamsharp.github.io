@@ -12,6 +12,10 @@ If you want to support my work then please consider buying one of my courses bel
 
 [Patreon](https://www.patreon.com/azamsharp)
 
+[Building Augmented Reality Apps Using RealityKit](https://www.udemy.com/course/building-augmented-reality-apps-in-realitykit-arkit/?referralCode=BB7A8EC8AEA928AAD34F)
+
+[Introduction to Server Driven UI in iOS](https://www.udemy.com/course/introduction-to-server-driven-ui-in-ios-swift-swiftui/?referralCode=2F57B10C28B68D440B89)
+
 [Programming macOS Using SwiftUI - Project Based Learning](https://www.udemy.com/course/programming-macos-using-swiftui-project-based-learning/?referralCode=341C56D773F7C838A545)
 
 [Test Driven Development in iOS Using Swift](https://www.udemy.com/course/test-driven-development-in-ios-using-swift/?referralCode=07649C41E6E184CE86B3)
