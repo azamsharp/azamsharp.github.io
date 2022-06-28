@@ -12,6 +12,14 @@
 <img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/uikit-recipes.png?raw=true" width="50%" height="50%">
 </a>
 
+<a href="https://azamsharp.gumroad.com/l/navigation-api-swiftui">
+<img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/navigation-api.png?raw=true" width="50%" height="50%">
+</a>
+
+<a href="https://azamsharp.gumroad.com/l/surviving-the-coding-bootcamp">
+<img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/surviving-coding-bootcamp.png?raw=true" width="50%" height="50%">
+</a>
+
 <a href="https://gum.co/VPSV">
 <img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/mvvmswiftui.png?raw=true" width="50%" height="50%">
 </a>
