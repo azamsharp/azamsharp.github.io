@@ -402,6 +402,8 @@ struct AuthView: View {
 
 The good thing about the above approach is that the view will only get re-rendered if the slice of the state they are interested in changes. This means updating the counter will not render AuthView again and toggling the authentication states will not re-render the GrandChildView. 
 
+I also created a YouTube video on managing @EnvironmentObject using slices. You can watch it [here](https://youtu.be/hYtYy6tXurs). 
+
 [Source Code](https://gist.github.com/azamsharp/6b02a5ee5247979cf24efadadbfb8692)
 
 ## Conclusion
