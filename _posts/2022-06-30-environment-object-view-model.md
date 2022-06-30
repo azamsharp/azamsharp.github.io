@@ -406,7 +406,7 @@ The good thing about the above approach is that the view will only get re-render
 
 ## Conclusion
 
-@EnvironmentObject is a great for sharing global state in your app but it does comes with a cost. Maybe in the future, we will be able to access @EnvironmentObject from right within our view models. This will allow us to cut down on passing state as a dependency injection. 
+```@EnvironmentObject``` is a great for sharing global state in your app but it does comes with a cost. Maybe in the future, we will be able to access ```@EnvironmentObject``` from right within our view models. This will allow us to cut down on passing state as a dependency injection. 
 
 Happy coding! 
 
