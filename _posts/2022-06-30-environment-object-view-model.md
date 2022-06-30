@@ -292,7 +292,7 @@ This does allows our GrandChildView to easily access the global state but it doe
 
 ## Slicing the Global State 
 
-Another problem is that each view that is dependent on the @EnvironmentObject AppState will render again when any value in the global state changes. This is expected but sometimes the view does not care about a particular global state value. Let's take a look at a simple example. We have updated our AppState to include a ```isAuthenticated``` boolean flag as shown below: 
+Another problem, which is unrelated to the earlier problem we discussed is that each view that is dependent on the @EnvironmentObject AppState will render again when any value in the global state changes. This is expected but sometimes the view does not care about a particular global state value. Let's take a look at a simple example. We have updated our AppState to include a ```isAuthenticated``` boolean flag as shown below: 
 
 ```swift 
 class AppState: ObservableObject {
