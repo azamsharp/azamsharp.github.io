@@ -8,8 +8,8 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [@EnvironmentObject in Views May Not be a Good Idea](_posts/2022-06-30-environment-object-view-model.md)
-In SwiftUI, ```@EnvironmentObject``` allows you to create global state that can be shared and manipulated from any view in your application. The problem with this approach is that we end up with views tightly coupled with the @EnvironmentObject, making them harder to reuse in other parts of the app. In this post, I will discuss few ways to move the EnvironmentObject into the view models, allowing views to be loosely coupled for reusability. 
+### [@EnvironmentObject in Views May Not be a Good Idea But Avoiding Them is Probably Much Worse ](_posts/2022-06-30-environment-object-view-model.md)
+In SwiftUI, ```@EnvironmentObject``` allows you to create global state that can be shared and manipulated from any view in your application. We tend to put @EnvironmentObject in our views and directly access the global state. This creates a tight coupling between the view and the ```@EnvironmentObject```, but avoiding this approach opens up a whole new cans of worms. In this article, I will discuss how @EnvironmentObject can be used in a SwiftUI view and how avoiding it can create dependency nightmare. 
 
 ### [Building a Rating View in SwiftUI](_posts/2021-08-27-building-swiftui-rating-view.md)
 In this post, you will learn how to build a Rating view in SwiftUI. Rating view will allow you to select a star rating and get access to the integer value of the rating.
