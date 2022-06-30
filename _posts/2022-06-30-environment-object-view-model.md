@@ -1,5 +1,5 @@
 
-# @EnvironmentObject in Views Creates Tightly Coupled Views 
+# @EnvironmentObject in Views May Not be a Good Idea 
 
 In SwiftUI, ```@EnvironmentObject``` allows you to create global state that can be shared and manipulated from any view in your application. The problem with this approach is that we end up with views tightly coupled with the @EnvironmentObject, making them harder to reuse in other parts of the app. In this post, I will discuss few ways to move the EnvironmentObject into the view models, allowing views to be loosely coupled for reusability. 
 
