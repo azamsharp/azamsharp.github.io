@@ -65,11 +65,11 @@ If you run the app and taps the "Increment" button then the counter will be upda
 
 Everything works as expected! So what is the problem? 
 
-The main problem is that we have introduced a tight coupling between the view and the @EnvironmentObject. Now the view must always use the EnvironmentObject to access the values. We also cannot use the view in other scenarios. Let's see how we can solve this problem by accessing the EnvironmentObject behind a View Model. 
+The main problem is that we have introduced a tight coupling between the view and the ```@EnvironmentObject```. Now the view must always use the EnvironmentObject to access the values. We also cannot use the view in other scenarios. Let's see how we can solve this problem by accessing the EnvironmentObject behind a View Model. 
 
 ## Implementing View Models
 
-We will start by creating two view models. One for the IncrementCounterView and one for the DisplayCounterView. This is shown below: 
+We will start by creating two view models. One for the ```IncrementCounterView``` and one for the ```DisplayCounterView```. This is shown below: 
 
 ```swift 
 class IncrementCounterViewModel {
