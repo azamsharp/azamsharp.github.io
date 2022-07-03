@@ -8,6 +8,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Configuring Global Routing in SwiftUI Using NavigationStack](_posts/2022-07-02-global-routing-using-navigation-stack.md)
+NavigationStack in iOS 16 allows developers to setup global routing for your application. Now, just like React and Flutter we can configure routes for our entire application in a central place. In this post, I will cover how you can setup global routing for your SwiftUI application. 
+
 ### [Slicing Global State in SwiftUI Using Multiple EnvironmentObjects](_posts/2022-07-01-slicing-environment-object.md)
 @EnvironmentObject in SwiftUI provides a way to configure global state for your application. Updating the global state, allows the views to re-render/refresh. Sometimes we are only interested to update a view when a small part of the global state changes. In this post, I will cover how you can create segments of your global state so your view only updates when that slice is changes. 
 
