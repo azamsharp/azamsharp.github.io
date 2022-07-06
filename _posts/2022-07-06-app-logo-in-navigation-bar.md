@@ -31,7 +31,7 @@ struct ContentView: View {
 
 The above code will display a view with a "heart" symbol in the view as shown below. 
 
-![Navigation Bar](images/2022-07-06-1.png)
+![Navigation Bar](/images/2022-07-06-1.png)
 
 If you press the **Go to Detail** button, you will be taken to the view which does does not display the navigation bar. This means our heart logo will no longer be visible. Now, let's see how we can fix this issue. 
 
@@ -62,7 +62,7 @@ struct RootView: View {
 
 Now, we have placed everything inside the ZStack and use the zIndex modifier to make sure that the image is on the top layer. The NavigationStack wraps the NavigationLink or any other view, which performs the navigation to the destination view. This means the top part remains the same but the bottom part is the one changing. 
 
-![Navigation Bar Displayed](images/nav-bar-icon.gif)
+![Navigation Bar Displayed](/images/nav-bar-icon.gif)
 
 ## Reference: 
 https://stackoverflow.com/questions/72850084/how-to-show-app-logo-in-all-navigation-bar-in-swiftui-app
