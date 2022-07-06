@@ -8,6 +8,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Displaying App Logo in Navigation Bar for All Views in SwiftUI](_posts/2022-07-06-app-logo-in-navigation-bar.md)
+When building iOS applications, sometimes you have a requirement to put application logo in the center of the NavigationBar on all the screens. In this post, you will learn how to acheive that using ZStack. 
+
 ### [Configuring Global Routing in SwiftUI Using NavigationStack](_posts/2022-07-02-global-routing-using-navigation-stack.md)
 NavigationStack in iOS 16 allows developers to setup global routing for your application. Now, just like React and Flutter we can configure routes for our entire application in a central place. In this post, I will cover how you can setup global routing for your SwiftUI application. 
 
