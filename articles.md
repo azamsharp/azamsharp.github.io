@@ -8,6 +8,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [I was wrong! MVVM is NOT a good choice for building SwiftUI applications](_posts/2022-07-17-2022-swiftui-and-mvvm.md)
+SwiftUI was introduced at WWDC 2019 and it completely changed how we build our apps for Apple platform. SwiftUI provided a declarative framework, which allowed developers to quickly and easily build user interface as compared to its predecessor UIKit or AppKit. Somewhere along the lines we adopted MVVM (Model View ViewModel) design pattern as the default pattern when building SwitUI applications. In this post, I will cover my experience of using MVVM pattern with SwiftUI framework and how it worked against the SwiftUI framework, making things more complicated. 
+
+
 ### [Displaying App Logo in Navigation Bar for All Views in SwiftUI](_posts/2022-07-06-app-logo-in-navigation-bar.md)
 When building iOS applications, sometimes you have a requirement to put application logo in the center of the NavigationBar on all the screens. In this post, you will learn how to acheive that using ZStack. 
 
