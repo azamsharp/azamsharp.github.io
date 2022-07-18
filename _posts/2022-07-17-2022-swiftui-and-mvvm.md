@@ -2,16 +2,17 @@
 
 SwiftUI was introduced at WWDC 2019 and it completely changed how we build our apps for Apple platform. SwiftUI provided a declarative framework, which allowed developers to quickly and easily build user interface as compared to its predecessor UIKit or AppKit. Somewhere along the lines we also adopted MVVM (Model View ViewModel) design pattern as the default pattern when building SwitUI applications. In this post, I will cover my experience of using MVVM pattern with SwiftUI framework and how with it resulted in an anti-pattern when building SwiftUI applications. 
 
-
 ## Note
 
 Before I begin, I want to point out that I was the biggest advocate of the MVVM design pattern. I have written books on SwiftUI and MVVM, I created video courses, YouTube videos and even wrote several articles explaining the benefits of using MVVM pattern for SwiftUI applications. If you are a developer and you jumped on the MVVM bandwagon then I was the driver. 
 
 ## React and Flutter 
 
-I started rock climbing few months ago. Some climbs need more technical skills rather than brute strength. During the beginning when I was stuck at a particular route, I would ask someone for the Beta. Beta is a fancy term for instructions on how to complete a climb. Once, I understand the Beta, the climbs becomes much easier. 
+SwiftUI is not the first declarative framework. React and Flutter existed before SwiftUI. When implementing solutions in React or Flutter, you will rarely hear the term MVVM. Just like Beta in rock climbing, we can learn a great deal from more mature frameworks like React. React mainly uses Context API or Redux for providing data to its components (views in SwiftUI). Flutter uses bloc, provider and also Redux. Even in Apple's own documentation, they never mentioned the word MVVM or even the term View Model. We as a community (myself included) just thought that MVVM might be a good design pattern to use when building SwiftUI applications. It turns out that if you use MVVM with SwiftUI then you will constantly be fighting the SwiftUI framework. Let's first understand how MVVM adds an extra layer to our application.  
 
-SwiftUI is not the first declarative framework. React and Flutter existed before SwiftUI. When implementing solutions in React or Flutter, you will rarely hear the term MVVM. Just like Beta in rock climbing, we can learn a great deal from more mature frameworks like React. React mainly uses Context API or Redux for providing data to its components (views in SwiftUI). Flutter uses bloc, provider and also Redux. Even in Apple's own documentation, they never mentioned the word MVVM or even the term View Model. We as a community (myself included) just thought that MVVM might be a good design pattern to use when building SwiftUI applications. It turns out that if you use MVVM with SwiftUI then you will constantly be fighting the SwiftUI framework. Let's first understand how MVVM adds an extra layer to our application.   
+## View is the View Model 
+
+Long time ago when I was working as a .NET developer, we worked on a WPF (Windows Presentation Foundation) application. We implemented MVVM pattern for our app, where the user interface created in XAML can perform two-way binding between the interface elements and custom view model. In SwiftUI, binding is available directly in the view using the ```@State``` and ```@Binding``` features. In other words View in SwiftUI acts as both a view and also a view model. 
 
 ## Layers 
 
@@ -168,11 +169,65 @@ One of the built in features of SwiftUI is the concept of Global State. Global s
 
 Unlike React, which requires a lot of work to setup and use global state, global state is easily accessible in SwiftUI applications using ```@EnvironmentObject``` property wrapper.
 
-The @EnvironmentObject is only available inside the Views. If you want to access @EnvironmentObject inside a View Model then you will have to pass it through the construction (dependency injection). 
+The @EnvironmentObject is only available inside the Views. If you want to access @EnvironmentObject inside a View Model then you will have to pass it through the construction (dependency injection). Let's take a look at implementation below: 
 
+``` swift 
+class AppState: ObservableObject {
+    @Published var counter: Int = 0 
+}
+```
 
+In the above code, we have created the global state called ```AppState```. AppState consists of a single property counter. 
 
-As you can see sharing global state when using View Models becomes hard. On the other hand, if we remove View Models from the equation then things get very simple. 
+Next, we implement the CounterViewModel which will be responsible for providing the updated counter value to the view. 
+
+``` swift 
+class CounterViewModel: ObservableObject {
+    
+    var appState: AppState
+    
+    init(appState: AppState) {
+        self.appState = appState
+    }
+    
+    var counter: Int {
+        appState.counter 
+    }
+    
+    func increment() {
+        objectWillChange.send()
+        appState.counter += 1
+    }
+    
+}
+```
+
+Finally, we will inject the ```AppState``` as an environment object and also as a dependency to the ```CounterViewModel```. 
+
+``` swift 
+@main
+struct LearnApp: App {
+    
+    var appState = AppState()
+    
+    let webservice = Webservice()
+    let counterService = CounterService()
+    
+    var body: some Scene {
+        WindowGroup {
+            
+            ContentView(counterVM: CounterViewModel(appState: appState))
+             .environmentObject(appState)
+        }
+    }
+}
+```
+
+> I do realize that I am injecting the same appState both in the ```CounterViewModel``` and as an environment object. The CounterViewModel can update the global state as well as change it. The environment object will allow other views to read the value from the ```@EnvironmentObject``` and get the updated state. 
+
+Now, if you run the app and press on the increment button then it will successfully increment the global state counter. 
+
+As you can see sharing global state when using View Models becomes hard and the complexity goes up, if you are dealing with multiple View Models and they also wants to access the global environment object. On the bright side, if we remove View Models from the equation then things get very simple. 
 
 We implement CounterService class, which maintains the counter state. This is implemented below: 
 
@@ -180,8 +235,7 @@ We implement CounterService class, which maintains the counter state. This is im
 class CounterService: ObservableObject {
     
     @Published var counter: Int = 0
-    
-    
+
     func increment() {
         counter += 1 
     }
@@ -214,7 +268,7 @@ struct ContentView: View {
 } 
 ```
 
-Pretty simple if you don't fight the SwiftUI framework right! 
+Pretty simple if you don't fight the SwiftUI framework right! We simply removed the view model from the equation and allowed the SwiftUI view to directly access the value of the counter from the CounterService, which maintains the global state of the counter. 
 
 In WWDC 2019 talk [Data Flow Through SwiftUI](https://developer.apple.com/videos/play/wwdc2019/226/) Apple talked about single source of truth. Single source of truth basically means that the data should flow from one direction. EnvironmentObject in SwiftUI allow us to make apps with un-directional flow. Let's take the same example of products API and see how we can store list of products in the global state without using the MVVM pattern.    
 
@@ -338,6 +392,12 @@ That's it! Now when the counter gets updated only CounterView will get rendered 
 
 One of the most common reasons developers use the MVVM pattern with SwiftUI is because they don't want their view to directly access the domain layer. But as I mentioned earlier, when using client server application your domain layer will exist on the server side. The client (SwiftUI) will only be responsible for using the server endpoints to perform CRUD operations. 
 
+## User Interface Validation 
+
+One of the common places to perform UI validation is a View Model. If the validation fails then we update the @Published property and display an error message to the user. On the other hand, if the validation passes then we call a networking layer and perform the task. 
+
+// NEED TO IMPLEMENT 
+
 ## Core Data 
 
 SwiftUI consists of @FetchRequest and @SectionedFetchRequest property wrapper for working with Core Data. @FetchRequest property wrapper not only fetches data from the persistent storage but also makes sure that the user interface is up to date by rendering it when the data changes. 
@@ -346,14 +406,17 @@ One main complain about using @FetchRequest is that we are exposing our domain o
 
 If your application is not server based then you can introduce local domain services that can act and perform logical operations on those objects. This means the objects will still remain data model objects but the main logic and rules will reside in local domain services. 
 
-Going back to the @FetchRequest property wrapper. If you try to use MVVM pattern with Core Data then you will need to implement @FetchRequest feature by yourself. This means you will end up implement NSFetchedResultsController, which requires a lot of code. 
+Going back to the @FetchRequest property wrapper. If you try to use MVVM pattern with Core Data then you will need to implement @FetchRequest feature by yourself. This means you will end up implementing ```NSFetchedResultsController```, which requires a lot of code. If you decide to not use @FetchRequest and also do not implement ```NSFetchedResultsController``` then you will be responsible for manually the function to retrieve the updated data and display it on the screen. 
 
 You can check out my YouTube video in which I demonstrate how to use MVVM pattern and implement NSFetchedResultsController. 
 
 [Core Data MVVM in SwiftUI App Using NSFetchedResultsController](https://youtu.be/gGM_Qn3CUfQ)
 
-> I may write a separate article in which I will discuss how to design apps that don't have a server component but still consists of business logic. 
+Compare the above video with the following approach, where I used the ```@FetchRequest``` property wrapper. 
 
+[Implementing @FetchRequest in SwiftUI](https://youtu.be/AhT1dJM8WvY)
+
+> I may write a separate article in which I will discuss how to design apps that don't have a server component but still consists of business logic. 
 
 ## Realm 
 
@@ -370,6 +433,22 @@ When writing tests, our main focus should be testing the application domain. Thi
 Next, you will be implementing your UI tests and then finally the integration tests. Even if you were using MVVM design pattern, you don't have to write tests for the the view models because view models don't contain any logic. 
 
 Please don't write tests just for the sake if writing tests. Write good tests and make sure your domain is well tested with high code coverage. 
+
+## What about Redux? 
+
+Redux pattern is commonly used in React applications. The basic idea of Redux is to provide a uni-directional data flow using single source of truth. Configuring Redux in React takes an effort. Apart from install the independent ```redux``` and ```react-redux``` package, you also need to setup reducer, middlewares (async operations), action creators, action types, multiple reducers etc. 
+
+Although you can implement Redux pattern in SwiftUI, I believe it is already available in the form of ```@EnvironmentObject```. The only thing you need to configure is a single source of truth. I demonstrated that in the code above, where we fetch products from the API and stored it in the global state. 
+
+## Resources 
+
+This post is based on my personal experiences with working with SwiftUI. I also read some interesting articles, which highlights the same problems. You can find the list below: 
+
+1. [Stop using MVVM for SwiftUI](https://developer.apple.com/forums/thread/699003)
+2. [Implementing useless MVVM with SwiftUI](https://swift2931.medium.com/implementing-useless-mvvm-with-swiftui-bdfd7aca2daa)
+3. [Data Flow Through SwiftUI](https://developer.apple.com/videos/play/wwdc2019/226/)
+4. [Slicing Global State in SwiftUI Using Multiple EnvironmentObjects](https://azamsharp.com/2022/07/01/slicing-environment-object.html)
+5. [Retrieving Content from a Server - Meme Creator](https://developer.apple.com/tutorials/sample-apps/memecreator?changes=lat_2_6_6_8)
 
 ## Conclusion 
 
