@@ -1,4 +1,4 @@
-# How MVVM Pattern Work Against the SwiftUI Framework 
+# How MVVM Design Pattern Work Against the SwiftUI Framework 
 
 SwiftUI was introduced at WWDC 2019 and it completely changed how we build our apps for Apple platform. SwiftUI provided a declarative framework, which allowed developers to quickly and easily build user interface as compared to its predecessor UIKit or AppKit. Somewhere along the lines we also adopted MVVM (Model View ViewModel) design pattern as the default pattern when building SwitUI applications. In this post, I will cover my experience of using MVVM pattern with SwiftUI framework and how with it resulted in an anti-pattern when building SwiftUI applications. 
 
@@ -336,15 +336,46 @@ That's it! Now when the counter gets updated only CounterView will get rendered 
 
 ## Business Logic 
 
-Earlier I mentioned that when implementing a client-server application.  
+One of the most common reasons developers use the MVVM pattern with SwiftUI is because they don't want their view to directly access the domain layer. But as I mentioned earlier, when using client server application your domain layer will exist on the server side. The client (SwiftUI) will only be responsible for using the server endpoints to perform CRUD operations. 
 
-Unit Testing 
+## Core Data 
 
-Core Data 
+SwiftUI consists of @FetchRequest and @SectionedFetchRequest property wrapper for working with Core Data. @FetchRequest property wrapper not only fetches data from the persistent storage but also makes sure that the user interface is up to date by rendering it when the data changes. 
 
-Realm 
+One main complain about using @FetchRequest is that we are exposing our domain objects to the view. The objects you retrieve using Core Data are not domain objects, they are data model objects. 
 
-Conclusion 
+If your application is not server based then you can introduce local domain services that can act and perform logical operations on those objects. This means the objects will still remain data model objects but the main logic and rules will reside in local domain services. 
+
+Going back to the @FetchRequest property wrapper. If you try to use MVVM pattern with Core Data then you will need to implement @FetchRequest feature by yourself. This means you will end up implement NSFetchedResultsController, which requires a lot of code. 
+
+You can check out my YouTube video in which I demonstrate how to use MVVM pattern and implement NSFetchedResultsController. 
+
+[Core Data MVVM in SwiftUI App Using NSFetchedResultsController](https://youtu.be/gGM_Qn3CUfQ)
+
+> I may write a separate article in which I will discuss how to design apps that don't have a server component but still consists of business logic. 
+
+
+## Realm 
+
+Recently, I was working on some sponsored videos for Realm. Realm is a framework that allows local persistence and also cloud sync services using object oriented database and provides much better API as compared to Core Data. 
+
+Realm has implemented special property wrappers to work seamlessly with SwiftUI. It allows the user interface to always stay in-sync with the data and even provides easy methods to perform create, update and delete operations. 
+
+If I had used MVVM pattern when working with Realm then I may have not taken advantage of all the available features. In short, I would be fighting the framework every step of the way. 
+
+## Unit Testing 
+
+When writing tests, our main focus should be testing the application domain. This is the heart of the application. Domain layer consists of all the rules and logic that powers the application. In a client/server application, domain layer exists on the server. So this means you will be writing unit tests for the code that is hosted on the server. 
+
+Next, you will be implementing your UI tests and then finally the integration tests. Even if you were using MVVM design pattern, you don't have to write tests for the the view models because view models don't contain any logic. 
+
+Please don't write tests just for the sake if writing tests. Write good tests and make sure your domain is well tested with high code coverage. 
+
+## Conclusion 
+
+SwiftUI is designed in such a way that the view also serves as the model. @State and @Binding allows for two-way binding and @EnvironmentObject provides global state. SwiftUI is a really powerful framework but only if you use it in a way, it was designed to be used. MVVM pattern is great, when used with frameworks that can support it. SwiftUI does not need MVVM pattern, actually MVVM acts as an anti-pattern when building SwiftUI applications. 
+
+Next time when building a SwiftUI app, try to surrender to the framework instead of fighting it. Your productivity will increase and you will not hit brick walls. 
 
 
 
