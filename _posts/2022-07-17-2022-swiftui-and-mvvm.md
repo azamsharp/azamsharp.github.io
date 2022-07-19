@@ -30,7 +30,7 @@ The main idea behind the view model is to provide an extra layer between the mod
 
 > The View Model does not have the code to perform network request. View Model communicates with an APIService/Webservice to make a call, which returns the Model/DTO objects, which are later populated in a ```@Published``` property of the View Model. 
 
-One very important thing to note in this diagram is the use of word model or DTO but not **domain model**. In most cases, client (SwiftUI App) does not have a domain model. The main logic of the application resides on the server, hence the domain logic/layer is on the server not on the client.
+One very important thing to note in this diagram is the use of word model or DTO but not **domain model**. In most cases, client (SwiftUI App) does not have a domain model. The main logic of the application resides on the server, hence the domain logic/layer is on the server not on the client. Applications with no server component can use Model in their app as domain models. This means View will search as a View but also as a View Model. Model will serve as a domain model. 
 
 Here is a typical code flow for consuming an API in a SwiftUI application using the MVVM principles. 
 
