@@ -2,6 +2,8 @@
 
 In this post, I will cover how a SwiftUI View is not only a view but also a ViewModel. We will compare it with WPF framework and see how SwiftUI already has built-in support for ViewModel right within the view. This means that in most cases, you don't need to create an extra layer of View Model per screen.    
 
+> Make sure to check out the resources section. I have created several YouTube videos to answer questions related to Networking, Validation, Business Layer etc. 
+
 ## Windows Presentation Foundation 
 
 Long time ago, in a galaxy far away when I was a .NET developer, I worked on several WPF (Windows Presentation Foundation) projects. WPF is used to build Windows applications and it is the successor to Windows Forms. 
