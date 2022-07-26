@@ -29,3 +29,10 @@ Apart from that, I think hating on a particular technology is never helpful. I a
 Instead of fighting and complaining, let's just choose best technology for the job. Sometimes it can be native but sometimes it can be cross platform like (React Native or Flutter). I learned so many things from React and Flutter, which I apply in SwiftUI. It is true that learning different languages and frameworks can make you a better developer. When I am teaching React for a coding bootcamp, I always encourage my students to take a look at React Native since it is similar and it will allow them to write mobile apps. Some of my students ends up working as a RN developer. This makes me super proud and happy! 
 
 The bottom line is choose the best technology for the job. Keep learning and enjoy!
+
+
+<center>
+<a href = "http://www.azamsharp.com/courses">
+<img src="https://raw.githubusercontent.com/azamsharp/azamsharp.github.io/master/_posts/images/banner.png"> 
+</a>
+</center>
