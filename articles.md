@@ -8,6 +8,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+
+### [Why do iOS Developers hates cross platform frameworks? ](_posts/2022-07-25-why-ios-devs-hates-cross-platform.md) 
+Most iOS developers have a very strong negative reaction towards cross platform frameworks. Some even advice to not learn cross platform as it will negatively impact your career. In this post, I will discuss my personal experience of working with cross platform frameworks and how I started to appreciate them. 
+
 ### [I was wrong! MVVM is NOT a good choice for building SwiftUI applications](_posts/2022-07-17-2022-swiftui-and-mvvm.md)
 SwiftUI was introduced at WWDC 2019 and it completely changed how we build our apps for Apple platform. SwiftUI provided a declarative framework, which allowed developers to quickly and easily build user interface as compared to its predecessor UIKit or AppKit. Somewhere along the lines we adopted MVVM (Model View ViewModel) design pattern as the default pattern when building SwitUI applications. In this post, I will cover my experience of using MVVM pattern with SwiftUI framework and how it worked against the SwiftUI framework, making things more complicated. 
 
