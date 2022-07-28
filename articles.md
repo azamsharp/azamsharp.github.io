@@ -9,6 +9,9 @@
 [Contact](/contact)
 
 
+###  [SwiftUI View is also a View Model](_posts/2022-07-21-view-is-the-view-model.md)
+In this post, I will cover how a SwiftUI View is not only a view but also a ViewModel. We will compare it with WPF framework and see how SwiftUI already has built-in support for ViewModel right within the view. This means that in most cases, you don't need to create an extra layer of View Model per screen. 
+
 ### [Why do iOS Developers hates cross platform frameworks? ](_posts/2022-07-25-why-ios-devs-hates-cross-platform.md) 
 Most iOS developers have a very strong negative reaction towards cross platform frameworks. Some even advice to not learn cross platform as it will negatively impact your career. In this post, I will discuss my personal experience of working with cross platform frameworks and how I started to appreciate them. 
 
