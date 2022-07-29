@@ -55,7 +55,9 @@ Check out the comparison between WPF and SwiftUI below:
 
 The basic client side validation like required and matching fields can be performed right within your view. For more complicated client side validation, I suggest implementing some sort of ```RulesEngine```. 
 
-Using this architecture the View acts as a View and also a View Model. The Model becomes the business layer (specially for apps with no server component). This means if you create a ```NetworkService```, it can be directly called from the View, which is also a View Model. 
+Using this architecture the View acts as a View and also a View Model. The Model becomes the business layer (specially for apps with no server component). This means if you create a ```NetworkService```, it can be directly called from the View, which is also a View Model. I personally, create an aggregate root model object and then call the web service layer from there. This allows me to handle business logic in my aggregate root model or the models that it is hosting. Below you can find a screenshot from Apple's [article](https://developer.apple.com/documentation/swiftui/managing-model-data-in-your-app), which also confirms that the View Model is not needed in most scenarios when building SwiftUI applications. This is because the data binding features are baked right into the View, which is also serving as a View Model. 
+
+![Managing model data in your app](/images/data-model.png)
 
 Even if you read Apple docs or watch WWDC videos, you will never hear the term MVVM or you will never see Apple engineers using another layer of abstraction. They will mostly implement StoreManagers or StoreService and then call it directly from the View (ViewModel) and populate the global state so they can maintain a single source of truth.  
 
