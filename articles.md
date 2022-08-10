@@ -8,6 +8,8 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+###  [MV State Pattern - A Better Way of Building SwiftUI Apps ](_posts/2022-08-09-intro-to-mv-state-pattern.md)
+I started working with SwiftUI framework in 2019. Like most developers, I also jumped on the MVVM bandwagon. I wrote books on it, gave presentations and even created a lot of videos. I managed to get MVVM working with SwiftUI in almost all of my projects. But it was a constant battle. I always felt that I am fighting SwiftUI framework. Even for small and medium sized projects, I felt that I was writing too much code and adding unnecessary layers. In this post, I will introduce MV pattern. This is not something I invented. This is the same pattern Apple use in their code samples for their SwiftUI apps. Check out the references section at the end of this post. 
 
 ###  [SwiftUI View is also a View Model](_posts/2022-07-21-view-is-the-view-model.md)
 In this post, I will cover how a SwiftUI View is not only a view but also a ViewModel. We will compare it with WPF framework and see how SwiftUI already has built-in support for ViewModel right within the view. This means that in most cases, you don't need to create an extra layer of View Model per screen. 
