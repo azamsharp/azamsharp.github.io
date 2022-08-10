@@ -268,7 +268,7 @@ Another way to validate is to create property wrappers for each validation scena
 
 ## Testing 
 
-One of the arguments of using MVVM with SwiftUI is that it allows developers to easily  perform unit testing for their views. This is a valid argument, because having a separate layer of view model does allow easy testing. You can invoke actions on the view model and witness changes on the view model properties. However, you can also perform unit testing for your views without a view models. Check out the framework called [ViewInspector](https://github.com/nalexn/ViewInspector). 
+One of the arguments of using MVVM with SwiftUI is that it allows developers to easily  perform unit testing for their views. This is a valid argument, because having a separate layer of view model does allow easy testing. You can invoke actions on the view model and witness changes on the view model properties. This kind of in-memory UI testing may not possible without an extra layer of view model but you can still write UI Tests for your SwiftUI applications. You can either use built-in Xcode UI Test Project or a framework called [ViewInspector](https://github.com/nalexn/ViewInspector). 
 
 ### Side Note 
 
