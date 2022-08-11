@@ -198,7 +198,9 @@ struct ContentView: View {
 }
 ```
 
-The view uses the Store to get the model objects and then directly binds it to the screen. There is no view model layer needed in between the view and the model. The view in SwiftUI is also a view model. As shown above this does not mean you can start putting URLSession in the view. You still need a network layer for performing requests as we implemented earlier.   
+The view uses the Store to get the model objects and then directly binds it to the screen. There is no view model layer needed in between the view and the model. The view in SwiftUI is also a view model. As shown above this does not mean you can start putting URLSession in the view. You still need a network layer for performing requests as we implemented earlier. 
+
+> When sharing the same environment object all the views using the environment object will render. This mostly includes child views and even views in the navigation stack. If this is started to cause issues then you may have to slice your global state. I covered that in my article [here](https://azamsharp.com/2022/07/01/slicing-environment-object.html). 
 
 ## Core Data
 
