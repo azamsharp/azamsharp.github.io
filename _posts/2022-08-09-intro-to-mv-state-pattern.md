@@ -109,6 +109,54 @@ At first glance, you may feel that Store is just a view model with a different n
 
 > For larger apps you may want to divide your global state into multiple slices. You can read about it [here](https://azamsharp.com/2022/07/01/slicing-environment-object.html). 
 
+### Update (08/11/2022): 
+
+Depending on your app, you may not even need a separate Webservice layer. You can make the call from right within your store as shown below: 
+
+``` swift 
+@MainActor
+class Store: ObservableObject {
+    
+    @Published var products: [Product] = []
+    
+    func loadProducts() async throws {
+        
+        let (data, response) = try await URLSession.shared.data(from: URL(string: "https://fakestoreapi.com/products")!)
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200
+        else {
+            throw NetworkError.badRequest
+        }
+        
+        products = try JSONDecoder().decode([Product].self, from: data)
+        
+    }
+    
+    func addProduct(_ product: Product) {
+        // code...
+    }
+    
+    func loadCart() {
+        // code...
+    }
+    
+    func loadUsers() {
+        // code...
+    }
+    
+    func addProduct() {
+        // code ...
+    }
+    
+}
+```
+
+You may need a Webservice layer if your store is doing too much. This includes multiple requests to combine the data and then forming a desired result. For most apps, you can just put network calls right within the store. 
+
+> Each app is different. If your architecture dictates that you must have a dedicated network layer then add it.  
+
+Next, we will inject the store into the environment object so it can be used throughout our application. 
+
 ``` swift
 import SwiftUI
 
