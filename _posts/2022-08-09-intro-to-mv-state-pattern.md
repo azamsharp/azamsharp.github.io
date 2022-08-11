@@ -328,9 +328,15 @@ Testing is definitely very important but only if you are writing meaningful test
 
 ```A user should be able to add transaction to their existing budget```
 
+If this operation is part of your model then your test should create a user, add a budget for that user in the database. Then add a new transaction to that budget and then check if the transaction was added successfully or not. 
+
+Unfortunately, most developers will ignore the database part and run their test against a mocked object. In the end their test run fast and they are happy to see the test pass but what exactly did they test. They simply tested that their mock object work as expected. In this scenario a real test would hit the database and check if all the rules were met or not.  
+
+> For the above scenario we are considering on device database like Sqlite being managed by Core Data or Realm.  
+
 I have worked with companies that have more than 2000+ tests. But if you looked closely you will find out the tests were not testing anything related to the business domain. They were actually testing the programming language. This is why it is extremely important to test the behaviors of your application instead of the implementation. When writing a test, ask yourself what business logic is being tested. If you cannot answer that question then stop writing the test.    
 
-> I give more precedence to domain layer unit tests and full system end-to-end functional tests. Functional system tests will ensure that the system works with all the other layers of the application. 
+> I give more precedence to domain layer unit tests and full system end-to-end functional tests. Functional system tests will ensure that the system works with all the other layers of the application. You don't have to write tests for your controller or view models. All of those layers will be tested during the end to end functional tests.  
 
 I will hopefully cover more about testing in future posts. 
 
