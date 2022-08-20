@@ -111,11 +111,11 @@ At first glance, you may feel that Store is just a view model with a different n
 
 ### Update (08/11/2022): 
 
-Depending on your app, you may not even need a separate Webservice layer. You can make the call from right within your store as shown below: 
+Depending on your app, you may not even need a Store layer. You can simply use the Webservice from right within your view (VM). 
 
 ``` swift 
 @MainActor
-class Store: ObservableObject {
+class Webservice: ObservableObject {
     
     @Published var products: [Product] = []
     
@@ -151,11 +151,15 @@ class Store: ObservableObject {
 }
 ```
 
-You may need a Webservice layer if your store is doing too much. This includes multiple requests to combine the data and then forming a desired result. For most apps, you can just put network calls right within the store. 
+If your app has multiple bounded context then your one single Webservice will be divided into multiple services catering to each bounded context. This means instead of a single Webservice class, you may have AccountService, UserService, ProductService etc.  
 
 > Each app is different. If your architecture dictates that you must have a dedicated network layer then add it.  
 
 Next, we will inject the store into the environment object so it can be used throughout our application. 
+
+**NOTE:** For this app, you can simply inject the Webservice into the EnvironmentObject since our Store is not doing much. Only, inject into the EnvironmentObject if you plan to access the data in other views. 
+
+> For this code you can also inject
 
 ``` swift
 import SwiftUI
