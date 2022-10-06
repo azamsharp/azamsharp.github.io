@@ -52,6 +52,8 @@ class Model: ObservableObject {
 
 >> A Model may look like View Model but it is not. A model is not responsible for formatting data to be presented on the screen. Unlike View Model, a separate model does need to be created for each screen. For smaller apps, you can use a single model for your entire app. If your model is getting larger then it would be a good idea to think about separating it and distributing the responsibilities among different aggregate models. You break a model into small models depending on the application domain, which is usually based on the bounded context of the application domain.  
 
+>> If I was following MVVM pattern then I would have ended up with several View Models including OrderListViewModel, OrderViewModel, AddOrderViewModel, OrderDetailViewModel and more. We have completely removed the View Models from the picture and the view is directly consuming the models (Order). Keep in mind View is the View Model. 
+
 The complete implementation of the model is shown below: 
 
 ```swift 
@@ -105,7 +107,7 @@ class Model: ObservableObject {
 
 The model calls the OrderService to get all the orders and performs different actions related to orders like inserting and updating. 
 
->> You might be wondering that why can't the View directly call the OrderService. The main reason is that Model provides sorting, filtering capabilities, which does not fit well in the OrderService. Another reason is that the model can invoke multiple services to aggregate and return data to the view. 
+>> You might be wondering that why can't the View directly call the OrderService and put all the orders in a local/private state. You can definitely do that but since, I am allowing the users to edit the orders on a separate screen and then refresh on the original screen it would make more sense for the orders to be available globally. Another reason is that Model can provide sorting, filtering capabilities, which does not fit well in the OrderService. Another reason is that the model can invoke multiple services to aggregate and return data to the view. 
 
 Next, let's take a look at the OrderService. 
 
