@@ -8,6 +8,14 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](_posts/2022-10-06-practical-mv-pattern-crud.md)
+
+I was listening to an amazing talk by Matias Villaverde and Rens Breur at NSSpain about "Lessons learnt rewriting SoundCloud in SwiftUI". You can watch the complete talk [here](https://vimeo.com/751534042/f1ae29434e). 
+
+This talk really resonated with me because I did similar mistakes when building SwiftUI applications. Instead of embracing the simplicity of the framework, I added unnecessary complexity to please the design pattern Gods. This included creating view models for each view, ignoring @FetchRequest and @SectionFetchRequest property wrappers, passing @EnvironmentObject to the view model instead of accessing it directly in the view and much more.  
+
+After almost two years of driving in the wrong direction, I decided to slam on the brakes and think about my decisions. In this post, I will discuss the SwiftUI architecture that I am using for my apps. 
+
 ###  [MV State Pattern - A Better Way of Building SwiftUI Apps ](_posts/2022-08-09-intro-to-mv-state-pattern.md)
 I started working with SwiftUI framework in 2019. Like most developers, I also jumped on the MVVM bandwagon. I wrote books on it, gave presentations and even created a lot of videos. I managed to get MVVM working with SwiftUI in almost all of my projects. But it was a constant battle. I always felt that I am fighting SwiftUI framework. Even for small and medium sized projects, I felt that I was writing too much code and adding unnecessary layers. In this post, I will introduce MV pattern. This is not something I invented. This is the same pattern Apple use in their code samples for their SwiftUI apps. Check out the references section at the end of this post. 
 

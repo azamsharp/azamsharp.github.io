@@ -1,4 +1,4 @@
-# SwiftUI Architecture - Embracing the Framework
+# SwiftUI Architecture - A Complete Guide to MV Pattern Approach 
 
 I was listening to an amazing talk by Matias Villaverde and Rens Breur at NSSpain about "Lessons learnt rewriting SoundCloud in SwiftUI". You can watch the complete talk [here](https://vimeo.com/751534042/f1ae29434e). 
 
