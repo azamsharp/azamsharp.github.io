@@ -12,7 +12,7 @@
 
 I was listening to an amazing talk by Matias Villaverde and Rens Breur at NSSpain about "Lessons learnt rewriting SoundCloud in SwiftUI". You can watch the complete talk [here](https://vimeo.com/751534042/f1ae29434e). 
 
-This talk really resonated with me because I did similar mistakes when building SwiftUI applications. Instead of embracing the simplicity of the framework, I added unnecessary complexity to please the design pattern Gods. This included creating view models for each view, ignoring @FetchRequest and @SectionFetchRequest property wrappers, passing @EnvironmentObject to the view model instead of accessing it directly in the view and much more.  
+This talk really resonated with me because I did similar mistakes when building SwiftUI applications. Instead of embracing the simplicity of the framework, I added unnecessary complexity to please the design pattern Gods. This included creating view models for each view, ignoring ```@FetchRequest``` and ```@SectionFetchRequest``` property wrappers, passing ```@EnvironmentObject``` to the view model instead of accessing it directly in the view and much more.  
 
 After almost two years of driving in the wrong direction, I decided to slam on the brakes and think about my decisions. In this post, I will discuss the SwiftUI architecture that I am using for my apps. 
 
