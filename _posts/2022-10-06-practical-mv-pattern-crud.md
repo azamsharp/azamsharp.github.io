@@ -2,27 +2,29 @@
 
 I was listening to an amazing talk by Matias Villaverde and Rens Breur at NSSpain about "Lessons learnt rewriting SoundCloud in SwiftUI". You can watch the complete talk [here](https://vimeo.com/751534042/f1ae29434e). 
 
-This talk really resonated with me because I did similar mistakes when building SwiftUI applications. Instead of embracing the framework, I added unnecessary complexity to fight against the framework. This included creating View Models for each view, ignoring @FetchRequest, passing @EnvironmentObject to the ViewModel and getting into the dependency injection nightmare.  
+This talk really resonated with me because I did similar mistakes when building SwiftUI applications. Instead of embracing the simplicity of the framework, I added unnecessary complexity to please the design patterns Gods. This included creating view models for each view, ignoring @FetchRequest and @SectionFetchRequest property wrappers, passing @EnvironmentObject to the view model and much more.  
 
-After almost two years of driving in the wrong direction, I decided to press the brake and go back to the drawing board. In this post, I will discuss the SwiftUI architecture I am using for my apps. The architecture might look extremely simple but it does utilize the true power of SwiftUI framework. 
+After almost two years of driving in the wrong direction, I decided to press the brakes and go back to the drawing board. In this post, I will discuss the SwiftUI architecture I am using for my apps. The architecture might look extremely simple but it does utilize the true power of SwiftUI framework. 
 
->> This architecture mentioned in this post works for my apps. When adopting an architecture make sure it fits your scenario. There is no architecture, fit all solution. 
+>> There is no official name for this architecture but in the iOS community it is known as the MV pattern. This pattern is inspired from Apple's WWDC videos and sample applications. You can find the links to the sample apps in the resources section. 
 
 ## Architecture
 
-The architecture for our app will revolve around few different components. This includes an Aggregate Model, Webservice and the server. The primary purpose of an Aggregate Model is to provide model objects to the view. Since, this is a client server app, the aggregate model will invoke a webservice which will return model objects to the view. 
+The architecture for our app will revolve around few different components. This includes an Aggregate Model, Webservice and the server. The primary purpose of an Aggregate Model is to provide model objects to the view. Since, this is a client server app, the aggregate model will invoke the webservice which will return model objects to the view. 
 
-For small apps you need just a single aggregate model. This is shown in the figure below. 
+For small apps you just need a single aggregate model. This is shown in the figure below. 
 
 ![MV Architecture Client/Server App](/images/mv-pattern-json-1.jpeg)
 
-For larger apps, you can introduce several aggregate model objects based on the bounded context of the application. 
+For larger apps, you can introduce several aggregate model objects based on the [bounded context](https://martinfowler.com/bliki/BoundedContext.html) of the application.
 
 ![MV Architecture Multiple Aggregate Root Models](/images/mv-pattern-json-2.jpeg)
 
+>> You don't need an aggregate model per view. The aggregate models are based on the bounded context of the application. 
+
 Let's take a look at what I mean by Aggregate Root.
 
-The main purpose of an Aggregate Root Model is to allow you access to the entities/models under a certain bounded context. The bounded context is determine by business domain. In the figure below, you can see different Aggregate Root models for an e-commerce application.  
+The main purpose of an Aggregate Root Model is to allow access to the entities/models under a certain bounded context. The bounded context is determine by the business domain. In the figure below, you can see different Aggregate Root models for an e-commerce application.  
 
 ![MV Architecture Client/Server App](/images/mv-pattern-json-3.jpeg)
 
@@ -32,7 +34,7 @@ For our small application, we will only be working with a single Aggregate Root 
 
 ## Implementing the Aggregate Root Model
 
-In Apple's documentation they have used different names for their model. This includes Model, FoodTruckModel, FrutaModel etc. I believe the model name should be based on the bounded context. For an e-commerce app your aggregate model might be Catalog, Payment, Shipping, Inventory etc. 
+In Apple's documentation they have used different names for their model. This includes Model, FoodTruckModel, FrutaModel etc. I believe the model name should be based on the bounded context. For an e-commerce app your aggregate model might be Catalog, Payment, Shipping, Inventory etc. Each aggregate model will allow you to access the entities controlled by the root. 
 
 For the sake of simplicity, I am calling my model "Model". The basic implementation is shown below: 
 
@@ -50,9 +52,9 @@ class Model: ObservableObject {
 }
 ```
 
->> A Model may look like View Model but it is not. A model is not responsible for formatting data to be presented on the screen. Unlike View Model, a separate model does need to be created for each screen. For smaller apps, you can use a single model for your entire app. If your model is getting larger then it would be a good idea to think about separating it and distributing the responsibilities among different aggregate models. You break a model into small models depending on the application domain, which is usually based on the bounded context of the application domain.  
+>> A Model may look like view model but it is not. A model is not responsible for formatting data to be presented on the screen. Unlike View Model, a separate model does need to be created for each screen. For smaller apps, you can use a single model for your entire app. If your model is getting larger then it would be a good idea to think about separating it and distributing the responsibilities among different aggregate models. You break a model into small models depending on the application domain, which is usually based on the bounded context of the application domain. You don't create root models based on the number of screen of the app.  
 
->> If I was following MVVM pattern then I would have ended up with several View Models including OrderListViewModel, OrderViewModel, AddOrderViewModel, OrderDetailViewModel and more. We have completely removed the View Models from the picture and the view is directly consuming the models (Order). Keep in mind View is the View Model. 
+>> If I was following MVVM pattern then I would have ended up with several View Models including OrderListViewModel, OrderViewModel, AddOrderViewModel, OrderDetailViewModel and more. We have completely removed the view models from the picture and the view is directly consuming the models. Keep in mind View is the View Model. 
 
 The complete implementation of the model is shown below: 
 
@@ -105,9 +107,9 @@ class Model: ObservableObject {
 }
 ```
 
-The model calls the OrderService to get all the orders and performs different actions related to orders like inserting and updating. 
+The model calls the OrderService to get all the orders and performs different actions related to orders like inserting, updating, sorting and filtering etc.   
 
->> You might be wondering that why can't the View directly call the OrderService and put all the orders in a local/private state. You can definitely do that but since, I am allowing the users to edit the orders on a separate screen and then refresh on the original screen it would make more sense for the orders to be available globally. Another reason is that Model can provide sorting, filtering capabilities, which does not fit well in the OrderService. Another reason is that the model can invoke multiple services to aggregate and return data to the view. 
+>> You might be wondering that why can't the view directly call the OrderService and display all the orders in a local/private state. You can definitely do that but since, I am allowing the users to edit the orders on a separate screen and then refreshing on the original screen it would make more sense for the orders to be available globally. Another reason is that root model can provide sorting, filtering capabilities, which does not fit well in the OrderService. The root model can invoke multiple services to aggregate and return data to the view and even add caching support (through a caching layer) to the app.  
 
 Next, let's take a look at the OrderService. 
 
@@ -171,15 +173,15 @@ class OrderService {
 }
 ```
 
->> You can create a generic service, which has all the basic operations like getAll, getById etc. 
+>> You can also create a generic webservice, which has all the basic operations like getAll, getById etc. 
 
 ## Implementing Views
 
 SwiftUI views are not just views but they are also view models. But that does not mean that you should put networking code right inside the view. 
 
->> By networking code I mean URLSession.shared.xxx. Although it will work as expected but it will make it harder to use the same networking calls from other views. This is the main reason we created the OrderService. In React apps, developers usually call the networking code (fetch or axios) from directly inside the Component. This is perfectly fine until, you need to make the same call somewhere else. 
+>> By networking code I mean URLSession.shared.xxx. Although it will work as expected but it will make it harder to use the same networking calls from other views. This is the main reason we created the OrderService. In React apps, developers usually call the networking code using libraries like fetch or axios from directly inside the components. This is perfectly fine until, you need to make the same call in some other component.
 
-In our app, SwiftUI views need to access the Model object so it can make a call and get the list of orders. We also want a global access of the list of orders. @EnvironmentObject will be a good fit for this scenario. The model object is injected as an @EnvironmentObject in the root view. This is shown in the implementation below: 
+In our app, SwiftUI views need to access the root model object so it can make calls and get the list of orders. We also want a global access of the list of orders. In his case @EnvironmentObject will be a good fit for this scenario. The model object is injected as an @EnvironmentObject in the root view. This is shown in the implementation below: 
 
 ```swift 
 @main
@@ -234,7 +236,7 @@ struct ContentView: View {
 }
 ```
 
-Let's take a look at **AddNewCoffeeOrderView**. The AddNewCoffeeOrderView view is responsible for allowing the user to place a brand new order. This view also performs UI validation and displays error messages to the user. 
+Let's take a look at **AddNewCoffeeOrderView**. The AddNewCoffeeOrderView view is responsible for allowing the user to place a brand new order. The same view is also used to update an existing order. AddNewCoffeeOrderView also performs UI validation and displays error messages to the user. 
 
 ```swift 
 struct AddNewCoffeeOrderError {
@@ -350,9 +352,9 @@ struct AddNewCoffeeOrderView: View {
 }
 ```
 
-We have used the same techniques for validation as used for React framework. If the field validation is unsuccessful then a flag is set, which displays the error messages to the user. 
+We have used the same techniques for validation as used in React apps. If the field validation is unsuccessful then a flag is set, which displays the error messages to the user. 
 
->> UI validation is NOT business logic. UI validation is just checking if the user has input valid information. The business rules (if any) will be executed on the valid data. Let's say you are building a website, where the user can enter their credit score and get an APR rate (Interest Rate). The UI validation is going to check that the credit score TextField is not left empty. It will also check that the score only consists of numbers between a certain range. All of this will be UI validation. Once the user successfully submits the credit score, we will run business rules to find out the appropriate APR for the user.  
+>> UI validation is NOT business logic. UI validation is just checking if the user has input valid information. The business rules (if any) will be executed on the valid data. Let's say you are building a website, where the user can enter their credit score and get an APR rate (Interest Rate). The UI validation is going to check that the credit score TextField is not left empty. It will also check that the score only consists of numbers between a certain range. All of this will be UI validation. Once the user successfully submits the credit score, the system will run business rules to find out the appropriate APR for the user.  
 
 Even HTML provides attributes to validate the UI. Take a look at the code below: 
 
@@ -364,7 +366,7 @@ The above code will validate the input field (TextBox), when the form is submitt
 
 >> In most client/server apps, business rules lives on the server and the client just provides the UI. 
 
-One of the benefits of using the @EnvironmentObject is that when the orders are altered, views are automatically reevaluated. Reevaluation is not the same as re-rendering. Revaluation means that SwiftUI will look at the diff tree and then decide, which views needs to be re-rendered. Revaluation is a very fast process, so although your view body might be getting fired constantly it does not mean that all views in the body are getting re-rendered. 
+One of the benefits of using the @EnvironmentObject is that when the orders are altered, views are automatically reevaluated. Reevaluation is not the same as rerendering. Revaluation means that SwiftUI will look at the diff tree and then decide, which views needs to be rerendered. Revaluation is a very fast process, so although your view body might be getting fired constantly it does not mean that all views in the body are getting rerendered. 
 
  Take a look at the code below: 
 
@@ -391,9 +393,9 @@ One of the benefits of using the @EnvironmentObject is that when the orders are 
 }
  ```
 
-If you type in the TextField then you will notice that the body is fired each time. The main reason is that the @State variable name is getting new values from the TextField. But that does not mean that the all the views inside the body are getting re-rendered. Only, the views that are changed are getting re-rendered. So in the above code, only TextField is getting re-rendered. 
+If you type in the TextField then you will notice that the body is fired each time. The main reason is that the @State variable **name** is getting new values from the TextField and it is causing the body to be reevaluated. But that does not mean that all views inside the body are getting rerendered. Only, the views that are changed are getting rerendered. So in the above code, only TextField is getting rerendered but that is the only one getting changed.  
 
-In the same way when using the @EnvironmentObject, several views may get revaluated but only those who needs to be re-rendered are rendered again. If you are getting unwanted re-rendering then you can always split your @EnvironmentObject into multiple objects. This is shown in my article [Slicing Global State in SwiftUI Using Multiple EnvironmentObjects](https://azamsharp.com/2022/07/01/slicing-environment-object.html). 
+In the same way when using the @EnvironmentObject, several views may get revaluated but only those who needs to be rerendered are rendered again. If you are getting unwanted rerendering then you can always split your @EnvironmentObject into multiple objects. This is shown in my article [Slicing Global State in SwiftUI Using Multiple EnvironmentObjects](https://azamsharp.com/2022/07/01/slicing-environment-object.html). 
 
 ## Resources 
 
@@ -405,6 +407,6 @@ In the same way when using the @EnvironmentObject, several views may get revalua
 
 ## Conclusion 
 
-SwiftUI does not need MVVM, since it already has MVVM built in. Although you can use MVVM with SwiftUI but it needlessly complicate things. A lot of other developers are coming to the same conclusion and rewriting their apps using features provided by SwiftUI. SwiftUI adds some magic to their property wrappers, which makes everything simple. For your next app, try creating views without View Models and allow the views to directly talk to the model. 
+SwiftUI does not need MVVM, since it already has MVVM built-in. Although you can use MVVM with SwiftUI but it needlessly complicate things. A lot of other developers are coming to the same conclusion and rewriting their apps using features provided by SwiftUI. SwiftUI adds some magic to their property wrappers, which makes everything simple. For your next app, try creating views without View Models and allow the views to directly talk to the model. To truly unleash the power of SwiftUI, you need to embrace all the different property wrappers provided by the framework.  
 
 
