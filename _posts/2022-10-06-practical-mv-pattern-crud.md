@@ -2,9 +2,9 @@
 
 I was listening to an amazing talk by Matias Villaverde and Rens Breur at NSSpain about "Lessons learnt rewriting SoundCloud in SwiftUI". You can watch the complete talk [here](https://vimeo.com/751534042/f1ae29434e). 
 
-This talk really resonated with me because I did similar mistakes when building SwiftUI applications. Instead of embracing the simplicity of the framework, I added unnecessary complexity to please the design patterns Gods. This included creating view models for each view, ignoring @FetchRequest and @SectionFetchRequest property wrappers, passing @EnvironmentObject to the view model and much more.  
+This talk really resonated with me because I did similar mistakes when building SwiftUI applications. Instead of embracing the simplicity of the framework, I added unnecessary complexity to please the design pattern Gods. This included creating view models for each view, ignoring @FetchRequest and @SectionFetchRequest property wrappers, passing @EnvironmentObject to the view model and much more.  
 
-After almost two years of driving in the wrong direction, I decided to press the brakes and go back to the drawing board. In this post, I will discuss the SwiftUI architecture I am using for my apps. The architecture might look extremely simple but it does utilize the true power of SwiftUI framework. 
+After almost two years of driving in the wrong direction, I decided to stop and think about my decisions. In this post, I will discuss the SwiftUI architecture I am using for my apps. The architecture might look extremely simple but it does utilize the true power of SwiftUI framework. 
 
 >> There is no official name for this architecture but in the iOS community it is known as the MV pattern. This pattern is inspired from Apple's WWDC videos and sample applications. You can find the links to the sample apps in the resources section. 
 
@@ -109,7 +109,8 @@ class Model: ObservableObject {
 
 The model calls the OrderService to get all the orders and performs different actions related to orders like inserting, updating, sorting and filtering etc.   
 
->> You might be wondering that why can't the view directly call the OrderService and display all the orders in a local/private state. You can definitely do that but since, I am allowing the users to edit the orders on a separate screen and then refreshing on the original screen it would make more sense for the orders to be available globally. Another reason is that root model can provide sorting, filtering capabilities, which does not fit well in the OrderService. The root model can invoke multiple services to aggregate and return data to the view and even add caching support (through a caching layer) to the app.  
+>> You might be wondering that why can't the view directly call the OrderService and store all the orders in a local/private state using the @State property wrapper. You can definitely do that but since, I am allowing the users to edit the orders on a separate screen and then refreshing on the original screen it would make more sense for the orders to be available globally. Also, if you store is in local state and the same state is needed or can be changed from other views then you will have to pass the state to the child views using @Binding. Again, there is nothing wrong with that but it can end up more work when passing the state too deep into the view hierarchy.  
+Another reason is that root model can provide sorting, filtering capabilities, which does not fit well in the OrderService. The root model can also invoke multiple services to aggregate and return data to the view and even add caching support (through a caching layer) to the app.  
 
 Next, let's take a look at the OrderService. 
 
@@ -173,7 +174,7 @@ class OrderService {
 }
 ```
 
->> You can also create a generic webservice, which has all the basic operations like getAll, getById etc. 
+>> If needed you can also create a generic webservice, which has all the basic operations like getAll, getById etc. 
 
 ## Implementing Views
 
@@ -352,6 +353,40 @@ struct AddNewCoffeeOrderView: View {
 }
 ```
 
+If you have a large form to validate then you can also introduce a view model, which will be populated through the TextFields. The view model can also provide validation support. One possible implementation is shown below: 
+
+```swift 
+struct AddCoffeeViewState {
+    
+    var name: String = ""
+    var coffeeName: String = ""
+    var total: String = ""
+    var size: CoffeeSize = .medium
+    var errors: AddNewCoffeeOrderError = AddNewCoffeeOrderError()
+    
+    mutating func isValid() -> Bool {
+       
+        if name.isEmpty {
+            errors.name = "Name cannot be empty!"
+        }
+        
+        if coffeeName.isEmpty {
+            errors.coffeeName = "Coffee name cannot be empty"
+        }
+        
+        if total.isEmpty {
+            errors.total = "Total cannot be empty"
+        } else if !total.isNumeric {
+            errors.total = "Total can only be numbers"
+        } else if total.isLessThan(0) {
+            errors.total = "Total cannot be less than 0"
+        }
+        
+        return errors.name.isEmpty && errors.coffeeName.isEmpty && errors.total.isEmpty
+    }
+}
+```
+
 We have used the same techniques for validation as used in React apps. If the field validation is unsuccessful then a flag is set, which displays the error messages to the user. 
 
 >> UI validation is NOT business logic. UI validation is just checking if the user has input valid information. The business rules (if any) will be executed on the valid data. Let's say you are building a website, where the user can enter their credit score and get an APR rate (Interest Rate). The UI validation is going to check that the credit score TextField is not left empty. It will also check that the score only consists of numbers between a certain range. All of this will be UI validation. Once the user successfully submits the credit score, the system will run business rules to find out the appropriate APR for the user.  
@@ -397,16 +432,55 @@ If you type in the TextField then you will notice that the body is fired each ti
 
 In the same way when using the @EnvironmentObject, several views may get revaluated but only those who needs to be rerendered are rendered again. If you are getting unwanted rerendering then you can always split your @EnvironmentObject into multiple objects. This is shown in my article [Slicing Global State in SwiftUI Using Multiple EnvironmentObjects](https://azamsharp.com/2022/07/01/slicing-environment-object.html). 
 
+# Testing
+One of the arguments of using MVVM with SwiftUI is that it allows developers to easily perform unit testing for their views. This is a valid argument, because having a separate layer of view model does allow easy testing. You can invoke actions on the view model and witness changes on the view model properties. This kind of in-memory UI testing may not possible without an extra layer of view model but you can still write UI Tests for your SwiftUI applications. You can either use built-in Xcode UI Test Project or a framework called ViewInspector.
+
+Side Note
+Kent Beck said it best “I get paid for code that works, not for tests, so my philosophy is to test as little as possible to reach a given level of confidence”.
+
+Nowadays, I see developers religiously testing every single line of their code and aiming for that 100% code coverage. Developers are paid to write features/code, not unit tests. But I always witness in projects that test code is almost 3 times more as compared to the actual codebase.
+
+Testing is definitely very important but only if you are writing meaningful tests. Consider a case, where we have to write a unit test for a following scenario.
+
+>> A user should be able to add transaction to their existing budget
+
+If this operation is part of your model then your test should create a user, add a budget for that user in the database. Then add a new transaction to that budget and then check if the transaction was added successfully or not.
+
+Unfortunately, most developers will ignore the database part and run their test against a mocked object. In the end their test run fast and they are happy to see the test pass but what exactly did they test. They simply tested that their mock object work as expected. In this scenario a real test would hit the database and check if all the rules were met or not.
+
+>> For the above scenario we are considering on device database like Sqlite being managed by Core Data or Realm.
+
+I have worked with companies that have more than 2000+ tests. But if you looked closely you will find out the tests were not testing anything related to the business domain. They were actually testing the programming language. This is why it is extremely important to test the behaviors of your application instead of the implementation. When writing a test, ask yourself what business logic is being tested. If you cannot answer that question then stop writing the test.
+
+>> Testing is very important that is why I give more precedence to domain layer unit tests and full system end-to-end functional tests. Functional system tests will ensure that the system works with all the other layers of the application. You don’t have to write tests for your controller or view models. All of those layers will be tested during the end to end functional tests.
+
+I cover end-to-end testing in my [video](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/?referralCode=4627986F77F533DEF0C7) course. 
+
+## Source Code
+
+You can download the source code using the link below: 
+
+[https://github.com/azamsharp/CoffeeAppMV]()
+
+## Video Course
+
+If you are interested in learning more about the MV Pattern in iOS then check out my brand new course
+
+ [MV Design Pattern in iOS - Build SwiftUI Apps Apple's Way](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/?referralCode=4627986F77F533DEF0C7)
+
 ## Resources 
 
 - [SwiftUI View is also a View Model](https://azamsharp.com/2022/07/21/view-is-the-view-model.html)
 - [WWDC - Data Flow Though SwiftUI](https://developer.apple.com/videos/play/wwdc2019/226/)
 - [Udemy Course: MV Design Pattern in iOS - Build SwiftUI Apps Apple's Way](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/?referralCode=4627986F77F533DEF0C7)
 - [Lessons learned rewriting SoundCloud in SwiftUI](https://vimeo.com/751534042/f1ae29434e)
+- [Fruta: Building a Feature-Rich App with SwiftUI](https://developer.apple.com/documentation/swiftui/fruta_building_a_feature-rich_app_with_swiftui)
+- [Food Truck: Building a SwiftUI Multiplatform App](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app)
+- [Meme Creator](https://developer.apple.com/tutorials/sample-apps/memecreator)
 
 
 ## Conclusion 
 
-SwiftUI does not need MVVM, since it already has MVVM built-in. Although you can use MVVM with SwiftUI but it needlessly complicate things. A lot of other developers are coming to the same conclusion and rewriting their apps using features provided by SwiftUI. SwiftUI adds some magic to their property wrappers, which makes everything simple. For your next app, try creating views without View Models and allow the views to directly talk to the model. To truly unleash the power of SwiftUI, you need to embrace all the different property wrappers provided by the framework.  
+SwiftUI does not need MVVM, since it already has MVVM built-in. Although you can use MVVM with SwiftUI but it needlessly complicate things. A lot of other developers are coming to the same [conclusion](https://vimeo.com/751534042/f1ae29434e) and rewriting their apps using features provided by SwiftUI. SwiftUI adds some magic to their property wrappers, which makes everything simple. For your next app, try creating views without view models and allow the views to directly talk to the model. To truly unleash the power of SwiftUI, you need to embrace all the different property wrappers provided by the framework.  
 
 
