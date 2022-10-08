@@ -468,7 +468,7 @@ I cover end-to-end testing in my [video](https://www.udemy.com/course/mv-design-
 
 ## Conclusion 
 
-SwiftUI does not need MVVM, since it already has MVVM built-in. Although you can use MVVM with SwiftUI but it needlessly complicate things. A lot of other developers are coming to the same [conclusion](https://vimeo.com/751534042/f1ae29434e) and rewriting their apps using features provided by SwiftUI. SwiftUI adds some magic to their property wrappers, which makes everything simple and performance efficient at the same time. For your next app, try creating views without view models and allow the views to directly talk to the model objects. 
+SwiftUI already has MVVM built-in. This means you don't need an extra layer of view models for your applications. A lot of other developers are coming to the same [conclusion](https://vimeo.com/751534042/f1ae29434e) and rewriting their apps using features provided by SwiftUI. SwiftUI adds some magic to their property wrappers, which makes everything simple and performance efficient at the same time. For your next app, try creating views without view models and allow the views to directly talk to the model objects. 
 
 Instead of fighting the framework try to embrace it. 
 
