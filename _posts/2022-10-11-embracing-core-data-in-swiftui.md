@@ -4,9 +4,16 @@ Core Data framework allows the user to persist an object tree to several differe
 
 >> The complete app is part of my course [MV Design Pattern in iOS - Build SwiftUI Apps Apple's Way](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/?couponCode=780EABCF3E4DC632EC9F)
 
+## Back Story 
+
+## Old Way 
+
+## New Way 
+
+
 ## Setting Up the Core Data Stack 
 
-The first step in using Core Data is to setup the Core Data stack. This means you have a basic Data Model file ready, which can be loaded using APIs provided by Core Data. In the implementation below you can see the CoreDataManager, which is responsible for setting up the Core Data stack. 
+The first step in using Core Data is to setup the Core Data stack. This means you have a basic data model file ready, which can be loaded using APIs provided by Core Data. In the implementation below you can see the CoreDataManager, which is responsible for setting up the Core Data stack. 
 
 >> You can download the complete project [here](https://github.com/azamsharp/BudgetApp) and check out the Core Data model file. 
 
