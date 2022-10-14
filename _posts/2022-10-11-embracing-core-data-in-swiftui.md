@@ -1,16 +1,15 @@
 # Embracing Core Data in SwiftUI 
 
-Core Data framework allows to persist an object tree to several different stores including SQLite, XML, binary and in-memory. SwiftUI team has provided us with APIs to make sure that SwiftUI and Core Data works seamlessly together. In this post, we will be building a small budget app using SwiftUI and Core Data. We will start by discussing our original approach of implementing the app. In our original approach we did not use any helpers provided by the SwiftUI team. Later, we will dive into the implementation, which uses SwiftUI Core Data property helpers. 
+Last year I was working on an app which was using the Core Data framework as a persistent medium to the SQLite store. I was reluctant to use any SwiftUI property wrappers for Core Data in my app, because I wanted to structure the app in several layers and those property wrappers were only available inside the View. The app worked but it was a pain to make sure that everything in Core Data was synced with SwiftUI views. 
+
+ SwiftUI team has provided us with APIs to make sure that SwiftUI and Core Data works seamlessly together. In this post, we will be building a small budget app using SwiftUI and Core Data. We will start by discussing our original approach of implementing the app, where we did not use any helpers provided by the SwiftUI frame. Later, we will look into a much simpler implementation, which uses SwiftUI Core Data property wrappers. 
 
 >> The complete app is part of my course [MV Design Pattern in iOS - Build SwiftUI Apps Apple's Way](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/?couponCode=780EABCF3E4DC632EC9F)
 
-## Back Story 
-
-Last year I was working on a Udemy course on SwiftUI, where one of the application was using Core Data framework. I was structuring my app into layers and staying away from all the new property wrappers provided by Apple. The app worked but it was a pain to make sure that everything in Core Data was synced with SwiftUI views. I either had to manually fetch the data again after inserting or I had to conform to ```NSFetchedResultsControllerDelegate```. In the next section, I will go over some of the issues I faced when working against the SwiftUI framework and not using all the features provided by SwiftUI to manage Core Data. 
 
 ## OLD WAY - Manually Calling Fetch or Implementing NSFetchedResultsController 
 
-I started with creating view models for each of my view. This included ```BudgetCategoryListViewModel```, ```AddNewBudgetViewModel``` etc. Each view model that interacts with Core Data was passed CoreDataManager as a dependency. This is shown in the implementation of BudgetCategoryListViewModel below: 
+I started with creating view models for each of my view. This included ```BudgetCategoryListViewModel```, ```AddNewBudgetViewModel``` etc. Each view model that interacted with Core Data was passed CoreDataManager as a dependency. CoreDataManager contains all the code which is used to setup Core Data stack and also provide fetching and persistence capabilities. The implementation of BudgetCategoryListViewModel is shown below: 
 
 ```swift 
 class BudgetCategoryListViewModel: ObservableObject {
@@ -38,7 +37,7 @@ class BudgetCategoryListViewModel: ObservableObject {
 }
 ```
 
->> The main reason for adding a CoreDataManager as a dependency is that sometimes developers want to create different managers based on the environment. For Core Data I have seen developers creating in-memory databases and writing tests against it. I am not in favour of such approach. I personally don't write against an in-memory database. Instead I would write to an actual database and then make sure that the database is destroyed after each test. The unit test is the isolation, not the thing under test. 
+>> The main reason for adding a CoreDataManager as a dependency is that sometimes developers want to create different managers based on the environment. For Core Data I have seen developers creating in-memory databases and writing tests against it. I am not in favour of such approach. I personally don't write tests against an in-memory database. Instead I would write tests against an actual database and then make sure that the database is destroyed after each test. Remember that the unit test is the isolation, not the thing under test. 
 
 The ContentView is also updated to take in BudgetCategoryListViewModel as a dependency. 
 
@@ -69,7 +68,7 @@ struct ContentView: View {
 }
 ```
 
-This means when creating ContentView, you need to pass in the view model dependency which takes in a Core Data dependency. 
+This means when creating ContentView, you need to pass in the view model dependency which itself takes in a Core Data dependency. 
 
 ```swift 
 
@@ -125,9 +124,9 @@ class CoreDataManager {
 }
 ```
 
->> For the sake of simplicity, we have added these functions to the CoreDataManager. For larger apps you should create designated services or place them under their corresponding entity.  
+>> For the sake of simplicity, we have added these functions to the CoreDataManager. For larger apps you should create designated services or place them under their corresponding entities.  
 
-In order to add a new budget category, user opens the AddNewBudgetCategoryView as a modal and fill in all the information. Once the budget category is added, the modal is dismissed. Unfortunately, the ContentView does not show the newly added budget category. There are several ways to resolve this issue. The quickest way is to call ```getBudgetCategories``` on BudgetCategoryListViewModel, when the modal is dismissed. This is shown below: 
+In order to add a new budget category, user opens the AddNewBudgetCategoryView as a modal and fills in all the required information. Once the budget category is added, the modal is dismissed. Unfortunately, the ContentView does not show the newly added budget category. There are several ways to resolve this issue. The quickest solution is to call ```getBudgetCategories``` on BudgetCategoryListViewModel, when the modal is dismissed. This is shown below: 
 
 ```swift 
  var body: some View {
@@ -152,11 +151,11 @@ In order to add a new budget category, user opens the AddNewBudgetCategoryView a
         }
 ```
 
->> There are several other ways to solve this problem. You can pass your budgetCategories as a @Binding to the AddNewOrderView and then insert an instance of BudgetCategoryViewModel, when Core Data successfully saves the item to the store. You can also store everything in an @EnvironmentObject and update it, but in that case you will need to pass @EnvironmentObject to the view model. I have also heard that you can subscribe to Combine publishers and refresh your view in case of changes. 
+>> There are several other ways to solve this problem. You can pass your budgetCategories as a @Binding to the AddNewOrderView and then insert an instance of BudgetCategoryViewModel, when Core Data successfully saves the item to the store. You can also store everything in an @EnvironmentObject and update it, but in that case you will need to pass @EnvironmentObject to the view model. 
 
-The above code will refresh the main view and display the newly inserted data. Although, it was not a lot of code but we still had to remember to call ```vm.getBudgetCategories``` on the dismiss of the model to get the newly added data.
+The above code will refresh the main view and display the newly inserted data. Although, it was not a lot of code but we still need to remember to call ```vm.getBudgetCategories``` on the dismiss of the model to get the newly added data.
 
-The call to ```vm.getBudgetCategories```, which also happens now on the dismiss of the modal will fetch all the data again from the store (SQLite). This is shown below: 
+Keep in mind that calling ```vm.getBudgetCategories``` on modal dismiss will fetch all the records again from the database. The SQL statements executed by Core Data are shown below: 
 
 
 ```sql 
@@ -183,7 +182,7 @@ You can read more about how to debug Core Data [here](https://useyourloaf.com/bl
 
 For our small app, it may not pose any concern, but if you had tons of records then it can cause issues.  
 
-Another thing we noticed is regarding the Core Data integration with CloudKit. The CoreDataManager function `getAllBudgetCategories` will not be called if an entry is added, modified, deleted on the cloud. In order to get the updates from the cloud, we will need to conform to NSFetchedResultsControllerDelegate. Since BudgetCategoryListViewModel is responsible for displaying all the budget categories to the user, we will conform it to ```NSFetchedResultsControllerDelegate```. The implementation is shown below: 
+Another thing I noticed is regarding the Core Data integration with CloudKit. The CoreDataManager function `getAllBudgetCategories` will not be called if an entry is added, modified, deleted on the cloud. In order to get the updates from the cloud, you will need to conform to ```NSFetchedResultsControllerDelegate```. The implementation is shown below: 
 
 ```swift 
 @MainActor
@@ -225,11 +224,11 @@ class BudgetCategoryListViewModel: NSObject, ObservableObject {
 }
 ```
 
-Now our ```BudgetCategoryListViewModel``` conforms to ```NSFetchedResultsControllerDelegate```. This means that we will get updates for our BudgetCategory entity. This also means that if you modify a record on the Cloud then it will be synced with the local app **instantly**. We also removed ```getBudgetCategories``` function from BudgetCategoryListViewModel, since NSFetchedResultsController is going to call ```controllerDidChangeContent``` function when any changes in BudgetCategory are detected. This means when you add a new budget category, it is automatically added to the view.  
+Now our ```BudgetCategoryListViewModel``` conforms to ```NSFetchedResultsControllerDelegate```. This means that we will get updates for our BudgetCategory entity. This also means that if you modify a record on the Cloud then it will be synced with the local app **instantly**. We also removed ```getBudgetCategories``` function from BudgetCategoryListViewModel, since NSFetchedResultsController is going to call ```controllerDidChangeContent``` function when any changes in BudgetCategory are detected. 
 
->> The word instantly is used loosely here. It usually takes couple of seconds to get updates from CloudKit and sync to the local database. When the actual call to sync will be made is still unclear. Core Data framework internally decides when it is appropriate time to sync.  
+>> The word instantly is used loosely here. It usually takes couple of seconds to get updates from CloudKit and sync to the local database.   
 
-The bottom line is that If you do not use NSFetchedResultsController then you end up fetching all the items again from the database. If you do use NSFetchedResultsController then you have to write a lot of code. 
+The bottom line is that If you do not use NSFetchedResultsController then you end up fetching all the items again from the database. If you do use NSFetchedResultsController then you have to write a lot of code as shown above. 
 
 --- 
 
@@ -266,7 +265,7 @@ class CoreDataManager {
 }
 ```
 
-Once, the Core Data stack has been initialized you can inject the NSManagedObjectContext into the @Environment of the app. 
+Once, the Core Data stack has been initialized you can inject the NSManagedObjectContext in the @Environment of the app. 
 
 The implementation is shown below: 
 
@@ -283,9 +282,11 @@ struct BudgetApp: App {
 
 >> This step is very important because the SwiftUI property wrappers like @FetchRequest, @SectionedFetchRequest will look for the NSManagedObjectContext inside the view's environment using @Environment property wrapper. If they don't find a value for ```managedObjectContext``` key then your code will not work as expected. 
 
-Now, you are ready to use Core Data inside your View. 
+>> NSManagedObject also conforms to the ObservableObject protocol. This means they have the capability of publishing their changes to the view. 
 
->> View in SwiftUI is also a View Model. Anytime in this article we refer to a view we are talking about a SwiftUI view which is also a view model. Check out the articles discussed in resources section below to learn more about it. 
+Now, you are ready to use Core Data inside your views. 
+
+>> A view in SwiftUI is also a view model. Anytime in this article we refer to a view we are talking about a SwiftUI view which is also a view model. Check out the articles discussed in resources section below to learn more about it. 
 
 ## Displaying Budget Categories 
 
@@ -355,7 +356,7 @@ Each budget category will consists of a list of transactions. The relationship b
 
 ![Core Data Model Diagram](/images/core-data-relationship.png)
 
-When a user selects a budget, we want to display all the transactions associated with that budget. We also want the user to add transactions to a selected budget. 
+When a user selects a budget, we want to display all the transactions associated with that budget. We also want the user to add transactions to an existing budget. 
 
 ### Saving a Transaction 
 
@@ -390,7 +391,7 @@ Once the user has entered the transaction details, they can press the save butto
 
 ## Displaying Transactions 
 
-The next step is to display all the transactions associated with the budget category. Due to one-to-many relationship between budget category and transaction, there is already a transactions property on the budget object. Unfortunately, the transactions property is of NSSet type, which does not conform to RandomAccessCollection. 
+The next step is to display all the transactions associated with the budget category. Due to one-to-many relationship between budget category and transaction, there is already a transactions property on the budget object. Unfortunately, the transactions property is of NSSet type, which does not conform to RandomAccessCollection. This means we cannot use a List view to iterate through the transactions.  
 
 ```swift 
  List(budgetCategory.transactions) { transaction in
@@ -527,9 +528,11 @@ If you think you will reuse the transactionsTotal on some other view then you ca
 
 ## Conclusion 
 
-Apple engineers have done a lot of work to make Core Data work seamlessly with SwiftUI framework. Property wrappers like @FetchRequest and @SectionedFetchRequest are optimized to work with SwiftUI framework and they are only available in the View (View is also a ViewModel in SwiftUI). 
+Apple engineers have done a lot of work to make Core Data work seamlessly with SwiftUI framework. Property wrappers like @FetchRequest and @SectionedFetchRequest are optimized to work with SwiftUI framework and they are only available in the View (View is also a ViewModel in SwiftUI). For your next app try to use the available property wrappers in SwiftUI, you will be impressed at how much less code you have to write to achieve the same result. 
 
 I hope you enjoyed this article! 
+
+If you liked this article, then you may consider checking out [my courses](https://azamsharp.com/courses). 
 
 
 ## Source Code 
