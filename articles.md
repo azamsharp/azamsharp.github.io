@@ -8,6 +8,11 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Embracing Core Data in SwiftUI](_posts/2022-10-11-embracing-core-data-in-swiftui.md)
+Last year I was working on an app which was using the Core Data framework as a persistent medium to the SQLite store. I was reluctant to use any SwiftUI property wrappers for Core Data in my app, because I wanted to structure the app in several layers and those property wrappers were only available inside the View. The app worked but it was a pain to make sure that everything in Core Data was synced with SwiftUI views. 
+
+ SwiftUI team has provided us with APIs to make sure that SwiftUI and Core Data works seamlessly together. In this post, we will be building a small budget app using SwiftUI and Core Data. We will start by discussing our original approach of implementing the app, where we did not use any helpers provided by the SwiftUI frame. Later, we will look into a much simpler implementation, which uses SwiftUI Core Data property wrappers.
+
 ### [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](_posts/2022-10-06-practical-mv-pattern-crud.md)
 
 I was listening to an amazing talk by Matias Villaverde and Rens Breur at NSSpain about "Lessons learnt rewriting SoundCloud in SwiftUI". You can watch the complete talk [here](https://vimeo.com/751534042/f1ae29434e). 
