@@ -2,11 +2,11 @@
 
 In the last architecture, we discussed in detail about [SwiftUI Architecture using the MV Pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). It is highly recommended that you read the [original post](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). In this post, we will cover how to create SwiftUI client/server applications using ReactJS architectural patterns. 
 
->> There are no silver bullets, use the architecture that fit your needs. 
-
 ## Consuming JSON in React 
 
 React was introduced in 2013, it means React had a head start of around 6 years over SwiftUI. React, SwiftUI and Flutter are all declarative frameworks and they are extremely similar in nature. We may not use React or Flutter to build iOS applications but we can definitely learn architectural patterns from them and incorporate it in SwiftUI applications. 
+
+>> It is encouraged to look at large codebase of React projects and learn how they implemented their apps. Same techniques can be applied for SwiftUI projects due to the similarity of the two frameworks.  
 
 In the code below you can see the App component (Comparable to SwiftUI View), fetching all the products from an API and then displaying it on the screen. 
 
@@ -45,7 +45,7 @@ The App component uses local/private state using React hooks as shown in the imp
 const [products, setProducts] = useState([])
 ```
 
-This is equivalent to @State in SwiftUI. Below you can find the complete implementation of the ContentView.  
+This is equivalent to ```@State``` in SwiftUI. Below you can find the complete implementation of the ContentView.  
 
 ```swift 
 struct ContentView: View {
