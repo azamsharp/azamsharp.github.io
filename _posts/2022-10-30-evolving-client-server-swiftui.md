@@ -1,4 +1,4 @@
-# Evolving SwiftUI Client/Server Architecture 
+# Evolving SwiftUI Architecture for Client/Server Apps 
 
 In the last architecture, we discussed in detail about [SwiftUI Architecture using the MV Pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). It is highly recommended that you read the [original post](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). In this post, we will cover how to create SwiftUI client/server applications using patterns and practices learned from ReactJS framework. 
 
