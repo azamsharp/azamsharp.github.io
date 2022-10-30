@@ -1,6 +1,6 @@
 # Evolving SwiftUI Client/Server Architecture 
 
-TODO
+In the last architecture, we discussed in detail about [SwiftUI Architecture using the MV Pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). It is highly recommended that you read the original post. In this post, we will cover how you can simplify SwiftUI client/server architecture by allowing our view (view model) to talk directly with the NetworkModel. 
 
 
 ## Consuming JSON in React 
@@ -259,13 +259,46 @@ The performSort function is fired, whenever the sortDirection changes. The perfo
     }
 ```
 
+>> The heart of sorting functionality is the [```sorted extension```](https://www.swiftbysundell.com/articles/the-power-of-key-paths-in-swift/), which allows sorting based on KeyPath. This means, it is a reusable function. 
 
+If you find some functionality, that you will need to use in other views then it is always a good idea to move it aside in a separate class. This was the main reason we moved our networking code into a NetworkModel. 
 
+>> You don't have to settle for just a single NetworkModel class for your complete app. A single NetworkModel may work for small sized applications but for larger apps you can create multiple NetworkModels based on the domain. This can include UserNetworkModel, AccountNetworkModel, ProductNetworkModel, CatalogNetworkModel etc. 
+
+## Caching 
+
+Caching allows your client (iOS App) to get responses from memory or filesystem instead of going all the way to the server. This can drastically improve performance of your apps. Even caching for just 5-6 seconds (Micro Caching) can help you save tons of requests and improve the performance of your app. 
+
+The caching layer can be implemented in the NetworkModel. Caching will be covered in the future post, but you check out the comments below to get an idea. 
+
+```swift 
+@MainActor
+class NetworkModel: ObservableObject {
+    
+    @Published var products: [Product] = []
+    
+    func fetchProducts(url: URL) async throws {
+        
+        // use a CacheService to check the data in the cache
+        // if the data is already in cache then return it from cache
+        // otherwise fetch a new copy of the data
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        products = try JSONDecoder().decode([Product].self, from: data)
+    }
+}
+```
+
+>> Sometimes developers find comfort in adding an intermediatory layer between the view and the network. We like to call that layer an aggregate root model and then your NetworkModel becomes Webservice. That approach was discussed in the last article [here](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). Depending on your app, you can evaluate which architecture works better for your app. 
 
 ## Resources 
 
 - [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html)
 - [Embracing Core Data in SwiftUI](https://azamsharp.com/2022/10/11/embracing-core-data-in-swiftui.html)
 - [SwiftUI View is also a View Model](https://azamsharp.com/2022/07/21/view-is-the-view-model.html)
+- [SwiftUI List|Searching & Sorting|JSON API](https://youtu.be/hMZdRduyA_4)
 
 ## Conclusion 
+
+In this post, you learned about SwiftUI architecture for client/server applications. This architecture is inspired from React applications. As mentioned before React, Flutter and SwiftUI share a lot of similarities and as developers, we should always try to learn from more mature frameworks. 
+
