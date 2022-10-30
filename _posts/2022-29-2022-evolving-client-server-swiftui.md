@@ -93,7 +93,7 @@ class NetworkModel: ObservableObject {
 }
 ```
 
-The NetworkModel class can be called directly from the ContentView. 
+The NetworkModel class can be called directly from the ContentView as shown below:  
 
 ```swift 
 struct ContentView: View {
@@ -114,7 +114,151 @@ struct ContentView: View {
 }
 ```
 
->> In the above code, ContentView serves as a container view and the List can be extracted into a reusable presentation view. The primary purpose of container view is not to provide reusability but host views that are reusable. 
+We can even refactor the above code to create ```ProductListView``` and ```ProduceCellView```. This is shown below: 
+
+```swift 
+struct ProductCellView: View {
+    
+    let product: Product
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(product.title)
+                .bold()
+                .padding([.bottom], 10)
+            Text(product.description)
+        }
+    }
+}
+
+struct ProductListView: View {
+    
+    let products: [Product]
+    
+    var body: some View {
+        List(products) { product in
+            ProductCellView(product: product)
+        }
+    }
+}
+
+struct ContentView: View {
+    
+   @StateObject private var networkModel = NetworkModel()
+    
+    var body: some View {
+        ProductListView(products: networkModel.products)
+            .task {
+            do {
+                try await networkModel.fetchProducts(url: Constants.Urls.allProducts)
+            } catch {
+                print(error)
+            }
+        }
+    }
+}
+```
+
+
+>> In the above code, ContentView serves as a container view and the ProductListView and ProductCellView are presentation views. 
+
+
+## Searching
+
+Most of the time when you are displaying a list of data, you also want to perform different actions on the data like searching and sorting. Let's see how we can accomplish the task of searching. 
+
+We are going to use the ```searchable``` modifier, which will allow us to create a SearchBar. We are also going to use the ```onChange``` modifier, which will trigger each time a user will enter something in the TextField. The onChange modifier calls the performSearch function, which searches the products returned from networkModel and assigns it to the filteredProducts array. 
+ 
+The new private property ```products``` returns filteredProduct if not empty, otherwise it returns list of all products.  
+
+```swift 
+struct ContentView: View {
+    
+    @StateObject private var networkModel = NetworkModel()
+    @State private var search: String = ""
+    @State private var filteredProducts: [Product] = []
+    
+    private func performSearch(keyword: String) {
+        filteredProducts = networkModel.products.filter { product in
+            product.title.lowercased().contains(keyword.lowercased())
+        }
+    }
+    
+    private var products: [Product] {
+        filteredProducts.isEmpty ? networkModel.products: filteredProducts
+    }
+    
+    var body: some View {
+        NavigationStack {
+            ProductListView(products: products)
+                .searchable(text: $search)
+                .onChange(of: search, perform: performSearch)
+                .task {
+                    do {
+                        try await networkModel.fetchProducts(url: Constants.Urls.allProducts)
+                    } catch {
+                        print(error)
+                    }
+                }
+        }
+    }
+}
+```
+
+>> The ContentView in SwiftUI, which is also a view model is not performing any business logic operations. All the business rules are run on the server side and only the result is sent back to the client (iOS App) for display. 
+
+Now, let's take a look at sorting and how we can implement sorting in our application. 
+
+## Sorting 
+
+We are going to allow the user to sort products in ascending or descending order, based on the title of the product. The ```SortDirection``` is implemented below: 
+
+```swift 
+enum SortDirection {
+    case asc
+    case desc
+}
+```
+
+The sorting will be performed by a button press. We also need to toggle the text of the button. This is performed by a local @State property as shown below: 
+
+```swift
+ var sortButtonText: String {
+        sortDirection == .asc ? "Sort Descending": "Sort Ascending"
+    }
+
+      VStack {
+                Button(sortButtonText) {
+                    sortDirection = sortDirection == .asc ? .desc: .asc
+                }
+                ProductListView(products: products)
+                    .searchable(text: $search)
+                    .onChange(of: search, perform: performSearch)
+                    .onChange(of: sortDirection, perform: performSort)
+                    .task {
+                        do {
+                            try await networkModel.fetchProducts(url: Constants.Urls.allProducts)
+                        } catch {
+                            print(error)
+                        }
+                }
+            }
+```
+
+The performSort function is fired, whenever the sortDirection changes. The performSort is responsible for sorting the list in ascending or descending order. 
+
+```swift 
+ private func performSort(direction: SortDirection) {
+        
+        switch direction {
+            case .asc:
+                networkModel.products = networkModel.products.sorted(by: \.title)
+            case .desc:
+                networkModel.products = networkModel.products.sorted(by: \.title).reversed()
+        }
+    }
+```
+
 
 
 
