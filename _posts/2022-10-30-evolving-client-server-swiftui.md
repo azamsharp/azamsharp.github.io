@@ -1,10 +1,10 @@
 # Evolving SwiftUI Client/Server Architecture 
 
-In the last architecture, we discussed in detail about [SwiftUI Architecture using the MV Pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). It is highly recommended that you read the [original post](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). In this post, we will cover how to create SwiftUI client/server applications using ReactJS architectural patterns. 
+In the last architecture, we discussed in detail about [SwiftUI Architecture using the MV Pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). It is highly recommended that you read the [original post](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). In this post, we will cover how to create SwiftUI client/server applications using patterns and practices learned from ReactJS framework. 
 
 ## Consuming JSON in React 
 
-React was introduced in 2013, it means React had a head start of around 6 years over SwiftUI. React, SwiftUI and Flutter are all declarative frameworks and they are extremely similar in nature. We may not use React or Flutter to build iOS applications but we can definitely learn architectural patterns from them and incorporate it in SwiftUI applications. 
+React was introduced in 2013, it means React had a head start of around 6 years over SwiftUI. React, SwiftUI and Flutter are all declarative frameworks and they are extremely similar in nature. We may not use React or Flutter to build applications but we can definitely learn architectural patterns from them and incorporate it in our SwiftUI applications. 
 
 >> It is encouraged to look at large codebase of React projects and learn how they implemented their apps. Same techniques can be applied for SwiftUI projects due to the similarity of the two frameworks.  
 
@@ -45,7 +45,9 @@ The App component uses local/private state using React hooks as shown in the imp
 const [products, setProducts] = useState([])
 ```
 
-This is equivalent to ```@State``` in SwiftUI. Below you can find the complete implementation of the ContentView.  
+The fetch API is used to consume JSON response and then finally populating the local state of the component. 
+
+This is equivalent to ```@State``` in SwiftUI. Below you can find the complete implementation of the ContentView in SwiftUI.  
 
 ```swift 
 struct ContentView: View {
@@ -71,7 +73,7 @@ struct ContentView: View {
 }
 ```
 
-We used the private/local @State to hold on to the products and made the call to the API right within our view (view model). 
+We populated the private/local @State with products and the API call was made from right within our view (view model). 
 
 >> SwiftUI views are basically equivalent to components in React or widgets in Flutter. SwiftUI views acts as a view model. Having said that, you should not put business logic in your view (view model). Business logic belongs in either model, domain service or on the server (client/server) apps. 
 
@@ -169,7 +171,7 @@ struct ContentView: View {
 ```
 
 
->> In the above code, ContentView serves as a container view and the ProductListView and ProductCellView are presentation views. Container views serves the purpose of containing other views (reusable views). Container views can download data from an API and then pass it down to the child views.  
+>> In the above code, ContentView serves as a container view and the ProductListView and ProductCellView are presentation views. Container views serves the purpose of containing other views (reusable views). The main job of a container view is to provide data down to the child views. 
 
 ## Searching
 
@@ -269,7 +271,7 @@ The performSort function is fired, whenever the sortDirection changes. The perfo
 
 >> The heart of sorting functionality is the [```sorted extension```](https://www.swiftbysundell.com/articles/the-power-of-key-paths-in-swift/), which allows sorting based on KeyPath. This means, it is a reusable function. 
 
->> You don't have to settle for just a single NetworkModel class for your complete app. A single NetworkModel may work for small sized applications but for larger apps you can create multiple NetworkModels based on the domain. This can include UserNetworkModel, AccountNetworkModel, ProductNetworkModel, CatalogNetworkModel etc. 
+>> You don't have to settle for just a single NetworkModel class for your complete app. A single NetworkModel may work for small sized applications but for larger apps you can create multiple NetworkModels based on the type of requests. This can include UserNetworkModel, AccountNetworkModel, ProductNetworkModel, CatalogNetworkModel etc. 
 
 ## Caching 
 
@@ -297,6 +299,12 @@ class NetworkModel: ObservableObject {
 
 >> Sometimes developers find comfort in adding an intermediatory layer between the view and the network. We like to call that layer an aggregate root model and then your NetworkModel becomes Webservice. That approach was discussed in the last article [here](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). Depending on your app, you can evaluate which architecture works better for your app. 
 
+The SwiftUI team has done a tremendous job in making the framework easy to use. Sometimes, it feels so simple that we begin to question ourself about the validity of the solution. The same experience is felt when using React and Flutter. Declarative user interfaces brings new concepts and patterns in programming, which may not sit well with older principles. One must experiment with different patterns and choose the one that satisfy their needs and criteria. 
+
+## Conclusion 
+
+In this post, you learned about SwiftUI architecture for client/server applications. This architecture is inspired from React applications. As mentioned before React, Flutter and SwiftUI share a lot of similarities and as developers, we should always try to learn from more mature frameworks. 
+
 ## Resources 
 
 - [MV Design Pattern in iOS: Build SwiftUI Apps Apple's Way](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/?referralCode=4627986F77F533DEF0C7)
@@ -305,7 +313,5 @@ class NetworkModel: ObservableObject {
 - [SwiftUI View is also a View Model](https://azamsharp.com/2022/07/21/view-is-the-view-model.html)
 - [SwiftUI List|Searching & Sorting|JSON API](https://youtu.be/hMZdRduyA_4)
 
-## Conclusion 
 
-In this post, you learned about SwiftUI architecture for client/server applications. This architecture is inspired from React applications. As mentioned before React, Flutter and SwiftUI share a lot of similarities and as developers, we should always try to learn from more mature frameworks. 
 
