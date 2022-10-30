@@ -311,6 +311,7 @@ In this post, you learned about SwiftUI architecture for client/server applicati
 - [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html)
 - [Embracing Core Data in SwiftUI](https://azamsharp.com/2022/10/11/embracing-core-data-in-swiftui.html)
 - [SwiftUI View is also a View Model](https://azamsharp.com/2022/07/21/view-is-the-view-model.html)
+
 - [SwiftUI List|Searching & Sorting|JSON API](https://youtu.be/hMZdRduyA_4)
 
 
