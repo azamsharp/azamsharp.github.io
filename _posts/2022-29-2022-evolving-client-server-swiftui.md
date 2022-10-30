@@ -1,11 +1,12 @@
 # Evolving SwiftUI Client/Server Architecture 
 
-In the last architecture, we discussed in detail about [SwiftUI Architecture using the MV Pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). It is highly recommended that you read the original post. In this post, we will cover how you can simplify SwiftUI client/server architecture by allowing our view (view model) to talk directly with the NetworkModel. 
+In the last architecture, we discussed in detail about [SwiftUI Architecture using the MV Pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). It is highly recommended that you read the original post. In this post, we will cover how to create SwiftUI client/server applications using ReactJS architectural patterns. 
 
+>> There are no silver bullets, use the architecture that fit your needs. 
 
 ## Consuming JSON in React 
 
-React was introduced in 2013, it means React had a head start of around 6 years over SwiftUI. React, SwiftUI and Flutter are all declarative frameworks and they are extremely similar in nature. It is always a good idea to learn patterns an practices from more mature frameworks. We may not use React or Flutter patterns in our SwiftUI apps but it is always a good idea to know different ways and techniques of building apps. 
+React was introduced in 2013, it means React had a head start of around 6 years over SwiftUI. React, SwiftUI and Flutter are all declarative frameworks and they are extremely similar in nature. You may not use React or Flutter to build iOS applications but it is always a good idea to know different ways and techniques of building apps. 
 
 In the code below you can see the App component (Comparable to SwiftUI View), fetching all the products from an API and then displaying it on the screen. 
 
@@ -64,13 +65,13 @@ struct ContentView: View {
 }
 ```
 
-We used the private/local @State to hold on to the products and made the call to the API right within our View (View Model). 
+We used the private/local @State to hold on to the products and made the call to the API right within our view (view model). 
 
->> SwiftUI views are basically equivalent to components in React or widgets in Flutter. SwiftUI views acts as a view model. Having said that, you should not put business logic in your view. Business logic belongs either in model or on the server in a client/server app.  
+>> SwiftUI views are basically equivalent to components in React or widgets in Flutter. SwiftUI views acts as a view model. Having said that, you should not put business logic in your view. Business logic belongs either in model, domain service or on the server. 
 
-The main issue with the above approach is that, it will be hard to reuse ```fetchProducts``` in any other view, since it is part of the view (view model).  
+The main issue with the above approach is that, it will be hard to reuse ```fetchProducts``` in any other view, since it is part of a particular view (view model).  
 
-But what if I don't plan to display products in any other view. Can I implement ```fetchProducts``` inside the view (view model)?  
+But what if you don't plan to display products in any other view. Can you implement ```fetchProducts``` inside the view (view model)?  
 
 Even though you may not call ```fetchProducts``` in any other view, it is recommended to move it out into a designated class. This way you will always have the flexibility to call it from anywhere and also add features like additional request headers, authorization, caching and even testing.  
 
@@ -93,7 +94,7 @@ class NetworkModel: ObservableObject {
 }
 ```
 
-The NetworkModel class can be called directly from the ContentView as shown below:  
+The NetworkModel class can be called directly from the ```ContentView``` as shown below:  
 
 ```swift 
 struct ContentView: View {
@@ -160,14 +161,14 @@ struct ContentView: View {
 ```
 
 
->> In the above code, ContentView serves as a container view and the ProductListView and ProductCellView are presentation views. 
+>> In the above code, ContentView serves as a container view and the ProductListView and ProductCellView are presentation views. Container views serves the purpose of containing other views (reusable views). Container views might download data from an API and then pass it down to the child views.  
 
 
 ## Searching
 
 Most of the time when you are displaying a list of data, you also want to perform different actions on the data like searching and sorting. Let's see how we can accomplish the task of searching. 
 
-We are going to use the ```searchable``` modifier, which will allow us to create a SearchBar. We are also going to use the ```onChange``` modifier, which will trigger each time a user will enter something in the TextField. The onChange modifier calls the performSearch function, which searches the products returned from networkModel and assigns it to the filteredProducts array. 
+We are going to use the ```searchable``` modifier, which will allow us to create a search bar. We are also going to use the ```onChange``` modifier, which will trigger each time a user will enter something in the TextField. The ```onChange``` modifier calls the performSearch function, which searches the products returned from networkModel and assigns it to the filteredProducts array. 
  
 The new private property ```products``` returns filteredProduct if not empty, otherwise it returns list of all products.  
 
