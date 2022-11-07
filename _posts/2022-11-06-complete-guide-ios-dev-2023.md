@@ -202,11 +202,16 @@ Here are some content creators to follow.
 12. [@rwenderlich](https://twitter.com/KodecoDev)
 13. [@stewartlynch](https://twitter.com/StewartLynch) 
 14. [@twannl](https://twitter.com/twannl) 
-15. [buildthatapp](https://twitter.com/buildthatapp) 
+15. [@buildthatapp](https://twitter.com/buildthatapp) 
+16. [@swiftandtips](https://twitter.com/swiftandtips)
+17. [@BigMtnStudio](https://twitter.com/BigMtnStudio)
+18. [@Sarunw](https://twitter.com/sarunw)
 
 ## Books 
 
-We live in an age, where reading books is getting obsolete. What was the last technology book you read? You probably don't remember.     
+We live in an age, where reading books is getting obsolete. What was the last technology book you read? You probably don't remember. I am in the same boat, I don't read as many books as I should. As a junior developer, you will always be in a advantageous position if you read books. 
+
+>> Knowledge is power  
 
 If you are starting out with iOS development then here are few recommendations on the books. 
 
@@ -218,10 +223,22 @@ If you are starting out with iOS development then here are few recommendations o
 6. [Swift for Complete Beginners](https://www.hackingwithswift.com/quick-start/beginners)
 7. [SwiftUI by Example](https://www.hackingwithswift.com/quick-start/swiftui)
 
+Try to read several books on a single subject. This way you will learn many different ways of building apps. 
 
 ## Podcasts 
 
-TODO 
+I love listening to podcasts. I listen to them during my daily walks, cleaning, rearranging garage and even swimming. Podcasts is a great way to consume knowledge and all of them are available free of cost. So the next time you are taking a walk outside in nice weather, give these podcasts a listen. 
+
+Here are few iOS development podcasts you might want to check out. 
+
+1. [Swift by Sundell](https://www.swiftbysundell.com/podcast/)
+2. [Core Intuition](https://coreint.org/)
+3. [Kodeco Podcast](https://www.kodeco.com/podcast)
+4. [AppForce1](https://appforce1.net)
+5. [Empower Apps](https://www.empowerapps.show)
+6. [Stacktrace](https://stacktracepodcast.fm)
+7. [Under the Radar](https://www.relay.fm/radar/)
+8. [Accidental Tech Podcast](http://atp.fm/)
 
 ## Portfolio 
 
@@ -264,6 +281,24 @@ After that I volunteered to speak at Houston .NET User Group. I presented in fro
 If you are not able to find local communities in your region then find remote user groups. Most of the meetings are now held remotely. One such community is [iOS Dev Happy Hour](https://www.iosdevhappyhour.com/), which hosts monthly meetups. People from all over the world join iOS Dev Happy Hour and share their experiences about programming, technology, life, career advice and everything else. 
 
 Your next step is to find a community that meet your needs and then become an active member of the community. Most user groups are looking for speakers, so if you have an interesting topic then contact them and volunteer to speak. 
+
+## Conferences 
+
+I love speaking at conferences. Just few months back, I presented two sessions at 360iDev in Denver. Conferences is a great way to meet people and share ideas. As a new developer, you may not be accepted as a speaker but you can always attend as an attendee or as a volunteer. You still get to meet speakers and other attendees and learn from them. There are a lot of iOS conferences taking place all around the world. Here are few of them: 
+
+1. [Do iOS](https://do-ios.com/) 
+2. [Server Side Swift](https://www.serversideswift.info/)
+3. [iOS Conf SG](https://iosconf.sg/)
+4. [Deep Dish Swift](https://deepdishswift.com/)
+5. [iOSDevUK](https://www.iosdevuk.com/)
+6. [NSSpain](https://2022.nsspain.com/)
+7. [trySwift](https://www.tryswift.co/)
+8. [Swift Heroes](https://swiftheroes.com/2022/)
+9. [FrenchKit](https://www.frenchkit.fr/)
+10. [WWDC](https://developer.apple.com/wwdc/)
+
+You can find a comprehensive list of conferences [here](https://cocoaconferences.com/). 
+
 
 ## Next Steps 
 
