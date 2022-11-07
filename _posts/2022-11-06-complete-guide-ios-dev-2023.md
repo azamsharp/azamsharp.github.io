@@ -322,3 +322,5 @@ You can also look into backend development. If you want to stay in iOS echo syst
 >> A lot of content covered in this article is part of my book called [Surviving the Coding Bootcamp - From no coding experience to earning a six-figure salary](https://azamsharp.gumroad.com/l/surviving-the-coding-bootcamp). 
 
 ## Conclusion 
+
+Good things takes time. Follow the path, keep learning and have patience. Becoming a iOS developer is not a sprint, it is a marathon. [Be the tortoise, not the hare](https://read.gov/aesop/025.html).    
