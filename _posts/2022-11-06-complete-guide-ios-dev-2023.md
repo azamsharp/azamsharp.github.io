@@ -171,7 +171,23 @@ Another things to keep in mind is not to publish your API keys or sensitive data
 
 GitHub is your developer resume. You must take time to make it stand out. It is not surprising that most students in my class who landed job first, had a polished GitHub profile. One of those students was Beyza Kilickol and her GitHub profile can be found here (https://github.com/beyzakilickol). As you can see Beyza worked extremely hard on her profile and made it easy for employers to experience her projects. She even added screenshots, videos, guest account login to streamline the experience. I encourage you to follow her GitHub profile as a template and learn how she has laid out her repositories.  
 
-As developers we are always focused on coding and find these tasks meaningless. But in reality, they are very important and can be the difference between you getting the job or not.   
+As developers we are always focused on coding and find these tasks meaningless. But in reality, they are very important and can be the difference between you getting the job or not. 
+
+## User Groups
+
+My first speaking engagement was back in 2004-2005, while I was still in college. I was speaking at Cougar Computer Science group for my university. I was excited about my first talk, which was on the topic of DataSet and DataTables in .NET. I prepared the talk for days and was ready to present in front of a large audience. To my disappointment, only one person showed up to my talk. 
+
+Instead of canceling the session, I continued with my presentation. In the end that single student told me that he enjoyed the talk and found it really useful. I thanked him for coming and wished him well for learning Microsoft.NET framework. 
+
+>> In my opinion, anyone can talk in front of a large audience. Your real test of nerves is when you are presenting in front of a very small group of people. You have to overcome your disappointment and continue with your presentation. 
+
+After that I volunteered to speak at Houston .NET User Group. I presented in front of over 100 people on the topic of LINQ to SQL. It was a great session and audience really enjoyed it. After the session, lot of members from the audience came to me and shared their contact information and even possible job opportunities. 
+
+>> It is not 1980's anymore. You cannot lock yourself in your mom's basement and code all day. You need to become part of the community and build relationships and connections. 
+
+If you are not able to find local communities in your region then find remote user groups. Most of the meetings are now held remotely. One such community is [iOS Dev Happy Hour](https://www.iosdevhappyhour.com/), which hosts monthly meetups. People from all over the world join iOS Dev Happy Hour and share their experiences about programming, technology, life, career advice and everything else. 
+
+Your next step is to find a community that meet your needs and then become an active member of the community. Most user groups are looking for speakers, so if you have an interesting topic then contact them and volunteer to speak. 
 
 
 ## Next Steps 
