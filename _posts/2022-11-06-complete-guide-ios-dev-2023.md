@@ -32,6 +32,9 @@ Programming is one of those rare professions where you don't really need a degre
 
 Let me tell you the biggest secret in software development. Programming languages are easy to learn. Once you know one language, you can easily learn any other language. In our bootcamp we start with Python language. Once students are comfortable with the fundamentals, we jump to the JavaScript language. We typically spend only one day in learning JavaScript, because students already know Python language. 
 
+1. [Official Swift Reference Book](https://docs.swift.org/swift-book/)
+2. [Swift Programming: The Big Nerd Ranch](https://www.amazon.com/Swift-Programming-Ranch-Guide-Guides/dp/0135264200/ref=sr_1_1?crid=1LAI6ELPZGXS8&keywords=swift+language&qid=1667835003&sprefix=swift+language%2Caps%2C129&sr=8-1)
+
 ## SwiftUI or UIKit 
 
 One of the roadblocks, new developers face is to choose between UIKit vs SwiftUI. This is an interesting question because there is no one correct answer. My recommendation is that spend 75% of your time learning SwiftUI and 25% on UIKit. SwiftUI is the future and all new development is being done in SwiftUI. 
@@ -40,7 +43,40 @@ Having said that, as a new developer you will likely not be working on a green f
 
 >> Greenfield projects are the one that lack the constraints imposed by prior work. A brownfield project is one that carries constraints related to the current state of the site. 
 
-One thing I noticed about new developers is that they want to see the progress quickly. I don't blame them, if I am starting to learn something new then I would like to see the results quickly too. SwiftUI declarative syntax, along with Xcode previews allows developers to quickly prototype their apps.    
+One thing I noticed about new developers is that they want to see the progress quickly. I don't blame them, if I am starting to learn something new then I would like to see the results quickly too. SwiftUI declarative syntax, along with Xcode previews allows developers to quickly prototype their apps as compared to UIKit. 
+
+## Junior developer road map 
+
+The hard part of learning iOS, Android or any other technology is not the programming language but the frameworks. There are so many frameworks available in iOS, which serves a particular purpose. This includes Audio/Video (AVFoundation), Core Data, MapKit, SwiftUI, UIKit, AppKit and even third party platforms including Firebase, Realm etc. 
+
+For junior developers, it becomes confusing as where to start. My recommendation is to first get comfortable with Swift language. This means you should know how to create variables, functions, loops, conditions. You can even move to the advance stuff like closures and generics. 
+
+Here are some resources to get you started with SwiftUI. 
+
+1. [100 Days of SwiftUI](https://www.hackingwithswift.com/100/swiftui)
+2. [iOS and Swift - The Complete iOS App Development Bootcamp](https://www.udemy.com/course/ios-13-app-development-bootcamp)
+3. [SwiftUI - Declarative Interfaces for any Apple Device](https://www.udemy.com/course/swiftui-declarative-interfaces-for-any-apple-device/?referralCode=EB97896D293C976B3231)
+
+After that your focus should be on the UI framework like SwiftUI. You should spend 75% of time learning SwiftUI and 25% on UIKit. This percentage will change with each year as more and more companies start adopting SwiftUI. Maybe in next 3-5 years, you will only be spending 5% time in learning UIKit and your core focus will be SwiftUI. 
+
+Once you are comfortable with Swift and SwiftUI then focus on consuming an API (JSON). This is by far the most common operation when you are building iOS applications. Learn about GET and POST requests and how to successfully decode the response and display it on the screen. Apart from consuming an API, also learn about POST request so you can send information to the server. 
+
+I have worked on dozens of iOS projects throughout my career and one thing that was common in almost all of them was that they all consumed some sort of API. Most of the time, it was an API implemented internally by the company using different technologies like .NET Web API, Ruby on Rails, Django etc. 
+
+As an iOS developer, you should not care which technology was used to build the API since you are simply consuming it. 
+
+Here are few free APIs that you can use to practice JSON parsing and consuming JSON in your iOS application. 
+
+1. [Huge list of public APIs](https://github.com/public-apis/public-apis)
+2. [food2fork.ca](https://food2fork.ca/)
+3. [Platzi Fake Store API](https://fakeapi.platzi.com/)
+4. [JSON Placeholder](https://jsonplaceholder.typicode.com/)
+
+>> I often advice my students to make sure that API is working as expected before writing a single line of code. You can use networking tools like POSTMAN to perform network request and validate the API. 
+
+JSON parsing in iOS can get complicated based on the response you received from the server. If you are interested then check out my course [The Complete Guide to JSON Parsing in Swift](https://www.udemy.com/course/ultimate-guide-to-json-parsing-with-swift/?referralCode=8E75504604F2D5D6BF00). In this course, I mentioned several ways of parsing JSON using the ```codable``` features of iOS and Swift language. 
+
+# General Advice  
 
 ## Programming is not an open heart surgery
 
@@ -96,11 +132,11 @@ Information is now readily available at your finger tips. Every coding question 
 
 Apart from searching for your answer on a search engine, you should also be comfortable with asking for help. There is nothing wrong with asking for help when you need it. There are several different forums where you can post your programming questions.  
 
-    I remember taking part on ASP.NET forums, while I was still in college. At that time I was learning web development so I posted a lot of questions on the forum. Later on, after I gained more experience I started helping people out. My contributions were recognized and I was awarded the Microsoft Most Valuable Professional (MVP) award in 2007. 
+>> I remember taking part on ASP.NET forums, while I was still in college. At that time I was learning web development so I posted a lot of questions on the forum. Later on, after I gained more experience I started helping people out. My contributions were recognized and I was awarded the Microsoft Most Valuable Professional (MVP) award in 2007. 
 
 Google also has similar programs (GDE), which are awarded based on developer’s contributions to the community. If you are awarded MVP or GDE then it will certainly look good on your resume. 
 
-When asking questions on forums make sure to formalize it correctly. Don’t just paste 200 lines of code and ask why it does not work. Questions like that are regularly downvoted on online forums and if you continue posting such questions without any context then there is a probability that your account will be suspended. 
+When asking questions on forums make sure to formalize it correctly. Don’t just paste 200 lines of code and ask why it does not work. Questions like that are regularly down-voted on online forums and if you continue posting such questions without any context then there is a probability that your account will be suspended. 
 
 You need to explain the exact problem you are facing and what solutions you have tried. The more context you are going to provide, more experienced developers will be willing to help you. 
 
@@ -146,6 +182,46 @@ Make sure you allocate weekly time to go through your newsletters. I go through 
 
 Searching for newsletters is quite simple too. Simply go to Google and search for your favorite topic i.e “React Newsletter”. You will be presented with several different options. Subscribe to the ones you find interesting and then sit back and enjoy with a hot cup of coffee. 
 
+## Twitter 
+
+Twitter is a great medium. 
+
+Here are some content creators to follow. 
+
+1. [@twostraws](https://twitter.com/twostraws)
+2. [@cr_wells](https://twitter.com/cr_wells)
+3. [@Kilo_Loco](https://twitter.com/Kilo_Loco)
+4. [@MengTo](https://twitter.com/MengTo)
+5. [@mecid](https://twitter.com/mecid)
+6. [@Archetapp](https://twitter.com/Archetapp)
+7. [@SwiftUILab](https://twitter.com/swiftuilab?lang=en)
+8. [@dimsumthinking](https://twitter.com/dimsumthinking)
+9. [@CodeWithChris](https://twitter.com/codewithchris)
+10. [@azamsharp](https://twitter.com/azamsharp)
+11. [@scottsmithdev](https://mobile.twitter.com/scottsmithdev)
+12. [@rwenderlich](https://twitter.com/KodecoDev)
+13. [@stewartlynch](https://twitter.com/StewartLynch) 
+14. [@twannl](https://twitter.com/twannl) 
+15. [buildthatapp](https://twitter.com/buildthatapp) 
+
+## Books 
+
+We live in an age, where reading books is getting obsolete. What was the last technology book you read? You probably don't remember.     
+
+If you are starting out with iOS development then here are few recommendations on the books. 
+
+1. [Swift Apprentice](https://www.kodeco.com/books/swift-apprentice)
+2. [SwiftUI Apprentice](https://www.kodeco.com/books/swiftui-apprentice)
+3. [UIKit Apprentice](https://www.kodeco.com/books/uikit-apprentice) 
+4. [SwiftUI by Tutorials](https://www.kodeco.com/books/swiftui-by-tutorials)
+5. [SwiftUI Projects](https://www.amazon.com/SwiftUI-Projects-real-world-cross-platform-applications/dp/183921466X/ref=sr_1_17_sspa?crid=20OVPRYN3UDLT&keywords=swiftui&qid=1667835812&sprefix=swiftui%2Caps%2C109&sr=8-17-spons&psc=1)
+6. [Swift for Complete Beginners](https://www.hackingwithswift.com/quick-start/beginners)
+7. [SwiftUI by Example](https://www.hackingwithswift.com/quick-start/swiftui)
+
+
+## Podcasts 
+
+TODO 
 
 ## Portfolio 
 
@@ -189,10 +265,8 @@ If you are not able to find local communities in your region then find remote us
 
 Your next step is to find a community that meet your needs and then become an active member of the community. Most user groups are looking for speakers, so if you have an interesting topic then contact them and volunteer to speak. 
 
-
 ## Next Steps 
 
-
-
+## Resources 
 
 ## Conclusion 
