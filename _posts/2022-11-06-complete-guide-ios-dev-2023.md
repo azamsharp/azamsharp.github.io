@@ -1,51 +1,61 @@
 # Becoming an iOS Developer - The Complete Guide 2023 
 
-I have been a software developer for more than a decade.  
+It always excites me to see so many people jumping into iOS development. We have a great community with lot of talented people and it is always expanding. 
+
+Recently, I have been talking to a lot of new developers and one of the main challenges they shared with me is that they have trouble getting started and they don't have a clear path on what to learn in order to move forward in their iOS journey.
+
+In this post, I will cover my recommendations on how you can become an iOS developer. Keep in mind that this is not the only path but just one of possible ways you can become an iOS developer. This is the strategy I will use if I were in their position.  
 
 >> A lot of content covered in this article is part of my book called [Surviving the Coding Bootcamp - From no coding experience to earning a six-figure salary](https://azamsharp.gumroad.com/l/surviving-the-coding-bootcamp). 
 
 ## Do I need a computer science degree? 
 
-The short answer is NO! You do not need a degree to become a software developer. As a coding bootcamp instructor for the last 5+ years, I have taught to many students who did not have a degree and they turned out to be amazing developers. 
+The short answer is NO! You do not need a computer science degree to become a software developer. As a coding bootcamp instructor for the last 5+ years, I have taught many students who did not have a degree and they turned out to be great developers. 
 
-Having said that if you do have an option to attend school, debt free then go ahead and get a degree. I just don't want anyone to rake up $100K debt, thinking that it was the only way to become a software developer. 
+Having said that if you do have an option to attend school, **debt free** then go ahead and get a degree. I just don't want anyone to go in $100K debt, thinking that it was the only way to become a software developer. 
 
-If you decide against getting a degree then keep in mind that there will be few jobs that may require a degree. Usually, these jobs are with big non-technology and education companies. This includes oil/gas/energy giants and even schools and colleges. 
+If you decide against getting a degree then keep in mind that there will be few jobs that may require a degree. Usually, these jobs are with big non-tech companies and education institutions. This includes oil/gas/energy giants and even schools and colleges. 
 
-People often ask me that how much of knowledge I learned in school is being used in my day to day job. For me personally, I use 0.000000000000001% of information I learned in school at my actual work. Most of the things I use at work, I learned on my own. This included Microsoft.NET, C# language, VB.NET and ASP.NET (back in 2003).  
+People often ask me that how much of knowledge I learned in school is being used in my day to day job. For me personally, I use 0.000000000000001% of information I learned in school at my actual work. Most of the things I use at work, I learned on my own. This included Microsoft.NET, C# language, VB.NET, ASP.NET, iOS etc.
 
 ## What about Coding Bootcamps? 
 
-Coding bootcamps are a great way to learn a particular stack quickly. Instead of spending 4 years and $100K in college, you spend 4 months and $15K-$20K. Coding bootcamps are fast paced and as a a student, you need to digest the information on daily basis. This format may not suit everyone and once a student gets too behind in their assignments, homework etc it becomes almost impossible to recover from it. 
+Coding bootcamps are a great way to learn a technology stack quickly. Instead of spending 4 years and $100K in college, you spend 4 months and $15K-$20K. Coding bootcamps are fast paced and as a student, you need to digest the information on daily basis. This format may not suit everyone and once a student gets too far behind in their assignments, homework etc it becomes very hard to recover from it. 
 
-Once again, I am not advocating taking out loans to attend a coding bootcamp. Work hard and save $15K-$20K and then attend a bootcamp, completely debt free. 
+>> Once again, I am not advocating taking out loans to attend a coding bootcamp. Work hard and save $15K-$20K and then attend a bootcamp, completely debt free. 
 
-Keep in mind that a coding bootcamp is not some magical place, where you can sit back and relax and become a developer in 4 months. This is like saying that I need to loose weight so I got a gym membership but never attended gym. Just because you are paying for a gym membership will not help you loose weight. You need to actually put in the work and burn those calories.     
+Keep in mind that a coding bootcamp is not some magical place, where you can sit back and relax and become a developer in 12-16 weeks. This is like saying that I need to loose weight so I got a gym membership but never attended gym. Just because you are paying for a gym membership does not mean that you will automatically loose weight. In order to loose weight, you need to get on the treadmill and start burning those calories.
 
->> Disclaimer: I work for coding bootcamp. 
+Coding bootcamps will test mentally. I describe that experience as drowning in information. Every day you will learn new concepts and apply them to build applications. You will have to work extremely hard to keep up with the pace. 
+
+>> Disclaimer: I am a coding bootcamp instructor for more than 5+ years.  
 
 ## What about free online resources? 
 
-Programming is one of those rare professions where you don't really need a degree to land a job. There are countless free resources available online. This ranges from YouTube videos, books, articles, courses and even free lectures from elite universities like Stanford. 
+Programming is one of those rare professions where you don't really need a degree or attend a coding bootcamp to land a job. There are countless free resources available online. This ranges from YouTube videos, books, articles, courses and even free lectures from elite universities like Stanford. 
 
-I found a great post on [Kean Blog](https://kean.blog/post/learn-ios), which lists a lot of resources. Keep in mind that not all the resources discussed in the post are free. 
+I found a great post on [Kean Blog](https://kean.blog/post/learn-ios), which lists a lot of resources. Keep in mind that not all the resources discussed in the post are free.
 
-## Learning Swift Language 
+>> Anyone can learn programming by using free online resources. Yet, we don't see a lot of self taught developers in the industry. The main reason is not the quality of resources but because most people lack motivation and consistency. Once they get stuck on something, they usually give up and move in different direction. 
+
+In simple terms, most people lack [Grit](https://youtu.be/H14bBuluwB8). They don't stay with problems longer. They don't persevere and they eventually give up.  
+
+## Programming Language is Easy  
 
 Let me tell you the biggest secret in software development. Programming languages are easy to learn. Once you know one language, you can easily transition to any other language.
 
 In my career, I have worked with JavaScript, Java, C#, VB.NET, Turbo C, Python, Kotlin, Dart, Swift, Objective-C. I don't actively program in all these languages but since most of the languages are similar, it will not take long to be productive. 
 
-The most important part of learning a language is to make sure your fundamentals are strong. This means, you should know how to create variables, functions, conditions, loops, modules etc.  
+The most important part of learning a language is to make sure your fundamentals are strong. This means, you should know how to create variables, functions, conditions, loops, modules etc. Once you are comfortable with the fundamentals, you can jump in and learn any programming language you want. 
 
 1. [Official Swift Reference Book](https://docs.swift.org/swift-book/)
 2. [Swift Programming: The Big Nerd Ranch](https://www.amazon.com/Swift-Programming-Ranch-Guide-Guides/dp/0135264200/ref=sr_1_1?crid=1LAI6ELPZGXS8&keywords=swift+language&qid=1667835003&sprefix=swift+language%2Caps%2C129&sr=8-1)
 
 ## SwiftUI or UIKit 
 
-One of the roadblocks, new developers face is to choose between UIKit vs SwiftUI. This is an interesting question because there is no one correct answer. My recommendation is that spend 75% of your time learning SwiftUI and 25% on UIKit. SwiftUI is the future and all new development is being done in SwiftUI. 
+One of the roadblocks, new developers face is to choose between UIKit vs SwiftUI. This is an interesting question because there is no one correct answer. My recommendation is that new developers should spend 75% of the time learning SwiftUI and 25% on UIKit. SwiftUI is the future and all new development is being done in SwiftUI. 
 
-Having said that, as a new developer you will likely not be working on a green field project. This means you will be dealing with legacy code, which is probably written in UIKit. This is where your 25% is going to come in handy.   
+Having said that, as a new developer you will most likely not be working on a green field project. This means you will be dealing with legacy code, which is probably written in UIKit. This is where your 25% is going to come in handy.   
 
 >> Greenfield projects are the one that lack the constraints imposed by prior work. A brownfield project is one that carries constraints related to the current state of the site. 
 
@@ -59,9 +69,11 @@ You never know, when you need to use React to create web applications or Flutter
 
 ## Junior developer road map 
 
-The hard part of learning iOS, Android or any other technology is not the programming language but the frameworks. There are so many frameworks available in iOS, which serves a particular purpose. This includes Audio/Video (AVFoundation), Core Data, MapKit, SwiftUI, UIKit, AppKit and even third party platforms including Firebase, Realm etc. 
+The hard part of learning iOS, Android or any other technology is not the programming language but the frameworks. There are many frameworks available in iOS, which serves a particular purpose. This includes Audio/Video (AVFoundation), Core Data, MapKit, SwiftUI, UIKit, AppKit and even third party platforms including Firebase, Realm etc. 
 
-For junior developers, it becomes confusing as where to start. My recommendation is to first get comfortable with Swift language. This means you should know how to create variables, functions, loops, conditions. You can even move to the advance stuff like closures and generics. 
+For junior developers, it becomes confusing as where to start. My recommendation is to first get comfortable with the Swift language. This means you should know how to create variables, functions, loops, conditions. You can even move to the advance stuff like closures and generics. 
+
+After that your focus should be on the UI framework like SwiftUI. You should spend 75% of time learning SwiftUI and 25% on UIKit. This percentage will change with each year as more and more companies start adopting SwiftUI. Maybe in next 3-5 years, you will only be spending 5% time in learning UIKit and your core focus will be SwiftUI. 
 
 Here are some resources to get you started with SwiftUI. 
 
@@ -69,9 +81,7 @@ Here are some resources to get you started with SwiftUI.
 2. [iOS and Swift - The Complete iOS App Development Bootcamp](https://www.udemy.com/course/ios-13-app-development-bootcamp)
 3. [SwiftUI - Declarative Interfaces for any Apple Device](https://www.udemy.com/course/swiftui-declarative-interfaces-for-any-apple-device/?referralCode=EB97896D293C976B3231)
 
-After that your focus should be on the UI framework like SwiftUI. You should spend 75% of time learning SwiftUI and 25% on UIKit. This percentage will change with each year as more and more companies start adopting SwiftUI. Maybe in next 3-5 years, you will only be spending 5% time in learning UIKit and your core focus will be SwiftUI. 
-
-Once you are comfortable with Swift and SwiftUI then focus on consuming an API (JSON). This is by far the most common operation when you are building iOS applications. Learn about GET and POST requests and how to successfully decode the response and display it on the screen. Apart from consuming an API, also learn about POST request so you can send information to the server. 
+Once you are comfortable with Swift and SwiftUI then focus on learning about how to consume an API (JSON). This is by far the most common operation when you are building an iOS application. Learn about GET and POST requests and how to successfully decode the response and display it on the screen. Apart from consuming an API, also learn about POST request so you can send information to the server. 
 
 I have worked on dozens of iOS projects throughout my career and one thing that was common in almost all of them was that they all consumed some sort of API. Most of the time, it was an API implemented internally by the company using different technologies like .NET Web API, Ruby on Rails, Django etc. 
 
@@ -84,7 +94,7 @@ Here are few free APIs that you can use to practice JSON parsing and consuming J
 3. [Platzi Fake Store API](https://fakeapi.platzi.com/)
 4. [JSON Placeholder](https://jsonplaceholder.typicode.com/)
 
->> I often advice my students to make sure that API is working as expected before writing a single line of code. You can use networking tools like POSTMAN to perform network request and validate the API. 
+>> I often advice my students to make sure that API is working as expected before writing a single line of code. You can use networking tools like [POSTMAN](https://www.postman.com/) to perform network request and validate the API. 
 
 JSON parsing in iOS can get complicated based on the response you received from the server. If you are interested then check out my course [The Complete Guide to JSON Parsing in Swift](https://www.udemy.com/course/ultimate-guide-to-json-parsing-with-swift/?referralCode=8E75504604F2D5D6BF00). In this course, I mentioned several ways of parsing JSON using the ```codable``` features of iOS and Swift language. 
 
@@ -92,7 +102,7 @@ JSON parsing in iOS can get complicated based on the response you received from 
 
 ## Programming is not an open heart surgery
 
-Even though I have been teaching at coding bootcamp for a very long time, one thing I witness in each cohort is student’s fear of writing wrong code. Students would rather jump off a building than write wrong code. I think this is deeply rooted to our education system, where different and unique answers are punished instead of being appreciated. 
+Even though I have been teaching at coding bootcamp for a very long time, one thing I witness in every cohort is student’s fear of writing wrong code. Students would rather jump off a building than write wrong code. I think this is deeply rooted to our education system, where different and unique answers are punished instead of being appreciated. 
 
 In one of the TED talks, Sir Ken Robinson talked about a young girl who was considered hopeless by her teachers. The teachers contacted her parents and told them that they believe that the child has learning disability and she is not able to concentrate in class. 
 
@@ -138,9 +148,7 @@ Next time you are about to write an app, write down all the tasks associated wit
 
 ## Google and StackOverFlow 
 
-One of the main aspects of a coding bootcamp is to teach students to be independent. As a student you should take advantage of your instructor’s knowledge but at the same time you should work towards becoming independent.   
-
-Information is now readily available at your finger tips. Every coding question you have has already been answered and just waiting to be discovered. You no longer have to drive to a local library and search through magazines and books for a solution. You can simply go to Google and type in your question and voila!   
+One of the main skills of becoming a developer is to be independent. Information is now readily available at your finger tips. Every coding question you have has already been answered and just waiting to be discovered. You no longer have to drive to a local library and search through magazines and books for a solution. You can simply go to Google and type in your question and voila!   
 
 Apart from searching for your answer on a search engine, you should also be comfortable with asking for help. There is nothing wrong with asking for help when you need it. There are several different forums where you can post your programming questions.  
 
@@ -168,7 +176,7 @@ My simple rule is to locate the problem or bug using logs for the first 5 minute
 
 ## Pet Projects 
 
-One of the best ways to boost your learning during a coding bootcamp is to work on your side/pet project. This project is not meant to be associated with the coding bootcamp graduation requirements. The main purpose of your personal project is to integrate all the skills you have learned during the coding bootcamp into your own application. 
+One of the best ways to boost your learning is to work on your side/pet project. This project is not meant to be associated with the coding bootcamp graduation requirements. The main purpose of your personal project is to integrate all the skills you have learned during the coding bootcamp into your own application. 
 
 This means your side project should be something that you are passionate about. Your passion will drive the progress of the project. One of my students from an earlier cohort had passion for astronomy. He used the concepts discussed in class to implement a custom iOS application to keep track of Earth’s distance from various sources. During the class, when we learned about how to consume a JSON API, he immediately went to NASA’s website and found a relevant API for his needs. Using the concepts that he learned in class, he was able to integrate the API into his own iOS app. 
 
@@ -196,7 +204,9 @@ Searching for newsletters is quite simple too. Simply go to Google and search fo
 
 ## Twitter 
 
-Twitter is a great medium. 
+Twitter is a great medium to get up to date information about a particular topic. I personally use Twitter to post coding articles, videos and courses. Apart from that I also follow hundreds of people so I can learn from them. 
+
+iOS community is fortunate to have many great content creators, who regularly put out material in the form of articles and videos.  
 
 Here are some content creators to follow. 
 
@@ -218,6 +228,9 @@ Here are some content creators to follow.
 16. [@swiftandtips](https://twitter.com/swiftandtips)
 17. [@BigMtnStudio](https://twitter.com/BigMtnStudio)
 18. [@Sarunw](https://twitter.com/sarunw)
+19. [@seanallen_dev](https://twitter.com/seanallen_dev)
+
+If you like the content from any of the creators then make sure to tell them. All of them would be very happy to hear from a satisfied consumer. 
 
 ## Books 
 
@@ -235,7 +248,9 @@ If you are starting out with iOS development then here are few recommendations o
 6. [Swift for Complete Beginners](https://www.hackingwithswift.com/quick-start/beginners)
 7. [SwiftUI by Example](https://www.hackingwithswift.com/quick-start/swiftui)
 
-Try to read several books on a single subject. This way you will learn the technology from several different point of view. 
+Try to read several books on a single subject. This way you will learn the technology from several different point of view. You don't need to read the whole book at one sitting. You can read book in chunks of 30 minute each day. It may take longer to read the book but you will finish the book. 
+
+>> If you are reading a programming book then it is important to practice what is being taught in the book. This means manually typing (not copy pasting) the code in your editor and making sure that it runs as expected. 
 
 ## Podcasts 
 
