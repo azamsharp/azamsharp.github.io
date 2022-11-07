@@ -1,6 +1,6 @@
 # Becoming an iOS Developer - The Complete Guide 2023 
 
-TODO 
+I have been a software developer for more than a decade.  
 
 >> A lot of content covered in this article is part of my book called [Surviving the Coding Bootcamp - From no coding experience to earning a six-figure salary](https://azamsharp.gumroad.com/l/surviving-the-coding-bootcamp). 
 
@@ -44,6 +44,12 @@ Having said that, as a new developer you will likely not be working on a green f
 >> Greenfield projects are the one that lack the constraints imposed by prior work. A brownfield project is one that carries constraints related to the current state of the site. 
 
 One thing I noticed about new developers is that they want to see the progress quickly. I don't blame them, if I am starting to learn something new then I would like to see the results quickly too. SwiftUI declarative syntax, along with Xcode previews allows developers to quickly prototype their apps as compared to UIKit. 
+
+One other benefit of learning SwiftUI is that, you can easily transition to React or Flutter when and if needed. I am not saying that you should learn SwiftUI to move to React or Flutter. I am pointing to the fact that React, Flutter and SwiftUI are so similar that by learning one framework, you will automatically know the basics of other framework. 
+
+You never know, when you need to use React to create web applications or Flutter to build a cross platform app. 
+
+>> React has been around since 2013 and it is much more mature as compared to SwiftUI. This allows us to look at React apps and incorporate patterns from React into our SwiftUI applications. 
 
 ## Junior developer road map 
 
@@ -299,8 +305,11 @@ I love speaking at conferences. Just few months back, I presented two sessions a
 
 You can find a comprehensive list of conferences [here](https://cocoaconferences.com/). 
 
-
 ## Next Steps 
+
+One great thing about being a software developer is that you will never get bored. There is just so much to learn. Each year Apple hosts WWDC in which they announce new frameworks and improvements to existing ones. WWDC videos is a great way to keep yourself up to date with Apple technologies.  
+
+Apart from just learning iOS, I always encourage people to look at other platforms. For example, after getting comfortable with SwiftUI, you can look at React and Flutter. Even if you are not actively developing React or Flutter applications, it is always a good idea to learn from similar frameworks. 
 
 ## Resources 
 
