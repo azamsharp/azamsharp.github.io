@@ -28,9 +28,15 @@ Keep in mind that a coding bootcamp is not some magical place, where you can sit
 
 Programming is one of those rare professions where you don't really need a degree to land a job. There are countless free resources available online. This ranges from YouTube videos, books, articles, courses and even free lectures from elite universities like Stanford. 
 
+I found a great post on [Kean Blog](https://kean.blog/post/learn-ios), which lists a lot of resources. Keep in mind that not all the resources discussed in the post are free. 
+
 ## Learning Swift Language 
 
-Let me tell you the biggest secret in software development. Programming languages are easy to learn. Once you know one language, you can easily learn any other language. In our bootcamp we start with Python language. Once students are comfortable with the fundamentals, we jump to the JavaScript language. We typically spend only one day in learning JavaScript, because students already know Python language. 
+Let me tell you the biggest secret in software development. Programming languages are easy to learn. Once you know one language, you can easily transition to any other language.
+
+In my career, I have worked with JavaScript, Java, C#, VB.NET, Turbo C, Python, Kotlin, Dart, Swift, Objective-C. I don't actively program in all these languages but since most of the languages are similar, it will not take long to be productive. 
+
+The most important part of learning a language is to make sure your fundamentals are strong. This means, you should know how to create variables, functions, conditions, loops, modules etc.  
 
 1. [Official Swift Reference Book](https://docs.swift.org/swift-book/)
 2. [Swift Programming: The Big Nerd Ranch](https://www.amazon.com/Swift-Programming-Ranch-Guide-Guides/dp/0135264200/ref=sr_1_1?crid=1LAI6ELPZGXS8&keywords=swift+language&qid=1667835003&sprefix=swift+language%2Caps%2C129&sr=8-1)
@@ -229,7 +235,7 @@ If you are starting out with iOS development then here are few recommendations o
 6. [Swift for Complete Beginners](https://www.hackingwithswift.com/quick-start/beginners)
 7. [SwiftUI by Example](https://www.hackingwithswift.com/quick-start/swiftui)
 
-Try to read several books on a single subject. This way you will learn many different ways of building apps. 
+Try to read several books on a single subject. This way you will learn the technology from several different point of view. 
 
 ## Podcasts 
 
@@ -260,9 +266,7 @@ Make sure to keep your portfolio up to date. As soon as you finish a project, ad
 
 If there is such a thing as a resume strictly for developers then it would be your GitHub profile. GitHub profile hosts all your coding projects and allows prospective employers to evaluate your technical skills. 
 
-A great GitHub project profile explains the purpose of the project clearly. It also list all the different technologies and APIs that were used in the project including live link and tags. If the project was UI/UX based then it should also include screenshots of the website. If it is a framework then it should consists of documentation on how to use the framework and even code samples. If your project is based on effects and animation, then it would be wise to add a small video or even a GIF animation showing the effect in action. This way viewers can simply watch the video and get a better understanding of your animation library, without spending time to download and install the framework.      
-
-During bootcamp you may be submitting your assignments through GitHub. This means your GitHub will get populated with lots of different repositories. You can avoid repository overcrowding by pinning your most important projects, this will make sure that only your pinned projects appear on your GitHub home screen.  
+A great GitHub project profile explains the purpose of the project clearly. It also list all the different technologies and APIs that were used in the project including live link and tags. If the project was UI/UX based then it should also include screenshots of the website. If it is a framework then it should consists of documentation on how to use the framework and even code samples. If your project is based on effects and animation, then it would be wise to add a small video or even a GIF animation showing the effect in action. This way viewers can simply watch the video and get a better understanding of your animation library, without spending time to download and install the framework.       
 
 Polishing your GitHub repository is mandatory in development world. If your repository does not even have a decent README file then it will send message to your audience that you don’t care much about your work.
 
@@ -311,6 +315,10 @@ One great thing about being a software developer is that you will never get bore
 
 Apart from just learning iOS, I always encourage people to look at other platforms. For example, after getting comfortable with SwiftUI, you can look at React and Flutter. Even if you are not actively developing React or Flutter applications, it is always a good idea to learn from similar frameworks. 
 
-## Resources 
+You can also look into backend development. If you want to stay in iOS echo system then [Vapor](https://vapor.codes/) is a great choice. Outside of iOS, you have a lot of different choices including Node with Express, Ruby on Rails, ASP.NET Web API, Django, Go and many many more. 
+
+>> Knowledge is never wasted. Things I learned and used decades ago still play an integral role in solidifying my concepts even today. 
+
+>> A lot of content covered in this article is part of my book called [Surviving the Coding Bootcamp - From no coding experience to earning a six-figure salary](https://azamsharp.gumroad.com/l/surviving-the-coding-bootcamp). 
 
 ## Conclusion 
