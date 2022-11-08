@@ -173,6 +173,9 @@ GitHub is your developer resume. You must take time to make it stand out. It is 
 
 As developers we are always focused on coding and find these tasks meaningless. But in reality, they are very important and can be the difference between you getting the job or not.   
 
+## User Groups & Conferences
+
+
 
 ## Next Steps 
 
