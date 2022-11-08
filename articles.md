@@ -8,6 +8,14 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Becoming an iOS Developer - The Complete Guide 2023](_posts/2022-11-06-complete-guide-ios-dev-2023.md)
+
+It always excites me to see so many people jumping into iOS development. We have a great community with lot of talented people and it is continuously expanding. 
+
+Recently, I have been talking to a lot of new developers and one of the main challenges they shared with me is that they have trouble getting started and they don't have a clear path on what to learn in order to move forward in their iOS journey.
+
+In this post, I will cover my recommendations on how you can become an iOS developer. Keep in mind that this is not the only path but just one of possible ways you can become an iOS developer. This is the strategy I would have used if I was in their position. 
+
 ### [Evolving SwiftUI Architecture for Client/Server Apps](_posts/2022-10-30-evolving-client-server-swiftui.md)
 
 In the last architecture, we discussed in detail about [SwiftUI Architecture using the MV Pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). It is highly recommended that you read the [original post](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). In this post, we will cover how to create SwiftUI client/server applications using patterns and practices learned from ReactJS framework. 
