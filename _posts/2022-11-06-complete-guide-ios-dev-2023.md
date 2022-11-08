@@ -8,6 +8,8 @@ In this post, I will cover my recommendations on how you can become an iOS devel
 
 >> A lot of content covered in this article is part of my book called [Surviving the Coding Bootcamp - From no coding experience to earning a six-figure salary](https://azamsharp.gumroad.com/l/surviving-the-coding-bootcamp). 
 
+>> Updated - 11/08/2022 - Added Git Section 
+
 ## Do I need a computer science degree? 
 
 The short answer is NO! You do not need a computer science degree to become a software developer. As a coding bootcamp instructor for the last 5+ years, I have taught many students who did not have a degree and they turned out to be great developers. 
@@ -66,6 +68,29 @@ One other benefit of learning SwiftUI is that, you can easily transition to Reac
 You never know, when you need to use React to create web applications or Flutter to build a cross platform app. 
 
 >> React has been around since 2013 and it is much more mature as compared to SwiftUI. This allows us to look at React apps and incorporate patterns from React into our SwiftUI applications. 
+
+## Source Control 
+
+Source control systems like Git allows you to keep track of the changes to your codebase and collaborate between team members. It is important that you are familiar with the basic operations of a source control system so you can start contributing to your project at work. These basic operations includes: 
+
+- Setting up a repository 
+- Adding changes to the staging 
+- Commit changes 
+- Pushing changes to remove 
+- Creating and merging branches 
+
+Git (Most popular source control system) provides a lot more features but to start out, you should learn enough to be productive. 
+
+Git can be used in several different ways. This includes the terminal interface and also graphical user interface. If you are a visual person then start with the graphical user interface. Get comfortable with using Git and performing the above mentioned actions. You can even use [source control explorer built right into Xcode](https://developer.apple.com/videos/play/wwdc2018/418/). You can find a list of Git GUI clients [here](https://git-scm.com/download/gui/mac). 
+
+>> Don't pay attention to people, who suggests that you **must** use terminal in order to work with Git. Git can be used in many different ways and there is nothing wrong with using graphical user interface with Git. 
+
+To learn more about Git, check out the following resources: 
+
+1. [Git YouTube Videos](https://www.youtube.com/watch?v=Kc1L-TQjZZY&list=PLDMXqpbtInQiSpxYyd8AxmJCVE7equijT)
+2. [Git Free Book](https://git-scm.com/book/en/v2)
+3. [Xcode and Source Control - A Case Study](https://youtu.be/eFD0KpcTcG8)
+4. [Source Control in Xcode](https://youtu.be/wGC8PV70isc)
 
 ## Junior developer road map 
 
