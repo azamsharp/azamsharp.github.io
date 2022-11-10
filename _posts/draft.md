@@ -8,6 +8,7 @@ How to select a topic for speaking?
 
 ## Don't be batman 
 
+One of the things I really find upsetting at conferences is when I see the speaker is not engaging with the audience. I remember attending a conference few years back, where the speaker sat quietly in the corner and worked on his computer. After the presentation was over, the speaker stood up and left. It was like he has seen a bat signal and wanted to flee the current situation. 
 
 
 ## Last second 
@@ -18,7 +19,7 @@ If you are speaker at a conference then don't talk about that you prepared the p
 
 I usually see this kind of behavior from experienced speakers, who wants to convey the message that even with little preparation they will give a good presentation. I am sure they will give excellent presentation but they don't need to convey this message to the audience. 
 
->> This is like, if I attend a UFC fight and the fighter tells me that he started preparing for the fight yesterday. 
+>> This is like, if I attend high profile UFC fight and the fighter tells everyone that he started preparing for the fight yesterday. 
 
 
 ## Conclusion
