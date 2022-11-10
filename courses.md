@@ -12,6 +12,8 @@ If you want to support my work then please consider buying one of my courses bel
 
 [Patreon](https://www.patreon.com/azamsharp)
 
+[MV Design Pattern in iOS - Build SwiftUI Apps Apple's Way](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/)
+
 [Building Augmented Reality Apps Using RealityKit](https://www.udemy.com/course/building-augmented-reality-apps-in-realitykit-arkit/?referralCode=BB7A8EC8AEA928AAD34F)
 
 [Introduction to Server Driven UI in iOS](https://www.udemy.com/course/introduction-to-server-driven-ui-in-ios-swift-swiftui/?referralCode=2F57B10C28B68D440B89)

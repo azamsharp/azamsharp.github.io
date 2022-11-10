@@ -71,7 +71,7 @@ You never know, when you need to use React to create web applications or Flutter
 
 >> React has been around since 2013 and it is much more mature as compared to SwiftUI. This allows us to look at React apps and incorporate patterns from React into our SwiftUI applications. 
 
-## Source Control 
+## Source Control
 
 Source control systems like Git allows you to keep track of the changes to your codebase and collaborate between team members. It is important that you are familiar with the basic operations of a source control system so you can start contributing to your project at work. These basic operations includes: 
 
