@@ -6,7 +6,7 @@
 
 [Home](https://azamsharp.github.io)
 [Courses](courses)
-[Deals](deals.html)
+[Deals](deals)
 [Books](books)
 [Articles](articles)
 [YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
