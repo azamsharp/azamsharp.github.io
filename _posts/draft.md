@@ -14,13 +14,19 @@ A lot of famous comedians follow the same technique. Instead of directly speakin
 
 Programming meetups are always looking for volunteers. And now with remote speaking opportunities, the possibilities are endless. Your next step is to find local or remote meetups in your area and start speaking. 
 
-  
 ## How to select a topic for speaking? 
 
-## Don't be batman 
+I have been been guilty of selecting and even speaking on topics that I was not passionate about. The main issue with going after a shinny topic is that the audience will always be able to tell that you are lacking passion for something you are talking about. You can try to hide all you want, but your body language, voice and your xxx will. 
 
-CHANGE THIS 
-One of the things I really find upsetting at conferences is when I see the speaker not engaging with the audience. I remember attending a conference few years back, where the speaker sat quietly in the corner and worked on his computer. After the presentation was over, the speaker stood up and left. It was like he has seen a bat signal and wanted to flee the current situation. 
+## Interacting with the community  
+
+When you are attending a conference as a speaker, then you should only be attending the conference as a speaker. I see a lot of speakers head down on their laptops instead of interacting with the audience.
+
+>> I can understand that some people may have trouble interacting with complete strangers. But you have to start somewhere. Let go of your fears and make some new friends.  
+
+One of the best ways to interact with other developers is during lunch or dinner. Conference attendees usually go out to eat in small groups. I always randomly selected a group enjoyed their company. During the lunch/dinner, I would get to know my group members. I would find out their role in their company and what technologies excites them. 
+
+Make sure your interest is genuine and does not have some sort of an plan behind it.  
 
 
 ## Last second 
