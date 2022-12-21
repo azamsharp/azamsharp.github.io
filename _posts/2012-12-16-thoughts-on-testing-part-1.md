@@ -273,6 +273,52 @@ End to end tests are NOT replacement of your domain model tests. You MUST write 
 
 ## Code Coverage 
 
+Code coverage is a metric that calculates how much of your code is covered under test. Let's take a very simple example. In the code below we have a BankAccount class, which consists of ```deposit``` and ```withdraw``` functions. 
+
+>> Keep in mind that in real world scenario, a bank account is not implemented as a calculator. A bank account is recorded in a ledger, where all financial transactions are recorded. 
+
+```swift 
+class BankAccount {
+    
+    private(set) var balance: Double
+    
+    init(balance: Double) {
+        self.balance = balance
+    }
+    
+    func deposit(_ amount: Double) {
+        self.balance += amount
+    }
+    
+    func withdraw(_ amount: Double) {
+        self.balance -= amount
+    }
+    
+}
+```
+
+One possible test for the BankAccount may check if the account is successfully deposited. 
+
+```swift 
+final class BankAccountTests: XCTestCase {
+    
+    func test_deposit_amount() {
+        
+        let bankAccount = BankAccount(balance: 0)
+        bankAccount.deposit(100)
+        XCTAssertEqual(100, bankAccount.balance)
+        
+    }
+}
+```
+
+If this is the only test we have in our test suite then our code coverage is not 100%. This means not all paths/functions are under test. This is true because we never implemented the test for ```withraw``` function. 
+
+You may be wondering that should you always have 100% code coverage. The simple answer is NO. But it also depends on the apps that you are working on. If you are writing code for NASA, where it will be responsible for landing rover on Mars then you better make sure that every single line is tested and your code coverage is 100%. 
+
+If you are implementing an app for a pace maker device that helps to regulate the heartbeat then you better make sure that your code coverage is 100%. One line is missed or untested code can result in someones life... literally. 
+
+
 
 
 ## The Ideal test 
