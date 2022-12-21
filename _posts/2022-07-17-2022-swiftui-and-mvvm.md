@@ -1,5 +1,10 @@
 # I was wrong! MVVM is NOT a good choice for building SwiftUI applications
 
+### UPDATE 
+
+>> I wrote an updated version of this article called [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). 
+
+
 SwiftUI was introduced at WWDC 2019 and it completely changed how we build our apps for Apple platform. SwiftUI provided a declarative framework, which allowed developers to quickly and easily build user interface as compared to its predecessor UIKit or AppKit. Somewhere along the lines we adopted MVVM (Model View ViewModel) design pattern as the default pattern when building SwitUI applications. In this post, I will cover my experience of using MVVM pattern with SwiftUI framework and how it worked against the SwiftUI framework, making things more complicated. 
 
 ## Note
