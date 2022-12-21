@@ -263,17 +263,17 @@ final class ProductTests: XCTestCase {
 }
 ```
 
-The test above is definitely longer than the predecessors discussed in the earlier section but the main reason is that it is a complete test and covers a particular behavior. 
+The test above is definitely longer than the previous tests discussed earlier in the section but the main reason it is longer is because it tests all layers of the app. It is a complete test and targets a particular behavior of the app. 
 
+End to end testing also requires some initial investments that will allow your test to run database migrations, insert seed data, simulate user interface events and then rolling back changes after the tests are completed. 
 
->> One common complaint about end to end testing is that they are slow. This is a valid point. The main reason that end to end tests are slow is because they test all the layers of the application. This means, launching the application, simulate the events and validating the output. In some cases, this may also include setting up data migration and rolling back changes after each test. 
+End to end tests are NOT replacement of your domain model tests. You MUST write tests against your domain models, specially if your app is domain heavy and consists of lots of business rules. 
 
-
-## Fitnese, Cucumber Oh My! 
-
-## Stop testing your view models and controllers
+>> You will have to find the right balance as to how often end to end tests will run. If you run it with each code check-in then your continuous integration server will always be running 100% of the time. If you run it once every couple of days then you will be notified of failures much later than expected.  
 
 ## Code Coverage 
+
+
 
 ## The Ideal test 
 
