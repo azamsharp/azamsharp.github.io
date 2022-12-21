@@ -1,6 +1,4 @@
-# Title Pending 
-
-
+# Pragmatic Testing and Avoiding Common Pitfalls 
 
 ## Not all tests are created equal 
 
@@ -24,96 +22,258 @@ One of the biggest mistake developers make is to focus on writing tests against 
 
 >> A trigger to add a test is the requirement, not a class or a function. 
 
-Just because you added a new class or a function does not means that you will automatically start writing the test. Those are just implementation details and can change. You should write a test when a new business requirement is handed to you. 
+Just because you added a new class or a function does not mean that you will start writing tests. Those are just implementation details which can change overtime. Your tests should target the business requirements and not the implementation details. 
 
-Here are few examples of behaviors: 
+Here are few examples of behaviors, derived from user stories: 
 
 1. When the customer withdraw amount and has insufficient funds then charge an overdraft fee.  
 2. Another example. 
 
 The behavior stems from the requirement of the project. Tests that checks the implementation detail instead of the behavior tends to be very brittle and can easily break when the implementation changes even though the behavior remains the same.  
 
-For example let's say you are building a calculator. A simple calculator might look like the implementation below: 
+Let's consider a scenario, where you are building an application to display a list of products on the screen. The products are fetched from a JSON API and rendered using SwiftUI framework, following the principles of MVVM design pattern.
+
+The complete app might look like the implementation below: 
 
 ```swift 
-class Calculator {
+class Webservice {
     
-    func add(a: Int, b: Int) -> Int {
-        return a + b 
+    func fetchProducts() async throws -> [Product] {
+        // ignore the hard-coded URL. We can inject the URL from using test configuration. 
+        let url = URL(string: "https://api.escuelajs.co/api/v1/products")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return try JSONDecoder().decode([Product].self, from: data)
+    }
+    
+}
+
+class ProductListViewModel: ObservableObject {
+    
+    @Published var products: [ProductViewModel] = []
+    
+    func populateProducts() async {
+        do {
+            let products = try await Webservice().fetchProducts()
+            self.products = products.map(ProductViewModel.init)
+        } catch {
+            print(error)
+        }
+    }
+    
+}
+
+struct ProductViewModel: Identifiable {
+    
+    private let product: Product
+    
+    init(product: Product) {
+        self.product = product
+    }
+    
+    var id: Int {
+        product.id
+    }
+    
+    var title: String {
+        product.title
+    }
+}
+
+
+struct ProductListScreen: View {
+    
+    @StateObject private var vm = ProductListViewModel()
+    
+    var body: some View {
+        List(vm.products) { product in
+            Text(product.title)
+        }.task {
+            await vm.populateProducts()
+        }
     }
 }
 ```
 
-A simple test for the Calculator is shown below: 
+>> If you want to learn more about managing build settings using Xcode configuration files then check out [this](https://www.danijelavrzan.com/posts/2022/11/xcode-configuration/) article. 
+
+The above application works as expected but is not testable in its correct state. In order to test the app, we need to inject the webservice as a dependency, so we can mock it. 
+
+>> This is called [**Test Induced Damage**](https://dhh.dk/2014/test-induced-design-damage.html). The tests is dictating that we should add dependencies so you can mock out the service. The only purpose of introducing a protocol/contract is so you can eventually mock it. Keep in mind there is nothing wrong with using protocols/contracts in your application. They do serve a very important purpose to hide the implementation details from the user. But just to add contracts to satisfy testing goals in not good practice as it complicates the implementation and your tests are directed away from testing the behavior of the app. 
+
+Let's continue with our journey of making our code testable. In the code below we have introduced a WebserviceProtocol. Both Webservice and the newly created MockedWebservice conforms to the WebserviceProtocol as shown below: 
 
 ```swift 
-final class CalculatorTests: XCTestCase {
+protocol WebserviceProtocol {
+    func fetchProducts() async throws -> [Product]
+}
 
-    func test_add_two_numbers() throws {
-       
-        let calculator = Calculator()
-        XCTAssertEqual(5, calculator.add(a: 2, b: 3))
+class Webservice: WebserviceProtocol {
+    
+    func fetchProducts() async throws -> [Product] {
+        
+        let url = URL(string: "https://api.escuelajs.co/api/v1/products")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return try JSONDecoder().decode([Product].self, from: data)
+    }
+}
+
+class MockedWebService: WebserviceProtocol {
+    func fetchProducts() async throws -> [Product] {
+        return [Product(id: 1, title: "Product 1"), Product(id: 2, title: "Product 2")]
     }
 }
 ```
 
-Pretty straight forward! Calculator is the public API and that is why we are testing that the Calculator is capable of adding two numbers.   
+>> You should probably use a better name, instead of calling it WebserviceProtocol. The main reason, I am calling it WebserviceProtocol is just for the sake of simplicity and convenience.   
 
-Now, let's assume that your Calculator needs to perform an operation using some fancy CalculatorService. Your Calculator class may look like the following: 
+The webservice is now injected as a dependency to our ProductListViewModel. This is shown below: 
 
 ```swift 
-class Calculator {
+class ProductListViewModel: ObservableObject {
     
-    private var calculatorService: CalculatorService
+    private let webservice: WebserviceProtocol
+    @Published var products: [ProductViewModel] = []
     
-    init(calculatorService: CalculatorService) {
-        self.calculatorService = calculatorService
+    init(webservice: WebserviceProtocol) {
+        self.webservice = webservice
     }
     
-    func add(a: Int, b: Int) -> Int {
-        calculatorService.add(a: a, b: b)
+    func populateProducts() async {
+        do {
+            let products = try await Webservice().fetchProducts()
+            self.products = products.map(ProductViewModel.init)
+        } catch {
+            print(error)
+        }
+    }
+    
+}
+```
+
+The view, ProductListScreen is also updated to reflect the change. 
+
+```swift 
+struct ProductListScreen: View {
+    
+    @StateObject private var vm = ProductListViewModel(webservice: WebserviceFactory.create())
+    
+    var body: some View {
+        List(vm.products) { product in
+            Text(product.title)
+        }.task {
+            await vm.populateProducts()
+        }
     }
 }
 ```
 
-Usually in these cases you introduce a mock object so you can mock the calls to the service. 
+>> WebserviceFactory is responsible for either returning the Webservice or MockedWebservice, depending on the application environment. 
+
+Now, let's go ahead and check out the test. 
 
 ```swift 
-protocol CalculatorServiceProtocol {
-    func add(a: Int, b: Int) -> Int
-}
-
-// This is the public API
-class Calculator {
+final class ProductsTests: XCTestCase {
     
-    private var calculatorService: CalculatorServiceProtocol
-    
-    init(calculatorService: CalculatorServiceProtocol) {
-        self.calculatorService = calculatorService
-    }
-    
-    func add(a: Int, b: Int) -> Int {
-        calculatorService.add(a: a, b: b)
-    }
-}
-
-class CalculatorService: CalculatorServiceProtocol {
-    func add(a: Int, b: Int) -> Int {
-        a + b
-    }
-}
-
-class MockedCalculatorService: CalculatorServiceProtocol {
-    func add(a: Int, b: Int) -> Int {
-        return a + b 
+    func test_populate_products() async throws {
+        
+        let mockedWebService = MockedWebService()
+        let productListVM = ProductListViewModel(webservice: mockedWebService)
+        
+        await productListVM.populateProducts()
+        
+        // This line is verifying the implementation detail.
+        // Implementation details can change
+        // fetchProducts can change to getProducts and the test will fail. 
+        verify(mockedWebService.fetchProducts()).wasCalled()
+        
+        XCTAssertEqual(2, productListVM.products.count)
     }
 }
 ```
 
+We create an instance of MockedWebservice inside our test and pass it to the ProductListViewModel. Next, we invoke the populateProducts function on the view model and then check to make sure that the fetchProducts on the mockedWebservice instance was called. Finally, the test checks the products property of the ProductListViewModel instance to make sure that is is populated. 
+
+I have seen hundreds of these kind of tests implemented in large projects. There is a lot of things wrong with the above test. First, we are testing the view model. There is no need to test a view model or a view controller through a unit test, since it does not contain any logic or behavior. There are no business rules implemented in the view model or the view controller. 
+
+>> You will have a much better return on your investment, if you write an end to end test for your view models/view controllers  instead of unit testing them.   
+
+Another problem with the above test is that it is not testing the behavior but the implementation. The following line of code is an implementation detail. 
+
+```swift
+verify(mockedWebService.fetchProducts()).wasCalled()
+```
+
+This means if you decide to refactor your code and rename the function ```fetchProducts``` to ```getProducts``` then your test will fail. These kind of tests are often known as brittle tests. They break when the internal implementation change, even though the functionality/behavior provided by the API remains the same. This is the main reason that your test should validate the behavior instead of the implementation.  
+
+>> The code that you write is a liability, including tests. When writing tests, focus on the quality of the tests instead of the quantity. Remember, you are not only responsible for writing tests but also maintaining them. 
+
+In the next section, you will learn how to write tests for your view models. 
+
+# End to End Testing 
+
+In the previous section, you learned that testing view models, view controllers and excessive mocking does not provide the return on your investment. Both view models and view controllers tests the implementation details instead of the behavior. Implementation can change due to refactoring, breaking all the dependent tests even though the behavior remained the same. 
+
+Human psychology also play an important role when writing tests. As software developers we want fast feedback with small amounts of dopamine hit along the way. There is nothing wrong with receiving fast feedback. Fast feedback is one of the important characteristics of a unit test. Unfortunately, sometimes we are going to fast to realize that we were on the wrong path. We start behaving like a test addict, who wants to see green checkmarks all the tests instantly.  
+
+As explained earlier testing view models and view controllers may add more tests to your test suite but does not provide any benefit. It may even work against you in the long term since now you will be responsible for maintaining those test cases. 
+
+In these scenarios, end to end testing is a much better choice. A good end to end will test one complete story/behavior. Below you can find the implementation of an end to end test. 
+
+```swift 
+final class ProductTests: XCTestCase {
+    
+    private var webservice: Webservice!
+    // products
+    let products = [Product(id: 1, title: "Handmade Fresh Table"),Product(id: 2, title: "Durable Water Bottle")]
+    
+    override func setUp() {
+        // make sure the Webservice is using the TEST server endpoints and not PRODUCTION
+        webservice = Webservice()
+        
+        // add few products // seeding the database
+        for product in products {
+            await webservice.addProduct(product: product)
+        }
+    }
+    
+    func test_display_list_of_all_products() async {
+        
+        let app = XCUIApplication()
+        app.launch()
+        
+        let productList = app.tables["productList"]
+        
+        // check if the item numbers is correct
+        XCTAssertEqual(productList.tables.cells.count, 2)
+        
+        // check if the correct items are displayed
+        for(index, product) in products.enumerated() {
+            let cell = productList.cells.element(boundBy: index)
+            XCTAssertEqual(cell.staticTexts["productTitle"].label, product.title)
+        }
+        
+    }
+    
+    override func tearDown() async throws {
+        // make sure to delete ALL records from the database so future test results are not influenced
+        await webservice.deleteProductById(productId: 1)
+        await webservice.deleteProductById(productId: 2)
+    }
+    
+}
+```
+
+The test above is definitely longer than the predecessors discussed in the earlier section but the main reason is that it is a complete test and covers a particular behavior. 
+
+
+>> One common complaint about end to end testing is that they are slow. This is a valid point. The main reason that end to end tests are slow is because they test all the layers of the application. This means, launching the application, simulate the events and validating the output. In some cases, this may also include setting up data migration and rolling back changes after each test. 
+
+
+## Fitnese, Cucumber Oh My! 
 
 ## Stop testing your view models and controllers
 
-## Mocking 
+## Code Coverage 
 
 ## The Ideal test 
 
