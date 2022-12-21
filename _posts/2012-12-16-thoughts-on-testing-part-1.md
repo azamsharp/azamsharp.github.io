@@ -318,12 +318,29 @@ You may be wondering that should you always have 100% code coverage. The simple 
 
 If you are implementing an app for a pace maker device that helps to regulate the heartbeat then you better make sure that your code coverage is 100%. One line is missed or untested code can result in someones life... literally. 
 
+So, what is the ideal code coverage number. It really depends on the app but any number above 70% is considered a decent code coverage. 
 
+>> When calculating code coverage make sure to ignore the third party libraries/frameworks as their code coverage is not your responsibility. 
 
+## Unit Testing, Data Access and File Access 
+
+Most developers that I have talked to believe that a unit testing cannot access a database or a file system. That is incorrect and plain wrong. A unit test CAN access a database or a file system. 
+
+>> Unit test is the isolation, not the thing under test 
+
+It is very important to remember that ```Unit test is the isolation, not the thing under test```. 
 
 ## The Ideal test 
 
 ## Resources 
+
+1. [TDD, Where Did It All Go Wrong (Ian Cooper)](https://youtu.be/EZ05e7EMOLM)
+2. [JS Unit Testing Good Practices & Horrible Mistakes](https://youtu.be/iP0Vl-vU3XM)
+3. [Pragmatic Unit Testing](https://youtu.be/iP0Vl-vU3XM)
+4. [Is TDD dead?](https://youtu.be/z9quxZsLcfo)
+5. [Test-induced design damage](https://dhh.dk/2014/test-induced-design-damage.html)
+6. [Unit Testing Principles, and Patterns](https://www.amazon.com/Unit-Testing-Principles-Practices-Patterns/dp/1617296279/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1671652981&sr=8-3)
+7. [Test Driven Development: By Example](https://www.amazon.com/Unit-Testing-Principles-Practices-Patterns/dp/1617296279/ref=tmm_pap_swatch_0?_encoding=UTF8&qid=1671652981&sr=8-3)
 
 ## Conclusion 
 
