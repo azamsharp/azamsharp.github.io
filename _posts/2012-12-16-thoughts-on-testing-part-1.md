@@ -324,11 +324,13 @@ So, what is the ideal code coverage number. It really depends on the app but any
 
 ## Unit Testing, Data Access and File Access 
 
-Most developers that I have talked to believe that a unit testing cannot access a database or a file system. That is incorrect and plain wrong. A unit test CAN access a database or a file system. 
+Most developers that I have talked to believe that a unit test cannot access a database or a file system. **That is incorrect and plain wrong**. A unit test CAN access a database or a file system. 
+
+It is very important to understand that ```Unit test is the isolation, not the thing under test```. This is so important so I am going to repeat it again. 
 
 >> Unit test is the isolation, not the thing under test 
 
-It is very important to remember that ```Unit test is the isolation, not the thing under test```. 
+One of the valid reasons of not accessing a database or a file system during unit tests is that a test may leave data behind which may cause other tests to behave in unexpected manner. The solution is to make sure that the database is always reverted to an initial state after the test is completed so that future tests gets a nice and clean database without any side effects.    
 
 ## The Ideal test 
 
