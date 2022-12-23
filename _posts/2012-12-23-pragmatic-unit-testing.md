@@ -427,6 +427,6 @@ Don't create protocols/interfaces/contracts with the sole purpose of mocking. If
 
 ## Conclusion 
 
-
+Testing is not only a skill but art too. 
 
 
