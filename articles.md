@@ -8,6 +8,14 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Pragmatic Testing and Avoiding Common Pitfalls ](_posts/2012-12-23-pragmatic-unit-testing.md)
+
+The main purpose of writing tests is to make sure that the software works as expected. Tests also gives you confidence that a change you make in one module is not going to break stuff in the same or other modules. 
+
+Not all applications requires writing tests. If you are building a basic application with a straight forward domain then you can test the complete app using manual testing. Having said that in most professional environments, you are working with a complicated domain with business rules. These business rules form the basis on which company operates and generates revenue. 
+
+In this article, I will discuss different techniques of writing tests and how a developer can write good tests to get the most return on their investment. 
+
 ### [Becoming an iOS Developer - The Complete Guide 2023](_posts/2022-11-06-complete-guide-ios-dev-2023.md)
 
 It always excites me to see so many people jumping into iOS development. We have a great community with lot of talented people and it is continuously expanding. 

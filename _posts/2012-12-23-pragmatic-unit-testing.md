@@ -1,6 +1,6 @@
 # Pragmatic Testing and Avoiding Common Pitfalls 
 
-The main purpose of writing tests is to make sure that the software works as expected. Tests also gives you confidence that a change you made in one module is not going to break stuff in the same or other modules. 
+The main purpose of writing tests is to make sure that the software works as expected. Tests also gives you confidence that a change you make in one module is not going to break stuff in the same or other modules. 
 
 Not all applications requires writing tests. If you are building a basic application with a straight forward domain then you can test the complete app using manual testing. Having said that in most professional environments, you are working with a complicated domain with business rules. These business rules form the basis on which company operates and generates revenue. 
 
@@ -8,7 +8,7 @@ In this article, I will discuss different techniques of writing tests and how a 
 
 ## Not all tests are created equal 
 
-Consider a scenario that you are writing an application for a bank. One of the business rules might be to charge overdraft fees in case of insufficient funds. Banks generate [billions of dollars income by just fees](https://www.depositaccounts.com/blog/banks-income-fees.html) alone. As a developer, you must write good quality tests to make sure that overdraft fee calculation works as expected.
+Consider a scenario that you are writing an application for a bank. One of the business rules is to charge overdraft fees in case of insufficient funds. Banks generate [billions of dollars income by just fees](https://www.depositaccounts.com/blog/banks-income-fees.html) alone. As a developer, you must write good quality tests to make sure that overdraft fee calculation works as expected.
 
 In the same bank app, you may have features like rendering templates for emails or logging certain interactions. These features are important but may not produce the same return on investment as compared to charging overdraft fees. This means if the email template is not in the correct format then the banks are not going to loose millions of dollars and you will not receive a call in the middle of the night. If the logging is meant for developers then in most cases you don't even need to write tests for it. It is just an implementation detail. 
 
@@ -20,16 +20,16 @@ Next time you are writing a test, ask yourself how important this feature is for
 
 One of the biggest mistakes developers make is to focus on writing tests against the implementation details instead of the behavior of the application.
 
->> A trigger to add a test is the requirement, not a class or a function. 
+>> A trigger to add a new test is the requirement, not a class or a function. 
 
 Just because you added a new class or a function does not mean that you will start writing tests. That is just an implementation detail which can change overtime. Your tests should target the business requirements and not the implementation details. 
 
-Here are few examples of behaviors, derived from user stories: 
+Here are few examples of behaviors, derived from business requirements: 
 
 1. When a customer withdraw amount and has insufficient funds then charge an overdraft fee.  
 2. The number of stocks specified by customer are submitted for trade at a specified price, once the limit has reached. 
 
-The behavior stems from the requirement of the project. Tests that checks the implementation detail instead of the behavior tends to be very brittle and can easily break when the implementation changes even though the behavior remains the same.  
+The behavior stems from the requirement of the project. Tests that checks the implementation details instead of the behavior tends to be very brittle and can easily break when the implementation changes even though the behavior remains the same.  
 
 Let's consider a scenario, where you are building an application to display a list of products on the screen. The products are fetched from a JSON API and rendered using SwiftUI framework, following the principles of MVVM design pattern.
 
@@ -98,9 +98,7 @@ struct ProductListScreen: View {
 }
 ```
 
->> If you want to learn more about managing build settings using Xcode configuration files then check out [this](https://www.danijelavrzan.com/posts/2022/11/xcode-configuration/) article. 
-
-The above application works as expected and produces the expected result. Instead of testing the concrete implementation of the ```Webservice```, we introduced an interface/contract/protocol just so we can inject a mock. The sole purpose of creating the protocol is so we can satisfy the tests, even though there is only one concrete implementation that conforms to that protocol/interface.  
+The above application works as expected and produces the expected result. Instead of testing the concrete implementation of the ```Webservice```, we will introduce an interface/contract/protocol just so that we can inject a mock. The sole purpose of creating the protocol is to satisfy the tests, even though there is only one concrete implementation that conforms to that protocol/interface.  
 
 >> This is called [**Test Induced Damage**](https://dhh.dk/2014/test-induced-design-damage.html). The tests are dictating that we should add dependencies so you can mock out the service. The only purpose of introducing a protocol/contract/interface is so you can eventually mock it. Keep in mind there is nothing wrong with using protocols/contracts in your application. They do serve a very important purpose to hide the implementation details from the user and providing abstraction, but just to add contracts to satisfy testing goals in not a good practice as it complicates the implementation and your tests are directed away from testing the actual behavior of the app. 
 
@@ -267,9 +265,9 @@ final class ProductTests: XCTestCase {
 }
 ```
   
->> Developers can run E2E tests locally on their development machine. This will require initial, such as testing framework, test environment, dependencies (database, services). E2E tests can be time-consuming, as a result developers may choose to run E2E tests less frequently than unit tests or other types of tests.  
+>> Developers can run E2E tests locally on their development machine. This will require initial setup such as testing framework, test environment, dependencies (database, services). E2E tests can be time-consuming, as a result developers may choose to run E2E tests less frequently than unit tests or other types of tests.  
 
-E2E tests are slower than the previous tests discussed earlier in the section but the main reason they are slower is because they tests all layers of the application. E2E tests are a complete test and targets a particular behavior of the app. 
+E2E tests are slower than the previous tests discussed earlier in the section but the main reason they are slower is because they tests all layers of the application. E2E tests are complete test and targets a particular behavior of the app. 
 
 End to end tests also requires some initial setup that will allow your test to run database migrations, insert seed data, simulate user interface events and then rolling back changes after the tests are completed. 
 
@@ -279,7 +277,7 @@ End to end tests are NOT replacement of your domain model tests. You MUST write 
 
 ## What about Integration Testing 
 
-Integration tests are performed to make sure that two different systems can work together. These systems can be external dependencies like database or API but it can also be different modules of the same system. 
+Integration tests are performed to make sure that two different systems can work together. These systems can be external dependencies like database or API but it can also be different modules within the same system. 
 
 Dependencies can be classified as managed and unmanaged dependencies. A managed dependency includes database, file systems etc. For managed dependencies, it is important that you use real instance and not a mock. Unmanaged dependencies include SMTP server, payment gateway etc. For unmanaged dependencies use mocks to verify their behavior. 
 
@@ -427,6 +425,6 @@ Don't create protocols/interfaces/contracts with the sole purpose of mocking. If
 
 ## Conclusion 
 
-Testing is not only a skill but art too. 
+Testing is a vast and complicated topic. Having said that you can simplify your testing efforts by focusing on the business requirements. Just like less code is better, quality tests are much better than quantity. I hope you have learned some lessons from this post that you can apply in your current and future projects.  
 
 
