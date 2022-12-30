@@ -43,8 +43,8 @@ The complete app might look like the implementation below:
 class Webservice {
     
     func fetchProducts() async throws -> [Product] {
-        // ignore the hard-coded URL. We can inject the URL from using test configuration. Also keep in mind that this is a managed dependency. This means we own the server and have access to the environments.  
-        let url = URL(string: "https://www.myownserver/api/v1/products")!
+        // ignore the hard-coded URL. We can inject the URL from using test configuration. 
+        let url = URL(string: "https://api.escuelajs.co/api/v1/products")!
         let (data, _) = try await URLSession.shared.data(from: url)
         return try JSONDecoder().decode([Product].self, from: data)
     }
@@ -113,7 +113,7 @@ class Webservice: WebserviceProtocol {
     
     func fetchProducts() async throws -> [Product] {
         
-        let url = URL(string: "https://www.myownserver/api/v1/products")!
+        let url = URL(string: "https://api.escuelajs.co/api/v1/products")!
         let (data, _) = try await URLSession.shared.data(from: url)
         return try JSONDecoder().decode([Product].self, from: data)
     }
