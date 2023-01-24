@@ -1,8 +1,11 @@
 # Container Pattern in SwiftUI 
 
+>> Updated 01/24/2023 - Added E2E and ViewInspector example
+
 Container pattern is a common pattern used in React community. Since React and SwiftUI are quite similar, this pattern can also be used for building SwiftUI applications. In this article, I will focus on the concepts behind the container pattern and how you can use it to build your SwiftUI applications. 
 
 >> Please keep in mind that I am not recommending any pattern in this article. I am just explaining what Container Pattern is and how it can be used to build SwiftUI applications. I suggest you do your own research and choose the best architecture pattern that fits your project. 
+
 
 ## What is Container Pattern? 
 
@@ -58,6 +61,76 @@ Having said that writing a unit test for a view model to verify the user interfa
 >> If you have logic in view models then you should definitely write tests for it. This logic can include sorting, filtering operations that can be tested in isolation. Just make sure that you are not using view models to test the interface of your app. For those scenarios you can use manual testing using Xcode previews, view testing using ViewInspector or End-to-End testing. 
 
 >> For E2E testing, you should be more focused on writing tests with longer happy paths and few edge cases rather than testing individual rule etc. Keep in mind that E2E tests takes longer to run but they also test a lot more and are considered best for regression and finding bugs. 
+
+Here is an example of E2E test for checking that the order is placed successfully. Keep in mind that since this is an E2E test, it will invoke an actual server (TEST) to place an order. 
+
+``` swift 
+final class When_user_adds_a_new_valid_order: XCTestCase {
+    
+    override func setUp() {
+        // run script to setup database
+        // create the tables etc
+    }
+    
+    func test_should_display_new_order_successfully() throws {
+       
+        let app = XCUIApplication()
+        app.launch()
+
+        // click on the Add New Order Button
+        app.buttons["addOrderButton"].tap()
+        
+        // fill out the order
+        app.textFields["nameTextField"].tap()
+        app.textFields["nameTextField"].typeText("John Doe")
+        
+        app.textFields["coffeeNameTextField"].tap()
+        app.textFields["coffeeNameTextField"].typeText("Hot Coffee")
+        
+        app.textFields["priceTextField"].tap()
+        app.textFields["priceTextField"].typeText("4.50")
+        
+        app.buttons["placeOrderButton"].tap()
+        
+        let orderList = app.collectionViews["orderList"]
+        
+        let nameLabel = orderList.children(matching: .cell).element(boundBy: 0).staticTexts["John Doe"].label
+        
+        XCTAssertTrue(orderList.cells.count == 1)
+        XCTAssertEqual(nameLabel, "John Doe")
+        
+    }
+    
+    override func tearDown() {
+        // drop or clear the tables for the next test
+    }
+
+}
+```
+
+You can also use [ViewInspector](https://github.com/nalexn/ViewInspector) to just test the view itself. ViewInspector reminds me of [Widget testing](https://docs.flutter.dev/cookbook/testing/widget/introduction) in Flutter. 
+
+>> ViewInspector example is for article purposes. Please consult actual documentation to learn more about ViewInspector. 
+
+``` swift 
+ func test_invalid_state_button_is_disabled() throws {
+        let sut = AddNewOrderView().environmentObject(Model())
+        let isDisabled = try sut.inspect().find(button: "Done").isDisabled()
+        XCTAssertTrue(isDisabled)
+    }
+    
+    func test_form_valid_button_is_enabled() throws {
+        let sut = AddNewOrderView().environmentObject(Model())
+        try sut.inspect().find(viewWithAccessibilityIdentifier: "nameTextField").textField().setInput("Mary Doe")
+        try sut.inspect().find(viewWithAccessibilityIdentifier: "coffeeNameTextField").textField().setInput("Hot Coffee")
+        try sut.inspect().find(viewWithAccessibilityIdentifier: "priceTextField").textField().setInput("5.75")
+        try sut.inspect().find(viewWithAccessibilityIdentifier: "coffeeSizePicker").picker().select(value: CoffeeSize.large)
+        let isDisabled = try sut.inspect().find(button: "Done").isDisabled()
+        XCTAssertFalse(isDisabled)
+    } 
+```
+
+>> Usually for such a simple/trivial scenario I just use Xcode Previews to manually test the validation rules instead of writing any unit test. If the scenario is complicated like If I have to filter orders based on several different options then I would unit test that algorithm.  
 
 ## References: 
 
