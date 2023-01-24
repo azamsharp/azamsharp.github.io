@@ -64,6 +64,7 @@ Having said that writing a unit test for a view model to verify the user interfa
 1. [Presentational and Container Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 
 2. [Exploring SwiftUI Architectures](https://youtu.be/HEDSVXyq2fw)
 3. [SwiftUI Architecture - A Complete Guide to MV Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html)
+4. [Why I don't do MVVM Anymore](https://youtu.be/kWEyKdZ4G38)
 
 ## Conclusion: 
 
