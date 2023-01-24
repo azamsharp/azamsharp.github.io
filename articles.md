@@ -8,6 +8,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Container Pattern for Building SwiftUI Apps](_posts/2023-01-24-introduction-to-container-pattern.md)
+Container pattern is a common pattern used in React community. Since React and SwiftUI are quite similar, this pattern can also be used for building SwiftUI applications. In this article, I will focus on the concepts behind the container pattern and how you can use it to build your SwiftUI applications. 
+
+
 ### [Pragmatic Testing and Avoiding Common Pitfalls ](_posts/2012-12-23-pragmatic-unit-testing.md)
 
 The main purpose of writing tests is to make sure that the software works as expected. Tests also gives you confidence that a change you make in one module is not going to break stuff in the same or other modules. 
