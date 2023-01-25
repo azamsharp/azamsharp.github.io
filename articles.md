@@ -8,7 +8,7 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [A Better Way to Handle Events from SwiftUI Views](_posts/2023-01-24-grouping-events-swiftui-view-using-enums.md.md)
+### [A Better Way to Handle Events for SwiftUI Views](_posts/2023-01-24-grouping-events-swiftui-view-using-enums.md.md)
 
 One way to make reusable views in SwiftUI is to expose the events as a closure. This allows the parent to consume the closure and take action. In this post, I will demonstrate how the events from a SwiftUI view can be grouped together into an enum allowing you to reduce code for creating multiple closures per view. 
 
