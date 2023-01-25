@@ -8,6 +8,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [A Better Way to Handle Events from SwiftUI Views](_posts/2023-01-24-grouping-events-swiftui-view-using-enums.md.md)
+
+One way to make reusable views in SwiftUI is to expose the events as a closure. This allows the parent to consume the closure and take action. In this post, I will demonstrate how the events from a SwiftUI view can be grouped together into an enum allowing you to reduce code for creating multiple closures per view. 
+
 ### [Container Pattern for Building SwiftUI Apps](_posts/2023-01-24-introduction-to-container-pattern.md)
 Container pattern is a common pattern used in React community. Since React and SwiftUI are quite similar, this pattern can also be used for building SwiftUI applications. In this article, I will focus on the concepts behind the container pattern and how you can use it to build your SwiftUI applications. 
 
