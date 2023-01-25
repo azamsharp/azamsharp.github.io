@@ -1,4 +1,4 @@
-# A Better Way to Handle Events from SwiftUI Views 
+# A Better Way to Handle Events for SwiftUI Views 
 
 One way to make reusable views in SwiftUI is to expose the events as a closure. This allows the parent to consume the closure and take action. In this post, I will demonstrate how the events from a SwiftUI view can be grouped together into an enum allowing you to reduce code for creating multiple closures per view. 
 
