@@ -12,7 +12,7 @@ Consider a situation where we are displaying a list of reminders. Each reminder 
     }
 ```
 
-![ReminderCellView](../images/reminder1.png)
+![ReminderCellView](/images/reminder1.png)
 
 As you can see, each ReminderViewCell consists of a checkbox and a delete button (trash icon). The checkbox and the delete button will trigger an event, which can be handled by the parent view through the use of closures. This is shown in the implementation below: 
 
