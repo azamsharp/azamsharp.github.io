@@ -20,7 +20,7 @@
 <img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/surviving-coding-bootcamp.png?raw=true" width="50%" height="50%">
 </a>
 
-<a href="https://gum.co/VPSV">
+<a href="/books/mvvm-in-swiftui.zip">
 <img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/mvvmswiftui.png?raw=true" width="50%" height="50%">
 </a>
 
