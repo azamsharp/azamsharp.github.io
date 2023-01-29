@@ -14,11 +14,44 @@ Diagram of active record pattern
 
 Active Record Pattern is ideal for building apps that exhibit an ORM (Object Relational Mapping) behavior. iOS apps that uses Core Data reflects that behavior and are good candidates to use the Active Record Pattern. 
 
-I also have past experience with several different ORM frameworks including NHibernate, Light Speed, Entity Framework, Sequelize etc and I think Core Data will fit nicely with the Active Record Pattern.  
+I have past experience with several different ORM frameworks including NHibernate, Light Speed, Entity Framework, Sequelize etc and I think Core Data will fit nicely with the Active Record Pattern.  
 
 >> Core Data is not an ORM, it is a framework that provides an object-oriented way to manage data in a persistent store, such as a SQLite database. 
 
-Scenario
+In this article, we will look at how to implement a simple Reminders App using SwiftUI and Core Data. The Reminders App will allow the user to add a list as well as add reminders to an existing list. 
+
+## Implementation
+
+The first thing we need to implement is a common base class or a protocol that will contain all the common functions, properties used by all our Core Data models. 
+
+The implementation is shown below: 
+
+```swift 
+import Foundation
+import CoreData
+
+protocol Model {
+   func save() throws
+}
+
+extension Model where Self: NSManagedObject {
+   
+    func save() throws {
+        try CoreDataProvider.shared.viewContext.save()
+    }
+    
+    func delete() throws {
+        CoreDataProvider.shared.viewContext.delete(self)
+        try save() 
+    }
+    
+    static var all: NSFetchRequest<Self> {
+        let request = NSFetchRequest<Self>(entityName: String(describing: self))
+        request.sortDescriptors = []
+        return request
+    }
+}
+```
 
 
 
