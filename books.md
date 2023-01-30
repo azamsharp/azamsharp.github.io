@@ -8,22 +8,23 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-<a href="https://azamsharp.gumroad.com/l/uikit-using-swiftui">
 <img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/uikit-recipes.png?raw=true" width="50%" height="50%">
-</a>
 
-<a href="https://azamsharp.gumroad.com/l/navigation-api-swiftui">
+[Download EPub](/books/UIKit%20with%20SwiftUI%20Recipes%20.epub)
+[Download Pdf](/books/UIKitSwiftUIRecipes.pdf)
+
 <img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/navigation-api.png?raw=true" width="50%" height="50%">
-</a>
 
-<a href="https://azamsharp.gumroad.com/l/surviving-the-coding-bootcamp">
+[Download EPub](/books/Navigation%20API%20in%20SwiftUI.epub) [Download Pdf](/books/Navigation-API-SwiftUI.pdf) 
+
+
 <img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/surviving-coding-bootcamp.png?raw=true" width="50%" height="50%">
-</a>
 
-<a href="/books/mvvm-in-swiftui.zip">
+[Download EPub](/books/surving-coding-bootcamp-04-30-2022.epub)
+[Download Pdf](/books/SurvivingTheCodingBootcamp-04-30-2022.pdf)
+
+
 <img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/mvvmswiftui.png?raw=true" width="50%" height="50%">
-</a>
 
-<a href="https://gum.co/QOIq">
-<img src="https://github.com/azamsharp/azamsharp.github.io/blob/master/_posts/images/arkitforios.png?raw=true" width="50%" height="50%">
-</a>
+[Download](/books/mvvm-in-swiftui.zip)
+
