@@ -308,6 +308,8 @@ The delete operation is also very similar. Here is the implementation of the del
 
 >> If we need some custom code to run during the save or delete operation for Reminder then we can always override any function exposed by the Model protocol. 
 
+You can download the source code [here](https://github.com/azamsharp/RemindersAppActiveRecordPattern).
+
 ## Conclusion
 
 Active Record Pattern blends in nicely when building SwiftUI apps with Core Data. It allows you to cleanly separate the business logic from the user interface. My recommendation is that you try it out and see if it fits your needs. 
