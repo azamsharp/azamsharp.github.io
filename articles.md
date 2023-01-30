@@ -8,6 +8,12 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Active Record Pattern for Building SwiftUI Apps with Core Data](_posts/2023-01-30-active-record-pattern-swiftui-core-data.md)
+
+Lately, I have been talking a lot about different architectural patterns that can be used to build SwiftUI applications. I discussed [MV pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html) for building client/server applications and [Container pattern](https://azamsharp.com/2023/01/24/introduction-to-container-pattern.html) for building hobby projects or projects where testing is not considered first class citizen. 
+
+Recently, I have been building Core Data applications and I wanted to try out Active Record Pattern and see how it feels. In this post, I will cover my experience with building SwiftUI apps using the Active Record Pattern.
+
 ### [A Better Way to Handle Events for SwiftUI Views](_posts/2023-01-24-grouping-events-swiftui-view-using-enums.md.md)
 
 One way to make reusable views in SwiftUI is to expose the events as a closure. This allows the parent to consume the closure and take action. In this post, I will demonstrate how the events from a SwiftUI view can be grouped together into an enum allowing you to reduce code for creating multiple closures per view. 
