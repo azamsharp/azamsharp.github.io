@@ -8,6 +8,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Resources - Passive Income for Developers](_posts/2023-02-01-resources-passive-income.md)
+
+Here are some resources we discussed during the Twitter Spaces. I hope you find them useful. 
+
 ### [Active Record Pattern for Building SwiftUI Apps with Core Data](_posts/2023-01-30-active-record-pattern-swiftui-core-data.md)
 
 Lately, I have been talking a lot about different architectural patterns that can be used to build SwiftUI applications. I discussed [MV pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html) for building client/server applications and [Container pattern](https://azamsharp.com/2023/01/24/introduction-to-container-pattern.html) for building hobby projects or projects where testing is not considered first class citizen. 
