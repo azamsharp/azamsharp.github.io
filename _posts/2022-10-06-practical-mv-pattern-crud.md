@@ -1,5 +1,7 @@
 # SwiftUI Architecture - A Complete Guide to MV Pattern Approach 
 
+>> Update 02/03/2023 - I recently published few more articles about SwiftUI Architecture. This includes exploring the [Container Pattern](https://azamsharp.com/2023/01/24/introduction-to-container-pattern.html), which is a common pattern when building ReactJS applications and [Active Record Pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). For me personally, Active Record Pattern felt more natural when building **Core Data** applications with SwiftUI. This was primarily due to the similarities between Core Data and a traditional ORM. My recommendation is that you try out all the different architectural patterns and see which one fits your needs. For client/server applications, I am comfortable with using the MV pattern discussed in this article.     
+
 I was listening to an amazing talk by Matias Villaverde and Rens Breur at NSSpain about "Lessons learnt rewriting SoundCloud in SwiftUI". You can watch the complete talk [here](https://vimeo.com/751534042/f1ae29434e). 
 
 This talk really resonated with me because I did similar mistakes when building SwiftUI applications. Instead of embracing the simplicity of the framework, I added unnecessary complexity to please the design pattern Gods. This included creating view models for each view, ignoring @FetchRequest and @SectionFetchRequest property wrappers, passing @EnvironmentObject to the view model instead of accessing it directly in the view and much more.  
