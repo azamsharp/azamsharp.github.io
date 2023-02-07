@@ -12,6 +12,10 @@ If you want to support my work then please consider buying one of my courses bel
 
 [Patreon](https://www.patreon.com/azamsharp)
 
+[Building a Reminders App Clone with SwiftUI & Core Data](https://www.udemy.com/course/building-a-reminders-app-clone-with-swiftui-core-data/?referralCode=A18E57F77802025AE96B)
+
+[iOS Development Using UIKit and Swift - Project Based Learning](https://www.udemy.com/course/ios-development-using-uikit-swift-project-based-learning/?referralCode=499D9D5E0217993EFA16)
+
 [MV Design Pattern in iOS - Build SwiftUI Apps Apple's Way](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/)
 
 [Building Augmented Reality Apps Using RealityKit](https://www.udemy.com/course/building-augmented-reality-apps-in-realitykit-arkit/?referralCode=BB7A8EC8AEA928AAD34F)
