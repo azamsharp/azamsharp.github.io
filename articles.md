@@ -12,6 +12,9 @@
 
 Here are some resources we discussed during the Twitter Spaces. I hope you find them useful. 
 
+### [Testing is About Confidence](_posts/2023-02-15-testing-is-about-confidence.md)
+If you ask 100 people what testing means to them, they will give you 100 different answers. For me personally, testing is all about confidence. Confidence that my code works and confidence that it will work as expected in the future. 
+
 ### [Active Record Pattern for Building SwiftUI Apps with Core Data](_posts/2023-01-30-active-record-pattern-swiftui-core-data.md)
 
 Lately, I have been talking a lot about different architectural patterns that can be used to build SwiftUI applications. I discussed [MV pattern](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html) for building client/server applications and [Container pattern](https://azamsharp.com/2023/01/24/introduction-to-container-pattern.html) for building hobby projects or projects where testing is not considered first class citizen. 

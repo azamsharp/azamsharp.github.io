@@ -132,21 +132,3 @@ This reasoning has allowed my test code to not spiral out of control. I value my
 >> Next time you are writing a test, validate the situation and evaluate its benefits to the business. 
 
 **This post described how I evaluate and write tests. This may not reflect your needs and criteria in your application. Talk to your team and choose the best path based on your needs.**
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
