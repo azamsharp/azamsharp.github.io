@@ -8,6 +8,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Testing View Model Does NOT Validate the User Interface](_posts/2023-02-16-testing-view-models.md)
+Couple of weeks ago, I was having a discussion with another developer, who was mentioning that they test their **user interface** through View Models in SwiftUI. I was not sure what he meant so I checked the source code and found that they had lot of unit tests for their View Models and they were just assuming that if the View Model tests are passing then the user interface will automatically work.
+
+
 ### [Resources - Passive Income for Developers](_posts/2023-02-01-resources-passive-income.md)
 
 Here are some resources we discussed during the Twitter Spaces. I hope you find them useful. 

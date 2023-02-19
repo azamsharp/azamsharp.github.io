@@ -1,6 +1,6 @@
 # Testing View Model Does NOT Validate the User Interface 
 
-Couple of weeks ago, I was having a discussion with another developer, who was mentioning that they test their **user interface** through View Models in SwiftUI. I was not sure what he meant so I checked the source code and found that they had lot of unit tests for their View Models and they were assuming that if the View Model tests are passing then the user interface will automatically work.
+Couple of weeks ago, I was having a discussion with another developer, who was mentioning that they test their **user interface** through View Models in SwiftUI. I was not sure what he meant so I checked the source code and found that they had lot of unit tests for their View Models and they were just assuming that if the View Model tests are passing then the user interface will automatically work.
 
 In this post, I will cover how writing unit tests for View Models is different then testing the user interface. 
 
