@@ -445,7 +445,16 @@ If you type in the TextField then you will notice that the body is fired each ti
 In the same way when using the @EnvironmentObject, several views may get revaluated but only those who needs to be rerendered are rendered again. If you are getting unwanted rerendering then you can always split your @EnvironmentObject into multiple objects. This is shown in my article [Slicing Global State in SwiftUI Using Multiple EnvironmentObjects](https://azamsharp.com/2022/07/01/slicing-environment-object.html). 
 
 # Testing
-One of the arguments of using MVVM with SwiftUI is that it allows developers to easily perform unit testing for their views. This is a valid argument, because having a separate layer of view model does allow easy testing. You can invoke actions on the view model and witness changes on the view model properties. This kind of in-memory UI testing may not possible without an extra layer of view model but you can still write UI Tests for your SwiftUI applications. You can either use built-in Xcode UI Test Project or a framework called ViewInspector.
+
+> Update - 02/20/2023: I have recently published number of articles on testing. This includes [Pragmatic Testing and Avoiding Common Pitfalls](https://azamsharp.com/2012/12/23/pragmatic-unit-testing.html), [Testing is About Confidence](https://azamsharp.com/2023/02/15/testing-is-about-confidence.html), [Testing View Model Does NOT Validate the User Interface](https://azamsharp.com/2023/02/16/testing-view-models.html).  
+
+Testing is a very important part of software development. Testing is usually broken down into three main categories, known as Testing Pyramid.  
+
+- Unit Tests 
+- Integration Tests 
+- E2E Tests 
+
+Depending on the complexiy of your app, you can invest your time in different parts of the pyramid. If your application has lots of domain rules then you should write a lot of unit tests against the aggregate model. If your app is integrating with unmanaged dependencies then you will need integration tests. Finally, the best tests for your application are E2E tests. These tests view the app as it is used by the user and are integral to guard against regression.  
 
 ### Side Note
 Kent Beck said it best “I get paid for code that works, not for tests, so my philosophy is to test as little as possible to reach a given level of confidence”.
@@ -458,13 +467,13 @@ Testing is definitely very important but only if you are writing meaningful test
 
 If this operation is part of your model then your test should create a user, add a budget for that user in the database. Then add a new transaction to that budget and then check if the transaction was added successfully or not.
 
-Unfortunately, most developers will ignore the database part and run their test against a mocked object. In the end their test run fast and they are happy to see the test pass but what exactly did they test. They simply tested that their mock object work as expected. In this scenario a real test would hit the database and check if all the rules were met or not.
+Unfortunately, most developers will ignore the database part and run their test against a mocked object. In the end their test run fast and they are happy to see the test pass but what exactly did they test. They simply tested that their mock object work as expected. In this scenario a real test would hit the TEST database and check if all the rules were met or not.
 
 >> For the above scenario we are considering on device database like Sqlite being managed by Core Data or Realm.
 
 I have worked with companies that have more than 2000+ tests. But if you looked closely you will find out the tests were not testing anything related to the business domain. They were actually testing the programming language. This is why it is extremely important to test the behaviors of your application instead of the implementation. When writing a test, ask yourself what business logic is being tested. If you cannot answer that question then stop writing the test.
 
->> Testing is very important that is why I give more precedence to domain layer unit tests and full system end-to-end functional tests. Functional system tests will ensure that the system works with all the other layers of the application. You don’t have to write tests for your controller or view models. All of those layers will be tested during the end to end functional tests.
+>> Testing is very important that is why I give more precedence to domain layer unit tests and full system end-to-end functional tests. Functional system tests will ensure that the system works with all the other layers of the application. 
 
 I cover end-to-end testing in my [video](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/?referralCode=4627986F77F533DEF0C7) course. 
 
