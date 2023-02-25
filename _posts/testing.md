@@ -1,91 +1,53 @@
-# Testing View Model Does NOT Validate the User Interface 
+# Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture
 
-Couple of weeks ago, I was having a discussion with another developer, who was mentioning that they test their **user interface** through View Models in SwiftUI. I was not sure what he meant so I checked the source code and found that they had lot of unit tests for their View Models and they were assuming that if the View Model tests are passing then the user interface will automatically work.
+In one of my previous articles, I mentioned that how I am using MV Pattern for building my client/server SwiftUI applications. 
 
-In this post, I will cover how writing unit tests for View Models is different then testing the user interface. 
+## Container and MV Pattern 
 
-> Please keep in mind that I am not suggesting that you should not write unit tests for your View Models. I am simply saying that your View Model unit tests does not validate that the user interface is working as expected. 
+The main idea behind the MV Pattern is to allow views directly talk to the model. This eliminate the need to create unnecessary layer of view models for each view, which simply contribute to the size of the project instead of providing any benefit. 
 
-Let's take a very simple example of building a counter application. 
+> In SwiftUI, view is similar to Component in React or Widget in Flutter. This means, it is not only used for displaying data but can also handle binding capabilities. **The View in SwiftUI is also a View Model.**. [Container pattern](https://azamsharp.com/2023/01/24/introduction-to-container-pattern.html) is commonly used in React to create rich container views and lean presentation views. If unit testing is not your high priority then container pattern might be a suitable choice for you. But with little effort, you can move from container pattern to MV pattern and also take advantage of testability.  
 
+Apple has shown MV pattern in several different flavors. This includes Fruta, FoodTruck and ScrumDinger applications. My focus for this article is on client/server applications as they are one of the most common types of iOS applications. 
+
+In a client/server application, the view needs to display data fetched from the server. Data can be in many different formats but mostly JSON is preferred. How can we provide data to the view with the least amount of effort yet still maintain separation of concerns? 
+
+In the code below, we used a StoreHTTPClient which is responsible for fetching the data from the API. The data is populated in the local state of ContentView and then passed to the ProductListView for display. 
+
+> This code is an example of Container Pattern. 
 
 ``` swift 
-class CounterViewModel: ObservableObject {
-    
-    @Published var count: Int = 0
-    
-    func increment() {
-        count += 1
-    }
-}
-
 struct ContentView: View {
     
-    @StateObject private var counterVM = CounterViewModel()
+    @State private var products: [Product] = []
+    let storeHTTPClient: StoreHTTPClient
     
     var body: some View {
-        VStack {
-            Text("\(counterVM.count)")
-            Button("Increment") {
-                counterVM.increment()
+        ProductListView(products: products)
+            .task {
+                do {
+                    products = try await storeHTTPClient.loadProducts()
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
-        }
     }
 }
 ```
 
-When the increment button is pressed, we call the increment function on the CounterViewModel instance and increment the count. Since count property is decorated with @Published property wrapper, it notifies the view to reevaluate and eventually rerender. 
+If you want to perform any logic then it will go inside the container view. The main disadvantage of this approach is that it becomes hard to perform unit testing on your code that resides inside the view. Once again, if unit testing is not your priority then this is a perfectly valid pattern to use. 
 
-In order to test that the count is incremented and displayed on the screen, the following unit test was written. 
+In WWDC 2020 talk titled "Data Essentials in SwiftUI" Apple presented the following diagram. 
 
-``` swift 
-import XCTest
-@testable import Learn
-
-final class LearnTests: XCTestCase {
-
-    func test_user_updated_count() {
-        let vm = CounterViewModel()
-        vm.increment()
-        XCTAssertEqual(1, vm.count)
-    }
-
-}
-```
-
-This is a perfectly **valid** unit test but it does not verify that the count has been updated and displayed on the screen. Let me repeat it again. **A View Model unit test does not verify that the count is successfully displayed on the screen. This is a unit test not a UI test.**
-
-To prove that a View Model unit test does not verify user interface elements, simply remove the Button view or even the Text view from the ContentView. The unit test will still pass. This can give you false confidence that your interface is working. 
-
-A better way to verify that a user interface is working as expected is to implement a UI test. Take a look at the following implementation. 
-
-``` swift 
-final class LearnUITests: XCTestCase {
-
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        app.buttons["incrementButton"].tap()
-        XCTAssertEqual("1", app.staticTexts["countLabel"].label)
-    }
-}
-```
-
-This test will launch the app in a simulator and verify that when the button is pressed, label is updated correctly. 
-
-> Depending on the complexity of the behavior you are testing, you may not even need to write a user interface test. I have found that most of the user interfaces can be tested quickly using Xcode Previews. 
-
-So what is the right balance? How many unit tests should you have for your View Model as compared to UI tests. 
-
-The answer is **it depends**. If you have complicated logic in your View Model then unit test can help. UITest (E2E) tests provide the best defense against regression. For each story, you can write couple of long happy path user interface tests and couple of edge cases. Once again, this really depends on the story and the complexities associated with the story. 
-
-In the end [testing is all about **confidence**](https://azamsharp.com/2023/02/15/testing-is-about-confidence.html). Sometimes you can gain confidence by writing fewer or no tests and other times you have to write more tests to achieve the level of confidence. 
-
-If you like this post and want to support my work then check out my [Udemy courses](https://azamsharp.com/courses). 
+![Aggregate Root](/images/aggre-root.png)
 
 
+
+In WWDC 2020 talk titled "Use Xcode for server-side development" Apple 
+
+
+
+![Multiple Aggregate Root](/images/mul-aggregate-root.png)
 
 
 
