@@ -2,6 +2,8 @@
 
 In one of my previous articles, I mentioned that how I am using MV Pattern for building my client/server SwiftUI applications. 
 
+## Modular Architecture 
+
 ## Screens vs Views 
 
 When I was working with Flutter, I observed a common pattern for organizing the widgets. Flutter developers were separating the widgets based on whether the widgets represents an entire screen of just a reusable control. For example
@@ -29,7 +31,7 @@ I find that it is always a good idea to keep a close eye on our friendly neighbo
 
 The main idea behind the MV Pattern is to allow views directly talk to the model. This eliminate the need for creating unnecessary layer of view models for each view, which simply contribute to the size of the project instead of providing any benefits.  
 
-> In SwiftUI, view is similar to Component in React or Widget in Flutter. This means, it is not only used for displaying data but can also handle binding capabilities. **The View in SwiftUI is also a View Model.**. If you plan to put all the logic in your views then check out Container Pattern. MV Pattern is not the same as Container Pattern. 
+> In SwiftUI, view is similar to Component in React or Widget in Flutter. This means, it is not only used for displaying data but can also handle binding capabilities. **The View in SwiftUI is also a View Model.**. Keep in mind that if you plan to put all the logic in your views then check out Container Pattern. MV Pattern is not the same as Container Pattern. 
 
 Apple has shown MV pattern in several places with different flavors. This includes Fruta, FoodTruck and ScrumDinger applications. My focus for this article is on client/server applications as they are one of the most common types of iOS applications. 
 
@@ -125,7 +127,18 @@ struct ContentView: View {
 
 Apart from fetching and persistence, StoreModel can also provide sorting, filtering, searching and other operations etc. 
 
-A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover how and when to introduce multiple aggregate root models.  
+A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover how to introduce multiple aggregate root models and .  
+
+## Multiple Aggregate Models 
+
+As you learned in the previous section, the purpose of an aggregate model is to expose data to your view. As Luca explained in [Data Essentials in SwiftUI WWDC 2020 (11:30)](https://developer.apple.com/videos/play/wwdc2020/10040/) "The aggregate model is an ```ObservableObject```, which acts as your data dependency surface. This allows us to model the data using value type and manage its life cycle and side effects with a reference type."  
+
+As your business grows, a single aggregate model might not be enough to maintain the life cycle and side effects of an entire application. This is where we will introduce multiple aggregate models. These aggregate models are based on the bounded context of the application. Bounded context refers to a specific area of the system that has clear boundaries and is designed to serve a particular business purpose or domain. 
+
+In an e-commerce application, we have have several bounded contexts including checkout process, inventory management system, catalog, fulfillment, shipment and customer management module. 
+
+Defining bounded context is an important part in software development and it helps to break down the application into small manageable pieces. This also allows teams to work on different parts of the system without interfering with each other. 
+
 
 
 ![Multiple Aggregate Root](/images/mul-aggregate-root.png)
