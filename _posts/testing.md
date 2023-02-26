@@ -2,6 +2,14 @@
 
 In one of my previous articles, I mentioned that how I am using MV Pattern for building my client/server SwiftUI applications. 
 
+## Screens vs Views 
+
+When I was working with Flutter, I observed a common pattern for organizing the widgets. Flutter developers were separating the widgets based on whether the widgets represents an entire screen of just a reusable control. For example
+
+Since React, Flutter and SwiftUI are extremely similar in nature we can apply the same principles when building SwiftUI applications. 
+
+For example when displaying details of a movie, instead of calling that view MovieDetailView, you can call it MovieDetailScreen. This will make it clear that the detail screen is an actual screen and not some reusable child view.  
+
 ## Understanding MV Pattern 
 
 The main idea behind the MV Pattern is to allow views directly talk to the model. This eliminate the need for creating unnecessary layer of view models for each view, which simply contribute to the size of the project instead of providing any benefits.  
@@ -61,16 +69,59 @@ class StoreModel: ObservableObject {
 
 > In Domain-Driven Design (DDD), an aggregate is a cluster of related objects that are treated as a single unit of work for the purpose of data consistency and transactional boundaries. An aggregate model, then, is a representation of an aggregate in code, typically as a class or group of classes.
 
-```StoreModel``` is an aggregate model that centralizes all the data for the application. Views communicate directly with the StoreModel to perform queries and persistence operations. StoreModel also utilizes ```StoreHTTPClient```, which is used to perform network operations. StoreHTTPClient is a stateless network layer. This means it can be used in other parts of the application that are not SwiftUI, meaning UIKit.    
+```StoreModel``` is an aggregate model that centralizes all the data for the application. Views communicate directly with the StoreModel to perform queries and persistence operations. StoreModel also utilizes ```StoreHTTPClient```, which is used to perform network operations. StoreHTTPClient is a stateless network layer. This means it can be used in other parts of the application that are not SwiftUI, meaning UIKit. 
+
+StoreModel can be used in views in a variety of different ways. You can StoreModel as a @StateObject to if you only want the data available to a particular view. But quite often I find myself adding StoreModel to @EnvironmentObject so that it can be available in the injected view and all its sub views.   
+
+``` swift 
+@main
+struct StoreAppApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(StoreModel(client: StoreHTTPClient()))
+            
+        }
+    }
+}
+```
+
+Now, you can use the ```StoreModel``` inside the view as shown below. 
+
+``` swift 
+struct ContentView: View {
+
+    @EnvironmentObject private var model: StoreModel
+    
+    var body: some View {
+        ProductListView(products: model.products)
+            .task {
+                do {
+                    try await model.populateProducts()
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+    }
+}
+```
+
+> You might be tempted to use @EnvironmentObject inside all views. Although, it will work as expected but for larger applications you need to make presentation views independent of any dependencies. Presentation views are usually child views that are created for the purpose of reusability. 
+
 
 ![Multiple Aggregate Root](/images/mul-aggregate-root.png)
 
+File Structure 
+
+Screens and Views 
 
 Caching 
 
 Navigation 
 
 Testing 
+
+Events 
 
 Conclusion 
 
