@@ -141,10 +141,13 @@ Defining bounded context is important in software development and it helps to br
 
 Developers are usually not good in finding bounded context of software applications. The main reason is that their technical knowledge does not directly map into domain knowledge. Domain knowledge requires different set of skills and a domain expert is a better fit for this kind of role. A domain expert is a person, who may not be tech savvy but understands how the business or a particular domain works. In large projects, you may have multiple domain experts each handling a different business domain. This is why it is extremely important for developers to communicate with domain experts and understand the domain before starting any development.  
 
-
-Once, you have identified different bounded contexts associated with your application. You can represent those context in the form of aggregate models. This is shown in the diagram below. 
+Once, you have identified different bounded contexts associated with your application you can represent them in the form of aggregate models. This is shown in the diagram below. 
 
 ![Multiple Aggregate Root](/images/aggregate-model-updated.002.jpeg)
+
+The network layer can also be divided into multiple HTTP clients or you can use a single generic network layer for your entire application. This is shown in the diagram below.  
+
+![Multiple Aggregate Root](/images/aggregate-model-updated.003.jpeg)
 
 The Catalog aggregate model will be responsible for providing the view with all the entities associated with Catalog. This can include but not limited to: 
 
@@ -161,7 +164,9 @@ The Ordering aggregate model will be responsible for providing view with all the
 - ShippingMethod 
 - Discount 
 
-The outline of Catalog aggregate model is shown below: 
+The ```Catalog``` and ```Ordering``` aggregate models are be reference types conforming to ObservableObject. And all the entities they provide will be value types. 
+
+The outline of ```Catalog``` aggregate model and ```Product``` entity is shown below: 
 
 ``` swift 
 
@@ -176,6 +181,7 @@ struct Product: Codable {
 
 class Catalog: ObservableObject {
     
+    // designated or generic HTTP client 
     let storeHTTPClient: StoreHTTPClient
     
     @Published var products: [Product]
@@ -190,21 +196,62 @@ class Catalog: ObservableObject {
     }
     
     func getProductById(_ productId: Int) -> Product? {
-        // use either designated HTTP client or generic HTTP client to get the product
+        // code here
     }
     
     func getProductsByCategory(_ categoryId: Int) -> [Product] {
-        // use either designated HTTP client or generic HTTP client to get the products
+       // code here
     }
     
     func getCategories() -> [Category] {
-        // use either designated HTTP client or generic HTTP client to get the categories
+        // code here
+    }
+}
+```
+
+Catalog and Order
+
+
+Next, you can inject the aggregate root objects to the designated root views of each domain context or the root view of the entire application. The later is shown below: 
+
+
+``` swift 
+@main
+struct StoreAppApp: App {
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(Catalog(client: CatalogHTTPClient()))
+                .environmentObject(Order(client: OrderHTTPClient()))
+            
+        }
+    }
+}
+```
+
+Now, inside a view you can access Catalog or Order by accessing it through @EnvironmentObject. 
+
+``` swift 
+struct CatalogListScreen: View {
+    
+    @EnvironmentObject private var catalog: Catalog
+    
+    var body: some View {
+        List(catalog.products) { product in
+            Text(product.name)
+        }.task {
+            do {
+                try await catalog.loadProducts()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
 }
 ```
 
 
-![Multiple Aggregate Root](/images/aggregate-model-updated.003.jpeg)
 
 Caching 
 
