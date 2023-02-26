@@ -66,4 +66,11 @@ class StoreModel: ObservableObject {
 ![Multiple Aggregate Root](/images/mul-aggregate-root.png)
 
 
+Caching 
+
+Navigation 
+
+Testing 
+
+Conclusion 
 
