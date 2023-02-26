@@ -8,7 +8,22 @@ When I was working with Flutter, I observed a common pattern for organizing the 
 
 Since React, Flutter and SwiftUI are extremely similar in nature we can apply the same principles when building SwiftUI applications. 
 
-For example when displaying details of a movie, instead of calling that view MovieDetailView, you can call it MovieDetailScreen. This will make it clear that the detail screen is an actual screen and not some reusable child view.  
+For example when displaying details of a movie, instead of calling that view MovieDetailView, you can call it MovieDetailScreen. This will make it clear that the detail view is an actual screen and not some reusable child view. Here are few more examples. 
+
+**Screens** 
+- MovieDetailView 
+- HomeScreen 
+- LoginScreen
+- RegisterScreen 
+- SettingsScreen 
+
+**Views** 
+- RatingsView 
+- MessageView 
+- ReminderListView
+- ReminderCellView 
+
+I find that it is always a good idea to keep a close eye on our friendly neighbors React and Flutter. You never know what ideas you will bring from other declarative frameworks into SwiftUI. 
 
 ## Understanding MV Pattern 
 
