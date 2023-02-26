@@ -101,7 +101,7 @@ struct StoreAppApp: App {
 }
 ```
 
-Now, you can use the ```StoreModel``` inside the view as shown below. 
+Now, you can use the ```StoreModel``` as shown in the implementation below. 
 
 ``` swift 
 struct ContentView: View {
@@ -123,12 +123,12 @@ struct ContentView: View {
 
 > You might be tempted to use @EnvironmentObject inside all views. Although, it will work as expected but for larger applications you need to make presentation views independent of any dependencies. Presentation views are usually child views that are created for the purpose of reusability. 
 
+Apart from fetching and persistence, StoreModel can also provide sorting, filtering, searching and other operations etc. 
+
+A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover how and when to introduce multiple aggregate root models.  
+
 
 ![Multiple Aggregate Root](/images/mul-aggregate-root.png)
-
-File Structure 
-
-Screens and Views 
 
 Caching 
 
