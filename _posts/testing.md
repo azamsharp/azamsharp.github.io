@@ -135,13 +135,76 @@ As you learned in the previous section, the purpose of an aggregate model is to 
 
 As your business grows, a single aggregate model might not be enough to maintain the life cycle and side effects of an entire application. This is where we will introduce multiple aggregate models. These aggregate models are based on the bounded context of the application. Bounded context refers to a specific area of the system that has clear boundaries and is designed to serve a particular business purpose or domain. 
 
-In an e-commerce application, we have have several bounded contexts including checkout process, inventory management system, catalog, fulfillment, shipment and customer management module. 
+In an e-commerce application, we have have several bounded contexts including checkout process, inventory management system, catalog, fulfillment, shipment, ordering, marketing and customer management module. 
 
-Defining bounded context is an important part in software development and it helps to break down the application into small manageable pieces. This also allows teams to work on different parts of the system without interfering with each other. 
+Defining bounded context is important in software development and it helps to break down the application into small manageable pieces. This also allows teams to work on different parts of the system without interfering with each other. 
+
+Developers are usually not good in finding bounded context of software applications. The main reason is that their technical knowledge does not directly map into domain knowledge. Domain knowledge requires different set of skills and a domain expert is a better fit for this kind of role. A domain expert is a person, who may not be tech savvy but understands how the business or a particular domain works. In large projects, you may have multiple domain experts each handling a different business domain. This is why it is extremely important for developers to communicate with domain experts and understand the domain before starting any development.  
 
 
+Once, you have identified different bounded contexts associated with your application. You can represent those context in the form of aggregate models. This is shown in the diagram below. 
 
-![Multiple Aggregate Root](/images/mul-aggregate-root.png)
+![Multiple Aggregate Root](/images/aggregate-model-updated.002.jpeg)
+
+The Catalog aggregate model will be responsible for providing the view with all the entities associated with Catalog. This can include but not limited to: 
+
+- Product 
+- Category 
+- Brand 
+- Review 
+
+The Ordering aggregate model will be responsible for providing view with all the ordering related entities. This can include but not limited to:  
+
+- Order 
+- OrderLineItem 
+- OrderStatus
+- ShippingMethod 
+- Discount 
+
+The outline of Catalog aggregate model is shown below: 
+
+``` swift 
+
+struct Product: Codable {
+    let productId: Int
+    let name: String
+    let category: Category
+    let price: Double
+    let description: String
+    let reviews: [Review]?
+}
+
+class Catalog: ObservableObject {
+    
+    let storeHTTPClient: StoreHTTPClient
+    
+    @Published var products: [Product]
+    @Published var categories: [Category]
+    
+    init(storeHTTPClient: StoreHTTPClient) {
+        self.storeHTTPClient = storeHTTPClient
+    }
+    
+    func loadProducts() {
+        // products = storeHTTPClient.loadProducts
+    }
+    
+    func getProductById(_ productId: Int) -> Product? {
+        // use either designated HTTP client or generic HTTP client to get the product
+    }
+    
+    func getProductsByCategory(_ categoryId: Int) -> [Product] {
+        // use either designated HTTP client or generic HTTP client to get the products
+    }
+    
+    func getCategories() -> [Category] {
+        // use either designated HTTP client or generic HTTP client to get the categories
+    }
+}
+```
+
+
+![Multiple Aggregate Root](/images/aggregate-model-updated.003.jpeg)
 
 Caching 
 
