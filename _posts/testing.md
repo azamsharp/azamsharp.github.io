@@ -308,7 +308,17 @@ Using this architecture, future aggregate models and data access services can be
 
 ## Validation
 
-There is a famous saying in software development, garbage in, garbage out. This means if you allow users to enter incorrect information (garbage) through the user interface then that garbage will eventually end up in your database.  
+There is a famous saying in software development, garbage in, garbage out. This means if you allow users to enter incorrect information (garbage) through the user interface then that garbage will eventually end up in your database. And usually when this happens, it becomes extremely difficult and time consuming to clean the database. 
+
+You must take necessary steps to prevent users from submitting incorrect information in the first place. 
+
+Consider a simple LoginScreen view. The implementation is shown below: 
+
+``` swift 
+
+```
+
+> All the validation helper functions can be moved into a separate Swift package. This will promote reusability and other projects can also benefit from using it. 
 
 ## Testing 
 
