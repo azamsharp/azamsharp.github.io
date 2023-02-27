@@ -320,9 +320,9 @@ As discussed earlier, each bounded context is represented by its own module. The
 
 **CatalogKit**: Represents the HTTP client for accessing catalog services. 
 
-**Foundation Core**: Represents the resources used by all modules. This can include helper classes/structs, reusable views, images, icons and even preview content used for testing. 
+**Foundation Core**: Represents resources used by all modules. This can include helper classes/structs, reusable views, images, icons and even preview content used for testing. 
 
-> Each module like Shipping, Inventory, Ordering etc can be represented by a folder structure or a package dependency. This really depends on how reusable your module is and if you wish to use it in other projects. 
+> Each module like Shipping, Inventory, Ordering etc can be represented by a folder structure or a package dependency. This really depends on your needs and if you wish to use it in other projects. 
 
 Using this architecture, future business requirements and data access services can be added without interfering with existing ones. This also allows more collaborative environment as different teams can work on different modules without interfering with each other. 
 
