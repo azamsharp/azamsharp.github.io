@@ -306,19 +306,269 @@ As discussed earlier, each bounded context is represented by its own module. The
 
 Using this architecture, future aggregate models and data access services can be added without interfering with existing ones. This also allows more collaborative environment as different teams can work on different modules without interfering with each other. 
 
-## Validation
+## Validation 
 
 There is a famous saying in software development, garbage in, garbage out. This means if you allow users to enter incorrect information (garbage) through the user interface then that garbage will eventually end up in your database. And usually when this happens, it becomes extremely difficult and time consuming to clean the database. 
 
 You must take necessary steps to prevent users from submitting incorrect information in the first place. 
 
-Consider a simple LoginScreen view. The implementation is shown below: 
+Consider a simple ```LoginScreen``` view with username and password TextFields. If we want to enable the login Button only when the view is validated correctly, we can use the implementation below: 
 
 ``` swift 
+struct LoginScreen: View {
+    
+    @State private var username: String = ""
+    @State private var password: String = ""
+    
+    private var isFormValid: Bool {
+        !username.isEmptyOrWhiteSpace && !password.isEmptyOrWhiteSpace
+    }
+    
+    var body: some View {
+        Form {
+            TextField("Username", text: $username)
+            TextField("Password", text: $password)
+            Button("Login") {
+                
+            }.disabled(!isFormValid)
+        }
+    }
+}
+```
+
+For such trivial logic, you can use Xcode Previews to quickly perform manual testing. If you are working on a more complicated form, then it is advised to extract it into its down struct. This concept is shown in the implementation below. 
+
+``` swift 
+struct LoginFormConfig {
+    
+    var username: String = ""
+    var password: String = ""
+    
+    var isFormValid: Bool {
+        !username.isEmptyOrWhiteSpace && !password.isEmptyOrWhiteSpace
+    }
+}
+
+struct LoginScreen: View {
+    
+    @State private var loginFormConfig: LoginFormConfig = LoginFormConfig()
+    
+    var body: some View {
+        Form {
+            TextField("Username", text: $loginFormConfig.username)
+            TextField("Password", text: $loginFormConfig.password)
+            Button("Login") {
+                
+            }.disabled(!loginFormConfig.isFormValid)
+        }
+    }
+}
+```
+
+```LoginFormConfig``` encapsulates the form validation. This also allows us to write unit tests against the LoginFormConfig. Few unit tests are shown below: 
+
+``` swift 
+final class LearnTests: XCTestCase {
+
+    func test_login_form_validates_successfully() {
+        
+        let expectedOutputs: [[String: Any]] = [
+            ["username": "johndoe", "password": "password", "isFormValid": true],
+            ["username": "", "password": "password", "isFormValid": false],
+            ["username": "johndoe", "password": " ", "isFormValid": false],
+            ["username": "", "password": " ", "isFormValid": false],
+            ["username": "   ", "password": "password", "isFormValid": false],
+            ["username": " johndoe", "password": " password", "isFormValid": true]
+        ]
+        
+        for expectedOutput in expectedOutputs {
+            let username = expectedOutput["username"] as! String
+            let password = expectedOutput["password"] as! String
+            let isFormValid = expectedOutput["isFormValid"] as! Bool
+            
+            let loginFormConfig = LoginFormConfig(username: username, password: password)
+            XCTAssertEqual(loginFormConfig.isFormValid, isFormValid)
+        }
+    }
+}
+```
+
+In the end extracting the form validation into a separate struct and writing unit tests for it depends on your level of confidence. Simple forms can be tested easily through Xcode Previews and do not require additional structure or even unit tests.   
+
+> Validation helper functions like isEmptyOrWhiteSpace, isNumeric, isEmail, isLessThan can be moved into a separate Swift package. This will promote reusability and other projects can also benefit from using it.
+
+## Displaying Errors 
+
+Displaying errors is an integral part of any application. 
+
+In SwiftUI, we can centralize displaying errors to a single place. This will prevent us from writing repetitive code and also provide a single point in codebase to change the layout and appearance.  
+
+We can start by creating an ErrorWrapper, which will be responsible for wrapping the actual error and also providing guidance to the user on the next steps. 
+
+``` swift 
+struct ErrorWrapper: Identifiable {
+    let id = UUID()
+    let error: Error
+    let guidance: String
+}
+```
+
+ErrorWrapper will be used by ErrorView. ErrorView will be responsible for displaying the details of the error in a visual format. You can find basic implementation of an ErrorView below.
+
+``` swift 
+struct ErrorView: View {
+    
+    let errorWrapper: ErrorWrapper
+    
+    var body: some View {
+        VStack {
+            Text("Error has occured in the application.")
+                .font(.headline)
+                .padding([.bottom], 10)
+            Text(errorWrapper.error.localizedDescription)
+            Text(errorWrapper.guidance)
+                .font(.caption)
+        }.padding()
+    }
+}
+```
+
+> ErrorView is simply a view and you can customize it as much as you want. 
+
+In order to set the error wrapper from any part of our application, we will add an ErrorState as an ObservableObject and inject it in an EnvironmentObject. 
+
+``` swift 
+class ErrorState: ObservableObject {
+    @Published var errorWrapper: ErrorWrapper?
+}
+
+@main
+struct StoreApp: App {
+    
+    @StateObject private var errorState = ErrorState()
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(errorState)
+                .sheet(item: $errorState.errorWrapper) { errorWrapper in
+                    ErrorView(errorWrapper: errorWrapper)
+                }
+        }
+    }
+}
 
 ```
 
-> All the validation helper functions can be moved into a separate Swift package. This will promote reusability and other projects can also benefit from using it. 
+Whenever the errorState changes, a sheet will be displayed with the latest error. Once again, you are free to use a different method of displaying the error instead of a sheet. 
+
+This technique allows you to have a single point in your codebase, which is responsible for displaying errors. 
+
+## Grouping View Events 
+
+One way to create reusable views in SwiftUI is to delegate the events to the parent view. This allows views to be used in different scenarios and without tying them to a particular logic. One way to accomplish this is to use closures. 
+
+Consider a ```ReminderCellView```, which allows the user to perform check/uncheck and delete operations. The implementation is shown below: 
+
+``` swift 
+struct ReminderCellView: View {
+    
+    let index: Int
+    let onChecked: (Int) -> Void
+    let onDelete: (Int) -> Void
+
+    var body: some View {
+        HStack {
+            Image(systemName: "square")
+                .onTapGesture {
+                    onChecked(index)
+                }
+            Text("ReminderCellView \(index)")
+            Spacer()
+            Image(systemName: "trash")
+                .onTapGesture {
+                    onDelete(index)
+                }
+        }
+    }
+}
+```
+
+```ReminderCellView``` exposes ```onChecked``` and ```onDelete``` closures. The caller can use these closures to perform a particular task. The calling side is shown below: 
+
+``` swift 
+struct ContentView: View {
+
+    var body: some View {
+        List(1...20, id: \.self) { index in
+            ReminderCellView(index: index, onChecked: { index in
+                // do something
+            }, onDelete: { index in
+                // do something
+            })
+        }
+    }
+}
+```
+
+As the complexity of ```ReminderCellView``` increases and it exposes more events then the calling side will become more complicated.
+
+We can fix this issue by grouping all the events into a simple enum. This is shown below: 
+
+``` swift 
+enum ReminderCellEvents {
+    case onChecked(Int)
+    case onDelete(Int)
+}
+```
+
+The ```ReminderCellView``` can be updated to use ```ReminderCellEvents```. This is shown below: 
+
+``` swift 
+struct ReminderCellView: View {
+    
+    let index: Int
+    let onEvent: (ReminderCellEvents) -> Void
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "square")
+                .onTapGesture {
+                    onEvent(.onChecked(index))
+                }
+            Text("ReminderCellView \(index)")
+            Spacer()
+            Image(systemName: "trash")
+                .onTapGesture {
+                    onEvent(.onDelete(index))
+                }
+        }
+    }
+}
+```
+
+Now, instead of dealing with multiple closures we are only handling a single enum based event structure. The calling site also looks much cleaner. 
+
+``` swift 
+struct ContentView: View {
+
+    var body: some View {
+        List(1...20, id: \.self) { index in
+            ReminderCellView(index: index) { event in
+                switch event {
+                    case .onChecked(let index):
+                        print(index)
+                    case .onDelete(let index):
+                        print(index)
+                }
+            }
+        }
+    }
+}
+```
+
+
+## Navigation 
 
 ## Testing 
 
@@ -819,12 +1069,7 @@ Remember to test the public API exposed by the module and not the implementation
 
 Don't create protocols/interfaces/contracts with the sole purpose of mocking. If a protocol consists of a single concrete implementation then use the concrete implementation and remove the interface/contract. Your architecture should be based on current business needs and not on what if scenarios that may never happen. Remember YAGNI (You aren't going to need it). Less code is better than more code. 
 
-
-Caching 
-
 Navigation 
-
-Events 
 
 Conclusion 
 
