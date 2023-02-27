@@ -88,7 +88,7 @@ class StoreModel: ObservableObject {
 
 ```StoreModel``` is an aggregate model that centralizes all the data for the application. Views communicate directly with the StoreModel to perform queries and persistence operations. StoreModel also utilizes ```StoreHTTPClient```, which is used to perform network operations. StoreHTTPClient is a stateless network layer. This means it can be used in other parts of the application that are not SwiftUI, meaning UIKit. 
 
-StoreModel can be used in views in a variety of different ways. You can StoreModel as a @StateObject to if you only want the data available to a particular view. But quite often I find myself adding StoreModel to @EnvironmentObject so that it can be available in the injected view and all its sub views.   
+StoreModel can be used in a variety of different ways. You can use StoreModel as a @StateObject if you only want the data available to a particular view and if you want to tie the life of the object with the life of the view. But quite often I find myself adding StoreModel to @EnvironmentObject so that it can be available in the injected view and all its sub views.   
 
 ``` swift 
 @main
@@ -248,7 +248,7 @@ struct CatalogListScreen: View {
 }
 ```
 
-If your CatalogListScreen needs to access Order information then it can utilize the Ordering aggregate model. 
+If your view needs to access order then it can utilize the Ordering aggregate model. This is shown below: 
 
 ``` swift 
 struct AdminDashboardScreen: View {
@@ -275,6 +275,11 @@ struct AdminDashboardScreen: View {
     }
 }
 ```
+
+There are scenarios when your aggregate model will need to access information from another aggregate model. In those cases, your aggregate model will simply use the network service to fetch the information that is needed. Don't try to pass one aggregate model to other. This is unnecessary and needlessly complicate things. 
+
+> It is important that your caching layer is called from within the network service and not from aggregate models. This will allow all aggregate models to take advantage of caching through the network layer.   
+
 
 ## Testing 
 
