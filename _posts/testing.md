@@ -179,6 +179,7 @@ struct Product: Codable {
     let reviews: [Review]?
 }
 
+@MainActor 
 class Catalog: ObservableObject {
     
     // designated or generic HTTP client 
@@ -192,28 +193,24 @@ class Catalog: ObservableObject {
     }
     
     func loadProducts() {
-        // products = storeHTTPClient.loadProducts
+         products = storeHTTPClient.loadProducts
     }
     
     func getProductById(_ productId: Int) -> Product? {
-        // code here
+        // fetch product by id 
     }
     
     func getProductsByCategory(_ categoryId: Int) -> [Product] {
-       // code here
+       // get products by category
     }
     
     func getCategories() -> [Category] {
-        // code here
+        categories = storeHTTPClient.loadCategories()
     }
 }
 ```
 
-Catalog and Order
-
-
-Next, you can inject the aggregate root objects to the designated root views of each domain context or the root view of the entire application. The later is shown below: 
-
+Catalog and Ordering aggregate models are injected into the application as an environment object. You can inject them directly in your application root view or the root view of each bounded context. The later is shown below: 
 
 ``` swift 
 @main
@@ -223,14 +220,14 @@ struct StoreAppApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(Catalog(client: CatalogHTTPClient()))
-                .environmentObject(Order(client: OrderHTTPClient()))
+                .environmentObject(Ordering(client: OrderingHTTPClient()))
             
         }
     }
 }
 ```
 
-Now, inside a view you can access Catalog or Order by accessing it through @EnvironmentObject. 
+Now, inside a view you can access Catalog or Order by accessing it through ```@EnvironmentObject```. This is shown below: 
 
 ``` swift 
 struct CatalogListScreen: View {
@@ -251,11 +248,33 @@ struct CatalogListScreen: View {
 }
 ```
 
+If your CatalogListScreen needs to access Order information then it can utilize the Ordering aggregate model. 
 
-
-Caching 
-
-Navigation 
+``` swift 
+struct AdminDashboardScreen: View {
+    
+    @EnvironmentObject private var catalog: Catalog
+    @EnvironmentObject private var ordering: Ordering
+    
+    var body: some View {
+        VStack {
+            List(catalog.products) { product in
+                Text(product.name)
+            }
+            List(ordering.allOrders) { order in
+                Text(order.status)
+            }
+        }.task {
+            do {
+                try await catalog.loadProducts()
+                try await ordering.loadOrders()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+}
+```
 
 ## Testing 
 
@@ -755,6 +774,11 @@ Unfortunately, there is no ideal test. It all depends on your project and requir
 Remember to test the public API exposed by the module and not the implementation details. This way you can write useful quality tests, which will also help you to catch errors.  
 
 Don't create protocols/interfaces/contracts with the sole purpose of mocking. If a protocol consists of a single concrete implementation then use the concrete implementation and remove the interface/contract. Your architecture should be based on current business needs and not on what if scenarios that may never happen. Remember YAGNI (You aren't going to need it). Less code is better than more code. 
+
+
+Caching 
+
+Navigation 
 
 Events 
 
