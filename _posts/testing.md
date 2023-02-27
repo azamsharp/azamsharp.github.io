@@ -278,7 +278,7 @@ struct AdminDashboardScreen: View {
 
 There are scenarios when your aggregate model will need to access information from another aggregate model. In those cases, your aggregate model will simply use the network service to fetch the information that is needed. 
 
-> It is important that your caching layer is called from within the network layer and not from aggregate models. This will allow all aggregate models to take advantage of caching through the network layer.   
+> It is important that your caching layer is called from within the network layer and not from aggregate models. This will allow aggregate models to take advantage of caching through the network layer.   
 
 As mentioned earlier for small or even medium sized apps, you may only need a single aggregate model. For larger apps you can introduce new aggregate models. Make sure to consult with a domain expert before creating application boundaries.  
 
