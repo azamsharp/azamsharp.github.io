@@ -2,13 +2,21 @@
 
 In one of my previous articles, I mentioned that how I am using MV Pattern for building my client/server SwiftUI applications. 
 
+> The primary focus of this article is on client/server applications. 
+
 ## Modular Architecture 
+
+Modular architecture in software refers to the design and organization of software systems into small, self contained modules or components. These modules can be tested and maintained independently of one another. Each module serves a specific purpose and solve a specific business need. 
+
+Modular architecture also provides advantages when working on large projects consisting of multiple teams. Each team can work on a particular module, without interfering with the other teams. 
+
+Modularity can be achieved in several different ways. You can expose each module as a package (SPM), which can be imported into different applications. Modularity can also be achieved by structuring your app based on specific grouping or folder structure. Keep in mind that when using folders for modularity you have to pay special attention to separation of concerns and single responsibility principles. 
+
+> The focus of this article is not Swift Package Manager, but how to achieve modularity by breaking the app based on the bounded context of your domain. Swift Package Manager can be used to package those dependencies into reusable units. 
 
 ## Screens vs Views 
 
-When I was working with Flutter, I observed a common pattern for organizing the widgets. Flutter developers were separating the widgets based on whether the widgets represents an entire screen of just a reusable control. For example
-
-Since React, Flutter and SwiftUI are extremely similar in nature we can apply the same principles when building SwiftUI applications. 
+When I was working with Flutter, I observed a common pattern for organizing the widgets. Flutter developers were separating the widgets based on whether the widgets represents an entire screen of just a reusable control. Since React, Flutter and SwiftUI are extremely similar in nature we can apply the same principles when building SwiftUI applications. 
 
 For example when displaying details of a movie, instead of calling that view MovieDetailView, you can call it MovieDetailScreen. This will make it clear that the detail view is an actual screen and not some reusable child view. Here are few more examples. 
 
@@ -29,11 +37,38 @@ I find that it is always a good idea to keep a close eye on our friendly neighbo
 
 ## Understanding the Architecture 
 
-The main idea behind the MV Pattern is to allow views directly talk to the model. This eliminate the need for creating unnecessary layer of view models for each view, which simply contribute to the size of the project instead of providing any benefits.  
+Software architecture is always a topic for hot debate, specially when there are so many different choices. For the last 8-12 months, I have been experimenting with MV pattern to build client/server apps and wrote about it in my original article [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html).
 
-> In SwiftUI, view is similar to Component in React or Widget in Flutter. This means, it is not only used for displaying data but can also handle binding capabilities. **The View in SwiftUI is also a View Model.**. Keep in mind that if you plan to put all the logic in your views then check out Container Pattern. MV Pattern is not the same as Container Pattern. 
+> Architecture and patterns depends on the type of application you are building. No single architecture will work in all scenarios. Choose the best architecture suitable for your application needs.  
 
-Apple has shown MV pattern in several places with different flavors. This includes Fruta, FoodTruck and ScrumDinger applications. My focus for this article is on client/server applications as they are one of the most common types of iOS applications. 
+The main idea behind the MV Pattern is to allow views directly talk to the model. This eliminates the need for creating unnecessary view models for each view, which simply contribute to the size of the project and does not provide any additional benefits. 
+
+> In SwiftUI, view is similar to Component in React or Widget in Flutter. This means, it is not only used for displaying data but can also handle binding capabilities. **The View in SwiftUI is also a View Model.**. Keep in mind that MV Pattern does not advocate putting all the logic inside views. If you are interested in that approach, Container Pattern may be a better choice for your needs. You can read more about the Container Pattern in my article [Container Pattern in SwiftUI](https://azamsharp.com/2023/01/24/introduction-to-container-pattern.html). 
+
+One of the most confusing things about SwiftUI are the views. I don't blame you, I don't think they should be called views. They should have been called Widgets (Flutter) or Components (React). The views in SwiftUI are not like UIKit views. They are just the declaration of view what you want to be displayed on the screen. 
+
+The views in SwiftUI, reminds me of ReactJS JSX syntax. Let's take a look at a very small example. 
+
+``` swift 
+function App() {
+    return (
+        <div>
+            <h1>Hello World</h1>
+            <button>Save</button>
+        </div>
+    )
+}
+```
+
+In the above code, we have created a functional component called App. The App component returns a ```<div>``` element containing a ```<h1>``` and ```<button>```. The thing to notice here is that those are not actual HTML elements. Those are virtual DOM (Document Object Model) elements managed by React framework. The main reason is that React needs to track changes to those elements so it can only render, what has changed. Once React finds out the changed elements, those virtual DOM elements are rendered as real HTML elements on the screen.  
+
+I believe SwiftUI uses the same concepts internally. The views in the body property are not actual views but the declaration of views. Eventually, those views gets converted to real views and then displayed on the screen. John Sundell also talked about it in his article [SwiftUI views versus modifiers](https://www.swiftbysundell.com/articles/swiftui-views-versus-modifiers/). 
+
+If you are interested in learning more about the concept of virtual DOM then check out this talk title [Tom Occhino and Jordan Walke: JS Apps at Facebook](https://youtu.be/GW0rj4sNH2w?t=301). This is the talk, where Facebook introduced ReactJS to the public. 
+
+Ok now back to the MV pattern! 
+
+Apple has shown MV pattern in several places with different flavors. This includes [Fruta](https://developer.apple.com/documentation/swiftui/fruta_building_a_feature-rich_app_with_swiftui), [FoodTruck](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app) and [ScrumDinger](https://developer.apple.com/tutorials/app-dev-training/getting-started-with-scrumdinger) applications. My focus for this article is on client/server applications as they are one of the most common types of iOS applications. 
 
 In WWDC 2020 talk titled "Data Essentials in SwiftUI" Apple presented the following diagram. 
 
@@ -397,6 +432,8 @@ In the end extracting the form validation into a separate struct and writing uni
 
 > Validation helper functions like isEmptyOrWhiteSpace, isNumeric, isEmail, isLessThan can be moved into a separate Swift package. This will promote reusability and other projects can also benefit from using it.
 
+I covered few different ways of handling and displaying validation errors in one of my previous articles that you can read [here](https://azamsharp.com/2022/08/09/intro-to-mv-state-pattern.html). 
+
 ## Displaying Errors 
 
 Displaying errors is an integral part of any application. 
@@ -567,8 +604,11 @@ struct ContentView: View {
 }
 ```
 
+In the end you will have to decide when you want to group events into an enum and when you want to use them individually (multiple closures). I tend to prefer using enum events if I have more than two closures exposed by the view. 
 
 ## Navigation 
+
+
 
 ## Testing 
 
