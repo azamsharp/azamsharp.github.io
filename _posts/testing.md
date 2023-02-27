@@ -127,7 +127,7 @@ struct ContentView: View {
 
 Apart from fetching and persistence, StoreModel can also provide sorting, filtering, searching and other operations etc. 
 
-A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover how to introduce multiple aggregate root models and .  
+A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover how to introduce multiple aggregate root models and how they can benefit when working in large teams.  
 
 ## Multiple Aggregate Models 
 
@@ -278,9 +278,37 @@ struct AdminDashboardScreen: View {
 
 There are scenarios when your aggregate model will need to access information from another aggregate model. In those cases, your aggregate model will simply use the network service to fetch the information that is needed. 
 
-> It is important that your caching layer is called from within the network layer and not from aggregate models. This will allow aggregate models to take advantage of caching through the network layer.   
+> It is important that your caching layer is called from within the network layer and not from aggregate models. This will allow all aggregate models to take advantage of caching through the network layer. 
 
-As mentioned earlier for small or even medium sized apps, you may only need a single aggregate model. For larger apps you can introduce new aggregate models. Make sure to consult with a domain expert before creating application boundaries.  
+As mentioned earlier for small or even medium sized apps, you may only need a single aggregate model. For larger apps you can introduce new aggregate models. Make sure to consult with a domain expert before creating application boundaries. 
+
+The concept of domain boundaries can also be applied to user interfaces. This allows us to reuse user interface elements in other applications. 
+
+![Factor out common pieces](/images/user-interface.png)
+
+> You can factor out common interface elements using Swift Package Manager and import those packages into other applications. 
+
+Let's go ahead and zoom out and see how our architecture looks like with all the pieces in place. 
+
+![Architecture](/images/architecture.001.jpeg)
+
+As discussed earlier, each bounded context is represented by its own module. These modules can be represented by a folder or a package dependency.
+
+**CatalogUI:** Represents user interface associated with catalog. This can include all the catalog specific stuff like AddCatalogScreen, UpdateCatalogScreen etc. 
+
+**Catalog:** Represents the models associated with catalog. This will contain the aggregate model and all the entities exposed by the aggregate model.
+
+**CatalogKit**: Represents the HTTP client for accessing catalog services. 
+
+**Foundation Core**: Represents the resources used by all modules. This can include helper classes/structs, reusable views, images, icons and even preview content used for testing. 
+
+> Each module like Shipping, Inventory, Ordering etc can be represented by a folder structure of a package dependency. This really depends on how reusable your module is and if you wish to use it in other projects. 
+
+Using this architecture, future aggregate models and data access services can be added without interfering with existing ones. This also allows more collaborative environment as different teams can work on different modules without interfering with each other. 
+
+## Validation
+
+There is a famous saying in software development, garbage in, garbage out. This means if you allow users to enter incorrect information (garbage) through the user interface then that garbage will eventually end up in your database.  
 
 ## Testing 
 
