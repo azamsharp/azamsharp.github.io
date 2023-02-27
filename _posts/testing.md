@@ -1,49 +1,35 @@
 # Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture
 
-In one of my previous articles, I mentioned that how I am using MV Pattern for building my client/server SwiftUI applications. 
+Software architecture is always a topic for hot debate, specially when there are so many different choices. For the last 8-12 months, I have been experimenting with MV pattern to build client/server apps and wrote about it in my original article [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). In this article, I will discuss how MV pattern can be applied to build large scale applications. 
 
-> The primary focus of this article is on client/server applications. 
+> Architecture and patterns depends on the type of application you are building. No single architecture will work in all scenarios. Choose the best architecture suitable for your application needs. 
+
+The outline of this article is shown below: 
+
+- [Modular Architecture](#modular-architecture) 
+- [Understanding the Architecture](#understanding-the-architecture)    
+- [Screens vs Views](#screens-vs-views) 
+- [Multiple Aggregate Models](#multiple-aggregate-models) 
+- [Validation](#validation) 
+- [Navigation](#navigation) 
+- [Grouping View Events](#grouping-view-events) 
+- [Testing](#testing) 
 
 ## Modular Architecture 
 
-Modular architecture in software refers to the design and organization of software systems into small, self contained modules or components. These modules can be tested and maintained independently of one another. Each module serves a specific purpose and solve a specific business need. 
+Modular architecture in software refers to the design and organization of software systems into small, self contained modules or components. These modules can be tested and maintained independently of one another. Each module serves a specific purpose and solve a specific business requirement. 
 
-Modular architecture also provides advantages when working on large projects consisting of multiple teams. Each team can work on a particular module, without interfering with the other teams. 
+Modular architecture also provides advantages when working on large projects consisting of multiple teams. Each team can work on a particular module, without interfering with other teams. 
+
+> If you are working on a module that will be consumed or used by other teams then make sure that you are communicating with them and not creating the module in complete isolation. A lot of problems in software exists solely because of lack of communication between teams.   
 
 Modularity can be achieved in several different ways. You can expose each module as a package (SPM), which can be imported into different applications. Modularity can also be achieved by structuring your app based on specific grouping or folder structure. Keep in mind that when using folders for modularity you have to pay special attention to separation of concerns and single responsibility principles. 
 
-> The focus of this article is not Swift Package Manager, but how to achieve modularity by breaking the app based on the bounded context of your domain. Swift Package Manager can be used to package those dependencies into reusable units. 
-
-## Screens vs Views 
-
-When I was working with Flutter, I observed a common pattern for organizing the widgets. Flutter developers were separating the widgets based on whether the widgets represents an entire screen of just a reusable control. Since React, Flutter and SwiftUI are extremely similar in nature we can apply the same principles when building SwiftUI applications. 
-
-For example when displaying details of a movie, instead of calling that view MovieDetailView, you can call it MovieDetailScreen. This will make it clear that the detail view is an actual screen and not some reusable child view. Here are few more examples. 
-
-**Screens** 
-- MovieDetailView 
-- HomeScreen 
-- LoginScreen
-- RegisterScreen 
-- SettingsScreen 
-
-**Views** 
-- RatingsView 
-- MessageView 
-- ReminderListView
-- ReminderCellView 
-
-I find that it is always a good idea to keep a close eye on our friendly neighbors React and Flutter. You never know what ideas you will bring from other declarative frameworks into SwiftUI. 
+> The focus of this article is not Swift Package Manager, but how to achieve modularity by breaking the app based on the bounded context of the application. **Swift Package Manager can be used to package those dependencies into reusable modules.** 
 
 ## Understanding the Architecture 
 
-Software architecture is always a topic for hot debate, specially when there are so many different choices. For the last 8-12 months, I have been experimenting with MV pattern to build client/server apps and wrote about it in my original article [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html).
-
-> Architecture and patterns depends on the type of application you are building. No single architecture will work in all scenarios. Choose the best architecture suitable for your application needs.  
-
-The main idea behind the MV Pattern is to allow views directly talk to the model. This eliminates the need for creating unnecessary view models for each view, which simply contribute to the size of the project and does not provide any additional benefits. 
-
-> In SwiftUI, view is similar to Component in React or Widget in Flutter. This means, it is not only used for displaying data but can also handle binding capabilities. **The View in SwiftUI is also a View Model.**. Keep in mind that MV Pattern does not advocate putting all the logic inside views. If you are interested in that approach, Container Pattern may be a better choice for your needs. You can read more about the Container Pattern in my article [Container Pattern in SwiftUI](https://azamsharp.com/2023/01/24/introduction-to-container-pattern.html). 
+The main idea behind the MV Pattern is to allow views directly talk to the model. This eliminates the need for creating unnecessary view models for each view, which simply contribute to the size of the project but does not provide any additional benefits. 
 
 One of the most confusing things about SwiftUI are the views. I don't blame you, I don't think they should be called views. They should have been called Widgets (Flutter) or Components (React). The views in SwiftUI are not like UIKit views. They are just the declaration of view what you want to be displayed on the screen. 
 
@@ -60,42 +46,41 @@ function App() {
 }
 ```
 
-In the above code, we have created a functional component called App. The App component returns a ```<div>``` element containing a ```<h1>``` and ```<button>```. The thing to notice here is that those are not actual HTML elements. Those are virtual DOM (Document Object Model) elements managed by React framework. The main reason is that React needs to track changes to those elements so it can only render, what has changed. Once React finds out the changed elements, those virtual DOM elements are rendered as real HTML elements on the screen.  
+In the above code, we have created a functional component called ```App```. The App component returns a ```<div>``` element containing a ```<h1>``` and ```<button>```. The thing to notice here is that those are not actual HTML elements. Those are virtual DOM (Document Object Model) elements managed by React framework. The main reason is that React needs to track changes to those elements so it can only render, what has changed. Once React finds out the changed elements, those virtual DOM elements are used to render real HTML elements on the screen.  
 
 I believe SwiftUI uses the same concepts internally. The views in the body property are not actual views but the declaration of views. Eventually, those views gets converted to real views and then displayed on the screen. John Sundell also talked about it in his article [SwiftUI views versus modifiers](https://www.swiftbysundell.com/articles/swiftui-views-versus-modifiers/). 
 
 If you are interested in learning more about the concept of virtual DOM then check out this talk title [Tom Occhino and Jordan Walke: JS Apps at Facebook](https://youtu.be/GW0rj4sNH2w?t=301). This is the talk, where Facebook introduced ReactJS to the public. 
 
-Ok now back to the MV pattern! 
+Apple talks about it in their article [Model data](https://developer.apple.com/documentation/swiftui/model-data) published on SwiftUI official documentation page. 
 
-Apple has shown MV pattern in several places with different flavors. This includes [Fruta](https://developer.apple.com/documentation/swiftui/fruta_building_a_feature-rich_app_with_swiftui), [FoodTruck](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app) and [ScrumDinger](https://developer.apple.com/tutorials/app-dev-training/getting-started-with-scrumdinger) applications. My focus for this article is on client/server applications as they are one of the most common types of iOS applications. 
+Ok now back to the MV pattern! 
 
 In WWDC 2020 talk titled "Data Essentials in SwiftUI" Apple presented the following diagram. 
 
 ![ObservableObject as the data dependency surface](/images/single-source.png)
 
-The main idea is to provide view access to a single layer that serves as source of truth and allows access to all the entities in the application.
+The main idea is to provide view access to a single layer or surface that serves as the source of truth and allows access to all entities within the application.
 
-Apple demonstrated this approach in their talk titled
-**"Use Xcode for server-side development"**. The screenshot from the talk is shown below. 
+Fruta and FoodTruck applications demonstrated how to use this pattern against a hard-coded data source. But in WWDC video title **"[Use Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/)"** Apple showed how to update the existing FoodTruck app and consume the data from an API response. 
+
+The screenshot below shows ```FoodTruckModel``` using the ```DonutsServerClient``` to retrieve list of donuts. DonutsServerClient is responsible for making an actual request to the server and downloading the donuts. Once the donuts are downloaded they are assigned to the serverDonuts property maintained by the FoodTruckModel.  
 
 ![Use Xcode for server-side development](/images/xcode-server.png)
 
 [Use Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/)
 
-Apart from the WWDC video, Apple also demonstrated this technique in their Fruta and FoodTruck applications, although in their sample apps they did not use a network layer.  
-
-Here is the updated diagram to supporting networking layer.  
+Here is the updated diagram to support networking layer.  
 
 ![Aggregate Root](/images/aggregate-model-updated.001.jpeg)
 
-> I know what you are thinking. Are we going to take advice based on Apple's code samples blindly? No! Never take any advice blindly. Always invest time and research the advantages and disadvantages of each approach. I have evaluated many different techniques and patterns and found this to be the best and simplest option when building client/server apps using SwiftUI. **Do your research!**  
+> I know what you are thinking. Are we going to take advice based on Apple's code samples blindly? No! Never take any advice blindly. Always invest time and research and weigh the advantages and disadvantages of each approach. I have evaluated many different techniques and patterns and found this to be the best and simplest option when building client/server apps using SwiftUI. **Do your research!**.   
 
 Based on Apple's recommendation in their WWDC videos and code samples, I have been implementing a single aggregate model, which holds the entire state of the application. For small and medium sized apps, a single aggregate model might be enough. For complicated apps, you can have multiple aggregate models which will group related entities together. Multiple aggregate models are discussed later in the article. 
 
-> Keep in mind that this article is about client/server apps. If you are using Core Data or anything else then you will have to do your research. For purely Core Data apps, I have been experimenting with Active Record Pattern. You can read about it [here](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html). 
+> Once again keep in mind that this article is about client/server apps. If you are using Core Data or anything else then you will have to do your research. For purely Core Data apps, I have been experimenting with Active Record Pattern. You can read about it [here](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html). 
 
-The implementation of my aggregate model is shown below: 
+Following the pattern discussed in [Use Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/) talk, here is the StoreModel I have implemented for my application.  
 
 ``` swift 
 class StoreModel: ObservableObject {
@@ -119,11 +104,11 @@ class StoreModel: ObservableObject {
 }
 ```
 
+```StoreModel``` is an aggregate model that centralizes all the data for the application. Views communicate directly with the StoreModel to perform queries and persistence operations. StoreModel also utilizes ```StoreHTTPClient```, which is used to perform network operations. StoreHTTPClient is a stateless network layer. This means it can be used in other parts of the application that are not SwiftUI, meaning UIKit or even on a different platform (macOS).  
+
 > In Domain-Driven Design (DDD), an aggregate is a cluster of related objects that are treated as a single unit of work for the purpose of data consistency and transactional boundaries. An aggregate model, then, is a representation of an aggregate in code, typically as a class or group of classes.
 
-```StoreModel``` is an aggregate model that centralizes all the data for the application. Views communicate directly with the StoreModel to perform queries and persistence operations. StoreModel also utilizes ```StoreHTTPClient```, which is used to perform network operations. StoreHTTPClient is a stateless network layer. This means it can be used in other parts of the application that are not SwiftUI, meaning UIKit. 
-
-StoreModel can be used in a variety of different ways. You can use StoreModel as a @StateObject if you only want the data available to a particular view and if you want to tie the life of the object with the life of the view. But quite often I find myself adding StoreModel to @EnvironmentObject so that it can be available in the injected view and all its sub views.   
+StoreModel can be used in a variety of different ways. You can use StoreModel as a @StateObject if you only want the data available to a particular view and if you want to tie the object with the life of the view. But quite often I find myself adding StoreModel to @EnvironmentObject so that it can be available in the injected view and all of its sub views.   
 
 ``` swift 
 @main
@@ -138,7 +123,7 @@ struct StoreAppApp: App {
 }
 ```
 
-Now, you can use the ```StoreModel``` as shown in the implementation below. 
+After the StoreModel is injected through the @EnvironmentObject, you can access the ```StoreModel``` as shown in the implementation below. 
 
 ``` swift 
 struct ContentView: View {
@@ -158,11 +143,11 @@ struct ContentView: View {
 }
 ```
 
-> You might be tempted to use @EnvironmentObject inside all views. Although, it will work as expected but for larger applications you need to make presentation views independent of any dependencies. Presentation views are usually child views that are created for the purpose of reusability. 
+> You might be tempted to use @EnvironmentObject inside all views. Although, it will work as expected but for larger applications you need to make presentation views free of any dependencies. Presentation views are usually child views that are created for the purpose of reusability. 
 
-Apart from fetching and persistence, StoreModel can also provide sorting, filtering, searching and other operations etc. 
+Apart from fetching and persistence, StoreModel can also provide sorting, filtering, searching and other operations directly to the view. 
 
-A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover how to introduce multiple aggregate root models and how they can benefit when working in large teams.  
+A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover multiple aggregate models and how they benefit when working in large teams.  
 
 ## Multiple Aggregate Models 
 
@@ -170,28 +155,28 @@ As you learned in the previous section, the purpose of an aggregate model is to 
 
 As your business grows, a single aggregate model might not be enough to maintain the life cycle and side effects of an entire application. This is where we will introduce multiple aggregate models. These aggregate models are based on the bounded context of the application. Bounded context refers to a specific area of the system that has clear boundaries and is designed to serve a particular business purpose or domain. 
 
-In an e-commerce application, we have have several bounded contexts including checkout process, inventory management system, catalog, fulfillment, shipment, ordering, marketing and customer management module. 
+In an e-commerce application, we can have several bounded contexts including checkout process, inventory management system, catalog, fulfillment, shipment, ordering, marketing and customer management modules. 
 
 Defining bounded context is important in software development and it helps to break down the application into small manageable pieces. This also allows teams to work on different parts of the system without interfering with each other. 
 
-Developers are usually not good in finding bounded context of software applications. The main reason is that their technical knowledge does not directly map into domain knowledge. Domain knowledge requires different set of skills and a domain expert is a better fit for this kind of role. A domain expert is a person, who may not be tech savvy but understands how the business or a particular domain works. In large projects, you may have multiple domain experts each handling a different business domain. This is why it is extremely important for developers to communicate with domain experts and understand the domain before starting any development.  
+Developers are usually not good in finding bounded context for software applications. The main reason is that their technical knowledge does not directly map into domain knowledge. Domain knowledge requires different set of skills and a domain expert is a better suited for this kind of role. A domain expert is a person, who may not be tech savvy but understands how the business or a particular domain works. In large projects, you may have multiple domain experts, each handling a different business domain. This is why it is extremely important for developers to communicate with domain experts and understand the domain before starting any development.  
 
 Once, you have identified different bounded contexts associated with your application you can represent them in the form of aggregate models. This is shown in the diagram below. 
 
 ![Multiple Aggregate Root](/images/aggregate-model-updated.002.jpeg)
 
-The network layer can also be divided into multiple HTTP clients or you can use a single generic network layer for your entire application. This is shown in the diagram below.  
+The network layer can also be divided into multiple HTTP clients or you can use a single generic network layer for your entire application. This is shown in the following diagram. 
 
 ![Multiple Aggregate Root](/images/aggregate-model-updated.003.jpeg)
 
-The Catalog aggregate model will be responsible for providing the view with all the entities associated with Catalog. This can include but not limited to: 
+The Catalog aggregate model will be responsible for providing views with all the entities associated with Catalog. This can include but not limited to: 
 
 - Product 
 - Category 
 - Brand 
 - Review 
 
-The Ordering aggregate model will be responsible for providing view with all the ordering related entities. This can include but not limited to:  
+The Ordering aggregate model will be responsible for providing views with all the ordering related entities. This can include but not limited to:  
 
 - Order 
 - OrderLineItem 
@@ -199,7 +184,7 @@ The Ordering aggregate model will be responsible for providing view with all the
 - ShippingMethod 
 - Discount 
 
-The ```Catalog``` and ```Ordering``` aggregate models are be reference types conforming to ObservableObject. And all the entities they provide will be value types. 
+The ```Catalog``` and ```Ordering``` aggregate models will be reference types conforming to ```ObservableObject``` protocol. And all the entities they provide will be value types. 
 
 The outline of ```Catalog``` aggregate model and ```Product``` entity is shown below: 
 
@@ -262,7 +247,7 @@ struct StoreAppApp: App {
 }
 ```
 
-Now, inside a view you can access Catalog or Order by accessing it through ```@EnvironmentObject```. This is shown below: 
+Now, inside a view you can access Catalog or Ordering by accessing it through ```@EnvironmentObject```. The implementation is shown below: 
 
 ``` swift 
 struct CatalogListScreen: View {
@@ -283,7 +268,7 @@ struct CatalogListScreen: View {
 }
 ```
 
-If your view needs to access order then it can utilize the Ordering aggregate model. This is shown below: 
+If your view needs to access ordering information then it can utilize the Ordering aggregate model.
 
 ``` swift 
 struct AdminDashboardScreen: View {
@@ -311,11 +296,11 @@ struct AdminDashboardScreen: View {
 }
 ```
 
-There are scenarios when your aggregate model will need to access information from another aggregate model. In those cases, your aggregate model will simply use the network service to fetch the information that is needed. 
+There are scenarios when your aggregate model will need to access information from another aggregate model. In those cases, your aggregate model will simply use the network service to fetch the information that is needs. 
 
-> It is important that your caching layer is called from within the network layer and not from aggregate models. This will allow all aggregate models to take advantage of caching through the network layer. 
+> It is important that your caching layer is called from within the network layer and not from aggregate models. This will allow aggregate models to take advantage of caching through the network layer, instead of implementing it on their own. By accessing caching layer from inside the network layer, all your aggregate models can benefit from faster response through the use of cached resources. 
 
-As mentioned earlier for small or even medium sized apps, you may only need a single aggregate model. For larger apps you can introduce new aggregate models. Make sure to consult with a domain expert before creating application boundaries. 
+> As mentioned earlier for small or even medium sized apps, you may only need a single aggregate model. For larger apps you can introduce new aggregate models. Make sure to consult with a domain expert before creating application boundaries. 
 
 The concept of domain boundaries can also be applied to user interfaces. This allows us to reuse user interface elements in other applications. 
 
@@ -337,9 +322,30 @@ As discussed earlier, each bounded context is represented by its own module. The
 
 **Foundation Core**: Represents the resources used by all modules. This can include helper classes/structs, reusable views, images, icons and even preview content used for testing. 
 
-> Each module like Shipping, Inventory, Ordering etc can be represented by a folder structure of a package dependency. This really depends on how reusable your module is and if you wish to use it in other projects. 
+> Each module like Shipping, Inventory, Ordering etc can be represented by a folder structure or a package dependency. This really depends on how reusable your module is and if you wish to use it in other projects. 
 
-Using this architecture, future aggregate models and data access services can be added without interfering with existing ones. This also allows more collaborative environment as different teams can work on different modules without interfering with each other. 
+Using this architecture, future business requirements and data access services can be added without interfering with existing ones. This also allows more collaborative environment as different teams can work on different modules without interfering with each other. 
+
+## Screens vs Views 
+
+When I was working with Flutter, I observed a common pattern for organizing the widgets. Flutter developers were separating the widgets based on whether the widgets represents an entire screen of just a reusable control. Since React, Flutter and SwiftUI are extremely similar in nature we can apply the same principles when building SwiftUI applications. 
+
+For example when displaying details of a movie, instead of calling that view MovieDetailView, you can call it MovieDetailScreen. This will make it clear that the detail view is an actual screen and not some reusable child view. Here are few more examples. 
+
+**Screens** 
+- MovieDetailView 
+- HomeScreen 
+- LoginScreen
+- RegisterScreen 
+- SettingsScreen 
+
+**Views** 
+- RatingsView 
+- MessageView 
+- ReminderListView
+- ReminderCellView 
+
+I find that it is always a good idea to keep a close eye on our friendly neighbors React and Flutter. You never know what ideas you will bring from other declarative frameworks into SwiftUI. 
 
 ## Validation 
 
@@ -608,7 +614,9 @@ In the end you will have to decide when you want to group events into an enum an
 
 ## Navigation 
 
+When building ReactJS applications you can use ```react-router-dom``` to configure navigation for your entire app. SwiftUI did not had this feature until iOS 16 introduced NavigationStack API. NavigationStack API can be used in several different ways but if you are interested in creating global navigation for your app then continue reading. 
 
+> I wrote a book on Navigation API in SwiftUI. If you are interested, you can download if free of charge from [here](https://azamsharp.com/books). 
 
 ## Testing 
 
@@ -647,8 +655,6 @@ The behavior stems from the requirement of the project. Tests that checks the im
 
 Let's consider a scenario, where you are building an application to display a list of products on the screen. The products are fetched from a JSON API and rendered using SwiftUI framework, following the principles of MVVM design pattern.
 
->> I personally don't use MVVM pattern when implementing SwiftUI application. I have written a lot about it and you can read my article [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html)
-
 First we will look at a common way of testing the above scenario that is adopted by most developers and then later we will implement tests in a more **pragmatic** way. 
 
 The complete app might look like the implementation below: 
@@ -658,7 +664,7 @@ class Webservice {
     
     func fetchProducts() async throws -> [Product] {
         // ignore the hard-coded URL. We can inject the URL from using test configuration. 
-        let url = URL(string: "https://api.escuelajs.co/api/v1/products")!
+        let url = URL(string: "https://test.store.com/api/v1/products")!
         let (data, _) = try await URLSession.shared.data(from: url)
         return try JSONDecoder().decode([Product].self, from: data)
     }
@@ -727,7 +733,7 @@ class Webservice: WebserviceProtocol {
     
     func fetchProducts() async throws -> [Product] {
         
-        let url = URL(string: "https://api.escuelajs.co/api/v1/products")!
+        let url = URL(string: "https://test.store.com/api/v1/products")!
         let (data, _) = try await URLSession.shared.data(from: url)
         return try JSONDecoder().decode([Product].self, from: data)
     }
@@ -1109,7 +1115,7 @@ Remember to test the public API exposed by the module and not the implementation
 
 Don't create protocols/interfaces/contracts with the sole purpose of mocking. If a protocol consists of a single concrete implementation then use the concrete implementation and remove the interface/contract. Your architecture should be based on current business needs and not on what if scenarios that may never happen. Remember YAGNI (You aren't going to need it). Less code is better than more code. 
 
-Navigation 
+## Conclusion 
 
-Conclusion 
+
 
