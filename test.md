@@ -56,7 +56,7 @@ Apple talks about it in their article [Model data](https://developer.apple.com/d
 
 Ok now back to the MV pattern! 
 
-In WWDC 2020 talk titled "Data Essentials in SwiftUI" Apple presented the following diagram. 
+In WWDC 2020 talk titled [Data Essentials in SwiftUI](https://developer.apple.com/videos/play/wwdc2020/10040/) Apple presented the following diagram. 
 
 ![ObservableObject as the data dependency surface](/images/single-source.png)
 

@@ -56,7 +56,7 @@ Apple talks about it in their article [Model data](https://developer.apple.com/d
 
 Ok now back to the MV pattern! 
 
-In WWDC 2020 talk titled "Data Essentials in SwiftUI" Apple presented the following diagram. 
+In WWDC 2020 talk titled [Data Essentials in SwiftUI](https://developer.apple.com/videos/play/wwdc2020/10040/) Apple presented the following diagram. 
 
 ![ObservableObject as the data dependency surface](/images/single-source.png)
 
@@ -143,7 +143,7 @@ struct ContentView: View {
 }
 ```
 
-> You might be tempted to use @EnvironmentObject inside all views. Although, it will work as expected but for larger applications you need to make presentation views free of any dependencies. Presentation views are usually child views that are created for the purpose of reusability. 
+> You might be tempted to use @EnvironmentObject inside all views. Although, it will work as expected but for larger applications you need to make presentation views free of any dependencies. Presentation views are usually child views that are created for the purpose of reusability. It you try to access @EnvironmentObject inside the child views then it effects their reusability status and they become less useful. The main reason is that now they are dependent on the @EnvironmentObject to provide them data. Instead we should follow the top-down approach, where the data is passed from the parent view to the child view. This is also known as the [Container/Presentation pattern](https://www.patterns.dev/posts/presentational-container-pattern/).    
 
 Apart from fetching and persistence, StoreModel can also provide sorting, filtering, searching and other operations directly to the view. 
 
