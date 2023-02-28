@@ -10,6 +10,7 @@ The outline of this article is shown below:
 - [Understanding the MV Pattern](#understanding-the-mv-pattern)    
 - [Screens vs Views](#screens-vs-views) 
 - [Multiple Aggregate Models](#multiple-aggregate-models) 
+- [View Specific Logic](#view-specific-logic)
 - [Validation](#validation) 
 - [Navigation](#navigation) 
 - [Grouping View Events](#grouping-view-events) 
@@ -327,6 +328,37 @@ As discussed earlier, each bounded context is represented by its own module. The
 > Each module like Shipping, Inventory, Ordering etc can be represented by a folder structure or a package dependency. This really depends on your needs and if you wish to reuse your modules in other projects. 
 
 Using this architecture, future business requirements and data access services can be added without interfering with existing ones. This also allows more collaborative environment as different teams can work on different modules without interfering with each other. 
+
+## View Specific Logic 
+
+Sometimes, our views will require presentational logic, formatting, sorting, filtering etc. Most of the time, this logic can be directly implemented right inside a view. Here is a sample code from Apple's FoodTruck application. 
+
+``` swift 
+struct SalesHistoryView: View {
+    @ObservedObject var model: FoodTruckModel
+    
+    var annualHistoryIsUnlocked: Bool {
+        storeController.isEntitled
+    }
+    
+    var hideChartContent: Bool {
+        timeframe != .week && !annualHistoryIsUnlocked
+    }
+     
+    var totalSales: Int {
+        sales.flatMap(\.entries).reduce(into: 0) { (partialResult, entry) in
+            partialResult += entry.sales
+        }
+    }
+```
+
+As you can see the properties ```annualHistoryIsUnlocked```, ```hideChartContent``` and ```totalSales``` are contained inside the view instead of in a separate layer. The view takes the data from the Model and then format it in a way it needs to be displayed. 
+
+> Sorting and filtering depends on your app needs. Sometimes,  you can do it inside the view and other times it may makes sense to perform those actions inside the model. 
+
+To prevent your views from getting massive, you will need to compose them in a correct way. If your view is getting too big then you need to evaluate the responsibilities of the view. If it is doing too much then it is better to divide the view into multiple views. 
+
+For more information, check out Apple's [FoodTruck](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app) application. 
 
 ## Screens vs Views 
 
