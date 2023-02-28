@@ -999,8 +999,6 @@ This means if you decide to refactor your code and rename the function ```fetchP
 
 > If you are using MVVM pattern then your VM may have logic. It is perfectly fine to write unit tests against the logic contained in the view model.   
 
-In the next section, you will learn how to write tests that validates the behavior of the application instead of the implementation details. 
-
 ## End to End Testing 
 
 In the previous section, you learned that and mocking in most scenarios does not provide the return on your investment. Tests written that use mocking usually end up being too brittle and can fail because of refactoring, breaking all the dependent tests even though the behavior remained the same. 
