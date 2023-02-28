@@ -997,19 +997,21 @@ This means if you decide to refactor your code and rename the function ```fetchP
 
 > The code that you write is a liability, including tests. When writing tests, focus on the quality of the tests instead of the quantity. Remember, you are not only responsible for writing tests but also maintaining them. 
 
->  
+> If you are using MVVM pattern then your VM may have logic. It is perfectly fine to write unit tests against the logic contained in the view model.   
 
 In the next section, you will learn how to write tests that validates the behavior of the application instead of the implementation details. 
 
 ## End to End Testing 
 
-In the previous section, you learned that testing view models and mocking does not provide the return on your investment. Tests written for view models that use mocking validates the implementation details instead of the behavior. Implementation can change due to refactoring, breaking all the dependent tests even though the behavior remained the same. 
+In the previous section, you learned that and mocking in most scenarios does not provide the return on your investment. Tests written that use mocking usually end up being too brittle and can fail because of refactoring, breaking all the dependent tests even though the behavior remained the same. 
 
 Human psychology also plays an important role when writing tests. As software developers we want fast feedback with small amounts of dopamine hit along the way. There is nothing wrong with receiving fast feedback. Fast feedback is one of the important characteristics of a unit test. Unfortunately, sometimes we are going too fast to realize that we were on the wrong path. We start behaving like a test addict, who wants to see green checkmarks alongside the tests instantly.  
 
-As explained earlier testing view models may add more tests to your test suite but does not provide any benefit. It may even work against you in the long run since now you will be responsible for maintaining those test cases and anytime the implementation detail changes, all your test will break even though the functionality remained the same. 
+As explained earlier adding tests that test the implementation details instead of behavior does not provide any benefit to your project. It may even work against you in the long run since now you will be responsible for maintaining those test cases and anytime the implementation detail changes, all your test will break even though the functionality remained the same. 
 
-In these scenarios, end to end testing is a much better choice. A good end to end will test one complete story/behavior. Below you can find the implementation of an end to end test. 
+> I am not proposing that you should not write unit tests. Unit tests are great when you are testing small units of code. I am proposing that you must make sure that you are testing the behavior of the code and not implementation details. This means if you want to write unit tests for your view models, you can. 
+
+Apart from unit tests and integration tests, end to end tests are best against regression. A good end to end will test one complete story/behavior. Below you can find the implementation of an end to end test. 
 
 ```swift 
 final class ProductTests: XCTestCase {
