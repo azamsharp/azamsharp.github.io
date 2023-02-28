@@ -234,7 +234,7 @@ Catalog and Ordering aggregate models are injected into the application as an en
 
 ``` swift 
 @main
-struct StoreAppApp: App {
+struct StoreApp: App {
     
     var body: some Scene {
         WindowGroup {
@@ -310,7 +310,7 @@ The concept of domain boundaries can also be applied to user interfaces. This al
 
 Let's go ahead and zoom out and see how our architecture looks like with all the pieces in place. 
 
-![Architecture](/images/architecture.001.jpeg)
+![Architecture](/images/architecture.001-updated.jpeg)
 
 As discussed earlier, each bounded context is represented by its own module. These modules can be represented by a folder or a package dependency.
 
@@ -377,7 +377,18 @@ struct LoginScreen: View {
 }
 ```
 
-For such trivial logic, you can use Xcode Previews to quickly perform manual testing. If you are working on a more complicated form, then it is advised to extract it into its down struct. This concept is shown in the implementation below. 
+For such trivial logic, you can use Xcode Previews to quickly perform manual testing and validate the outcome. But if you like to test the above logic then you can use the following unit test. 
+
+``` swift
+
+let view = LoginScreen()
+view.username = "John Lenon"
+view.password = "qwerty"
+XCTAssertTrue(view.isFormValid)
+
+```
+
+ If you are working on a more complicated form, then it is advised to extract it into its own struct. This concept is shown in the implementation below. 
 
 ``` swift 
 struct LoginFormConfig {
