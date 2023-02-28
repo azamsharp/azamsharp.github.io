@@ -33,8 +33,6 @@ The behavior stems from the requirement of the project. Tests that checks the im
 
 Let's consider a scenario, where you are building an application to display a list of products on the screen. The products are fetched from a JSON API and rendered using SwiftUI framework, following the principles of MVVM design pattern.
 
->> I personally don't use MVVM pattern when implementing SwiftUI application. I have written a lot about it and you can read my article [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html)
-
 First we will look at a common way of testing the above scenario that is adopted by most developers and then later we will implement tests in a more **pragmatic** way. 
 
 The complete app might look like the implementation below: 
@@ -44,7 +42,7 @@ class Webservice {
     
     func fetchProducts() async throws -> [Product] {
         // ignore the hard-coded URL. We can inject the URL from using test configuration. 
-        let url = URL(string: "https://api.escuelajs.co/api/v1/products")!
+        let url = URL(string: "https://test.store.com/api/v1/products")!
         let (data, _) = try await URLSession.shared.data(from: url)
         return try JSONDecoder().decode([Product].self, from: data)
     }
@@ -113,7 +111,7 @@ class Webservice: WebserviceProtocol {
     
     func fetchProducts() async throws -> [Product] {
         
-        let url = URL(string: "https://api.escuelajs.co/api/v1/products")!
+        let url = URL(string: "https://test.store.com/api/v1/products")!
         let (data, _) = try await URLSession.shared.data(from: url)
         return try JSONDecoder().decode([Product].self, from: data)
     }
@@ -194,12 +192,8 @@ final class ProductsTests: XCTestCase {
 ```
 
 We created an instance of ```MockedWebservice``` inside our test and pass it to the ```ProductListViewModel```. Next, we invoke the ```populateProducts``` function on the view model and then check to make sure that the ```fetchProducts``` on the mockedWebservice instance was called. Finally, the test checks the products property of the ````ProductListViewModel``` instance to make sure that is is populated correctly. 
-
-I have seen hundreds of these kind of tests implemented in large projects. There is a lot of things wrong with the above test. First, we are testing the view model. There is no need to test a view model through a unit test, since it does not contain any logic or behavior. There are no business rules implemented in view models. 
-
->> You will have a much better return on your investment, if you write an end to end test for your view models instead of unit testing them.   
-
-Another problem with the above test is that it is not testing the behavior but the implementation. The following line of code is an implementation detail. 
+ 
+The problem with the above test is that it is not testing the behavior but the implementation. The following line of code is an implementation detail. 
 
 ```swift
 verify(mockedWebService.fetchProducts()).wasCalled()
@@ -207,19 +201,21 @@ verify(mockedWebService.fetchProducts()).wasCalled()
 
 This means if you decide to refactor your code and rename the function ```fetchProducts``` to ```getProducts``` then your test will fail. These kind of tests are often known as brittle tests as they break when the internal implementation changes even though the functionality/behavior provided by the API remains the same. This is also the main reason that your test should validate the behavior instead of the implementation.  
 
->> The code that you write is a liability, including tests. When writing tests, focus on the quality of the tests instead of the quantity. Remember, you are not only responsible for writing tests but also maintaining them. 
+> The code that you write is a liability, including tests. When writing tests, focus on the quality of the tests instead of the quantity. Remember, you are not only responsible for writing tests but also maintaining them. 
 
-In the next section, you will learn how to write tests that validates the behavior of the application instead of the implementation details. 
+> If you are using MVVM pattern then your VM may have logic. It is perfectly fine to write unit tests against the logic contained in the view model.   
 
-# End to End Testing 
+## End to End Testing 
 
-In the previous section, you learned that testing view models and mocking does not provide the return on your investment. Tests written for view models that use mocking validates the implementation details instead of the behavior. Implementation can change due to refactoring, breaking all the dependent tests even though the behavior remained the same. 
+In the previous section, you learned that and mocking in most scenarios does not provide the return on your investment. Tests written that use mocking usually end up being too brittle and can fail because of refactoring, breaking all the dependent tests even though the behavior remained the same. 
 
 Human psychology also plays an important role when writing tests. As software developers we want fast feedback with small amounts of dopamine hit along the way. There is nothing wrong with receiving fast feedback. Fast feedback is one of the important characteristics of a unit test. Unfortunately, sometimes we are going too fast to realize that we were on the wrong path. We start behaving like a test addict, who wants to see green checkmarks alongside the tests instantly.  
 
-As explained earlier testing view models may add more tests to your test suite but does not provide any benefit. It may even work against you in the long run since now you will be responsible for maintaining those test cases and anytime the implementation detail changes, all your test will break even though the functionality remained the same. 
+As explained earlier adding tests that test the implementation details instead of behavior does not provide any benefit to your project. It may even work against you in the long run since now you will be responsible for maintaining those test cases and anytime the implementation detail changes, all your test will break even though the functionality remained the same. 
 
-In these scenarios, end to end testing is a much better choice. A good end to end will test one complete story/behavior. Below you can find the implementation of an end to end test. 
+> I am not proposing that you should not write unit tests. Unit tests are great when you are testing small units of code. I am proposing that you must make sure that you are testing the behavior of the code and not implementation details. This means if you want to write unit tests for your view models, you can. 
+
+Apart from unit tests and integration tests, end to end tests are best against regression. A good end to end will test one complete story/behavior. Below you can find the implementation of an end to end test. 
 
 ```swift 
 final class ProductTests: XCTestCase {
@@ -402,6 +398,88 @@ In-memory database provides several benefits including:
 Even thought these benefits looks appealing, I personally do not recommend using in-memory database for testing purposes. The main reason is that in-memory databases does not represent an actual production environment. This means you may not encounter the same issues during tests, which you may witness when using an actual database. 
 
 >> It is always a good idea to to make sure that your test environment and production environment are nearly identical in nature. 
+
+## Testing View Model Does NOT Validate the User Interface  
+
+Couple of weeks ago, I was having a discussion with another developer, who was mentioning that they test their **user interface** through View Models in SwiftUI. I was not sure what he meant so I checked the source code and found that they had lot of unit tests for their View Models and they were just assuming that if the View Model tests are passing then the user interface will automatically work.
+
+> Please keep in mind that I am not suggesting that you should not write unit tests for your View Models. I am simply saying that your View Model unit tests does not validate that the user interface is working as expected. 
+
+Let's take a very simple example of building a counter application. 
+
+``` swift 
+class CounterViewModel: ObservableObject {
+    
+    @Published var count: Int = 0
+    
+    func increment() {
+        count += 1
+    }
+}
+
+struct ContentView: View {
+    
+    @StateObject private var counterVM = CounterViewModel()
+    
+    var body: some View {
+        VStack {
+            Text("\(counterVM.count)")
+            Button("Increment") {
+                counterVM.increment()
+            }
+        }
+    }
+}
+```
+
+When the increment button is pressed, we call the increment function on the CounterViewModel instance and increment the count. Since count property is decorated with @Published property wrapper, it notifies the view to reevaluate and eventually rerender. 
+
+In order to test that the count is incremented and displayed on the screen, the following unit test was written. 
+
+``` swift 
+import XCTest
+@testable import Learn
+
+final class LearnTests: XCTestCase {
+
+    func test_user_updated_count() {
+        let vm = CounterViewModel()
+        vm.increment()
+        XCTAssertEqual(1, vm.count)
+    }
+
+}
+```
+
+This is a perfectly **valid** unit test but it does not verify that the count has been updated and displayed on the screen. Let me repeat it again. **A View Model unit test does not verify that the count is successfully displayed on the screen. This is a unit test not a UI test.**
+
+To prove that a View Model unit test does not verify user interface elements, simply remove the Button view or even the Text view from the ContentView. The unit test will still pass. This can give you false confidence that your interface is working. 
+
+A better way to verify that a user interface is working as expected is to implement a UI test. Take a look at the following implementation. 
+
+``` swift 
+final class LearnUITests: XCTestCase {
+
+    func testExample() throws {
+        // UI tests must launch the application that they test.
+        let app = XCUIApplication()
+        app.launch()
+
+        app.buttons["incrementButton"].tap()
+        XCTAssertEqual("1", app.staticTexts["countLabel"].label)
+    }
+}
+```
+
+This test will launch the app in a simulator and verify that when the button is pressed, label is updated correctly. 
+
+> Depending on the complexity of the behavior you are testing, you may not even need to write a user interface test. I have found that most of the user interfaces can be tested quickly using Xcode Previews. 
+
+So what is the right balance? How many unit tests should you have for your View Model as compared to UI tests. 
+
+The answer is **it depends**. If you have complicated logic in your View Model then unit test can help. UITest (E2E) tests provide the best defense against regression. For each story, you can write couple of long happy path user interface tests and couple of edge cases. Once again, this really depends on the story and the complexities associated with the story. 
+
+In the end [testing is all about **confidence**](https://azamsharp.com/2023/02/15/testing-is-about-confidence.html). Sometimes you can gain confidence by writing fewer or no tests and other times you have to write more tests to achieve the level of confidence. 
 
 ## The Ideal test 
 
