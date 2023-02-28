@@ -625,7 +625,10 @@ In the end you will have to decide when you want to group events into an enum an
 
 ## Navigation 
 
-When building ReactJS applications you can use ```react-router-dom``` to configure navigation for your entire app. SwiftUI did not had this feature until iOS 16 introduced NavigationStack API. NavigationStack API can be used in several different ways but if you are interested in creating global navigation for your app then continue reading. 
+SwiftUI introduced NavigationStack in iOS 16, which allowed developers to configure global routes for their application. 
+
+
+
 
 > I wrote a book on Navigation API in SwiftUI. If you are interested, you can download if free of charge from [here](https://azamsharp.com/books). 
 
