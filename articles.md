@@ -8,6 +8,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](_posts/2023-02-28-building-large-scale-apps-swiftui.md)
+Software architecture is always a topic for hot debate, specially when there are so many different choices. For the last 8-12 months, I have been experimenting with MV pattern to build client/server apps and wrote about it in my original article [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). In this article, I will discuss how MV pattern can be applied to build large scale client/server applications. 
+
 ### [Testing View Model Does NOT Validate the User Interface](_posts/2023-02-16-testing-view-models.md)
 Couple of weeks ago, I was having a discussion with another developer, who was mentioning that they test their **user interface** through View Models in SwiftUI. I was not sure what he meant so I checked the source code and found that they had lot of unit tests for their View Models and they were just assuming that if the View Model tests are passing then the user interface will automatically work.
 

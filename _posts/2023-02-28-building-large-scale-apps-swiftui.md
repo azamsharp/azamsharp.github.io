@@ -31,6 +31,8 @@ Modularity can be achieved in several different ways. You can expose each module
 
 The main idea behind the MV Pattern is to allow views directly talk to the model. This eliminates the need for creating unnecessary view models for each view, which simply contribute to the size of the project but does not provide any additional benefits. 
 
+> MV Pattern does not advocate putting all the logic in view. That particular pattern is known as [Container Pattern](https://www.patterns.dev/posts/presentational-container-pattern/). I have also talked about it on my blog. You can read about it [here](https://azamsharp.com/2023/01/24/introduction-to-container-pattern.html).   
+
 One of the most confusing things about SwiftUI are the views. I don't blame you, I don't think they should be called views. They should have been called Widgets (Flutter) or Components (React). The views in SwiftUI are not like traditional UIKit views. They are just the declaration of what you want to be displayed on the screen. 
 
 The views in SwiftUI, reminds me of ReactJS JSX syntax. Let's take a look at a very small example. 
@@ -62,7 +64,7 @@ In WWDC 2020 talk titled [Data Essentials in SwiftUI](https://developer.apple.co
 
 The main idea is to provide view access to a single layer or surface that serves as the source of truth and allows access to all entities within the application.
 
-[Fruta](https://developer.apple.com/documentation/swiftui/fruta_building_a_feature-rich_app_with_swiftui) and [FoodTruck](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app) applications demonstrated how to use this pattern against a hard-coded data source. But in WWDC video title **"[Use Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/)"** Apple showed how to update the existing FoodTruck app and consume the data from an API response. 
+Apple sample projects, which includes [Fruta](https://developer.apple.com/documentation/swiftui/fruta_building_a_feature-rich_app_with_swiftui) and [FoodTruck](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app) applications demonstrated how to use this pattern against a hard-coded data source. But in WWDC video title **"[Use Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/)"** Apple showed how to update the existing FoodTruck app and consume the data from an API response. 
 
 The screenshot below shows ```FoodTruckModel``` using the ```DonutsServerClient``` to retrieve list of donuts. DonutsServerClient is responsible for making an actual request to the server and downloading the donuts. Once the donuts are downloaded they are assigned to the serverDonuts property maintained by the FoodTruckModel.  
 
