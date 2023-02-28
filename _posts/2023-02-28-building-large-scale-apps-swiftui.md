@@ -986,12 +986,8 @@ final class ProductsTests: XCTestCase {
 ```
 
 We created an instance of ```MockedWebservice``` inside our test and pass it to the ```ProductListViewModel```. Next, we invoke the ```populateProducts``` function on the view model and then check to make sure that the ```fetchProducts``` on the mockedWebservice instance was called. Finally, the test checks the products property of the ````ProductListViewModel``` instance to make sure that is is populated correctly. 
-
-I have seen hundreds of these kind of tests implemented in large projects. There is a lot of things wrong with the above test. First, we are testing the view model. There is no need to test a view model through a unit test, since it does not contain any logic or behavior. There are no business rules implemented in view models. 
-
->> You will have a much better return on your investment, if you write an end to end test for your view models instead of unit testing them.   
-
-Another problem with the above test is that it is not testing the behavior but the implementation. The following line of code is an implementation detail. 
+ 
+The problem with the above test is that it is not testing the behavior but the implementation. The following line of code is an implementation detail. 
 
 ```swift
 verify(mockedWebService.fetchProducts()).wasCalled()
@@ -999,7 +995,9 @@ verify(mockedWebService.fetchProducts()).wasCalled()
 
 This means if you decide to refactor your code and rename the function ```fetchProducts``` to ```getProducts``` then your test will fail. These kind of tests are often known as brittle tests as they break when the internal implementation changes even though the functionality/behavior provided by the API remains the same. This is also the main reason that your test should validate the behavior instead of the implementation.  
 
->> The code that you write is a liability, including tests. When writing tests, focus on the quality of the tests instead of the quantity. Remember, you are not only responsible for writing tests but also maintaining them. 
+> The code that you write is a liability, including tests. When writing tests, focus on the quality of the tests instead of the quantity. Remember, you are not only responsible for writing tests but also maintaining them. 
+
+>  
 
 In the next section, you will learn how to write tests that validates the behavior of the application instead of the implementation details. 
 
