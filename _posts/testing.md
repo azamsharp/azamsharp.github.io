@@ -310,7 +310,7 @@ The concept of domain boundaries can also be applied to user interfaces. This al
 
 Let's go ahead and zoom out and see how our architecture looks like with all the pieces in place. 
 
-![Architecture](/images/architecture.001-updated.jpeg)
+![Architecture](/images/architecture-model-updated.jpeg)
 
 As discussed earlier, each bounded context is represented by its own module. These modules can be represented by a folder or a package dependency.
 
