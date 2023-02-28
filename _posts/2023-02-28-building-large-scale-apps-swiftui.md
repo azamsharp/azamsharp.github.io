@@ -331,7 +331,7 @@ Using this architecture, future business requirements and data access services c
 
 ## View Specific Logic 
 
-Sometimes, our views will require presentational logic, formatting, sorting, filtering etc. Most of the time, this logic can be directly implemented right inside a view. Here is a sample code from Apple's FoodTruck application. 
+Sometimes, our views will require presentational logic, formatting, sorting, filtering etc. Most of the time, this logic can be directly implemented right inside a view. Here is a sample code from Apple's [FoodTruck](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app) application. 
 
 ``` swift 
 struct SalesHistoryView: View {
