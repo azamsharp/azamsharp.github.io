@@ -331,7 +331,7 @@ Using this architecture, future business requirements and data access services c
 
 ## View Specific Logic 
 
-Sometimes, our views will require presentational logic, formatting, sorting, filtering etc. Most of the time, this logic can be directly implemented right inside a view. Here is a sample code from Apple's [FoodTruck](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app) application. 
+Sometimes, our views will require presentational logic, formatting, sorting, filtering etc. Most of the time, this logic can be directly implemented right inside a view. This is shown in the implementation below: 
 
 ``` swift 
 struct SalesHistoryView: View {
@@ -358,8 +358,6 @@ As you can see the properties ```annualHistoryIsUnlocked```, ```hideChartContent
 
 
 To prevent your views from getting massive, you will need to compose them in a correct way. If your view is getting too big then you need to evaluate the responsibilities of the view. If it is doing too much then it is better to divide the view into multiple views. 
-
-For more information, check out Apple's [FoodTruck](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app) application. 
 
 ## Screens vs Views 
 
