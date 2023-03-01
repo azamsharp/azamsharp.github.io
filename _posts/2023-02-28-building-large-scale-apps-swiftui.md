@@ -358,7 +358,7 @@ As you can see the properties ```annualHistoryIsUnlocked```, ```hideChartContent
 
 To prevent your views from getting massive, you will need to compose them in a correct way. If your view is getting too big then you need to evaluate the responsibilities of the view. If it is doing too much then it is better to divide the view into multiple views. 
 
-Last week, I was watching [React.js: The Documentary](https://youtu.be/8pDqJVdNa44) and one of the things mentioned in the documentary was the idea of separation of concerns. React team was talking about how separation of concerns meant putting JS files, css files and HTML files separate but now with modern architecture, we have to think of separation of concerns in a different way. With React, Flutter and even SwiftUI separation of concern is the behavior exposed by the component. This means a component is a reusable piece, which can be easily plugged into the application. A component will responsible for UI logic, styling etc. 
+Last week, I was watching [React.js: The Documentary](https://youtu.be/8pDqJVdNa44) and one of the things mentioned in the documentary was the idea of separation of concerns. React team was talking about how separation of concerns meant putting JS files, css files and HTML files separate but now with modern architecture, we have to think of separation of concerns in a different way. With React, Flutter and even SwiftUI separation of concern is the behavior exposed by the component. This means a component is a reusable piece, which can be easily plugged into the application. A component will be responsible for UI logic, styling etc. 
 
 > This does not mean, you should start putting actual domain logic in the views :) 
 
