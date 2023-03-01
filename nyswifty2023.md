@@ -1,6 +1,6 @@
 # Resources 
 
-1. [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html) 
+1. [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html) 
 2. [Pragmatic Testing and Avoiding Common Pitfalls](https://azamsharp.com/2012/12/23/pragmatic-unit-testing.html)
 3. [A Better Way to Handle Events for SwiftUI Views](https://azamsharp.com/2023/01/24/grouping-events-swiftui-view-using-enums.md.html)
 4. [Slicing Global State in SwiftUI Using Multiple EnvironmentObjects](https://azamsharp.com/2022/07/01/slicing-environment-object.html)
