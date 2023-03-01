@@ -416,18 +416,9 @@ struct LoginScreen: View {
 }
 ```
 
-For such trivial logic, you can use Xcode Previews to quickly perform manual testing and validate the outcome. But if you like to test the above logic then you can use the following unit test. 
+For such trivial logic, you can use Xcode Previews to quickly perform manual testing and validate the outcome. 
 
-``` swift
-
-let view = LoginScreen()
-view.username = "John Lenon"
-view.password = "qwerty"
-XCTAssertTrue(view.isFormValid)
-
-```
-
- If you are working on a more complicated form, then it is advised to extract it into its own struct. This concept is shown in the implementation below. 
+If you are working on a more complicated form, then it is advised to extract it into its own struct. This concept is shown in the implementation below. 
 
 ``` swift 
 struct LoginFormConfig {
