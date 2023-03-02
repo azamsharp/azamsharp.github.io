@@ -10,6 +10,7 @@ The outline of this article is shown below:
 - [Understanding the MV Pattern](#understanding-the-mv-pattern)    
 - [Screens vs Views](#screens-vs-views) 
 - [Multiple Aggregate Models](#multiple-aggregate-models) 
+- [View Specific Logic](#view-specific-logic)
 - [Validation](#validation) 
 - [Navigation](#navigation) 
 - [Grouping View Events](#grouping-view-events) 
@@ -327,6 +328,186 @@ As discussed earlier, each bounded context is represented by its own module. The
 > Each module like Shipping, Inventory, Ordering etc can be represented by a folder structure or a package dependency. This really depends on your needs and if you wish to reuse your modules in other projects. 
 
 Using this architecture, future business requirements and data access services can be added without interfering with existing ones. This also allows more collaborative environment as different teams can work on different modules without interfering with each other. 
+
+## View Specific Logic 
+
+In this last section, I talked about how aggregate models can serve as a single source of truth and provide required data to the views. But what about view specific logic? Where should that logic be placed and what options do we have to perform testing on that logic. 
+
+In the code below, we want to filter the products based on the minimum and maximum price. The implementation is shown below: 
+
+``` swift 
+struct ContentView: View {
+    
+    let httpClient: HTTPClientProtocol
+    @State private var products: [Product] = []
+    @State private var min: Double?
+    @State private var max: Double?
+    @State private var filteredProducts: [Product] = []
+    
+    private func filterProducts() {
+        
+        guard let min = min,
+              let max = max else { return }
+        
+        filteredProducts = products.filter {
+            $0.price >= min && $0.price <= max
+        }
+    }
+    
+    private var isFormValid: Bool {
+        
+        guard let min = min,
+              let max = max else { return false }
+        
+        return min < max
+    }
+    
+    var body: some View {
+        VStack {
+            HStack {
+                TextField("Min", value: $min, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                TextField("Max", value: $max, format: .number)
+                    .textFieldStyle(.roundedBorder)
+            }
+            Text("Max must be larger than min.")
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.caption)
+                .padding([.bottom], 20)
+            
+            Button("Apply") {
+                filterProducts()
+            }
+            
+            .disabled(!isFormValid)
+          
+            List(filteredProducts.isEmpty ? products: filteredProducts) { product in
+                HStack {
+                    Text(product.title)
+                    Spacer()
+                    Text(product.price, format: .currency(code: "USD"))
+                }
+            }
+            .task {
+                do {
+                    products = try await httpClient.loadProducts()
+                } catch {
+                    print(error)
+                }
+        }
+        }.padding()
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView(httpClient: HTTPClientStub())
+    }
+}
+```
+
+> If filterProducts or similar functions will be involved in any model logic then you can also put it inside the aggregate root model, instead of the view.  
+
+Please note that instead of invoking the real service, we are using a stubbed version of the HTTPClient that returns pre-configured response. Another good option would be to create separate JSON files for each response and read data from those files, when using Xcode previews. I covered that in one of my YouTube video, [Building SwiftUI Xcode Previews Using JSON File](https://youtu.be/EycwLxTU-EA). 
+
+> Keep in mind that in the above scenario, if no results are found during filtering then the original products array is returned. 
+
+We have two pieces of code in the view that constitute as logic, ```isFormValid``` and ```filterProducts```. If we want to test that code we have number of ways. 
+
+Use Xcode previews! I know this does not sound fancy but I encourage you to use Xcode previews to test your view based logic. Xcode previews is extremely fast (depending on the machine you are using) and it gives you the same feeling as Red/Green/Refactor cycle. For this particular scenario, Xcode previews will be my first choice. 
+
+> Xcode previews is not the answer to everything. If you are dealing with complicated view logic then it will be a good idea to move out all the logic into a separate struct and then write unit tests for that piece of code. Remember, one of the important aspects of why we test is to [gain confidence about our code](https://azamsharp.com/2023/02/15/testing-is-about-confidence.html). 
+
+Another option is to extract the logic from the view and then write unit tests against it. This is shown in the implementation below: 
+
+``` swift 
+struct ProductFilterForm {
+    
+    var min: Double?
+    var max: Double?
+    
+    func filterProducts(_ products: [Product]) -> [Product] {
+        
+        guard let min = min,
+              let max = max else { return [] }
+        
+        return products.filter {
+            $0.price >= min && $0.price <= max
+        }
+    }
+}
+```
+
+```ProductFilterForm``` can now be unit tested in isolation. The unit test is shown below: 
+
+``` swift 
+
+func test_user_can_filter_products_by_price() throws {
+        
+        self.continueAfterFailure = false
+      
+        let products = [
+            Product(id: 1, title: "Product 1", price: 10),
+            Product(id: 2, title: "Product 2", price: 100),
+            Product(id: 3, title: "Product 3", price: 200),
+            Product(id: 4, title: "Product 4", price: 500)
+        ]
+        
+        let expectedFilteredProducts = [
+            Product(id: 2, title: "Product 2", price: 100),
+            Product(id: 3, title: "Product 3", price: 200),
+            Product(id: 4, title: "Product 4", price: 500)
+        ]
+        
+        let productFilterForm = ProductFilterForm(min: 100, max: 500)
+        let filteredProducts = productFilterForm.filterProducts(products)
+        
+        for expectedProduct in expectedFilteredProducts {
+            
+            let product = filteredProducts.first { $0.id == expectedProduct.id }
+            
+            XCTAssertNotNil(product)
+            XCTAssertEqual(product!.title, expectedProduct.title)
+            XCTAssertEqual(product!.price, expectedProduct.price)
+        }
+        
+    }
+
+```
+
+> Unit testing view's logic in isolation as shown above can be beneficial for complicated user interfaces. Keep in mind that just because your unit test passes, does not mean that your user interface is working as expected. 
+
+And the final kind of test you can write is an end-to-end test. E2E tests are great because they test the app from user's point of view and they are best against regression. The downside is that E2E tests are slower then running unit tests. The main reason they are slower is because they are testing the complete application instead of small units. Most of the issues in software exists because the application was tested at unit level and not at system level. I encourage you to spend some time writing meaningful E2E tests. 
+
+Here is an implementation of an E2E test for the above scenario. 
+
+``` swift 
+  func test_user_can_filter_products_based_on_price() {
+        
+        let app = XCUIApplication()
+        app.launchEnvironment = ["ENV": "TEST"]
+        app.launch()
+        
+        app.textFields["minTextField"].tap()
+        app.textFields["minTextField"].typeText("100")
+        
+        app.textFields["maxTextField"].tap()
+        app.textFields["maxTextField"].typeText("500")
+        
+        app.buttons["applyButton"].tap()
+        
+        // assert that the count is correct
+        XCTAssertEqual(3, app.collectionViews["productList"].cells.count)
+        // assert that the items are correct
+        XCTAssertEqual("Product 2", app.collectionViews["productList"].staticTexts["Product 2"].label)
+        XCTAssertEqual("Product 3", app.collectionViews["productList"].staticTexts["Product 3"].label)
+        XCTAssertEqual("Product 4", app.collectionViews["productList"].staticTexts["Product 4"].label)
+    }
+```
+
+In the end you will have to decide where in [testing pyramid](https://martinfowler.com/articles/practical-test-pyramid.html) you want to invest your time to get the best return on your investment.  
+
+> If you want to learn more about testing then you can check out my course [Test Driven Development in iOS Using Swift](https://www.udemy.com/course/test-driven-development-in-ios-using-swift/?referralCode=07649C41E6E184CE86B3). 
 
 ## Screens vs Views 
 
