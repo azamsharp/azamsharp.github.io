@@ -310,12 +310,15 @@ There are scenarios when your aggregate model will need to access information fr
 The concept of domain boundaries can also be applied to user interfaces. This allows us to reuse user interface elements in other applications. 
 
 ![Factor out common pieces](/images/user-interface.png)
+* Permission has been granted from the original author of the image to use it in this article.
+
 
 > You can factor out common interface elements using Swift Package Manager and import those packages into other applications. 
 
 Let's go ahead and zoom out and see how our architecture looks like with all the pieces in place. 
 
 ![Architecture](/images/architecture-model-updated.jpeg)
+* This image has been updated and the permission has been granted from the original author of the image to use it in this article. 
 
 As discussed earlier, each bounded context is represented by its own module. These modules can be represented by a folder or a package dependency.
 
