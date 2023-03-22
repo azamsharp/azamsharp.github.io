@@ -521,7 +521,7 @@ When I was working with Flutter, I observed a common pattern for organizing the 
 For example when displaying details of a movie, instead of calling that view MovieDetailView, you can call it MovieDetailScreen. This will make it clear that the detail view is an actual screen and not some reusable child view. Here are few more examples. 
 
 **Screens** 
-- MovieDetailView 
+- MovieDetailScreen
 - HomeScreen 
 - LoginScreen
 - RegisterScreen 
