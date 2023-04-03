@@ -8,6 +8,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [The What-If Architecture](_posts/2023-04-03-the-what-if-architecture.md)
+Lately, I have been thinking about the "What-If Architecture". Most people commonly refer to it as YAGNI (You Aren't Gonna Need It). I was reading some discussion thread, where a developer was creating a Core Data app using SwiftUI and wanted to display information from the database on the screen.
+
 ### [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](_posts/2023-02-28-building-large-scale-apps-swiftui.md)
 Software architecture is always a topic for hot debate, specially when there are so many different choices. For the last 8-12 months, I have been experimenting with MV pattern to build client/server apps and wrote about it in my original article [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). In this article, I will discuss how MV pattern can be applied to build large scale client/server applications. 
 
