@@ -38,8 +38,6 @@ If you want to support my work then please consider buying one of my courses bel
 
 [Flutter & Firebase - Build Real World iOS and Android Apps](https://www.udemy.com/course/flutter-firebase-build-real-world-ios-and-android-apps/?referralCode=007B47CAB3795A71C57A)
 
-[Core Data in iOS](https://www.udemy.com/course/core-data-in-ios/?referralCode=F87F4552453DA9E776FE)
-
 [Composable SwiftUI Architecture Using Redux](https://www.udemy.com/course/composable-swiftui-architecture-using-redux/?referralCode=03CE8A82FDCB3DEF611E)
 
 [The Complete Hands-On SwiftUI Apps Using Firebase](https://www.udemy.com/course/the-complete-hands-on-swiftui-apps-using-firebase/?referralCode=688190DEB57CD2E86A8F)
