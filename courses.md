@@ -12,6 +12,14 @@ If you want to support my work then please consider buying one of my courses bel
 
 [Patreon](https://www.patreon.com/azamsharp)
 
+[UIKit and SwiftUI Integration Essentials: 1 Hour Course](https://www.udemy.com/course/uikit-and-swiftui-integration-essentials-1-hour-course/?referralCode=F492EB12325EA9F49497)
+
+[SwiftUI Navigation API: A 1-Hour Crash Course](https://www.udemy.com/course/swiftui-navigation-api-a-1-hour-crash-course/?referralCode=F815BD9E5E261FD62C4B)
+
+[Build ChatGPT App for iOS/macOS with SwiftUI in 1 Hour](https://www.udemy.com/course/build-intelligent-apps-for-macos-and-ios-with-chatgpt/?referralCode=1478E3ED219F0253FE59)
+
+[Build Real-Time Chat App with SwiftUI & Firebase](https://www.udemy.com/course/build-real-time-chat-app-with-swiftui-firebase/?referralCode=7CD292905C390D4C7E25)
+
 [Building a Reminders App Clone with SwiftUI & Core Data](https://www.udemy.com/course/building-a-reminders-app-clone-with-swiftui-core-data/?referralCode=A18E57F77802025AE96B)
 
 [iOS Development Using UIKit and Swift - Project Based Learning](https://www.udemy.com/course/ios-development-using-uikit-swift-project-based-learning/?referralCode=499D9D5E0217993EFA16)
