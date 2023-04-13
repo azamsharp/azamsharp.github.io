@@ -11,3 +11,6 @@
 9. [Fruta App](https://developer.apple.com/documentation/swiftui/fruta_building_a_feature-rich_app_with_swiftui)
 10. [Data Essentials in SwiftUI](https://developer.apple.com/videos/play/wwdc2020/10040/)
 11. [Use Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/)
+12. [ReactJS Documentary](https://youtu.be/8pDqJVdNa44)
+13. [What-If Architecture](https://azamsharp.com/2023/04/03/the-what-if-architecture.html)
+14. [MV Design Pattern in iOS - Build SwiftUI Apps Apple's Way](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/?referralCode=4627986F77F533DEF0C7)
