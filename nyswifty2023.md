@@ -14,3 +14,4 @@
 12. [ReactJS Documentary](https://youtu.be/8pDqJVdNa44)
 13. [What-If Architecture](https://azamsharp.com/2023/04/03/the-what-if-architecture.html)
 14. [MV Design Pattern in iOS - Build SwiftUI Apps Apple's Way](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/?referralCode=4627986F77F533DEF0C7)
+15. [Learn SwiftUI’s View struct: value semantics, diffing and dependency tracking](https://www.malcolmhall.com/2023/03/23/learn-swiftuis-view-struct-value-semantics-diffing-and-dependency-tracking/)
