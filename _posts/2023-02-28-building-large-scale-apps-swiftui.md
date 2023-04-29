@@ -150,7 +150,9 @@ struct ContentView: View {
 
 Apart from fetching and persistence, StoreModel can also provide sorting, filtering, searching and other operations directly to the view. 
 
-> If I was using the traditional MVVM pattern then I would create several view models to accommodate each screen. This can include ```ProductListViewModel```, ```ProductViewModel```, ```AddProductViewModel```, ```ProductDetailViewModel``` and many more. Most of the time, these view models end up with one or two functions and maintaining a single source of truth can become very hard. In MV pattern, the view itself is the view model so we don't need to create unnecessary view models for most of the time. The view, which is also a view model is simply going to ask model (Aggregate Model) for the data.  
+> If I was using the traditional MVVM pattern then I would create several view models to accommodate each screen. This can include ```ProductListViewModel```, ```ProductViewModel```, ```AddProductViewModel```, ```ProductDetailViewModel``` and many more. Most of the time, these view models end up with one or two functions and maintaining a single source of truth can become very hard. In MV pattern, the view itself is the view model so we don't need to create unnecessary view models for most of the time. The view, which is also a view model is simply going to ask model (Aggregate Model) for the data. 
+
+**The source of truth in a client/server application is the server.**. This means you should not be adding view models conforming to ObservableObject (new source of truth) protocol just because you added a new view. The source of truth for that view has not changed, it is still the server. 
 
 A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover multiple aggregate models and how they benefit when working in large teams.  
 
