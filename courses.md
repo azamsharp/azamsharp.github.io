@@ -12,6 +12,8 @@ If you want to support my work then please consider buying one of my courses bel
 
 [Patreon](https://www.patreon.com/azamsharp)
 
+[Mastering Full Stack iOS Development Using SwiftUI and Vapor](https://www.udemy.com/course/full-stack-ios-development-using-swiftui-and-vapor/?referralCode=5573DBDE821F2E6A80E8)
+
 [UIKit and SwiftUI Integration Essentials: 1 Hour Course](https://www.udemy.com/course/uikit-and-swiftui-integration-essentials-1-hour-course/?referralCode=F492EB12325EA9F49497)
 
 [SwiftUI Navigation API: A 1-Hour Crash Course](https://www.udemy.com/course/swiftui-navigation-api-a-1-hour-crash-course/?referralCode=F815BD9E5E261FD62C4B)
