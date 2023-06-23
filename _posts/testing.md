@@ -1,41 +1,122 @@
-# The What-If Architecture 
+# Architecturing SwiftData Applications 
 
-Lately, I have been thinking about the "What-If Architecture". Most people commonly refer to it as YAGNI (You Aren't Gonna Need It). I was reading some discussion thread, where a developer was creating a Core Data app using SwiftUI and wanted to display information from the database on the screen.
 
-Developer's implementation was similar to the code below: 
+SwiftData was introduced at WWDC 2023 as a replacement for Core Data framework. SwiftData serves as a wrapper on top of Core Data and allows on-device persistence as well as syncing to the cloud. 
+
+The main advantage of SwiftData is its seamless integration with SwiftUI framework. This post is divided into multiple sections. The first part of this post discusses the basics of SwiftData framework and then later on we dive into the architectural topics as well as current limitations of SwiftData framework.  
+
+> SwiftData is part of iOS 17 and at the time of this writing Xcode 15 is still in beta stage. This means content discussed in this article is subject to change. I will try my best to keep the article updated. 
+
+### Getting Started with SwiftData
+
+SwiftData allows you to declare the schema in code. This is different from Core Data, where you had to define a separate mapping file to create your schema. SwiftData uses the ```@Model``` macro, which dictates that this model is the source of truth and allows persistence. 
+
+> Maybe in the future Apple can introduce a tool, which can allow developers to view the relationships between different SwiftData models in a more visual way. 
 
 ``` swift 
-struct HistoryView: View {
+import SwiftData
+
+@Model
+final class Budget {
     
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "dateCreated", ascending: true)]) private var historyItemResults: FetchedResults<HistoryItem>    
-    var body: some View {
+    var name: String
+    var limit: Double
         
-            List(historyItemResults) { historyItem in
-                Text(historyItem.question ?? "")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
-                   
-            }.frame(maxWidth: .infinity)            
+    init(name: String, limit: Double) {
+        self.name = name
+        self.limit = limit
     }
 }
 ```
 
-The code works and does it job but other developers quickly pointed out that this is not a good approach since now the view ```HistoryView``` is tied up with ```@FetchRequest``` and will only work with Core Data. What if in the future, we want to use Realm or What if we want to use a document database like MongoDB instead of relational database. 
+In the above code we have created a Budget class and decorated with ```@Model``` macro. This means Budget is now a source of truth and it can be persisted to the database. By default SwiftData uses SQLite database but it can be configured to persist data in XML, binary and even in-memory databases. 
 
-The points raised by other developers are valid, or are they? Should we design our app, which fulfills current business requirements (Core Data + SwiftUI), or should we create abstractions to support future changes, which may or may not ever happen? The part "may not ever happen" is really important here. You really have to think about the cost of what if it does happen vs what if it never happens. Unfortunately, this is not easy to calculate since it depends on many factors, including the cost of change, the cost of carry, and the cost of build, etc. Martin Fowler wrote about it [here](https://martinfowler.com/bliki/Yagni.html), which I highly recommend reading.
+> SwiftData automatically handles the identification aspect of a model, eliminating the need for explicitly defining an `id` property or conforming to the `Identifiable` protocol.
 
-> In my own personal experience, when we build software on assumptions rather than business requirements, most of the times our assumptions turned out to be false. 
+Keep in mind that the ```@Model``` macro can only be applied to classes. If you apply it to a type ```struct``` then you will be greeted with errors. 
 
-If we spend time creating those abstractions then we are spending  valuable time away from current business requirements. And in most cases when those future requirements become reality then we find out that they were very different from our initial vision. We also tend to restrict ourselves from not using helper functions/wrappers which can make our development easier and provide results faster. This includes ```@FetchRequest```, ```@SectionedFetchRequest``` in Core Data and ```@ObservedResults``` in Realm. 
+To persist Budget to the database you will need to configure the model container. This is done in the App file as shown below: 
 
-I came to realize this during my own experience and also read the same experience from other developers. My advice is to focus on current business needs and stop forcing abstractions, unless they are true abstractions. 
+``` swift 
+@main
+struct SpendSmartARPApp: App {
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                BudgetListScreen()
+            }
+        }
+        .modelContainer(for: Budget.self)
+    }
+}
+```
 
-> Genuine abstractions are discovered, not invented” (from Unit Testing Principles, Practices, and Patterns by 
-[@vkhorikov](https://twitter.com/vkhorikov))
+Now you can persist the budget to the database by using the modelContext through the Environment as shown below: 
+
+``` swift 
+struct BudgetListScreen: View {
+    
+    @Environment(\.modelContext) private var context
+
+    @State private var name: String = ""
+    @State private var limit: Double?
+    
+    func saveBudget() {
+        // saveBudget is fired only after the data has been successfully validated
+        let budget = Budget(name: name, limit: limit!)
+        context.insert(budget)
+    }
+```
+
+One thing to notice is that we are not explicitly calling the save function on context. The insert function will add the model to the context and then internally call the save function. SwiftData autosaves the model context. The autosave events are triggered based on the UI related events. 
+
+Not all apps require autosave feature. If you are not interested in autosave then you can turn it off at the model container level as shown below: 
+
+``` swift 
+ var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                BudgetListScreen()
+            }
+        }
+        .modelContainer(for: Budget.self, isAutosaveEnabled: false)
+        
+    }
+```
+
+### Querying Data 
+
+Once the data has been persisted, the next step is to display it on the screen. SwiftData uses the ```@Query``` property wrapper for fetching data from the database. In the code below we fetch all the budgets and then display it in the list. 
+
+``` swift 
+struct BudgetListScreen: View {
+    
+    @Environment(\.modelContext) private var context
+    @Query private var budgets: [Budget]
+    
+    var body: some View {
+        Form {
+            
+            Section("Budgets") {
+                List(budgets) { budget in
+                        HStack {
+                            Text(budget.name)
+                            Spacer()
+                            Text(budget.limit, format: .currency(code: "USD"))
+                        }
+                }
+            }
+        }
+    }
+}
+```
+
+> It is important to point out that you don't  have to pass all the models used in your app to the model container. Depending on the relationships between the models you only need to pass the parent model.   
 
 
 
-
+### Resources
 
 
 
