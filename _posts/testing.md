@@ -8,6 +8,16 @@ The main advantage of SwiftData is its seamless integration with SwiftUI framewo
 
 ### Enable Core Data Debugging
 
+As I mentioned earlier SwiftData uses Core Data behind the scenes. This means all the debugging techniques for Core Data should also work for SwiftData applications. One of the most common and easy to use debugging technique is through the use of flags in launch arguments. There are several different launch arguments available, but for starting out you can use the following: 
+
+``` swift
+-com.apple.CoreData.SQLDebug 1
+```
+
+This flag will output the path of the database as well as the SQL queries executed against the database. This can prove to be extremely valuable, when you want to make sure you are not performing excessive actions against the database and it allows you to refactor your code and make it better. 
+
+If you want to learn more then check out this detailed [article](https://useyourloaf.com/blog/debugging-core-data/). 
+
 ### Getting Started with SwiftData
 
 SwiftData allows you to declare the schema in code. This is different from Core Data, where you had to define a separate mapping file to create your schema. SwiftData uses the ```@Model``` macro, which dictates that this model is the source of truth and allows persistence. 
@@ -95,7 +105,7 @@ There are two relationships we have to define.
 1. A single budget can have many transactions. 
 2. Each transaction can belong to a budget.  
 
-We have modified the Budget class to support a list of transactions. This means one budget can have many transactions. The relationship is created using the ```@Relationship``` macro. The cascade option indicates that when the budget is deleted then all the transactions of that budget will also be deleted. 
+We have modified the Budget class to support a list of transactions. This means one budget can have many transactions. The relationship is created using the ```@Relationship``` macro. The cascade option indicates that when the budget is deleted then all the transactions associated with that budget will also be deleted. 
 
 ``` swift 
 @Model
@@ -113,6 +123,30 @@ final class Budget {
     }
 ```
 
+The other side of the relationship is from the transaction point of view. a transaction belongs to a budget. This relationship is shown below: 
+
+``` swift 
+@Model
+final class Transaction {
+    var note: String
+    var amount: Double
+    var date: Date
+    var hasReceipt: Bool = false
+    
+    @Relationship(inverse: \Budget.transactions)
+    var budget: Budget?
+    
+    init(note: String, amount: Double, date: Date, hasReceipt: Bool = false) {
+        self.note = note
+        self.amount = amount
+        self.date = date
+        self.hasReceipt = hasReceipt
+    }
+    
+}
+```
+
+> I have experienced that even if you remove the @Relationship macro from Transaction class, it will be implicitly discovered by SwiftData. Make sure to set the budget optional or else it will give you runtime error. 
 
 ### Querying Data 
 
