@@ -148,6 +148,8 @@ final class Transaction {
 
 > I have experienced that even if you remove the @Relationship macro from Transaction class, it will be implicitly discovered by SwiftData. Make sure to set the budget optional or else it will give you runtime error. 
 
+// write about when saving the budget first before adding transaction. 
+
 ### Querying Data 
 
 Once the data has been persisted, the next step is to display it on the screen. SwiftData uses the ```@Query``` property wrapper for fetching data from the database. In the code below we fetch all the budgets and then display it in the list. 
