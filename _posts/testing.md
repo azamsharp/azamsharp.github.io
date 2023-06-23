@@ -1,11 +1,12 @@
-# Architecturing SwiftData Applications 
-
+# The Ultimate Guide to Building SwiftData Applications  
 
 SwiftData was introduced at WWDC 2023 as a replacement for Core Data framework. SwiftData serves as a wrapper on top of Core Data and allows on-device persistence as well as syncing to the cloud. 
 
 The main advantage of SwiftData is its seamless integration with SwiftUI framework. This post is divided into multiple sections. The first part of this post discusses the basics of SwiftData framework and then later on we dive into the architectural topics as well as current limitations of SwiftData framework.  
 
 > SwiftData is part of iOS 17 and at the time of this writing Xcode 15 is still in beta stage. This means content discussed in this article is subject to change. I will try my best to keep the article updated. 
+
+### Enable Core Data Debugging
 
 ### Getting Started with SwiftData
 
@@ -85,6 +86,34 @@ Not all apps require autosave feature. If you are not interested in autosave the
     }
 ```
 
+### Relationships 
+
+There is a saying in object oriented programming, "No object is an island". Relations is an integral part of a relational database. From database perspective, these relationships are handled by joining multiple tables together. Luckily, with SwiftData we don't have to worry about joins etc. We define our model relationships in Swift using macros provided by SwiftData. 
+
+There are two relationships we have to define. 
+
+1. A single budget can have many transactions. 
+2. Each transaction can belong to a budget.  
+
+We have modified the Budget class to support a list of transactions. This means one budget can have many transactions. The relationship is created using the ```@Relationship``` macro. The cascade option indicates that when the budget is deleted then all the transactions of that budget will also be deleted. 
+
+``` swift 
+@Model
+final class Budget {
+    
+    var name: String
+    var limit: Double
+    
+    @Relationship(.cascade)
+    var transactions: [Transaction] = []
+    
+    init(name: String, limit: Double) {
+        self.name = name
+        self.limit = limit
+    }
+```
+
+
 ### Querying Data 
 
 Once the data has been persisted, the next step is to display it on the screen. SwiftData uses the ```@Query``` property wrapper for fetching data from the database. In the code below we fetch all the budgets and then display it in the list. 
@@ -111,6 +140,29 @@ struct BudgetListScreen: View {
     }
 }
 ```
+
+The ```@Query``` property wrapper also supports other arguments like filter, sort, order and animation. Here is the ```@Query``` implementation which supports sort and order. 
+
+``` swift 
+ @Query(sort: \.name, order: .forward) private var budgets: [Budget]
+```
+
+The budgets array will be sorted based on name property of the Budget type and organized in ascending order (.forward) parameter. 
+
+You can also provide the filter option using predicates. Predicates are implemented using the freestanding macros in Swift. Here is a simple ```Query``` using the a predicate to only return the budgets having limits over $100. 
+
+``` swift 
+ @Query(filter: #Predicate { $0.limit > 100 }) private var budgets: [Budget]
+```
+
+Depending on your criteria, you can add multiple conditions in the predicate. One example is shown below: 
+
+``` swift 
+    @Query(filter: #Predicate { $0.limit > 100 && $0.name.contains("Vac") }) private var budgets: [Budget]
+```
+
+Predicate parameters are not always static/fixed. You can also make dynamic predicates. This means predicate will be based on a parameter passed to it.  
+
 
 > It is important to point out that you don't  have to pass all the models used in your app to the model container. Depending on the relationships between the models you only need to pass the parent model.   
 
