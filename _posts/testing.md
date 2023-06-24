@@ -146,11 +146,53 @@ final class Transaction {
 }
 ```
 
-> I have experienced that even if you remove the @Relationship macro from Transaction class, it will be implicitly discovered by SwiftData. Also make sure to set  property in transaction budget optional or else it will give you runtime error. 
+> I have experienced that even if you remove the @Relationship macro from Transaction class, it will be implicitly discovered by SwiftData. Also make sure to set  budget property as optional or else it will give you runtime error. 
 
-Another thing to keep in mind is that the relationships created in SwiftData only exists in the object graph and are not the same as relationships between database tables. This means if you open the database using applications like Base or BeeKeeper, you will find the relationships section is completely empty.  
+Another thing to keep in mind is that the relationships created in SwiftData only exists in the object graph and are not the same as relationships between database tables. This means if you open the database using applications like Base or BeeKeeper, you will find the relationships section is completely empty. **SwiftData is a framework, which can persist an object graph but it is NOT an ORM**.   
 
-> It is important to point out that you don't  have to pass all the models used in your app to the model container. Depending on the relationships between the models you only need to pass the parent model. 
+It is important to note that you don't have to pass all the models used in your app to the model container. Depending on the relationships between the models you only need to pass the parent model. 
+
+In the example below, we are only passing Budget.self to the modelContainer modifier. This is because Budget contains references to Transaction class and modelContainer can infer those relationships based on the budget class. 
+
+``` swift 
+@main
+struct SpendSmartARPApp: App {
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                BudgetListScreen()
+            }
+        }
+        // passing Transaction.self is not needed in the modelContainer below
+        .modelContainer(for: Budget.self)
+        
+    }
+}
+```
+
+There are several different ways of adding a transaction to a budget. It all depends on your user interface needs. Below you can find the implementation where we create a brand new transaction and then assign its budget property to the budget that was passed to the view.  
+
+``` swift 
+struct BudgetDetailScreen: View {
+    
+    @Environment(\.modelContext) private var context
+    
+    let budget: Budget
+    
+    private func saveTransaction() {
+        // this function is fired after the validation of the form is successful 
+        let transaction = Transaction(note: note, amount: amount!, date: date, hasReceipt: hasReceipt)
+        transaction.budget = budget 
+    }
+
+    var body: some View {
+ TransactionListView(transactions: budget.transactions)
+    }
+```
+
+You don't need to call save or even insert since the model budget is already part of the context. **This will automatically update both sides of the relationship. It means transaction.budget will have a budget and a new transaction will be added to budget.transactions automatically.** 
+
 
 ### Querying Data 
 
@@ -199,7 +241,9 @@ Depending on your criteria, you can add multiple conditions in the predicate. On
     @Query(filter: #Predicate { $0.limit > 100 && $0.name.contains("Vac") }) private var budgets: [Budget]
 ```
 
-Predicate parameters are not always static/fixed. You can also make dynamic predicates. This means predicate will be based on a parameter passed to it.  
+Predicate parameters are not always static/fixed. You can also make dynamic predicates. This means predicate will be based on a parameter passed to it. 
+
+The following code snippet demonstrates the initialization of the view with the note parameter. This parameter plays a crucial role in initializing the ```Query``` object, enabling the creation of dynamic queries.   
 
 ``` swift 
   @Query private var transactions: [Transaction]
@@ -208,9 +252,36 @@ Predicate parameters are not always static/fixed. You can also make dynamic pred
         _transactions = Query(filter: #Predicate { $0.note.contains(note) }) 
     }
 ```
-  
 
+Unfortunately, the dynamic queries does not work in all scenarios. Maybe it is just the current limitation of SwiftData framework, which will be fixed in the future release. Here is an example, which will cause compile time errors. 
 
+In the code below, we are trying to get all the transactions based on the budget's name. Unfortunately, this will result in an error.  
+
+``` swift 
+struct BudgetDetailScreen: View {
+    
+    @Environment(\.modelContext) private var context
+    
+    let budget: Budget
+    
+    @Query private var transactions: [Transaction]
+    
+    init(budget: Budget) {
+        self.budget = budget
+        // Missing argument label 'lhs:' in call
+        // Initializer 'init(_:)' requires that 'Budget' conform to 'Decodable'
+        // Initializer 'init(_:)' requires that 'Budget' conform to 'Encodable'
+        _transactions = Query(filter: #Predicate { $0.budget!.name.contains(budget.name) })
+    }
+```
+
+### Xcode Previews 
+
+### Migrations 
+
+### SwiftData with UIKit 
+
+### Syncing with iCloud 
 
 ### Resources
 
