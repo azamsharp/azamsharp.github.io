@@ -146,9 +146,11 @@ final class Transaction {
 }
 ```
 
-> I have experienced that even if you remove the @Relationship macro from Transaction class, it will be implicitly discovered by SwiftData. Make sure to set the budget optional or else it will give you runtime error. 
+> I have experienced that even if you remove the @Relationship macro from Transaction class, it will be implicitly discovered by SwiftData. Also make sure to set  property in transaction budget optional or else it will give you runtime error. 
 
-// write about when saving the budget first before adding transaction. 
+Another thing to keep in mind is that the relationships created in SwiftData only exists in the object graph and are not the same as relationships between database tables. This means if you open the database using applications like Base or BeeKeeper, you will find the relationships section is completely empty.  
+
+> It is important to point out that you don't  have to pass all the models used in your app to the model container. Depending on the relationships between the models you only need to pass the parent model. 
 
 ### Querying Data 
 
@@ -199,8 +201,14 @@ Depending on your criteria, you can add multiple conditions in the predicate. On
 
 Predicate parameters are not always static/fixed. You can also make dynamic predicates. This means predicate will be based on a parameter passed to it.  
 
-
-> It is important to point out that you don't  have to pass all the models used in your app to the model container. Depending on the relationships between the models you only need to pass the parent model.   
+``` swift 
+  @Query private var transactions: [Transaction]
+    
+    init(note: String) {
+        _transactions = Query(filter: #Predicate { $0.note.contains(note) }) 
+    }
+```
+  
 
 
 
