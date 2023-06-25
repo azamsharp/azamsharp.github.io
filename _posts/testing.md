@@ -195,7 +195,7 @@ You don't need to call save or even insert since the model budget is already par
 
 Unfortunately, this does not re-render ```TransactionListView```. Even though the transactions in budget instance are updated, it still does not trigger an update on the view. I am not sure about the reason but I believe it may be because the update was caused internally and not through the mechanism that invoke the observation. 
 
-The correct way of adding transaction to an existing budget which also re-renders the view is by adding is through the budget.transactions property as shown below: 
+The correct way of adding a transaction to an existing budget which also re-renders the view is by adding it through the ```budget.transactions``` property as shown below: 
 
 ``` swift 
   private func saveTransaction() {
@@ -203,6 +203,26 @@ The correct way of adding transaction to an existing budget which also re-render
         // This will also re-render the TransactionListView 
         budget.transactions.append(transaction)
     }
+
+      var body: some View {
+ TransactionListView(transactions: budget.transactions)
+    }
+```
+
+You can also add designated methods on budget class to perform add transaction or remove transaction operations. This allows you to run business logic prior to adding or removing transactions to a budget.    
+
+``` swift 
+ func addTransaction(_ transaction: Transaction) {
+        // add business domain rules here
+        self.transactions.append(transaction)
+    }
+```
+
+If you plan to use the above approach, you can also make your transactions property ```private(set)``` so that it cannot be altered from outside the budget class. 
+
+``` swift 
+ @Relationship(.cascade)
+    private(set) var transactions: [Transaction] = []
 ```
 
 ### Querying Data 
