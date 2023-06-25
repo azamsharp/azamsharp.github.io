@@ -193,6 +193,17 @@ struct BudgetDetailScreen: View {
 
 You don't need to call save or even insert since the model budget is already part of the context. **This will automatically update both sides of the relationship. It means transaction.budget will have a budget and a new transaction will be added to budget.transactions automatically.** 
 
+Unfortunately, this does not re-render ```TransactionListView```. Even though the transactions in budget instance are updated, it still does not trigger an update on the view. I am not sure about the reason but I believe it may be because the update was caused internally and not through the mechanism that invoke the observation. 
+
+The correct way of adding transaction to budget which also re-renders the view is by adding is through the budget.transactions property as shown below: 
+
+``` swift 
+  private func saveTransaction() {
+        let transaction = Transaction(note: note, amount: amount!, date: date, hasReceipt: hasReceipt)
+        // This will also re-render the TransactionListView 
+        budget.transactions.append(transaction)
+    }
+```
 
 ### Querying Data 
 
