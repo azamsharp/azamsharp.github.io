@@ -195,7 +195,7 @@ You don't need to call save or even insert since the model budget is already par
 
 Unfortunately, this does not re-render ```TransactionListView```. Even though the transactions in budget instance are updated, it still does not trigger an update on the view. I am not sure about the reason but I believe it may be because the update was caused internally and not through the mechanism that invoke the observation. 
 
-The correct way of adding transaction to budget which also re-renders the view is by adding is through the budget.transactions property as shown below: 
+The correct way of adding transaction to an existing budget which also re-renders the view is by adding is through the budget.transactions property as shown below: 
 
 ``` swift 
   private func saveTransaction() {
