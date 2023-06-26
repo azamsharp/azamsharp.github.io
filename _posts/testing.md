@@ -225,6 +225,43 @@ If you plan to use the above approach, you can also make your transactions prope
     private(set) var transactions: [Transaction] = []
 ```
 
+SwiftData relations are not limited to one-to-one or one-to-many but you can also construct many-to-many relationships, also known as siblings relationship. In the code below, we have defined two models ```Recipe``` and ```Ingredient```. The relationship between Recipe and Ingredient is many to many.
+
+- One recipe can have many ingredients 
+- One ingredient can belong to many recipes 
+
+``` swift 
+@Model
+final class Recipe {
+    let name: String
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    @Relationship(.nullify)
+    var ingredients: [Ingredient] = []
+}
+
+@Model
+final class Ingredient {
+    
+    let name: String
+    
+    @Relationship(inverse: \Recipe.ingredients)
+    var recipes: [Recipe] = []
+    
+    init(name: String) {
+        self.name = name
+    }
+}
+```
+
+// need to check the delete operation 
+// what happens when you delete a recipe which many ingredients are using
+
+We have used .nullify as the delete rule for both sides of the relationship. This means if you delete a recipe then ingredients who were pointing to the deleted recipe will simply be pointing to nil. Similarly, if you delete an ingredient, it will place nil values for those ingredients used by recipes.
+
 ### Querying Data 
 
 Once the data has been persisted, the next step is to display it on the screen. SwiftData uses the ```@Query``` property wrapper for fetching data from the database. In the code below we fetch all the budgets and then display it in the list. 
