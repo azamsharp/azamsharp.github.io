@@ -239,7 +239,7 @@ final class Recipe {
         self.name = name
     }
     
-    @Relationship(.nullify)
+    @Relationship
     var ingredients: [Ingredient] = []
 }
 
@@ -257,10 +257,12 @@ final class Ingredient {
 }
 ```
 
+
+
 // need to check the delete operation 
 // what happens when you delete a recipe which many ingredients are using
 
-We have used .nullify as the delete rule for both sides of the relationship. This means if you delete a recipe then ingredients who were pointing to the deleted recipe will simply be pointing to nil. Similarly, if you delete an ingredient, it will place nil values for those ingredients used by recipes.
+
 
 ### Querying Data 
 
