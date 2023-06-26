@@ -257,6 +257,27 @@ final class Ingredient {
 }
 ```
 
+When adding a new recipe with ingredients you must make sure that recipe is already persisted. Take a look at the following code, which will result in an error: 
+
+``` swift 
+   Button("Save") {
+                
+                let recipe = Recipe(name: recipeName)
+                let ingredients = ingredientNames.components(separatedBy: ",")
+                    .map { $0.trimmingCharacters(in: .whitespaces) }
+                
+                ingredients.forEach { name in
+                    let ingredient = Ingredient(name: name)
+                    recipe.ingredients.append(ingredient)
+                }
+                
+                context.insert(recipe)
+                
+            }
+```
+
+
+We have not provided the ```.cascade``` option for the relationships, because we don't want to delete all the ingredients when a recipe is deleted and vice versa. If you delete an ingredient from ```recipe.ingredients``` array then it will be simply be removed from the array. Same goes for removing a recipe from ```ingredients.recipes``` array.  
 
 
 // need to check the delete operation 
