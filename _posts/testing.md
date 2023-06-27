@@ -348,13 +348,13 @@ The budgets array will be sorted based on name property of the Budget type and o
 You can also provide the filter option using predicates. Predicates are implemented using the freestanding macros in Swift. Here is a simple ```Query``` using the a predicate to only return the budgets having limits over $100. 
 
 ``` swift 
- @Query(filter: #Predicate { $0.limit > 100 }) private var budgets: [Budget]
+@Query(filter: #Predicate { $0.limit > 100 }) private var budgets: [Budget]
 ```
 
 Depending on your criteria, you can add multiple conditions in the predicate. One example is shown below: 
 
 ``` swift 
-    @Query(filter: #Predicate { $0.limit > 100 && $0.name.contains("Vac") }) private var budgets: [Budget]
+@Query(filter: #Predicate { $0.limit > 100 && $0.name.contains("Vac") }) private var budgets: [Budget]
 ```
 
 Predicate parameters are not always static/fixed. You can also make dynamic predicates. This means predicate will be based on a parameter passed to it. 
@@ -362,11 +362,11 @@ Predicate parameters are not always static/fixed. You can also make dynamic pred
 The following code snippet demonstrates the initialization of the view with the note parameter. This parameter plays a crucial role in initializing the ```Query``` object, enabling the creation of dynamic queries.   
 
 ``` swift 
-  @Query private var transactions: [Transaction]
+@Query private var transactions: [Transaction]
     
     init(note: String) {
         _transactions = Query(filter: #Predicate { $0.note.contains(note) }) 
-    }
+}
 ```
 
 Unfortunately, the dynamic queries does not work in all scenarios. Maybe it is just the current limitation of SwiftData framework, which will be fixed in the future release. Here is an example, which will cause compile time errors. 
@@ -391,7 +391,77 @@ struct BudgetDetailScreen: View {
     }
 ```
 
+> This might be related to a bug in SwiftData. Keep in mind that at the time of this writing SwiftData is still not released. 
+
+As you learned earlier on that queries are implemented using the ```@Query``` property wrapper. The ```@Query``` property wrapper is only available inside the view. But that does not mean that queries cannot be constructed outside the view. In the implementation below, we have created a ```FetchDescriptor``` inside the Budget class itself, which is later injected into the ```@Query```. 
+
+``` swift 
+@Model
+final class Budget {
+    
+    var name: String
+    var limit: Double
+    
+    // other code ....
+    
+    static var all: FetchDescriptor<Budget> {
+        FetchDescriptor(sortBy: [SortDescriptor(\Budget.name, order: .reverse)])
+    }
+    
+}
+```
+
+Now inside the view you can use the ```all``` function of the Budget class. 
+
+``` swift 
+struct BudgetListScreen: View {   
+    @Query(Budget.all) private var allBudgets: [Budget]
+}
+```
+
+This allows you to move the creation of the query in the model itself instead of the view, allowing you to use the same query in other parts of the application. My recommendation is to start out having the query in the view. If your query is getting complicated and needs to be reused in other views then think about moving it to the model class. 
+
 ### Xcode Previews 
+
+Xcode previews play a vital role in the development of SwiftUI applications, offering a significant advantage in rapidly iterating over designs and visually validating logic.
+
+> Keep in mind that Xcode previews is not a replacement for your domain level unit tests. 
+
+One way to use previews in SwiftData is by implementing a custom ```ModelContainer```. This technique was shown in WWDC video titled [Build an app with SwiftData](https://developer.apple.com/videos/play/wwdc2023/10154/?time=530). The main idea is to create a model container only for the purpose of rendering Xcode previews. The model container can be in-memory containing fake data. The implementation is shown below: 
+
+``` swift 
+import Foundation
+import SwiftData
+
+@MainActor
+let previewContainer: ModelContainer = {
+    
+    do {
+        let container = try ModelContainer(for: Budget.self, ModelConfiguration(inMemory: true))
+        SampleData.budgets.enumerated().forEach { index, budget in
+            container.mainContext.insert(budget)
+            let transaction = Transaction(note: "Note \(index + 1)", amount: (Double(index) * 10), date: Date())
+            budget.addTransaction(transaction)
+        }
+        
+        return container
+        
+    } catch {
+        fatalError("Failed to create container.")
+    }
+}()
+
+struct SampleData {
+    static let budgets: [Budget] = {
+        return (1...5).map { Budget(name: "Budget \($0)", limit: 100 * Double($0)) }
+    }()
+}
+```
+
+In the above code, I have not only created fake budget objects but also added some transactions to each budget. You can even get more creative and populate fake data through a JSON file.
+
+> It is not mandatory that your model container for previews is always in-memory. You can use an actual persistent model container too. This way your data will be available between preview refreshes. 
+
 
 ### Migrations 
 
@@ -409,7 +479,9 @@ This can mean different things to different people but for me it simply means th
 
 Since 2019, I have used many different architectural patterns when building SwiftUI applications. This included MVVM, Container pattern, Redux, MV pattern and Active Record Pattern. Apple has a sample SwiftData application called [Backyard Birds: Building an app with SwiftData and widgets](https://developer.apple.com/documentation/swiftui/backyard-birds-sample), which uses a variation of Active Record Pattern. 
 
-I say variation because Apple puts all the logic in the in the models but still uses the model context for persistence operations like save and delete. This technique also allows you to work with Xcode Previews for SwiftData applications since you can easily inject a model container for the previews. This was shown in earlier sections of this article.  
+I say variation of Active Record Pattern because Apple puts all the logic in their models but still uses the model context for persistence operations like save and delete. This technique also allows you to work with Xcode Previews for SwiftData applications since you can easily inject a model container for the previews. I covered working with Xcode previews [earlier](#xcode-previews) in this article.   
+
+> Apple introduced ```@FetchRequest``` for Core Data and ```@Query``` for SwiftData. These property wrappers are optimized for working with SwiftUI framework. But sometimes in a quest to satisfy a certain architecture, we ignore SwiftUI built-in features and try reinvent the wheel. I have seen a lot of developers ignoring the above mentioned property wrappers and manually implementing ```NSFetchedResultsController``` for their SwiftUI applications. I have done the same, I even have a video on it titled [Core Data MVVM in SwiftUI App Using NSFetchedResultsController](https://youtu.be/gGM_Qn3CUfQ). Ultimately, my efforts resulted in mere lines of code, contributing to an increased burden and liability. The key takeaway from this experience is to embrace SwiftUI as it was intended, avoiding unnecessary complications. Remember that the simplest and most natural approach often yields the best results.  
 
 ### Syncing with iCloud 
 
