@@ -407,13 +407,13 @@ During [Platforms State of the Union 2023](https://developer.apple.com/videos/pl
 
 This can mean different things to different people but for me it simply means that let SwiftUI be SwiftUI. Instead of fighting the framework, try to work with it. 
 
-Since 2019, I have used many different architectural patterns when building SwiftUI applications. This included MVVM, Container pattern, Redux, MV pattern and Active Record Pattern. For Core Data applications, a variation of Active Record Pattern worked well for my applications. 
+Since 2019, I have used many different architectural patterns when building SwiftUI applications. This included MVVM, Container pattern, Redux, MV pattern and Active Record Pattern. Apple has a sample SwiftData application called [Backyard Birds: Building an app with SwiftData and widgets](https://developer.apple.com/documentation/swiftui/backyard-birds-sample), which uses a variation of Active Record Pattern. 
 
-> When using Active Record Pattern with Core Data and even SwiftData I was initially putting the save function inside the model itself. Although it worked but it made it difficult to setup Xcode previews. I later decided to put only the logical part in the models and use the save, delete functionality through the model context. 
-
-### SwiftData with UIKit 
+I say variation because Apple puts all the logic in the in the models but still uses the model context for persistence operations like save and delete. This technique also allows you to work with Xcode Previews for SwiftData applications since you can easily inject a model container for the previews. This was shown in earlier sections of this article.  
 
 ### Syncing with iCloud 
+
+### SwiftData with UIKit 
 
 ### Resources
 
