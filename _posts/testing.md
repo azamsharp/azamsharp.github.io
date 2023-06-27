@@ -6,6 +6,10 @@ The main advantage of SwiftData is its seamless integration with SwiftUI framewo
 
 > SwiftData is part of iOS 17 and at the time of this writing Xcode 15 is still in beta stage. This means content discussed in this article is subject to change. I will try my best to keep the article updated. 
 
+The outline of this article is shown below: 
+
+- [Enable Core Data Debugging](#enable-core-data-debugging) 
+
 ### Enable Core Data Debugging
 
 As I mentioned earlier SwiftData uses Core Data behind the scenes. This means all the debugging techniques for Core Data should also work for SwiftData applications. One of the most common and easy to use debugging technique is through the use of flags in launch arguments. There are several different launch arguments available, but for starting out you can use the following: 
@@ -257,7 +261,7 @@ final class Ingredient {
 }
 ```
 
-When adding a new recipe with ingredients you must make sure that recipe is already persisted. Take a look at the following code, which will result in an error: 
+When adding a new recipe with ingredients you must make sure that recipe has already been persisted. Take a look at the following code, which will result in an error: 
 
 ``` swift 
    Button("Save") {
@@ -276,6 +280,27 @@ When adding a new recipe with ingredients you must make sure that recipe is alre
             }
 ```
 
+After creating the recipe instance, we loop though the ingredient names and append them to the recipe through the ingredients property. But since recipe is not yet saved to the context, this will cause an exception. The fix is to add the recipe to the context right after the recipe instance is created. This is shown in the implementation below: 
+
+``` swift 
+  Button("Save") {
+                
+                let recipe = Recipe(name: recipeName)
+                
+                context.insert(recipe)
+
+                let ingredients = ingredientNames.components(separatedBy: ",")
+                    .map { $0.trimmingCharacters(in: .whitespaces) }
+                
+                
+                ingredients.forEach { name in
+                    let ingredient = Ingredient(name: name)
+                    recipe.ingredients.append(ingredient)
+                }
+            }
+```
+
+Now, when you run the code it will not have any exceptions. Behind the scenes, this operation is performed by at least 3 tables. One table for recipes, one for ingredients and one will be a pivot table used for the relationships between recipes and ingredients. 
 
 We have not provided the ```.cascade``` option for the relationships, because we don't want to delete all the ingredients when a recipe is deleted and vice versa. If you delete an ingredient from ```recipe.ingredients``` array then it will be simply be removed from the array. Same goes for removing a recipe from ```ingredients.recipes``` array.  
 
@@ -369,6 +394,22 @@ struct BudgetDetailScreen: View {
 ### Xcode Previews 
 
 ### Migrations 
+
+### Architecture 
+
+Architecture has always been a topic of hot debate, specially in the SwiftUI community. There are couple of reasons behind the architecture confusion. First, Apple has never advocated openly about a particular architecture to follow when building SwiftUI applications. The primary rationale behind this is that, unlike UIKit applications that typically adhered to the MVC (Model-View-Controller) architecture by default, SwiftUI offers greater flexibility in terms of architectural choices. 
+
+I have written several articles about SwiftUI architectures. Including [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html) and [Active Record Pattern for Building SwiftUI Apps with Core Data](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html)
+
+> While Apple has not explicitly recommended a particular architecture for building SwiftUI or SwiftData applications, we can acquire valuable insights into the architectural patterns used by Apple through their sample code and WWDC videos.
+
+During [Platforms State of the Union 2023](https://developer.apple.com/videos/play/wwdc2023/102/?time=81), Darin Adler said **"the most natural way to write your code is also the best."**. This was again mentioned by Josh Shaffer (Engineering director with the UIKit and SwiftUI team at Apple) in the Under the Radar podcast [episode 270](https://www.relay.fm/radar/270). 
+
+This can mean different things to different people but for me it simply means that let SwiftUI be SwiftUI. Instead of fighting the framework, try to work with it. 
+
+Since 2019, I have used many different architectural patterns when building SwiftUI applications. This included MVVM, Container pattern, Redux, MV pattern and Active Record Pattern. For Core Data applications, a variation of Active Record Pattern worked well for my applications. 
+
+> When using Active Record Pattern with Core Data and even SwiftData I was initially putting the save function inside the model itself. Although it worked but it made it difficult to setup Xcode previews. I later decided to put only the logical part in the models and use the save, delete functionality through the model context. 
 
 ### SwiftData with UIKit 
 
