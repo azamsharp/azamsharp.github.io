@@ -9,6 +9,7 @@ The main advantage of SwiftData is its seamless integration with SwiftUI framewo
 The outline of this article is shown below: 
 
 - [Enable Core Data Debugging](#enable-core-data-debugging) 
+- [Getting Started with SwiftData](#getting-started-with-swiftdata)
 
 ### Enable Core Data Debugging
 
@@ -458,10 +459,44 @@ struct SampleData {
 }
 ```
 
-In the above code, I have not only created fake budget objects but also added some transactions to each budget. You can even get more creative and populate fake data through a JSON file.
+In the above code, we have not only created fake budget objects but also added some transactions to each budget. You can even get more creative and populate fake data through a JSON file.
 
 > It is not mandatory that your model container for previews is always in-memory. You can use an actual persistent model container too. This way your data will be available between preview refreshes. 
 
+Finally, you can use the previewContainer in your view as shown in the implementation below: 
+
+``` swift 
+struct BudgetDetailContainerView: View {
+    @Query private var budgets: [Budget]
+    
+    var body: some View {
+        NavigationStack {
+            BudgetDetailScreen(budget: budgets[0])
+        }
+    }
+}
+
+#Preview { @MainActor in
+    BudgetDetailContainerView()
+        .modelContainer(previewContainer)
+}
+```
+
+Please note that the above code will cause a warning ```Converting function value of type '@MainActor () -> any View' to '() -> any View' loses global actor 'MainActor'```. At this point, it is not clear that if this is a bug or expected behavior.  
+
+> #Preview is a new macro introduced in SwiftUI, which automatically writes the necessary code to generate a preview for the view. These kind of macros are also known as freestanding macros. 
+
+Although using ```#Preview``` macro is the preferred choice, you can still use the ```PreviewProvider``` to create macros for your application. This is shown below:  
+
+``` swift 
+struct BudgetDetailContainer_Previews: PreviewProvider {
+    static var previews: some View {
+        BudgetDetailContainerView()
+            .modelContainer(previewContainer)
+        
+    }
+}
+```
 
 ### Migrations 
 
