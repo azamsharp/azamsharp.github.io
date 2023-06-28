@@ -424,9 +424,13 @@ This allows you to move the creation of the query in the model itself instead of
 
 ### Xcode Previews 
 
-Xcode previews play a vital role in the development of SwiftUI applications, offering a significant advantage in rapidly iterating over designs and visually validating logic.
+Xcode previews plays a vital role in the development of SwiftUI applications, offering a significant advantage in rapidly iterating over designs and visually validating logic.
 
-> Keep in mind that Xcode previews is not a replacement for your domain level unit tests. 
+In the talk [Build programmatic UI with Xcode Previews](https://developer.apple.com/videos/play/wwdc2023/10252/), Apple engineer mentioned that previews are like tests. They help you to quickly iterate over your user interface design and even UI logic. 
+
+My experience with previews has been the same. I use it extensively for iterating over the app design and user interface logic. If the UI logic is more complicated then those parts can be separated out into independent data structs, where they can be tested individually using XCTest framework. 
+
+> Xcode previews are great for incrementally testing your UI and the logic contained in the UI but they are not a replacement for all different types of tests on your application. You still need to write domain level unit tests, integration tests and end-to-end tests.  
 
 One way to use previews in SwiftData is by implementing a custom ```ModelContainer```. This technique was shown in WWDC video titled [Build an app with SwiftData](https://developer.apple.com/videos/play/wwdc2023/10154/?time=530). The main idea is to create a model container only for the purpose of rendering Xcode previews. The model container can be in-memory containing fake data. The implementation is shown below: 
 
