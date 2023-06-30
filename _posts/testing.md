@@ -506,7 +506,37 @@ struct BudgetDetailContainer_Previews: PreviewProvider {
 
 ### Migrations 
 
-Migrations allows 
+As your application grows, your database schema also changes. It is important to keep track of these changes so you can revert back to the old schema, if needed. This also allows a new member on the team to quickly setup their environment. All they need to do is run database migrations and they system will be up to date with the current database schema. 
+
+Any changes you do to the schema of the database must be represented by a migration. These changes includes but not limited to: 
+
+- Adding or removing constraints to a column 
+- Renaming an existing column 
+- Changing the data type of the column 
+
+SwiftData allows you to perform migrations by defining different schema versions. Consider an example where you have a ```Budget``` model defined below: 
+
+``` swift 
+@Model
+final class Budget {
+    
+    var name: String
+    var limit: Double
+    
+    @Relationship(.cascade)
+    var transactions: [Transaction] = []
+    
+    init(name: String, limit: Double) {
+        self.name = name
+        self.limit = limit
+    }    
+}
+```
+
+The Budget model currently does not have unique constraints on the name. This means you can have duplicate budget names added to your application. What if we want to update our schema to support unique name constraints. We can't just update our Budget model and add the ```@Attribute(.unique)``` macro. The main reason is that we may have existing budget records in the database with the duplicated names and if we try to add the unique constraints then the database will throw an error since the unique constraints will be activated because of the existing duplicate records. 
+
+Since this operation requires the change of the schema, we must write a migration to perform this action. We also must take care of existing duplicate budget records in the database to ensure data integrity. 
+
 
 ### Architecture 
 
