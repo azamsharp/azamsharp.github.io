@@ -10,6 +10,8 @@ The outline of this article is shown below:
 
 - [Enable Core Data Debugging](#enable-core-data-debugging) 
 - [Getting Started with SwiftData](#getting-started-with-swiftdata)
+- [Migrations](#migrations)
+- [Architecture](#architecture)
 
 ### Enable Core Data Debugging
 
@@ -503,6 +505,8 @@ struct BudgetDetailContainer_Previews: PreviewProvider {
 ```
 
 ### Migrations 
+
+Migrations allows 
 
 ### Architecture 
 
