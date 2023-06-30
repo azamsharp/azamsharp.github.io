@@ -535,7 +535,73 @@ final class Budget {
 
 The Budget model currently does not have unique constraints on the name. This means you can have duplicate budget names added to your application. What if we want to update our schema to support unique name constraints. We can't just update our Budget model and add the ```@Attribute(.unique)``` macro. The main reason is that we may have existing budget records in the database with the duplicated names and if we try to add the unique constraints then the database will throw an error since the unique constraints will be activated because of the existing duplicate records. 
 
-Since this operation requires the change of the schema, we must write a migration to perform this action. We also must take care of existing duplicate budget records in the database to ensure data integrity. 
+Since this operation requires the change to the schema, we must write a migration to perform this action. We also must take care of existing duplicate budget records in the database to ensure data integrity. 
+
+Migrations in SwiftData are created using ```VersionedSchema``` protocol. You can create different versions of your schema by conforming to ```VersionedSchema``` protocol. Below, you can see the implementation of our original schema. 
+
+``` swift 
+enum SpendTrackerSchemaV1: VersionedSchema {
+    
+      static var versionIdentifier: String? = "Initial version of the model"
+    
+    static var models: [any PersistentModel.Type] {
+        [Budget.self]
+    }
+    
+    @Model
+    final class Budget {
+        
+        var name: String
+        var limit: Double
+        
+        @Relationship(.cascade)
+        var transactions: [Transaction] = []
+        
+        init(name: String, limit: Double) {
+            self.name = name
+            self.limit = limit
+        }
+        
+    }
+}
+```
+
+The ```versionIdentifier``` is used to specify the purpose of the migration. The ```models``` property is used to indicate, which models will be part of this schema. And finally, we have the complete implementation of the Budget model. 
+
+As you can see in the above implementation, we did not have the unique constraint on the name property. This is because in our original implementation, we did not have the unique constraint on the name property. These model/schema changes came later and that is the reason we need to implement a version 2 of the schema. 
+
+In the implementation below we have the V2 of the schema, which includes the unique attribute on the name property. 
+
+``` swift 
+
+enum SpendTrackerSchemaV2: VersionedSchema {
+    
+    static var versionIdentifier: String? = "Adding unique constraint to the name property"
+    
+    static var models: [any PersistentModel.Type] {
+        [Budget.self]
+    }
+    
+    @Model
+    final class Budget {
+        
+        @Attribute(.unique) var name: String
+        var limit: Double
+        
+        @Relationship(.cascade)
+        var transactions: [Transaction] = []
+        
+        init(name: String, limit: Double) {
+            self.name = name
+            self.limit = limit
+        }
+        
+    }
+}
+
+```
+
+Once, you have implemented the new version of the schema. The next step is to work on a migration plan using ```SchemaMigrationPlan``` protocol. SchemaMigrationPlan provides an interface for describing the evolution of a schema and how to migrate between specific versions.
 
 
 ### Architecture 
