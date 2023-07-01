@@ -12,6 +12,7 @@ The outline of this article is shown below:
 - [Getting Started with SwiftData](#getting-started-with-swiftdata)
 - [Migrations](#migrations)
 - [Architecture](#architecture)
+- [Testing](#testing)
 
 ### Enable Core Data Debugging
 
@@ -675,7 +676,7 @@ struct SpendTrackerApp: App {
 
 ### Architecture 
 
-Architecture has always been a topic of hot debate, specially in the SwiftUI community. There are couple of reasons behind the architecture confusion. First, Apple has never advocated openly about a particular architecture to follow when building SwiftUI applications. The primary rationale behind this is that, unlike UIKit applications that typically adhered to the MVC (Model-View-Controller) architecture by default, SwiftUI offers greater flexibility in terms of architectural choices. 
+Architecture has always been a topic of hot debate, specially in the SwiftUI community. There are couple of reasons behind the confusion. First, Apple has never advocated openly about a particular architecture to follow when building SwiftUI applications. The primary rationale behind this is that, unlike UIKit applications that typically adhered to the MVC (Model-View-Controller) architecture by default, SwiftUI offers greater flexibility in terms of architectural choices. 
 
 I have written several articles about SwiftUI architectures. Including [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html) and [Active Record Pattern for Building SwiftUI Apps with Core Data](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html)
 
@@ -687,13 +688,15 @@ This can mean different things to different people but for me it simply means th
 
 Since 2019, I have used many different architectural patterns when building SwiftUI applications. This included MVVM, Container pattern, Redux, MV pattern and Active Record Pattern. Apple has a sample SwiftData application called [Backyard Birds: Building an app with SwiftData and widgets](https://developer.apple.com/documentation/swiftui/backyard-birds-sample), which uses a variation of Active Record Pattern. 
 
-I say variation of Active Record Pattern because Apple puts all the logic in their models but still uses the model context for persistence operations like save and delete. This technique also allows you to work with Xcode Previews for SwiftData applications since you can easily inject a model container for the previews. I covered working with Xcode previews [earlier](#xcode-previews) in this article.   
+I say variation of Active Record Pattern because Apple puts all the logic in their models but still uses the model context for persistence operations like save and delete. This technique allows you to work with Xcode Previews for SwiftData applications since you can easily inject a model container for the previews. I covered working with Xcode previews [earlier](#xcode-previews) in this article.   
 
 Apple introduced ```@FetchRequest``` for Core Data and ```@Query``` for SwiftData. These property wrappers are optimized for working with SwiftUI framework. But sometimes in a quest to satisfy a certain architecture, we ignore SwiftUI built-in features and try to reinvent the wheel. I have seen a lot of developers ignoring the above mentioned property wrappers and manually implementing ```NSFetchedResultsController``` for their SwiftUI applications. I have done the same, I even have a video on it titled [Core Data MVVM in SwiftUI App Using NSFetchedResultsController](https://youtu.be/gGM_Qn3CUfQ). 
 
 Ultimately, my efforts resulted in more lines of code, contributing to an increased burden and liability. The key takeaway from this experience is to embrace SwiftUI as it was intended, avoiding unnecessary complications. Remember that the simplest and most natural approach often yields the best results.  
 
-### Syncing with iCloud 
+### Testing
+
+### Syncing with iCloud (coming soon)
 
 ### SwiftData with UIKit 
 
@@ -703,6 +706,9 @@ You will start by setting up the model container for your app. This should be do
 
 ### Resources
 
+- [SwiftData official documentation](https://developer.apple.com/documentation/swiftdata)
+- [SwiftData WWDC Videos](https://www.google.com/search?q=wwdc+videos+swiftdata&oq=wwdc+videos+swiftdata&aqs=chrome..69i57j69i60l3.3658j0j7&sourceid=chrome&ie=UTF-8)
+- [SwiftData Udemy Course: SwiftData - Declarative Data Persistence for SwiftUI ](https://www.udemy.com/course/swiftdata-declarative-data-persistence-for-swiftui/?referralCode=A1303D0BA99171C90D9B)
 
 
 
