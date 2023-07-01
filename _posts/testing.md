@@ -696,6 +696,10 @@ Ultimately, my efforts resulted in more lines of code, contributing to an increa
 
 ### Testing
 
+Testing plays a crucial role in software development, serving as a cornerstone of confidence. When dealing with a straightforward domain, I may opt for minimal or even zero tests. However, when tackling a complex business domain, I rely on the assistance of unit tests to ensure accuracy and reliability.
+
+
+
 ### Syncing with iCloud (coming soon)
 
 ### SwiftData with UIKit 
@@ -737,7 +741,7 @@ Once the container has been initialized, you can use it in your view controllers
     }
 ```
 
-> There is no equivalent of ```NSFetchedResultsController``` in SwiftData. This also indicates Apple's intention that SwiftData is primarily created to work with SwiftUI and not with UIKit. Having said that you can, if you want still use SwiftData with UIKit.   
+> There is no equivalent of ```NSFetchedResultsController``` in SwiftData. This also indicates Apple's intention that SwiftData is primarily created to work with SwiftUI and not with UIKit. Having said that you can, if you want still use SwiftData with UIKit.    
 
 ### Resources
 
