@@ -702,7 +702,42 @@ Ultimately, my efforts resulted in more lines of code, contributing to an increa
 
 SwiftData is primarily designed to work with SwiftUI, but it can be integrated with the UIKit framework. Apple discusses these steps these in the article [Preserving your app’s model data across launches](https://developer.apple.com/documentation/swiftdata/preservingyourappsmodeldataacrosslaunches). 
 
-You will start by setting up the model container for your app. This should be done at the start of your application. The implementation of the container property is shown  
+You will start by setting up the model container for your app. This should be done at the start of your application. The implementation of the container property is shown below: 
+
+``` swift 
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    // other code 
+    
+    lazy var container: ModelContainer = {
+        //let configuration = ModelConfiguration(inMemory: true)
+        let container = try! ModelContainer(for: TodoItem.self)
+        return container
+    }()
+}
+```
+
+Once the container has been initialized, you can use it in your view controllers, just like you have for SwiftUI applications. Once thing to notice is that when working with SwiftData fro your UIKit apps, you don't have access to the ```@Query``` property wrapper. This means you need to call the fetch function, which is part of the context to manually fetch the records. This is shown in the implementation below: 
+
+``` swift 
+ private func populateTodoItems() {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let context = appDelegate.container.mainContext
+        
+        let fetchDescriptor: FetchDescriptor<TodoItem> = FetchDescriptor()
+        
+        do {
+            self.todoItems = try context.fetch(fetchDescriptor)
+            tableView.reloadData()
+        } catch {
+            print(error)
+        }
+    }
+```
+
+> There is no equivalent of ```NSFetchedResultsController``` in SwiftData. This also indicates Apple's intention that SwiftData is primarily created to work with SwiftUI and not with UIKit. Having said that you can, if you want still use SwiftData with UIKit.   
 
 ### Resources
 
