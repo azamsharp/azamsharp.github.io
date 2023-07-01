@@ -603,6 +603,75 @@ enum SpendTrackerSchemaV2: VersionedSchema {
 
 Once, you have implemented the new version of the schema. The next step is to work on a migration plan using ```SchemaMigrationPlan``` protocol. SchemaMigrationPlan provides an interface for describing the evolution of a schema and how to migrate between specific versions.
 
+Since this migration involves preserving the data integrity, it will require a custom migration state. A custom migration is created using the ```custom``` function on the ```MigrationStage``` enum. The function supports the ```willMigrate``` and ```didMigrate``` closures, which are fired at different lifetime of the migration. In our case, we will be using ```willMigrate``` to update the current budget record to make sure the names are unique. 
+
+``` swift 
+ static let migrateV1toV2 = MigrationStage.custom(fromVersion: SpendTrackerSchemaV1.self, toVersion: SpendTrackerSchemaV2.self, willMigrate: { context in
+        
+        guard let budgets = try? context.fetch(FetchDescriptor<Budget>()) else { return }
+        
+        var duplicates = Set<Budget>()
+        var uniqueSet = Set<String>()
+        
+        for budget in budgets {
+            if !uniqueSet.insert(budget.name).inserted {
+                duplicates.insert(budget)
+            }
+        }
+        
+        // now change the names for duplicates
+        for budget in duplicates {
+            let budgetToBeUpdated = budgets.first(where: { $0.id == budget.id } )!
+            budgetToBeUpdated.name = budgetToBeUpdated.name + " \(generateUniqueRandomNumber())"
+        }
+        
+        // calling save is important
+        try? context.save()
+        
+        
+    }, didMigrate: nil)
+```
+
+In the above ```willMigrate``` implementation, we first find all the duplicate budgets based on their names. Once we find all the duplicated names we go through them and update their name property to make it unique. And then finally we persist the information to the database by calling ```context.save()``` function. 
+
+**Don't run your app yet!**
+
+Remember that your models are defined as versioned schema and not in the Budget.swift file. Open your Budget.swift file and make a ```typealias``` to point to the correct Budget model version. 
+
+``` swift
+typealias Budget = SpendTrackerSchemaV2.Budget
+```
+
+> The tip to use ```typealias``` was shared by Pol Piella in his article [Configuring SwiftData in a SwiftUI app](https://www.polpiella.dev/configuring-swiftdata-in-a-swiftui-app). 
+
+Finally, you need to update your SpendTrackerApp file to use the migration plan. This is shown below: 
+
+``` swift 
+@main
+struct SpendTrackerApp: App {
+    
+    let container: ModelContainer
+    
+    init() {
+        do {
+            container = try ModelContainer(for: [Budget.self], migrationPlan: SpendTrackerMigrationPlan.self, ModelConfiguration(for: [Budget.self]))
+        } catch {
+            fatalError("Could not initialize the container.")
+        }
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                BudgetListScreen()
+            }
+        }
+        .modelContainer(container)
+    }
+}
+```
+
+ Now if you run the app, the migration is going to run and add the unique constraint to the name property. Not only that but your existing budget names will be updated to satisfy the unique constraints.  
 
 ### Architecture 
 
