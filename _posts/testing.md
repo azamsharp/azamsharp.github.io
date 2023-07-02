@@ -698,9 +698,36 @@ Ultimately, my efforts resulted in more lines of code, contributing to an increa
 
 Testing plays a crucial role in software development, serving as a cornerstone of confidence. When dealing with a straightforward domain, I may opt for minimal or even zero tests. However, when tackling a complex business domain, I rely on the assistance of unit tests to ensure accuracy and reliability.
 
+In software development, domain is considered the heart of the application and requires extensive testing.
 
+``` swift 
+  func test_should_calculate_budget_total_successfully() {
+        
+        let budget = Budget(name: "Budger 1", limit: 100)
+        let transaction = Transaction(note: "Note 1", amount: 100, date: Date())
+        let transaction2 = Transaction(note: "Note 2", amount: 50, date: Date())
+        let transaction3 = Transaction(note: "Note 3", amount: 100, date: Date())
+        
+        budget.addTransaction(transaction)
+        budget.addTransaction(transaction2)
+        budget.addTransaction(transaction3)
 
-### Syncing with iCloud (coming soon)
+        XCTAssertEqual(250, budget.total)
+        
+    }
+```
+
+Testing is a vast and complicated topic. I have written few articles on my views on testing. You can read it [here](https://azamsharp.com/2012/12/23/pragmatic-unit-testing.html). If you are interested to learn more about testing then check out the book, [Unit Testing Principles, Practices and Patterns by Vladimir Khorikov](https://a.co/d/edDcv2q). 
+
+Sometime back I shared on Twitter that how I consider Xcode Previews to be kind of like tests for your views. This means all the presentation and transformation logic you have in your views can be easily tested using Xcode Previews. 
+
+![Xcode Previews as Tests](/images/xcode-previews-test.png)
+
+Apple also shared similar views in their WWDC 2023 video titled [Build programmatic UI with Xcode Previews](https://developer.apple.com/videos/play/wwdc2023/10252/). 
+
+![Apple Xcode Previews are Tests](/images/apple-xcode-previews.png)
+
+In the end, focus on writing tests for the most important parts of your application. In most cases, it is the domain. This will give you the best return on your investment.    
 
 ### SwiftData with UIKit 
 
