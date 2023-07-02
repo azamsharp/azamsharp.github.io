@@ -50,7 +50,7 @@ final class Budget {
 }
 ```
 
-The ```Budget``` class looks like a normal class, except that it is decorated with ```@Model``` macro. The ```@Model``` macro will generate the required code, which will allow the ```Budget``` class to be persisted to the SQLite database. By default SwiftData uses SQLite database but it can be configured to persist data in XML, binary and even in-memory databases. 
+The ```Budget``` class looks like a normal class, except that it is decorated with ```@Model``` macro. The ```@Model``` macro will generate the required code, which will allow the ```Budget``` class to be persisted to the persisted store. By default SwiftData uses SQLite database but it can be configured to persist data in XML, binary and even in-memory databases. 
 
 Keep in mind that the ```@Model``` macro can only be applied to classes. If you apply it to a type ```struct``` then you will be greeted with errors. This means your models must be a reference type and not value types.  
 
