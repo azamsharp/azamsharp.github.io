@@ -133,7 +133,7 @@ final class Budget {
     }
 ```
 
-> If you are planning to use iCloud and CloudKit to sync your SwiftData records then you need to make sure that the relationships you define in SwiftData are optional with a default value. This means the above relationship will become ```@Relationship(.cascade)
+> If you are planning to use iCloud and CloudKit to sync your SwiftData records then you need to make sure that the relationships you define in SwiftData are optional with a default value. This means the above relationship will be written as ```@Relationship(.cascade)
     var transactions: [Transaction]? = []```
 
 The other side of the relationship is from the transaction point of view. A transaction can belong to a budget. This relationship is shown below: 
@@ -160,9 +160,9 @@ final class Transaction {
 
 > I have experienced that even if you remove the @Relationship macro from Transaction class, it will be implicitly discovered by SwiftData. Also make sure to set budget property as optional or else it will give you runtime error. 
 
-Another thing to keep in mind is that the relationships created in SwiftData only exists in the object graph and they are not the same as relationships between database tables. This means if you open the database using applications like [Base](https://menial.co.uk/base/) or [BeeKeeper](https://www.beekeeperstudio.io/), you will find the relationships section completely empty. **SwiftData is a framework, which can persist an object graph to different stores, but it is NOT an ORM**.   
+Another thing to keep in mind is that the relationships created in SwiftData only exists in the object graph and they are not the same as relationships between database tables. This means if you open the database using applications like [Base](https://menial.co.uk/base/) or [BeeKeeper](https://www.beekeeperstudio.io/), you will not find any foreign key constraints listed under the relationships section. **SwiftData is a framework, which can persist an object graph to different stores, but it is NOT an ORM**.   
 
-It is also important to note that you don't have to pass all the models used in your app to the model container in the ```SpendSmartARPApp``` struct. Depending on the relationships between the models you only need to pass the parent model and all the child relationships are inferred.  
+It is also important to note that you don't have to pass all the models used in your app to the model container in the ```SpendSmartARPApp``` struct. Depending on the relationships between the models you only need to pass the parent model and all the child relationships are automatically inferred.  
 
 In the example below, we are only passing ```Budget``` type to the modelContainer modifier. This is because Budget contains reference to ```Transaction``` class and modelContainer can infer those relationships based on the budget class. 
 
@@ -182,7 +182,7 @@ struct SpendSmartARPApp: App {
 }
 ```
 
-There are several different ways of adding a transaction to a budget. It all depends on your user interface needs. Below you can find the implementation where we create a brand new transaction and then assign its budget property to the budget that was passed to the view.  
+Now that we have setup the relationship between budget and transaction, the next step is to add a transaction to a particular budget. There are several different ways of adding a transaction to a budget. It all depends on your user interface needs. Below you can find the implementation where we create a brand new transaction and then assign it to the budget property. The budget was passed to the view through the constructor. 
 
 ``` swift 
 struct BudgetDetailScreen: View {
@@ -204,7 +204,7 @@ struct BudgetDetailScreen: View {
 
 You don't need to call save or even insert since the model budget is already part of the context. **This will automatically update both sides of the relationship. It means transaction.budget will have a budget and a new transaction will be added to budget.transactions automatically.** 
 
-Unfortunately, this does not re-render ```TransactionListView```. Even though the transactions in budget instance are updated, it still does not trigger an update on the view. I am not sure about the reason but I believe it may be because the update was caused internally and not through the mechanism that invoke the observation. 
+Unfortunately, this does not re-render ```TransactionListView```. Even though the transactions in budget instance are updated, it still does not trigger an update on the view. I am not sure about the reason but I believe it may be because the update was caused internally and not through the mechanism that invoke the observation behavior. 
 
 The correct way of adding a transaction to an existing budget which also re-renders the view is by adding it through the ```budget.transactions``` property as shown below: 
 
@@ -281,9 +281,7 @@ When adding a new recipe with ingredients you must make sure that recipe has alr
                     let ingredient = Ingredient(name: name)
                     recipe.ingredients.append(ingredient)
                 }
-                
                 context.insert(recipe)
-                
             }
 ```
 
@@ -311,15 +309,11 @@ Now, when you run the code it will not have any exceptions. Behind the scenes, t
 
 We have not provided the ```.cascade``` option for the relationships, because we don't want to delete all the ingredients when a recipe is deleted and vice versa. If you delete an ingredient from ```recipe.ingredients``` array then it will be simply be removed from the array. Same goes for removing a recipe from ```ingredients.recipes``` array.  
 
-
-// need to check the delete operation 
-// what happens when you delete a recipe which many ingredients are using
-
-
-
 ### Querying Data 
 
 Once the data has been persisted, the next step is to display it on the screen. SwiftData uses the ```@Query``` property wrapper for fetching data from the database. In the code below we fetch all the budgets and then display it in the list. 
+
+> The ```@Query``` property wrapper may remind you of ```@FetchRequest``` property wrapper in Core Data. They do share a lot of common characteristics.  
 
 ``` swift 
 struct BudgetListScreen: View {
@@ -344,15 +338,15 @@ struct BudgetListScreen: View {
 }
 ```
 
-The ```@Query``` property wrapper also supports other arguments like filter, sort, order and animation. Here is the ```@Query``` implementation which supports sort and order. 
+The ```@Query``` property wrapper also supports other arguments like filter, sort, order and animation. Here is the ```@Query``` implementation which supports sorting and ordering. 
 
 ``` swift 
  @Query(sort: \.name, order: .forward) private var budgets: [Budget]
 ```
 
-The budgets array will be sorted based on name property of the Budget type and organized in ascending order (.forward) parameter. 
+The budgets array will be sorted based on ```name``` property of the Budget type and organized in ascending order (.forward) parameter. 
 
-You can also provide the filter option using predicates. Predicates are implemented using the freestanding macros in Swift. Here is a simple ```Query``` using the a predicate to only return the budgets having limits over $100. 
+You can also provide the filter option using predicates. Predicates are implemented using the [freestanding macros](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/macros/) in Swift. Here is a simple ```Query``` using a predicate to only return the budgets having limits over $100. 
 
 ``` swift 
 @Query(filter: #Predicate { $0.limit > 100 }) private var budgets: [Budget]
@@ -364,9 +358,9 @@ Depending on your criteria, you can add multiple conditions in the predicate. On
 @Query(filter: #Predicate { $0.limit > 100 && $0.name.contains("Vac") }) private var budgets: [Budget]
 ```
 
-Predicate parameters are not always static/fixed. You can also make dynamic predicates. This means predicate will be based on a parameter passed to it. 
+Predicates are not always implemented using static/fixed values. You can also make dynamic predicates. This means predicate will be based on a parameter passed to it. 
 
-The following code snippet demonstrates the initialization of the view with the note parameter. This parameter plays a crucial role in initializing the ```Query``` object, enabling the creation of dynamic queries.   
+The following code snippet demonstrates the initialization of a view with the note parameter. This parameter plays a crucial role in initializing the ```Query``` object and enabling the creation of dynamic queries.   
 
 ``` swift 
 @Query private var transactions: [Transaction]
@@ -400,7 +394,7 @@ struct BudgetDetailScreen: View {
 
 > This might be related to a bug in SwiftData. Keep in mind that at the time of this writing SwiftData is still not released. 
 
-As you learned earlier on that queries are implemented using the ```@Query``` property wrapper. The ```@Query``` property wrapper is only available inside the view. But that does not mean that queries cannot be constructed outside the view. In the implementation below, we have created a ```FetchDescriptor``` inside the Budget class itself, which is later injected into the ```@Query```. 
+As you learned earlier that queries are implemented using the ```@Query``` property wrapper. The ```@Query``` property wrapper is only available inside the view. But that does not mean that queries cannot be constructed outside of the view. In the implementation below, we have created a ```FetchDescriptor``` inside the Budget class itself, which is later injected into the ```@Query```. 
 
 ``` swift 
 @Model
@@ -427,6 +421,8 @@ struct BudgetListScreen: View {
 ```
 
 This allows you to move the creation of the query in the model itself instead of the view, allowing you to use the same query in other parts of the application. My recommendation is to start out having the query in the view. If your query is getting complicated and needs to be reused in other views then think about moving it to the model class. 
+
+> At the time of this writing there is also no way to dynamically change the predicate attached with the query. This means you will have to create a new instance of the query and provide the new predicate. In Core Data with ```@FetchRequest``` you were allowed to substitute the predicate with a new one. Maybe this is just a current limitation and will be addressed in the future versions of SwiftData framework.  
 
 ### Xcode Previews 
 
