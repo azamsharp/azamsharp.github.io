@@ -8,6 +8,12 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [The Ultimate Guide to Building SwiftData Applications](/_posts/2023-07-04-the-ultimate-swift-data-guide.md)
+
+SwiftData made its debut at WWDC 2023 as a replacement for the Core Data framework. Serving as a wrapper on top of Core Data, SwiftData enables on-device persistence and seamless syncing to the cloud.
+
+One of the key benefits of utilizing SwiftData lies in its effortless integration with the SwiftUI framework. This article is structured into several sections, each delving into different aspects of the SwiftData framework. First, we will explore the foundational concepts of SwiftData, followed by an examination of its architectural design, relationship management, migration capabilities, and more. By navigating through these sections, you will gain a comprehensive understanding of SwiftData's features and functionalities, empowering them to leverage its full potential in your iOS development endeavors.
+
 ### [The What-If Architecture](_posts/2023-04-03-the-what-if-architecture.md)
 Lately, I have been thinking about the "What-If Architecture". Most people commonly refer to it as YAGNI (You Aren't Gonna Need It). I was reading some discussion thread, where a developer was creating a Core Data app using SwiftUI and wanted to display information from the database on the screen.
 
