@@ -1,8 +1,8 @@
 # The Ultimate Guide to Building SwiftData Applications  
 
-SwiftData was introduced at WWDC 2023 as a replacement for Core Data framework. SwiftData serves as a wrapper on top of Core Data and allows on-device persistence as well as syncing to the cloud. 
+SwiftData made its debut at WWDC 2023 as a replacement for the Core Data framework. Serving as a wrapper atop Core Data, SwiftData enables on-device persistence and seamless syncing to the cloud.
 
-The main advantage of using SwiftData is its seamless integration with SwiftUI framework. This post is divided into multiple sections. The first part of this post discusses the basics of SwiftData framework and then later on we dive into the architectural topics as well as migrations and testing using SwiftData framework. 
+One of the key benefits of utilizing SwiftData lies in its effortless integration with the SwiftUI framework. This article is structured into several sections, each delving into different aspects of the SwiftData framework. Firstly, we will explore the foundational concepts of SwiftData, followed by a deeper examination of its architectural design, relationship management, migration capabilities, and more. By navigating through these sections, you will gain a comprehensive understanding of SwiftData's features and functionalities, empowering them to leverage its full potential in their iOS development endeavors.
 
 > SwiftData is part of iOS 17 and at the time of this writing Xcode 15 is still in beta stage. This means content discussed in this article is subject to change. I will try my best to keep the article updated. 
 
@@ -10,27 +10,33 @@ The outline of this article is shown below:
 
 - [Enable Core Data Debugging](#enable-core-data-debugging) 
 - [Getting Started with SwiftData](#getting-started-with-swiftdata)
+- [Relationships](#relationships)
+- [Querying Data](#querying-data)
+- [Xcode Previews](#xcode-previews)
 - [Migrations](#migrations)
 - [Architecture](#architecture)
 - [Testing](#testing)
+- [SwiftData with UIKit](#swiftdata-with-uikit)
+- [Resources](#resources)
+- [Conclusion](#conclusion)
 
 ### Enable Core Data Debugging
 
-As I mentioned earlier SwiftData uses Core Data behind the scenes. This means all the debugging techniques for Core Data should also work for SwiftData applications. One of the most common and easy to use debugging technique is through the use of flags in launch arguments. There are several different launch arguments available, but for starting out you can use the following: 
+As I mentioned earlier SwiftData uses Core Data behind the scenes. This means all the debugging techniques for Core Data should also work for SwiftData applications. One of the most common and easy to use debugging techniques is through the use of flags in launch arguments. There are several different launch arguments available, but for starting out you can use the following: 
 
 ``` swift
 -com.apple.CoreData.SQLDebug 1
 ```
 
-This flag will output the path of the database as well as the SQL queries executed against the database. This can prove to be extremely valuable, when you want to make sure that you are not performing excessive queries against the database and it allows you to refactor your code and make it better. 
+This flag will output the path of the database as well as the SQL queries executed against the database. This aspect holds tremendous value, particularly when aiming to minimize excessive database queries and optimize code. It provides an opportunity to refactor and enhance code quality, leading to improved overall performance and efficiency.
 
 If you want to learn more then check out this detailed [article](https://useyourloaf.com/blog/debugging-core-data/). 
 
 ### Getting Started with SwiftData
 
-SwiftData allows you to declare the schema in code. This is different from Core Data, where you had to define a separate mapping file to create your schema. SwiftData uses the ```@Model``` macro, which dictates that this model is the source of truth and allows persistence. 
+SwiftData offers the convenience of declaring the schema directly in code, distinguishing itself from Core Data's requirement of a separate mapping file for schema creation. By utilizing the ```@Model``` attribute, SwiftData enables developers to indicate persistence and establish a definitive source of truth. This approach simplifies the development process, allowing for a more streamlined and cohesive schema definition within the codebase.
 
-> At this time there is no tool to view the relationships between different SwiftData models visually. Hopefully, in the future Apple can introduce a tool to provide this visualization.
+> Currently, there is no available tool to visualize the relationships between different SwiftData models in a graphical manner. It would be beneficial for developers if Apple could introduce a dedicated tool in the future to provide this visual representation. Such a tool would greatly enhance the understanding and analysis of complex relationships within the SwiftData models, facilitating easier navigation and comprehension of the data structure.
 
 Below you can see the implementation of the ```Budget``` model:
 
@@ -90,7 +96,7 @@ struct BudgetListScreen: View {
     }
 ```
 
-One thing to notice is that we are not explicitly calling the save function on the context. The insert function will add the model to the context and then internally call save. SwiftData autosaves the model context. The autosave events are triggered based on the UI related events. 
+One thing to notice is that we are not explicitly calling the save function on the context. The insert function will add the model to the context and then internally call save. SwiftData autosaves the model context. The autosave events are triggered based on the UI related events and user input.  
 
 Not all apps require autosave feature. If you are not interested in autosave then you can turn it off at the model container level as shown below: 
 
@@ -115,7 +121,7 @@ There are two relationships we have to define.
 1. A single budget can have many transactions. 
 2. Each transaction can belong to a single budget.  
 
-We have modified the Budget class to support a list of transactions. This means one budget can have many transactions. The relationship is created using the ```@Relationship``` macro. The cascade option indicates that when the budget is deleted then all the transactions associated with that budget will also be deleted. 
+We have modified the Budget class to support a list of transactions. This means one budget can have many transactions. The relationship is created using the ```@Relationship``` macro. The cascade option indicates that when the budget is deleted then all the transactions associated with the budget will also be deleted. 
 
 ``` swift 
 @Model
@@ -432,9 +438,9 @@ In the talk [Build programmatic UI with Xcode Previews](https://developer.apple.
 
 My experience with previews has been the same. I use it extensively for iterating over the app design and user interface logic. If the UI logic is more complicated then those parts can be separated out into independent data structs, where they can be tested individually using XCTest framework. 
 
-> Xcode previews are great for incrementally testing your UI and the logic contained in the UI but they are not a replacement for all different types of tests on your application. You still need to write domain level unit tests, integration tests and end-to-end tests.  
+> Xcode previews are great for incrementally testing your UI and the logic contained in the UI but they are not a replacement for all different types of tests for your application. You may still need to write domain level unit tests, integration tests and end-to-end tests.  
 
-One way to use previews in SwiftData is by implementing a custom ```ModelContainer```. This technique was shown in WWDC video titled [Build an app with SwiftData](https://developer.apple.com/videos/play/wwdc2023/10154/?time=530). The main idea is to create a model container only for the purpose of rendering Xcode previews. The model container can be in-memory containing fake data. The implementation is shown below: 
+One way to use previews in SwiftData is by implementing a custom ```ModelContainer```. This technique was shown in WWDC video titled [Build an app with SwiftData](https://developer.apple.com/videos/play/wwdc2023/10154/?time=530). The main idea is to create a model container just for the purpose of rendering Xcode previews. The model container can be in-memory containing fake data. The implementation is shown below: 
 
 ``` swift 
 import Foundation
@@ -465,9 +471,9 @@ struct SampleData {
 }
 ```
 
-In the above code, we have not only created fake budget objects but also added some transactions to each budget. You can even get more creative and populate fake data through a JSON file.
+In the above code, we have not only created fake budget objects but also added some fake transactions to each budget item. You can even get more creative and populate fake data through a JSON file.
 
-> It is not mandatory that your model container for previews is always in-memory. You can use an actual persistent model container too. This way your data will be available between preview refreshes. 
+> It is not mandatory that your model container for previews is always in-memory. You can always use an actual persistent model container too. This way your data will be available between preview refreshes. 
 
 Finally, you can use the previewContainer in your view as shown in the implementation below: 
 
@@ -506,9 +512,9 @@ struct BudgetDetailContainer_Previews: PreviewProvider {
 
 ### Migrations 
 
-As your application grows, your database schema also changes. It is important to keep track of these changes so you can revert back to the old schema, if needed. This also allows a new member on the team to quickly setup their environment. All they need to do is run database migrations and they system will be up to date with the current database schema. 
+As your application grows, your database schema also changes. It is important to keep track of these changes so you can revert back to the old schema, if needed. This also allows a new member on the team to quickly setup their environment. All they need to do is run database migrations and their system will be up to date with the current database schema. 
 
-Any changes you do to the schema of the database must be represented by a migration. These changes includes but not limited to: 
+Any changes to the database schema must be represented by a migration. These changes includes but are not limited to: 
 
 - Adding or removing constraints to a column 
 - Renaming an existing column 
@@ -535,7 +541,9 @@ final class Budget {
 
 The Budget model currently does not have unique constraints on the name. This means you can have duplicate budget names added to your application. What if we want to update our schema to support unique name constraints. We can't just update our Budget model and add the ```@Attribute(.unique)``` macro. The main reason is that we may have existing budget records in the database with the duplicated names and if we try to add the unique constraints then the database will throw an error since the unique constraints will be activated because of the existing duplicate records. 
 
-Since this operation requires the change to the schema, we must write a migration to perform this action. We also must take care of existing duplicate budget records in the database to ensure data integrity. 
+SwiftData supports two types of schema migrations, lightweight and custom. Lightweight migrations do not require any custom code. Specifying delete rules for the relationships and providing originalName are examples of lightweight migrations. Custom migrations are needed when you must run some additional code with your migration.   
+
+Since this operation requires the change to the schema as well as updating the data, we must write a **custom** migration to perform this action. A custom migration will take care of any existing duplicate budget records in the database to ensure data integrity. 
 
 Migrations in SwiftData are created using ```VersionedSchema``` protocol. You can create different versions of your schema by conforming to ```VersionedSchema``` protocol. Below, you can see the implementation of our original schema. 
 
@@ -568,7 +576,7 @@ enum SpendTrackerSchemaV1: VersionedSchema {
 
 The ```versionIdentifier``` is used to specify the purpose of the migration. The ```models``` property is used to indicate, which models will be part of this schema. And finally, we have the complete implementation of the Budget model. 
 
-As you can see in the above implementation, we did not have the unique constraint on the name property. This is because in our original implementation, we did not have the unique constraint on the name property. These model/schema changes came later and that is the reason we need to implement a version 2 of the schema. 
+As you can see in the above implementation, we do not have a unique constraint on the name property. This is because in our original implementation, we did not have the unique constraint on the name property. These model/schema changes came later and that is the reason we need to implement a version 2 of the schema. 
 
 In the implementation below we have the V2 of the schema, which includes the unique attribute on the name property. 
 
@@ -603,7 +611,7 @@ enum SpendTrackerSchemaV2: VersionedSchema {
 
 Once, you have implemented the new version of the schema. The next step is to work on a migration plan using ```SchemaMigrationPlan``` protocol. SchemaMigrationPlan provides an interface for describing the evolution of a schema and how to migrate between specific versions.
 
-Since this migration involves preserving the data integrity, it will require a custom migration state. A custom migration is created using the ```custom``` function on the ```MigrationStage``` enum. The function supports the ```willMigrate``` and ```didMigrate``` closures, which are fired at different lifetime of the migration. In our case, we will be using ```willMigrate``` to update the current budget record to make sure the names are unique. 
+A custom migration is created using the ```custom``` function on the ```MigrationStage``` enum. This function supports the ```willMigrate``` and ```didMigrate``` closures, which are fired during different lifetime events of the migration. In our case, we will be using ```willMigrate``` to update the current budget records to make sure the existing names are unique. 
 
 ``` swift 
  static let migrateV1toV2 = MigrationStage.custom(fromVersion: SpendTrackerSchemaV1.self, toVersion: SpendTrackerSchemaV2.self, willMigrate: { context in
@@ -632,15 +640,21 @@ Since this migration involves preserving the data integrity, it will require a c
     }, didMigrate: nil)
 ```
 
-In the above ```willMigrate``` implementation, we first find all the duplicate budgets based on their names. Once we find all the duplicated names we go through them and update their name property to make it unique. And then finally we persist the information to the database by calling ```context.save()``` function. 
+In the above ```willMigrate``` implementation, we first find all the duplicate budgets based on their names. Once we find all the duplicated names, we go through them and update their name property to make it unique. Finally we persist the information to the database by calling ```context.save()``` function. 
 
 **Don't run your app yet!**
 
-Remember that your models are defined as versioned schema and not in the Budget.swift file. Open your Budget.swift file and make a ```typealias``` to point to the correct Budget model version. 
+Remember that our models are defined in versioned schema file and not in the ```Budget.swift file```. This means if you have already defined ```Budget``` class in Budget.swift file, you need to remove it or you will get duplicate declaration error. 
+
+So, what should we put in ```Budget.swift``` file? Once technique you can use is to create a ```typealias```, which represents the current model version. 
+
+ Open your ```Budget.swift``` file and make a ```typealias``` to point to the correct Budget model version. 
 
 ``` swift
 typealias Budget = SpendTrackerSchemaV2.Budget
 ```
+
+This means that in your code you can still refer to the ```Budget``` class by using Budget instead of using ```SpendTrackerSchemaV2.Budget```. 
 
 > The tip to use ```typealias``` was shared by Pol Piella in his article [Configuring SwiftData in a SwiftUI app](https://www.polpiella.dev/configuring-swiftdata-in-a-swiftui-app). 
 
@@ -671,33 +685,35 @@ struct SpendTrackerApp: App {
 }
 ```
 
- Now if you run the app, the migration is going to run and add the unique constraint to the name property. Not only that but your existing budget names will be updated to satisfy the unique constraints.  
+ Now if you run the app, the migration is going to run and add the unique constraint to the name property. Not only that but your existing duplicate budget names will be updated to satisfy the unique constraints.
 
 ### Architecture 
 
 Architecture has always been a topic of hot debate, specially in the SwiftUI community. There are couple of reasons behind the confusion. First, Apple has never advocated openly about a particular architecture to follow when building SwiftUI applications. The primary rationale behind this is that, unlike UIKit applications that typically adhered to the MVC (Model-View-Controller) architecture by default, SwiftUI offers greater flexibility in terms of architectural choices. 
 
-I have written several articles about SwiftUI architectures. Including [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html) and [Active Record Pattern for Building SwiftUI Apps with Core Data](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html)
-
 > While Apple has not explicitly recommended a particular architecture for building SwiftUI or SwiftData applications, we can acquire valuable insights into the architectural patterns used by Apple through their sample code and WWDC videos.
 
 During [Platforms State of the Union 2023](https://developer.apple.com/videos/play/wwdc2023/102/?time=81), Darin Adler said **"the most natural way to write your code is also the best."**. This was again mentioned by Josh Shaffer (Engineering director with the UIKit and SwiftUI team at Apple) in the Under the Radar podcast [episode 270](https://www.relay.fm/radar/270). 
 
-This can mean different things to different people but for me it simply means that let SwiftUI be SwiftUI. Instead of fighting the framework, try to work with it. 
+This can mean different things to different people but for me it simply meant that let SwiftUI be SwiftUI. Instead of fighting the framework, try to work with it. 
 
 Since 2019, I have used many different architectural patterns when building SwiftUI applications. This included MVVM, Container pattern, Redux, MV pattern and Active Record Pattern. Apple has a sample SwiftData application called [Backyard Birds: Building an app with SwiftData and widgets](https://developer.apple.com/documentation/swiftui/backyard-birds-sample), which uses a variation of Active Record Pattern. 
 
-I say variation of Active Record Pattern because Apple puts all the logic in their models but still uses the model context for persistence operations like save and delete. This technique allows you to work with Xcode Previews for SwiftData applications since you can easily inject a model container for the previews. I covered working with Xcode previews [earlier](#xcode-previews) in this article.   
+I say variation of Active Record Pattern because Apple puts all the logic in their models but still uses the model context for persistence operations like save and delete. This technique allows you to easily work with Xcode Previews for SwiftData applications since you can easily inject a model container for the previews. I covered working with Xcode previews [earlier](#xcode-previews) in this article.   
 
 Apple introduced ```@FetchRequest``` for Core Data and ```@Query``` for SwiftData. These property wrappers are optimized for working with SwiftUI framework. But sometimes in a quest to satisfy a certain architecture, we ignore SwiftUI built-in features and try to reinvent the wheel. I have seen a lot of developers ignoring the above mentioned property wrappers and manually implementing ```NSFetchedResultsController``` for their SwiftUI applications. I have done the same, I even have a video on it titled [Core Data MVVM in SwiftUI App Using NSFetchedResultsController](https://youtu.be/gGM_Qn3CUfQ). 
 
 Ultimately, my efforts resulted in more lines of code, contributing to an increased burden and liability. The key takeaway from this experience is to embrace SwiftUI as it was intended, avoiding unnecessary complications. Remember that the simplest and most natural approach often yields the best results.  
 
+If you are interested in further reading about SwiftUI architecture then I have written several articles on this topic. This includes [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html) and [Active Record Pattern for Building SwiftUI Apps with Core Data](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html). 
+
 ### Testing
 
 Testing plays a crucial role in software development, serving as a cornerstone of confidence. When dealing with a straightforward domain, I may opt for minimal or even zero tests. However, when tackling a complex business domain, I rely on the assistance of unit tests to ensure accuracy and reliability.
 
-In software development, domain is considered the heart of the application and requires extensive testing.
+In software development, domain is considered the most important part of the application. This is where all the rules and business logic is implemented. By testing the domain you get the best return on your investment. In our application, the domain logic is contained in the models. 
+
+In the code below we are validating that the budget total is calculated correctly.  
 
 ``` swift 
   func test_should_calculate_budget_total_successfully() {
@@ -748,7 +764,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 ```
 
-Once the container has been initialized, you can use it in your view controllers, just like you have for SwiftUI applications. Once thing to notice is that when working with SwiftData fro your UIKit apps, you don't have access to the ```@Query``` property wrapper. This means you need to call the fetch function, which is part of the context to manually fetch the records. This is shown in the implementation below: 
+Once the container has been initialized, you can use it in your view controllers, just like you have for SwiftUI applications. Once thing to notice is that when working with SwiftData for your UIKit apps, you don't have access to the ```@Query``` property wrapper. This means you need to call the fetch function, which is part of the context to manually fetch the records. This is shown in the implementation below: 
 
 ``` swift 
  private func populateTodoItems() {
@@ -774,6 +790,13 @@ Once the container has been initialized, you can use it in your view controllers
 - [SwiftData official documentation](https://developer.apple.com/documentation/swiftdata)
 - [SwiftData WWDC Videos](https://www.google.com/search?q=wwdc+videos+swiftdata&oq=wwdc+videos+swiftdata&aqs=chrome..69i57j69i60l3.3658j0j7&sourceid=chrome&ie=UTF-8)
 - [SwiftData Udemy Course: SwiftData - Declarative Data Persistence for SwiftUI ](https://www.udemy.com/course/swiftdata-declarative-data-persistence-for-swiftui/?referralCode=A1303D0BA99171C90D9B)
+- [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html)
+- [Active Record Pattern for Building SwiftUI Apps with Core Data](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html)
+
+
+### Conclusion 
+
+SwiftData is a highly anticipated and welcomed addition to the iOS framework, offering seamless integration with SwiftUI and a reliable migration path for Core Data applications. This exceptional framework not only effortlessly aligns with the powerful capabilities of SwiftUI but also provides a smooth transition for developers with existing Core Data projects. By leveraging the intuitive nature of SwiftUI and the versatility of SwiftData, developers can effectively manage data and create remarkable iOS applications with ease. The inclusion of SwiftData in the iOS framework represents a significant advancement, empowering developers to streamline their workflows and deliver exceptional user experiences.
 
 
 
