@@ -16,3 +16,5 @@
 14. [MV Design Pattern in iOS - Build SwiftUI Apps Apple's Way](https://www.udemy.com/course/mv-design-pattern-in-ios-for-swiftui/?referralCode=4627986F77F533DEF0C7)
 15. [Learn SwiftUI’s View struct: value semantics, diffing and dependency tracking](https://www.malcolmhall.com/2023/03/23/learn-swiftuis-view-struct-value-semantics-diffing-and-dependency-tracking/)
 16. [RailsConf 2014 - Keynote: Writing Software by David Heinemeier Hansson](https://youtu.be/9LfmrkyP81M)
+17. [The Ultimate Guide to Building SwiftData Applications](https://azamsharp.com/2023/07/04/the-ultimate-swift-data-guide.html)
+18. [Backyard Birds: Building an app with SwiftData and widgets](https://developer.apple.com/documentation/swiftui/backyard-birds-sample)
