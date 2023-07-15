@@ -8,6 +8,14 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Convenience Property Wrappers vs Custom Data Access Layer in SwiftUI](_posts/2023-07-16-property-wrappers-vs-data-access-layer.md)
+
+Yesterday, I had the opportunity to speak at [WomenWhoCode Mobile](https://www.womenwhocode.com/network/mobile/) event. It was a remote event and well attended. I spoke about SwiftUI architecture best practices. 
+
+When I was covering Core Data I mentioned that you should use ```@FetchRequest``` property wrappers as they are optimized to work with SwiftUI. Same is true for ```@Query``` property wrapper in SwiftData. 
+
+During this time an interesting question was raised. An attendee asked what if you want to change the data access layer in the future. Currently our views are tightly coupled with either Core Data or SwiftData but what happens if we want to use Realm or GRDB. 
+
 ### [The Ultimate Guide to Building SwiftData Applications](/_posts/2023-07-04-the-ultimate-swift-data-guide.md)
 
 SwiftData made its debut at WWDC 2023 as a replacement for the Core Data framework. Serving as a wrapper on top of Core Data, SwiftData enables on-device persistence and seamless syncing to the cloud.

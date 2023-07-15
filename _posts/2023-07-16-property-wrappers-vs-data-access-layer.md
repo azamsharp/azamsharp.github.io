@@ -12,8 +12,7 @@ I have thought about this question for a very long time. This is one of those qu
 
 Consider a scenario that we are building a simple TodoList application. We add our model ```TodoItem```, which consists of a single property ```title```. We add a ```TodoListView```, which uses the ```@Query``` property wrapper to fetch and also monitor the changes in the model context of the application. In just a few lines of code we are able to display todo items on our screen. The code is listed below: 
 
-```swift 
-
+``` swift 
 @Model
 class TodoItem {
     
