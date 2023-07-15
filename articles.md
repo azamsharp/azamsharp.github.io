@@ -8,7 +8,7 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [Convenience Property Wrappers vs Custom Data Access Layer in SwiftUI](_posts/2023-07-16-property-wrappers-vs-data-access-layer.md)
+### [Convenience Property Wrappers vs Custom Data Access Layer in SwiftUI](_posts/2023-07-15-property-wrappers-vs-data-access-layer.md)
 
 Yesterday, I had the opportunity to speak at [WomenWhoCode Mobile](https://www.womenwhocode.com/network/mobile/) event. It was a remote event and well attended. I spoke about SwiftUI architecture best practices. 
 
