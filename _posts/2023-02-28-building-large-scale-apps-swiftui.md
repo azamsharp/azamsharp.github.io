@@ -156,7 +156,13 @@ Apart from fetching and persistence, StoreModel can also provide sorting, filter
 
 A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover multiple aggregate models and how they benefit when working in large teams.  
 
+The MV pattern and MVVM pattern may appear similar at first glance, but they exhibit significant differences. In a client/server app using MVVM, a separate view model is created for each screen. For instance, in a movies management app, you might end up with multiple view models like MovieListViewModel, AddMovieViewModel, MovieDetailViewModel, and possibly MovieViewModel. 
 
+However, MV takes a different approach altogether, omitting the creation of view models. Instead, it directly binds the DTO objects (models from the server) to the view. In some cases, the view can directly utilize the network layer to fetch the DTO objects, while in others, a single Data Store or Aggregate Model (ObservableObject) aids in accessing the movies. Any required UI validation or data transformation is implemented within the view itself.
+
+To ensure reusability of child views, the container and presenter pattern come into play. One view is responsible for requesting and obtaining the data, while another view, known as the presenter, takes charge of displaying the data. This separation of responsibilities ensures a more modular and maintainable design.
+
+With MV, the overall structure differs from MVVM, allowing for a more direct handling of data and views without the need for multiple view models. By leveraging the container and presenter pattern, your app can achieve better organization and reusability of views.
 
 ## Multiple Aggregate Models 
 
