@@ -1,136 +1,122 @@
-# Convenience Property Wrappers vs Custom Data Access Layer in SwiftUI
 
-Yesterday, I had the opportunity to speak at [WomenWhoCode Mobile](https://www.womenwhocode.com/network/mobile/) event. It was a remote event and well attended. I spoke about SwiftUI architecture best practices. 
+When I started learning SwiftUI in 2019, I adopted MVVM pattern for my SwiftUI architecture. Most of my apps were client/server based, which means they were consuming a JSON API.
 
-When I was covering Core Data I mentioned that you should use ```@FetchRequest``` property wrappers as they are optimized to work with SwiftUI. Same is true for ```@Query``` property wrapper in SwiftData. 
+Each time I added a view, I also added a view model for that view. Even though the source of truth never changed. The source of truth was still the server. This is a very important point as source of truth plays an important role in SwiftUI applications. As new screens were added, new view models were also added for each screen. And before I know it, I was dealing with dozens of view models, each still communicating with the same server and retrieving the information. The actual request was initiated and handled by the HTTPClient/Webservice layer. 
 
-During this time an interesting question was raised. An attendee asked what if you want to change the data access layer in the future. Currently our views are tightly coupled with either Core Data or SwiftData but what happens if we want to use Realm or GRDB. 
+Even with a medium sized apps with 10-15 screens, it was becoming hard to manage all the view models. I was also having issues with access values from EnvironmentObjects. This is because ```@EnvironmentObject``` property wrapper is not available inside the view models. 
 
-I have thought about this question for a very long time. This is one of those questions, which does not have a straight forward answer or a single answer to be exact. The answer is opinion based so let's take a look at both sides of the equation. I will use SwiftData in my examples.  
+After a lot of research, experimentation I later concluded that view models for each screen is not required when building SwiftUI applications. If my view needs data then it should be given to the view directly. There are many ways to accomplish it. Below, my view is consuming the data from a JSON API. The view uses the HTTPClient to fetch the data. HTTPClient is completely stateless, it is just used to perform a network call, decode the response and give the results to the caller. 
 
-### Property Wrappers
+ This is shown in the implementation below: 
 
-Consider a scenario that we are building a simple TodoList application. We add our model ```TodoItem```, which consists of a single property ```title```. We add a ```TodoListView```, which uses the ```@Query``` property wrapper to fetch and also monitor the changes in the model context of the application. In just a few lines of code we are able to display todo items on our screen. The code is listed below: 
 
-```swift 
-
-@Model
-class TodoItem {
+``` swift
+struct ConferenceListScreen: View {
     
-    var title: String
+    @Environment(\.httpClient) private var httpClient
+    @State private var conferences: [Conference] = []
     
-    init(title: String) {
-        self.title = title
-    }
-}
-
-struct TodoItemView: View {
-    
-    let todoItem: TodoItem
-    
-    var body: some View {
-        Text(todoItem.title)
-    }
-}
-
-struct TodoListView: View {
-    
-    @Query private var todoItems: [TodoItem]
-    
-    var body: some View {
-        List(todoItems) { todoItem in
-           TodoItemView(todoItem: todoItem)
+    private func loadConferences() async {
+        let resource = Resource(url: Constants.Urls.conferences, modelType: [Conference].self)
+        do {
+            conferences = try await httpClient.load(resource)
+        } catch {
+            // show error view
+            print(error.localizedDescription) 
         }
     }
-    
+     
+    var body: some View {
+        
+        Group {
+            if conferences.isEmpty {  
+                ProgressView()
+            } else { 
+                List(conferences) { conference in
+                    NavigationLink(value: conference) {
+                        ConferenceCellView(conference: conference)
+                    }
+                }
+                .listStyle(.plain)
+            }
+        }
+        .task {
+            await loadConferences()
+        }
+    }
 }
 ```
 
-But what if few weeks later you decided that you want to replace SwiftData with Realm. And we are also assuming that you are interested in using Realm SwiftUI property wrappers in your application. This means all those ```@Query``` property wrappers will not work. Realm uses ```@ObservedResults``` property wrapper instead of ```@Query``` property wrapper. Also Realm models are not decorated with ```@Model``` macro so you need to remove that too. 
-
-> If your intention is to utilize Realm, it's crucial to note that all of your models will necessitate updating, irrespective of the approach you choose.
-
-The ```TodoItemView``` also needs to be updated as Realm uses ```@ObservedRealmObject``` or similar instead of ```[TodoItem]```. 
-
-Ultimately, it becomes apparent that altering the data persistence framework will have a ripple effect throughout a significant portion of our application.
-
-### Custom Data Access Layer 
-
-Now, let's see the what happens when we implement our own custom data access layer. 
-
-We will start with implementing the protocol. 
+Sometimes, we need to fetch the data and then hold on to it so other views can also access and even modify the data. For those cases, we can use @Binding to send the data to the child view or even put the data in @EnvironmentObject. The @EnvironmentObject implementation is shown below: 
 
 ``` swift
-protocol TodoServiceProtocol {
-    func saveTodoItem(_ todoItem: TodoItem)
-    func getTodoItems() throws -> [TodoItem]
-}
-```
-
-Next, we will implement the concrete implementation of our data access service: 
-
-``` swift
-class SwiftDataTodoService: TodoServiceProtocol {
+class StoreModel: ObservableObject {
     
-    private var context: ModelContext
+    private var storeHTTPClient: StoreHTTPClient
     
-    init(context: ModelContext) {
-        self.context = context
+    init(storeHTTPClient: StoreHTTPClient) {
+        self.storeHTTPClient = storeHTTPClient
     }
     
-    func saveTodoItem(_ todoItem: TodoItem) {
-        context.insert(todoItem)
+    @Published var products: [Product] = []
+    @Published var categories: [Category] = []
+    
+    func addProduct(_ product: Product) async throws {
+         try await storeHTTPClient.addProduct(product)
     }
     
-    func getTodoItems() throws -> [TodoItem] {
-        return try context.fetch(FetchDescriptor<TodoItem>())
+    func populateProducts() async throws {
+        self.products = try await storeHTTPClient.loadProducts()
     }
 }
 ```
 
-And finally, you can use the ```SwiftDataTodoService``` in your application. 
+Inject it into the root view as shown below: 
+
+``` swift 
+@main
+struct StoreAppApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(StoreModel(client: StoreHTTPClient()))
+            
+        }
+    }
+}
+```
+
+And then access it in the view as shown below: 
 
 ``` swift
 struct ContentView: View {
-    
-    private var service: TodoServiceProtocol
-    @State private var todoItems: [TodoItem] = []
-    
-    init(service: TodoServiceProtocol) {
-        self.service = service
-    }
-    
-    private func loadTodoItems() {
-        // get all the items
-        do {
-            todoItems = try service.getTodoItems()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
+
+    @EnvironmentObject private var model: StoreModel
     
     var body: some View {
-        VStack {
-            Button("Insert Todo Item") {
-                service.saveTodoItem(TodoItem(title: "Feed the Rabbit"))
-                // load the todo items from db
-                loadTodoItems()
+        ProductListView(products: model.products)
+            .task {
+                do {
+                    try await model.populateProducts()
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
-            
-            List(todoItems) { todoItem in
-                Text(todoItem.title)
-            }.task {
-                loadTodoItems()
-            }
-        }
-        .padding()
     }
 }
 ```
-This is definitely a lot more code as compared to our previous approach. We pass the ```TodoService``` as a dependency to our ContentView and then uses the ```saveTodoItem``` and ```getTodoItems``` functions to perform appropriate actions. By not using the built-in property wrappers like ```@FetchRequest``` or ```@Query``` we lost the ability of tracking changes but gained the flexibility of swapping out the data access layers when and if needed. 
 
-### Final Words 
+Now, when most readers read the above code they say "Oh you change the name of view model to StoreModel or DataStore etc and thats it". NO! Look carefully. We are no longer creating view model per screen. We are creating a single thing that maintains an entire state of the application. I am calling that thing StoreModel (E-Commerce) but you can call it anything you want. You can call it DataStore etc. 
 
-When determining which option is superior, the answer is **it depends**. If convenience is your priority, then SwiftUI property wrappers are recommended. However, if you value flexibility to accommodate future changes, implementing a custom data access layer would be more suitable.
+The main point is that when working with SwiftUI applications, the view is already a view model so you don't have to add another layer of redirection. 
 
-I pose a question for you to contemplate: When was the last instance in which you entirely swapped out your data access layers?
+Your next question might be what about larger apps! Great question! I have written a very detailed article on SwiftUI Architecture that you can read below: 
+
+https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html
+
+I have also written a detailed article on SwiftData. The same concepts can be applied when building Core Data applications.  
+
+https://azamsharp.com/2023/07/04/the-ultimate-swift-data-guide.html
+
+NOTE: Appeloper is 100% correct. Don'nt needlessly add layers to your app. It will only make your app more complicated. 
+

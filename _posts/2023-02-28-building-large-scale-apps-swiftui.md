@@ -156,6 +156,8 @@ Apart from fetching and persistence, StoreModel can also provide sorting, filter
 
 A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover multiple aggregate models and how they benefit when working in large teams.  
 
+
+
 ## Multiple Aggregate Models 
 
 As you learned in the previous section, the purpose of an aggregate model is to expose data to your view. As Luca explained in [Data Essentials in SwiftUI WWDC 2020 (11:30)](https://developer.apple.com/videos/play/wwdc2020/10040/) "The aggregate model is an ```ObservableObject```, which acts as your data dependency surface. This allows us to model the data using value type and manage its life cycle and side effects with a reference type."  
