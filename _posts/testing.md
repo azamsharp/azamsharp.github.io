@@ -30,7 +30,7 @@ Modularity can be achieved in several different ways. You can expose each module
 
 ## Understanding the MV Pattern (Updated) 
 
-In the traditional MVVM pattern, when you create a new view, you also create a corresponding view model (though not all views need one). The view model's job is to handle bindings, manage network operations (using a network layer), and handle validations, among other things. Let's take an example of an app that displays a list of movies, lets you add a new movie, and shows movie details. To structure such an app using the MVVM pattern, you can adopt the following approach.
+In the traditional MVVM pattern, when you create a new view, you also create a corresponding view model (though not all views require one). The view model's role is to manage bindings, handle network operations (using a network layer), and manage validations, among other tasks. Let's consider an example of an app that displays a movie list, allows you to add a new movie, and shows movie details. To structure such an app using the MVVM pattern, you can follow the approach outlined below.
 
 | View | View Model |
 | --- | ----------- |
@@ -40,11 +40,58 @@ In the traditional MVVM pattern, when you create a new view, you also create a c
 
 A typical view model can consists of networking code, UI validation and data transformation code. Each of these view models is conforming to ObservableObject protocol. Let's pause here for a moment. An ObservableObject protocol is used to define a new source of truth. But all the above mentioned view models are accessing the same source of truth, which is the server. So, if the source of truth is not changing, why are we creating new classes conforming to ObservableObject. 
 
-Another issue is that each of these view models depends on the networking layer. This means a networking service needs to be injected as a dependency for every single view. This can become cumbersome for large apps with lots of view models. 
+Another concern arises from the fact that each of these view models relies on the networking layer. This implies that a networking service must be provided as a dependency for every individual view model. In certain scenarios, you might even find yourself injecting a view model into a view that also relies on a network service. This can introduce significant complexity and become unwieldy, especially in larger applications featuring numerous view models.
 
-Lastly, the functionality offered by a view model is already available in the view. The primary responsibility of a view model is to support binding. This is already possible inside the view through the use of ```@State```, ```@Binding```, ```@EnvironmentObject``` property wrappers. I strongly believe that Apple did a disservice to the iOS community by calling it a view. They should have called it a component.
+This scenario is shown in the code below: 
 
-The view in a SwiftUI view is the return from the ```body``` property. Even that is not a true view but just a declaration of a view. Eventually, declarations are mapped to the actual UIView and then rendered on the screen. The mapping for some of the common SwiftUI to UIView is shown below:
+```swift
+protocol HTTPClientProtocol {
+    // contract
+}
+
+struct HTTPClient: HTTPClientProtocol {
+    // conform to the contract
+}
+
+struct Movie: Codable {
+    let name: String
+}
+
+class MovieListViewModel: ObservableObject {
+    
+    @Published var movies: [Movie] = []
+    let httpClient: HTTPClientProtocol
+    
+    init(httpClient: HTTPClientProtocol) {
+        self.httpClient = httpClient
+    }
+    
+    func loadMovies() {
+        // movies = httpClient.load(resource...)
+    }
+}
+
+struct MovieListView: View {
+    
+    let vm: MovieListViewModel
+    
+    var body: some View {
+        Text("Display Movies")
+    }
+}
+
+struct MoviesApp: App {
+    var body: some Scene {
+        MovieListView(vm: MovieListViewModel(httpClient: HTTPClient()))
+    }
+}
+
+```
+
+
+Lastly, the functionality offered by a view model is already available in the view. The primary responsibility of a view model is to support binding. This is already possible inside the view through the use of ```@State```, ```@Binding```, ```@EnvironmentObject``` property wrappers. I strongly believe that Apple did a disservice to the iOS community by calling it a view. They should have called it a component or something similar. This has led to a lot of confusion in the iOS community. The word view entails that it is a visual only component like HTML or XAML in WPF. But that is not the case. The view in SwiftUI is the return from the ```body``` property. Even that is not an actual view but just declaration of the view. 
+
+SwiftUI views are mapped to the UIView counter parts and then rendered on the screen. SwiftUI views are just basic value type structs. They have no knowledge on how to paint pixels on the screen. SwiftUI uses the declaration of the views to render actual UIViews. The mapping for some of the common SwiftUI to UIView is shown below:
 
 | SwiftUI View | UIView |
 | --- | ----------- |
@@ -52,6 +99,9 @@ The view in a SwiftUI view is the return from the ```body``` property. Even that
 | Text | UILabel |
 | TextField | UITextField | 
 
+All this mapping is hidden from the developers but you can always look at the inner details through the use of Instruments. 
+
+TODO: screenshot from instruments
 
 
 
