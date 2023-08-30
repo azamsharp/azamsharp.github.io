@@ -172,13 +172,15 @@ struct NewsListScreen: View {
 
 The ```NewsListScreen``` serves as a container view. This means it is responsible for making the network call and fetching the data. Once the data is fetched, it can be passed down to the presentation view. At present the only reusable view we have in the above code is ```ArticleView```. Depending on your app and requirements, you can also extract out List into a separate ```ArticleListView``` component. 
 
-Another thing to notice in the above code is the use of ```sortedArticles``` private property. As I mentioned earlier that in MV pattern, views are the view models. This is no need to create a view model associated with ```NewsListScreen```. If your view is getting large then use view decomposition to break it into smaller pieces. Keep in mind that views in SwiftUI are value types. Value types are cheap to create. This gives you the flexibility to break your view into multiple reusable pieces.  
+Another thing to notice in the above code is the use of ```sortedArticles``` private property. As I mentioned earlier that in MV pattern, views are the view models. This is no need to create a view model associated with ```NewsListScreen```. If your view is getting large then use view decomposition to break it into smaller pieces. Keep in mind that views in SwiftUI are value types. Value types are cheap to create. This gives you the flexibility to break your views into multiple reusable pieces.  
 
 > If you are wondering how would you test the sortedArticles property then keep reading. Testing will be covered in the later section of this article. 
 
-Apple sample projects, which includes [Fruta](https://developer.apple.com/documentation/swiftui/fruta_building_a_feature-rich_app_with_swiftui) and [FoodTruck](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app) applications demonstrated how to use this pattern against a hard-coded data source. But in WWDC video title **"[Use Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/)"** Apple showed how to update the existing FoodTruck app and consume the data from an API response. 
+The above technique is ideal when the state is private to the view and is not shared with the rest of the application. You can still alter/modify the state by passing the state to child views using ```@Binding``` and ```@Bindable``` property wrappers and macros, but once you are passing the state into multiple levels of view hierarchy it becomes repetitive and time consuming. 
 
-The screenshot below shows ```FoodTruckModel``` using the ```DonutsServerClient``` to retrieve list of donuts. DonutsServerClient is responsible for making an actual request to the server and downloading the donuts. Once the donuts are downloaded they are assigned to the serverDonuts property maintained by the FoodTruckModel.  
+When working on larger apps, you need the ability to share state with other views of the application without having to pass down through the view hierarchy. Apple has demonstrated this approach in few sample projects, which includes [Fruta](https://developer.apple.com/documentation/swiftui/fruta_building_a_feature-rich_app_with_swiftui) and [FoodTruck](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app). These sample applications demonstrated how to use this pattern against a hard-coded data source. But in WWDC video title **"[Use Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/)"** Apple showed how to update the existing FoodTruck app and consume the data from an API response. 
+
+The screenshot below shows ```FoodTruckModel``` using the ```DonutsServerClient``` to retrieve list of donuts. ```DonutsServerClient``` is responsible for making an actual request to the server and downloading the donuts. Once the donuts are downloaded they are assigned to the serverDonuts property maintained by the FoodTruckModel.  
 
 ![Use Xcode for server-side development](/images/xcode-server.png)
 
@@ -432,7 +434,6 @@ The concept of domain boundaries can also be applied to user interfaces. This al
 
 ![Factor out common pieces](/images/user-interface.png)
 * Permission has been granted from the original author of the image to use it in this article.
-
 
 > You can factor out common interface elements using Swift Package Manager and import those packages into other applications. 
 
@@ -925,168 +926,137 @@ In the end you will have to decide when you want to group events into an enum an
 
 ## Navigation 
 
-SwiftUI introduced NavigationStack in iOS 16, which allowed developers to configure global routes for their application. 
+SwiftUI introduced NavigationStack in iOS 16, which allowed developers to configure global routes for their application. This is similar to React Router, where routes can be configured in a single place. When I originally wrote this section, I used ```@EnvironmentObject``` to store the routes. Even though it worked as expected but it did not felt natural. The main purpose of ```@EnvironmentObject``` is to store state that will be shared with different views in the application. ```@EnvironmentObject``` can be really beneficial when you have to access state in a deeply nested view, without having to pass through all the parent views. 
 
-There are several different ways to handle routing in SwiftUI. One possible approach is to handle all the routes in the root view of the application. We will start by creating the Routes enum, which will setup the routes for entire application. The implementation is shown below: 
+In terms of navigation, we are not sharing state with other views that will be displayed on the screen, we are sharing app environment configurations. For this scenario ```@Environment``` is a much better choice. ```@Environment``` values can be used to store configuration settings, services, application routers and more. You have already seen ```@Environment``` in action earlier when we stored ```httpClient``` as a custom environment value. 
 
-``` swift 
+We will start by creating an enum to represent routes for our application. 
 
-enum Routes: Hashable {
-    case catalog(CatalogRoutes)
-    case inventory(InventoryRoutes)
-    
-    enum CatalogRoutes: Hashable {
-        case home
-        case detail(Category)
-                
-    }
-    
-    enum InventoryRoutes: Hashable {
-        case home
-        case detail(Product)
+```swift
+enum Route: Hashable {
+    case home
+    case login
+    case detail(Product)
+    case reviews
+    case reviewDetail
+}
+```
+
+> For larger apps you can create nested enums to divide the routes based on different sections of the application. 
+
+Next, we will implement custom Environment key and Environment values. 
+
+```swift
+
+enum NavigationType: Hashable {
+    case push(Route)
+    case unwind(Route)
+}
+
+struct NavigateEnvironmentKey: EnvironmentKey {
+    static var defaultValue: (NavigationType) -> Void = { _ in }
+}
+
+extension EnvironmentValues {
+    var navigate: (NavigationType) -> Void {
+        get { self[NavigateEnvironmentKey.self] }
+        set { self[NavigateEnvironmentKey.self] = newValue }
     }
 }
 ```
 
-The ```Routes``` enum represents the root routes for each section of the screen. This includes ```catalog```, ```inventory```, ```shipping``` etc. The routes for each section are declared inside their corresponding route enums (```CatalogRoutes```, ```InventoryRoutes```).  
+The important thing to notice here is the declaration and usage of ```NavigationType```. The ```NavigationType``` enum represents the two types of navigations that can be performed. This includes the default push navigation and also unwind navigation. Unwind navigation will allow users to go from View G to View C or root. 
 
-For programmatic navigation, we added ```NavigationState```. NavigationState keep tracks of all the routes and will be injected into the app through the ```@EnvironmentObject```. 
+> There are multiple ways of handling unwinding of routes. Just like navigate closure, you can introduce an unwind closure that takes in a route instead of the NavigationType. For this article, I am using a single navigate closure to handle both push and unwind scenarios.  
 
-``` swift 
-class NavigationState: ObservableObject {
-    @Published var routes: [Routes] = []
-}
-```
+Next, we need to setup the routes and inject Environment values at the root of our application. Usually this is performed in the App file of your application. The implementation is shown below:
 
-Finally, we handle all the routes in our root view of the application. This is shown below: 
-
-```swift 
+```swift
 @main
 struct LearnApp: App {
     
-    @StateObject private var navigationState = NavigationState()
+    @State private var routes: [Route] = []
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack(path: $navigationState.routes) {
+            NavigationStack(path: $routes) {
                 ContentView()
-                    .navigationDestination(for: Routes.self) { route in
+                    .navigationDestination(for: Route.self) { route in
                         switch route {
-                            case .catalog(let catalogRoutes):
-                                switch catalogRoutes {
-                                    case .home:
-                                        Text("Home View")
-                                    case .detail(let category):
-                                        // show category detail view
-                                        Text(category.name)
-                                }
-                            case .inventory(let inventoryRoutes):
-                                switch inventoryRoutes {
-                                    case .home:
-                                        // show home view
-                                        Text("Home View")
-                                    case .detail(let product):
-                                        // show product details View
-                                        Text(product.name)
-                                }
+                            case .home:
+                                ContentView()
+                            case .login:
+                                Text("Login")
+                            case .detail(let product):
+                                ProductDetail(product: product)
+                            case .reviews:
+                                ReviewList()
+                            case .reviewDetail:
+                                ReviewDetail()
                         }
                     }
-            }.environmentObject(navigationState)
-        }
-    }
-}
-```
-
-The above approach works but, it can quickly get messy because we are putting all the routes of our application in a single place. One way to control this problem is to create separate routers for each section of the screen and allow routers to handle specific routing behavior. The implementation of ```CatalogRouter``` is shown below. CatalogRouter is responsible for handling all the routes related to the catalog screens.  
-
-``` swift 
-struct CatalogRouter {
-    
-    let routes: CatalogRoutes
-
-    @ViewBuilder
-    func configure() -> some View {
-        switch routes {
-            case .detail(let category):
-                return Text(category.name)
-        }
-    }
-}
-```
-
-Similarly, we can add router for Inventory. 
-
-``` swift 
-struct InventoryRouter {
-    let routes: InventoryRoutes
-    
-    // view builder
-    @ViewBuilder
-    func configure() -> some View {
-        switch routes {
-            case .detail(let product):
-                Text(product.name)
-            case .home:
-                Text("Home")
-        }
-    }
-}
-```
-
-Now, our navigationDestination looks much cleaner. 
-
-``` swift 
-@main
-struct LearnApp: App {
-    
-    @StateObject private var navigationState = NavigationState()
-    
-    var body: some Scene {
-        WindowGroup {
-            NavigationStack(path: $navigationState.routes) {
-                ContentView()
-                    .navigationDestination(for: Routes.self) { route in
-                        switch route {
-                            case .catalog(let routes):
-                                CatalogRouter(routes: routes).configure()
-                            case .inventory(let routes):
-                                InventoryRouter(routes: routes).configure()
+            }.environment(\.navigate) { navType in
+               
+                switch navType {
+                    case .push(let route):
+                        routes.append(route)
+                    case .unwind(let route):
+                        
+                        if route == .home {
+                            routes = []
+                        } else {
+                            guard let index = routes.firstIndex(where: { $0 == route })  else { return }
+                            routes = Array(routes.prefix(upTo: index + 1))
                         }
-                    }
-            }.environmentObject(navigationState)
+                }
+            }
         }
     }
 }
 ```
 
-If you need to call a certain route, you can append the route in ```NavigationState```. This is shown in the implementation below: 
+The ```NavigationStack``` tracks the routes using the $routes binding. Whenever a new route is added or removed, ```.navigationDestination``` is validated. The ```.navigationDestination``` modifier is responsible for returning the destination view based on the type of the route. In a similar fashion, environment values are injected to the ```NavigationStack```. The ```.navigate``` closure is responsible for appending new routes and even unwinding routes to a particular destination.
 
-``` swift 
-struct ContentView: View {
+Finally, views can perform programmatic navigation using the new ```@Environment``` key called ```navigate```. This is shown in the following implementation: 
+
+```swift
+struct ReviewList: View {
     
-    @EnvironmentObject private var navigationState: NavigationState
+    @Environment(\.navigate) private var navigate
     
     var body: some View {
-       
         VStack {
-            
-            Button("Go to Catalog") {
-                navigationState.routes.append(.catalog(.detail(Category(name: "Category 1"))))
+            Text("Reviews")
+            Button("Go to Product") {
+                 navigate(.push(.detail(Product(name: "Chair"))))
             }
-            
-            Button("Go to Inventory") {
-                navigationState.routes.append(.inventory(.detail(Product(name: "Product 1"))))
+            Button("Go back to Home View") {
+                navigate(.unwind(.home))
             }
-           
-        } .padding()
+        }
     }
 }
 ```
+
+While researching for this section, I tried out various ways to perform routing. One of the solutions included the following easy to use syntax: 
+
+```swift 
+navigate(.detail(Product(name: "Chair")))
+```
+
+The problem I ran into was the above implementation did not supported unwinding routes. One way to handle unwinding would be to simply check the routes array and then if the route already exists then drop all the indexes after that route. Although this can be implemented but it makes code unclear to the developer. Take a look at the following example: 
+
+```swift
+navigate(.reviews)
+```
+
+When the developer composes this code, the assumption is that it facilitates push navigation rather than unwinding. However, if the same function call is employed to execute an unwind operation exclusively in cases where the route already exists, it imposes an additional cognitive burden on the developer. Consequently, the developer is compelled to possess a more comprehensive understanding of the inner workings of the function before initiating its invocation.
+
+So, in the end it depends on your needs. If you have criteria to support unwinding routes then use the implementation above, on the other hand if you are just interested in normal push navigation then substitute ```NavigationType``` in navigate closure with Route. 
 
 > I am sure there are other ways of handling navigation in SwiftUI. Send me a [Gist](https://gist.github.com/) of your suggestion on [Twitter](https://twitter.com/azamsharp) and I will be more than happy to review it. 
 
 > I also wrote a book on Navigation API in SwiftUI. If you are interested, you can download it free of charge from [here](https://azamsharp.com/books). 
-
 
 ## Testing 
 
