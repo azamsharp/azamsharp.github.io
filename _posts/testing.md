@@ -6,7 +6,8 @@ Software architecture is always a topic for hot debate, specially when there are
 
 The outline of this article is shown below: 
 
-- [Modular Architecture](#modular-architecture) 
+- [Modular Architecture](#modular-architecture)
+- [MVVM in SwiftUI](#mvvm-in-swiftui) 
 - [Understanding the MV Pattern](#understanding-the-mv-pattern)    
 - [Screens vs Views](#screens-vs-views) 
 - [Multiple Aggregate Models](#multiple-aggregate-models) 
@@ -14,6 +15,7 @@ The outline of this article is shown below:
 - [Validation](#validation) 
 - [Navigation](#navigation) 
 - [Grouping View Events](#grouping-view-events) 
+- [Formatting]
 - [Testing](#testing) 
 
 ## Modular Architecture 
@@ -28,7 +30,7 @@ Modularity can be achieved in several different ways. You can expose each module
 
 > The focus of this article is not Swift Package Manager, but how to achieve modularity by breaking the app based on the bounded context of the application. **Swift Package Manager can be used to package those dependencies into reusable modules.** 
 
-## MVVM in SwiftUI (Updated) 
+## MVVM in SwiftUI
 
 In the traditional MVVM pattern, when you create a new view, you also create a corresponding view model (though not all views require one). The view model's role is to manage bindings, handle network operations (using a network layer), manage validations, among other tasks. Let's consider an example of an app that displays a movie list, allows you to add a new movie, and shows movie details. To structure such an app using the MVVM pattern, you can follow the approach outlined below.
 
