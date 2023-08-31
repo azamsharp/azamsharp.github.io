@@ -1,5 +1,12 @@
 # Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture
 
+Updated (08/31/2023)
+- Added "Problems with MVVM with SwiftUI". 
+- Updated "Understanding the MV Pattern" 
+- Updated "Navigation"
+- Updated "Displaying Errors"
+- Added "Formatting" 
+
 Software architecture is always a topic for hot debate, specially when there are so many different choices. For the last 8-12 months, I have been experimenting with MV pattern to build client/server apps and wrote about it in my original article [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). In this article, I will discuss how MV pattern can be applied to build large scale client/server applications. 
 
 > Architecture and patterns depends on the type of application you are building. No single architecture will work in all scenarios. Choose the best architecture suitable for your application needs. 
@@ -7,15 +14,16 @@ Software architecture is always a topic for hot debate, specially when there are
 The outline of this article is shown below: 
 
 - [Modular Architecture](#modular-architecture)
-- [MVVM in SwiftUI](#mvvm-in-swiftui) 
+- [Problems with MVVM with SwiftUI](#problems-with-mvvm-with-swiftui)
 - [Understanding the MV Pattern](#understanding-the-mv-pattern)    
 - [Screens vs Views](#screens-vs-views) 
 - [Multiple Aggregate Models](#multiple-aggregate-models) 
 - [View Specific Logic](#view-specific-logic)
 - [Validation](#validation) 
 - [Navigation](#navigation) 
+- [Displaying Errors](#displaying-errors)
 - [Grouping View Events](#grouping-view-events) 
-- [Formatting]
+- [Formatting](#formatting)
 - [Testing](#testing) 
 
 ## Modular Architecture 
@@ -34,9 +42,7 @@ Modularity can be achieved in several different ways. You can expose each module
 
 MVVM pattern originated from [Presentation Model](https://martinfowler.com/eaaDev/PresentationModel.html) architecture, which is known as Application Model to Visual Works Smalltalk users. The main idea behind the Presentation Model is that the state and the behavior of the view is pulled out to its own model. The Presentation Model communicates with the business logic layer and provides the data to the view. The view performs two way communication with the Presentation Model in which, the data can flow from the view to the Presentation Model and vice versa. 
 
-The main motivation for the Presentation Model is to provide an interface to the view so it can only get the data it needs, without directly dealing with the complicated business logic layer. Martin Fowler mentioned that one of the annoyances of Presentation Model is to write the synchronization code (binding) between the Presentation Model and the view. 
-
-Later, Microsoft introduced WPF (Windows Presentation Foundation) which consisted of built-in binding between the view (XAML) and view models (C#). Microsoft started calling it MVVM (Model View View Model).  
+The main motivation for the Presentation Model is to provide an interface to the view so it can only get the data it needs, without directly dealing with the complicated business logic layer. Martin Fowler mentioned that one of the annoyances of Presentation Model is to write the synchronization code (binding) between the Presentation Model and the view. This was later resolved when Microsoft introduced WPF (Windows Presentation Foundation) framework. Windows Presentation Foundation consisted of built-in binding between the view (XAML) and view models (C#). Microsoft started calling it MVVM (Model View View Model).  
 
 In the conventional MVVM pattern, alongside the creation of a new view designed to function as a screen, a corresponding view model is also crafted in parallel. The view model's role is to manage bindings, handle network operations (using a network layer), manage validations, among other tasks. Imagine an application focused on presenting a list of movies from an API, affording users the ability to append new movies, and exhibiting comprehensive movie details. To architect such an application adhering to the MVVM pattern, you may end up with the following structure. 
 
@@ -46,11 +52,11 @@ In the conventional MVVM pattern, alongside the creation of a new view designed 
 | AddMovieView | AddMovieViewModel |
 | MovieDetailView | MovieDetailViewModel | 
 
-Each view is represented by its own view model. Consider an application that consists of 20+ screens, you will end up with 20+ view models. A typical view model can consists of networking code (through a networking layer), UI validation and data transformation code. Each of these view models conforms to ```ObservableObject``` protocol. The main purpose of ```ObservableObject``` protocol is to define a new source of truth. Source of truth is one of the most important concepts in SwiftUI as it is responsible for keeping the data and the view in-sync. In a client/server application, source of truth is the server. So, if the source of truth is the same, why are we creating new source of truths for each view by conforming to ```ObservableObject``` protocol. 
+Each view is represented by its own view model. Consider an application that consists of 20+ screens, you will end up with 20+ view models. A typical view model can consists of networking code (through a networking layer), UI validation and data transformation code. Each of these view models conforms to ```ObservableObject``` protocol. The main purpose of ```ObservableObject``` protocol is to define a new source of truth. Source of truth is one of the most important concepts in SwiftUI as it is responsible for keeping the data and the view in-sync. In a client/server application, source of truth is the server. So, if the source of truth is the same, why are we creating new source of truths for each view by introducing a view model by conforming to ```ObservableObject``` protocol. 
 
-> This doesn't imply that you have to restrict yourself to just one ```ObservableObject``` or source of truth for your entire application. While you can certainly incorporate multiple ObservableObjects into your application, their introduction should not be solely driven by the inclusion of a new view. The primary motivation behind introducing a new ObservableObject should stem from the integration of a new source of truth. Furthermore, you'll come to understand that there are instances where you'll introduce ObservableObjects based on the bounded context of the application. This is covered later in this article. 
+> This does not imply that you have to restrict yourself to just one ```ObservableObject``` or source of truth for your entire application. While you can certainly incorporate multiple ObservableObjects into your application, their introduction should not be solely driven by the inclusion of a new view. The primary motivation behind introducing a new ObservableObject should stem from the integration of a new source of truth. Furthermore, you'll come to understand that there are instances where you'll introduce ObservableObjects based on the bounded context of the application. This is covered later in this article. 
 
-Another concerns arises from the fact that in a client/server application, most of these view models will need to communicate with the server. So, if you have a dozen screens and each screen is accompanied with a designated view models then it means you need to inject the networking layer to each of those view models using the principles of dependency injection. This can result in the following implementations: 
+Another concerns arises from the fact that in a client/server application, most of these view models will need to communicate with the server. So, if you have a dozen screens and each screen is accompanied with a designated view model then it means you need to inject the networking layer to each of those view models using the principles of dependency injection. This can result in the following implementations: 
 
 ```swift 
 struct MoviesApp: App {
@@ -63,7 +69,7 @@ struct MoviesApp: App {
 
 ```MovieListView``` depends on ```MovieListViewModel``` which depends on ```HTTPClient```. The main issue is not the dependency injection but that you have to do this for every view that consists of a view model and wants to communicate with the server. Consider repeating the same steps for ```AddMovieView``` and ```MovieDetailView```. This can make your code extremely hard to understand and with each ```ObservableObject``` you have created a new source of truth. With dozens of sources of truth, it becomes hard to manage and share state between different views in a client/server applications. 
 
-But the most important point is that the functionality offered by a view model is already baked in the view. The primary responsibility of a view model is to support binding. This is already possible inside the view through the use of ```@State```, ```@Binding```, ```@EnvironmentObject``` property wrappers. 
+But the most important point is that the functionality offered by a view model is already baked into the view. The primary responsibility of a view model is to support binding. This is already possible inside the view through the use of ```@State```, ```@Binding```, ```@EnvironmentObject``` property wrappers. 
 
 > It's important to reiterate that this does not imply a shift towards placing all elements within a view. The integration of an ```ObservableObject``` is warranted when a new source of truth emerges. However, the inclusion of an ```ObservableObject``` shouldn't be prompted solely by the addition of a new view. Consider an example of ```LocationManager```. The purpose of a ```LocationManager``` is to provide the user with a new location, region, coordinates etc. This is a good candidate for ```ObservableObject```.  
 
@@ -74,12 +80,12 @@ SwiftUI views are mapped to the UIView counter parts and then rendered on the sc
 | SwiftUI View | UIView |
 | --- | ----------- |
 | List | UICollectionView |
-| Text | UILabel |
+| Text, Button | CGDrawingView |
 | TextField | UITextField | 
 
-All this mapping is hidden from the developers but you can always look at the inner details through the use of Instruments. 
+All this mapping is hidden from the developers but you can always look at the inner details through the view debugging feature in Xcode. Below you can see through view debugging that List in SwiftUI maps to UICollectionView.  
 
-TODO: screenshot from instruments
+![View Debugging](/images/view-debugging.png)
 
 The views in SwiftUI, reminds me of ReactJS JSX syntax. Let's take a look at a very small example. 
 
@@ -99,6 +105,8 @@ In the above ReactJS code, we have created a functional component called ```App`
 SwiftUI uses the same concepts internally. The views in the body property are not actual views but the declaration of views. Eventually, those views gets converted to real views and then displayed on the screen. John Sundell also talked about it in his article [SwiftUI views versus modifiers](https://www.swiftbysundell.com/articles/swiftui-views-versus-modifiers/). 
 
 If you are interested in learning more about the concept of virtual DOM then check out this talk title [Tom Occhino and Jordan Walke: JS Apps at Facebook](https://youtu.be/GW0rj4sNH2w?t=301). This is the talk, where Facebook introduced ReactJS to the public. 
+
+For three years, I've employed the conventional MVVM approach alongside SwiftUI, but consistently encountered struggles with the framework. I regrettably overlooked Apple's beneficial property wrappers, attempting instead to create solutions from scratch. This misguided effort led to increased complications, a surplus of code, and heightened maintenance demands. It was during this period that I realized the imperative for a more effective strategy.
 
 ## Understanding the MV Pattern 
 
@@ -149,9 +157,9 @@ struct NewsListScreen: View {
 }
 ```
 
-The ```NewsListScreen``` serves as a container view. This means it is responsible for making the network call and fetching the data. Once the data is fetched, it can be passed down to the presentation view. At present the only reusable view we have in the above code is ```ArticleView```. Depending on your app and requirements, you can also extract out List into a separate ```ArticleListView``` component. 
+The ```NewsListScreen``` serves as a container view. This means it is responsible for making network calls and fetching the data. Once the data is fetched, it can be passed down to the presentation view. At present the only reusable view we have in the above code is ```ArticleView```. Depending on your app and requirements, you can also extract out List into a separate ```ArticleListView``` component. 
 
-Another thing to notice in the above code is the use of ```sortedArticles``` private property. As I mentioned earlier that in MV Pattern, views are the view models. This is no need to create a view model associated with ```NewsListScreen```. If your view is getting large then use the principles of view decomposition to break it into smaller pieces. Keep in mind that views in SwiftUI are value types. Value types are cheap to create. This gives you the flexibility to break your views into multiple reusable pieces.  
+Another thing to notice in the above code is the use of ```sortedArticles``` private property. As I mentioned earlier that in MV Pattern, views are the view models. This is no need to create a view model associated with ```NewsListScreen```. If your view is getting large then use the principles of [view decomposition to break it into smaller pieces](https://youtu.be/rgckaWoSlwc?si=5ZaRLmFtRgf40Vbp). Keep in mind that views in SwiftUI are value types. Value types are cheap to create. This gives you the flexibility to break your views into multiple reusable pieces.  
 
 > If you are wondering how would you test the sortedArticles property then keep reading. Testing will be covered in the later section of this article. 
 
@@ -731,72 +739,6 @@ In the end extracting the form validation into a separate struct and writing uni
 
 I covered few different ways of handling and displaying validation errors in one of my previous articles that you can read [here](https://azamsharp.com/2022/08/09/intro-to-mv-state-pattern.html). 
 
-## Displaying Errors 
-
-Displaying errors is an integral part of any application. 
-
-In SwiftUI, we can centralize displaying errors to a single place. This will prevent us from writing repetitive code and also provide a single point in codebase to change the layout and appearance.  
-
-We can start by creating an ErrorWrapper, which will be responsible for wrapping the actual error and also providing guidance to the user on the next steps. 
-
-``` swift 
-struct ErrorWrapper: Identifiable {
-    let id = UUID()
-    let error: Error
-    let guidance: String
-}
-```
-
-ErrorWrapper will be used by ErrorView. ErrorView will be responsible for displaying the details of the error in a visual format. You can find basic implementation of an ErrorView below.
-
-``` swift 
-struct ErrorView: View {
-    
-    let errorWrapper: ErrorWrapper
-    
-    var body: some View {
-        VStack {
-            Text("Error has occured in the application.")
-                .font(.headline)
-                .padding([.bottom], 10)
-            Text(errorWrapper.error.localizedDescription)
-            Text(errorWrapper.guidance)
-                .font(.caption)
-        }.padding()
-    }
-}
-```
-
-> ErrorView is simply a view and you can customize it as much as you want. 
-
-In order to set the error wrapper from any part of our application, we will add an ErrorState as an ObservableObject and inject it in an EnvironmentObject. 
-
-``` swift 
-class ErrorState: ObservableObject {
-    @Published var errorWrapper: ErrorWrapper?
-}
-
-@main
-struct StoreApp: App {
-    
-    @StateObject private var errorState = ErrorState()
-    
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environmentObject(errorState)
-                .sheet(item: $errorState.errorWrapper) { errorWrapper in
-                    ErrorView(errorWrapper: errorWrapper)
-                }
-        }
-    }
-}
-
-```
-
-Whenever the errorState changes, a sheet will be displayed with the latest error. Once again, you are free to use a different method of displaying the error instead of a sheet. 
-
-This technique allows you to have a single point in your codebase, which is responsible for displaying errors. 
 
 ## Grouping View Events 
 
@@ -1036,6 +978,259 @@ So, in the end it depends on your needs. If you have criteria to support unwindi
 > I am sure there are other ways of handling navigation in SwiftUI. Send me a [Gist](https://gist.github.com/) of your suggestion on [Twitter](https://twitter.com/azamsharp) and I will be more than happy to review it. 
 
 > I also wrote a book on Navigation API in SwiftUI. If you are interested, you can download it free of charge from [here](https://azamsharp.com/books). 
+
+## Displaying Errors 
+
+Displaying errors is an integral part of any application. In SwiftUI we have many different ways of displaying errors. In this section, we will cover three different techniques that can be used to display errors. 
+
+### Technique #1: 
+
+This technique was demonstrated in Apple's [Scrumdinger](https://developer.apple.com/tutorials/app-dev-training/getting-started-with-scrumdinger) application. We will start by creating an ```ErrorWrapper```, which will be responsible for wrapping the actual error and also providing guidance to the user on the next steps. The implementation is shown below:  
+
+``` swift 
+struct ErrorWrapper: Identifiable {
+    let id = UUID()
+    let error: Error
+    let guidance: String
+}
+```
+
+ErrorView is responsible for displaying the details of the error in a visual format. You can find basic implementation of an ErrorView below.
+
+``` swift 
+struct ErrorView: View {
+    
+    let errorWrapper: ErrorWrapper
+    
+    var body: some View {
+        VStack {
+            Text("Error has occured in the application.")
+                .font(.headline)
+                .padding([.bottom], 10)
+            Text(errorWrapper.error.localizedDescription)
+            Text(errorWrapper.guidance)
+                .font(.caption)
+        }.padding()
+    }
+}
+```
+
+> ErrorView is simply a view and you can customize it as much as you want. 
+
+The usage of ```ErrorWrapper``` and ```ErrorView``` is shown below: 
+
+``` swift 
+struct HomeView: View {
+    
+    @State private var errorWrapper: ErrorWrapper?
+    
+    private enum SampleError: Error {
+        case operationFailed
+    }
+    
+    var body: some View {
+        VStack {
+            Button("Throw Error") {
+                do {
+                    throw SampleError.operationFailed
+                } catch {
+                    errorWrapper = ErrorWrapper(error: error, guidance: "Operation failed. Please try again.")
+                }
+            }
+        }.sheet(item: $errorWrapper) { errorWrapper in
+            ErrorView(errorWrapper: errorWrapper)
+        }
+    }
+}
+```
+
+Now, when an error is thrown a sheet is presented with the details about the error along with the guidance for next steps. 
+
+At present, when the intention is to present an error in a distinct view, the process necessitates the creation of an "errorWrapper" along with the attachment of a sheet to the corresponding view for the error's visibility. But imagine a scenario where the display of errors could be consolidated into a centralized location.
+
+### Technique #2:
+
+Instead of attaching the sheet/alert to each screen of the application, we can attach it to the root view. This way we have a single place to handle, displaying of the errors. For this to work, we need global access to the errorWrapper so it can be set by any view. We will use the same technique we used in the [Navigation](#navigation) section and use a custom ```@Environment``` value to manage global access. The implementation for the custom key and the extension is shown below: 
+
+``` swift 
+struct ShowErrorEnvironmentKey: EnvironmentKey {
+    static var defaultValue: (Error, String) -> Void = { _, _ in }
+}
+
+extension EnvironmentValues {
+    var showError: (Error, String) -> Void {
+        get { self[ShowErrorEnvironmentKey.self] }
+        set { self[ShowErrorEnvironmentKey.self] = newValue }
+    }
+}
+```
+
+Now, we can use the ```showError``` Environment value in your view as implemented below: 
+
+```swift 
+struct HomeView: View {
+    
+    @Environment(\.showError) private var showError
+    
+    private enum SampleError: Error {
+        case operationFailed
+    }
+    
+    var body: some View {
+        VStack {
+            Button("Throw Error") {
+                do {
+                    throw SampleError.operationFailed
+                } catch {
+                   showError(error, "Please try again later.")
+                }
+            }
+        }
+    }
+}
+```
+
+Finally, will will attach the new Environment value to the root view of the application so it is easily accessible by all child views. 
+
+```swift 
+@main
+struct LearnApp: App {
+    
+    @State private var errorWrapper: ErrorWrapper?
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environment(\.showError) { error, guidance in
+                    errorWrapper = ErrorWrapper(error: error, guidance: guidance)
+                }
+                .sheet(item: $errorWrapper) { errorWrapper in
+                    Text(errorWrapper.error.localizedDescription)
+                }
+        }
+    }
+}
+```
+
+We have now centralized the displaying of errors for our application. In the future if you want to make any changes then there is a single place you can update. 
+
+> New displays like .alert, .toast etc can be added by introducing an enum to the ErrorWrapper. You can check out the implementation [here](https://twitter.com/azamsharp/status/1695476201127645465?s=20). 
+
+### Technique #3: 
+
+I learned about this technique from my discussion with [Hussein EIRyalat](https://www.linkedin.com/in/hussc/). He used custom view modifiers to display of errors. I have changed the implementation a little bit to support ```ErrorWrapper```.   
+
+The first step is to implement the view modifiers and view extensions. The implementation is shown below: 
+
+``` swift 
+struct ErrorViewModifier: ViewModifier {
+    
+    @Binding var errorWrapper: ErrorWrapper?
+    
+    init(errorWrapper: Binding<ErrorWrapper?>) {
+        self._errorWrapper = errorWrapper
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .sheet(item: $errorWrapper) { errorWrapper in
+                Text(errorWrapper.error.localizedDescription)
+            }
+    }
+}
+
+extension View {
+    
+    func onError(_ errorWrapper: Binding<ErrorWrapper?>) -> some View {
+        modifier(ErrorViewModifier(errorWrapper: errorWrapper))
+    }
+}
+```
+
+Now, we can directly call ```onError``` as shown in the implementation below: 
+
+``` swift 
+struct HomeView: View {
+    
+    @State private var errorWrapper: ErrorWrapper?
+    
+    private enum SampleError: Error {
+        case operationFailed
+    }
+    
+    var body: some View {
+        VStack {
+            Button("Throw Error") {
+                do {
+                    throw SampleError.operationFailed
+                } catch {
+                    errorWrapper = ErrorWrapper(error: error, guidance: "Please try again.")
+                }
+            }
+        }.onError($errorWrapper)
+    }
+}
+```
+
+In this section, we covered three different ways of displaying errors in our SwiftUI application. Each approach has its own advantages and disadvantages. Try out different approaches and see which one fits your needs. 
+
+## Formatting 
+
+It is common practice to format the data before presenting it to the user. 
+
+When formatting data, it's crucial to exercise caution with regard to the user's present locale. Take a look at the following example. 
+
+```swift 
+struct HomeView: View {
+    
+    let amount: Double = 25.75
+    
+    var body: some View {
+        // displays $25.750000
+        Text("$\(amount)") 
+    }
+}
+```
+
+There are few problems with the above implementation. The first one is pretty basic. Users don't want to see ```$25.750000``` they want to see ```$25.75```. But the much bigger issue is the hard-coded ```$``` sign. This means that the amount will only be displayed in US dollar currency. It would be a much better idea to set the currency based on user's locale. 
+
+The following implementation shows how to display currency correctly based on user's locale.  
+
+``` swift 
+extension Locale {
+    static var currencyCode: String {
+        Locale.current.currency?.identifier ?? "USD"
+    }
+}
+
+struct HomeView: View {
+    
+    let amount: Double = 25.75
+    
+    var body: some View {
+        // displays $25.75 
+        Text(amount, format: .currency(code: Locale.currencyCode))
+    }
+}
+```
+
+Formatting in SwiftUI is not just limited to currency but you can format dates, measurements and even lists. This is shown below: 
+
+**Formatting Dates:**
+
+![Date Formatting](/images/format-date.jpeg)
+
+**Formatting Lists:**
+
+![Format Lists](/images/format-lists.jpeg)
+
+**Formatting Distances**: 
+
+You don't need to access locale from ```@Environment```. This was just used to demonstrate that it converts distances automatically based on the locale. 
+
+![Format Distances](/images/format-distances.jpeg)
+
+So, the next you are trying to format your data to be displayed in a SwiftUI view make sure to check out the built-in formatters. There is a very good chance that SwiftUI already provides utility functions for your needs.  
 
 ## Testing 
 
