@@ -30,9 +30,15 @@ Modularity can be achieved in several different ways. You can expose each module
 
 > The focus of this article is not Swift Package Manager, but how to achieve modularity by breaking the app based on the bounded context of the application. **Swift Package Manager can be used to package those dependencies into reusable modules.** 
 
-## MVVM in SwiftUI
+## Problems with MVVM with SwiftUI
 
-In the traditional MVVM pattern, when you create a new view, you also create a corresponding view model (though not all views require one). The view model's role is to manage bindings, handle network operations (using a network layer), manage validations, among other tasks. Let's consider an example of an app that displays a movie list, allows you to add a new movie, and shows movie details. To structure such an app using the MVVM pattern, you can follow the approach outlined below.
+MVVM pattern originated from [Presentation Model](https://martinfowler.com/eaaDev/PresentationModel.html) architecture, which is known as Application Model to Visual Works Smalltalk users. The main idea behind the Presentation Model is that the state and the behavior of the view is pulled out to its own model. The Presentation Model communicates with the business logic layer and provides the data to the view. The view performs two way communication with the Presentation Model in which, the data can flow from the view to the Presentation Model and vice versa. 
+
+The main motivation for the Presentation Model is to provide an interface to the view so it can only get the data it needs, without directly dealing with the complicated business logic layer. Martin Fowler mentioned that one of the annoyances of Presentation Model is to write the synchronization code (binding) between the Presentation Model and the view. 
+
+Later, Microsoft introduced WPF (Windows Presentation Foundation) which consisted of built-in binding between the view (XAML) and view models (C#). Microsoft started calling it MVVM (Model View View Model).  
+
+In the conventional MVVM pattern, alongside the creation of a new view designed to function as a screen, a corresponding view model is also crafted in parallel. The view model's role is to manage bindings, handle network operations (using a network layer), manage validations, among other tasks. Imagine an application focused on presenting a list of movies from an API, affording users the ability to append new movies, and exhibiting comprehensive movie details. To architect such an application adhering to the MVVM pattern, you may end up with the following structure. 
 
 | View | View Model |
 | --- | ----------- |
@@ -40,61 +46,30 @@ In the traditional MVVM pattern, when you create a new view, you also create a c
 | AddMovieView | AddMovieViewModel |
 | MovieDetailView | MovieDetailViewModel | 
 
-A typical view model can consists of networking code (through a networking layer), UI validation and data transformation code. Each of these view models is conforming to ObservableObject protocol. The main purpose of ObservableObject protocol is used to define a new source of truth. Source of truth is one of the most important concepts in SwiftUI as it is responsible for keeping the data and the view sync. In a client/server application, source of truth is the server. So, if the source of truth is the same, why are we creating new source of truths by conforming to ObservableObject protocol. 
+Each view is represented by its own view model. Consider an application that consists of 20+ screens, you will end up with 20+ view models. A typical view model can consists of networking code (through a networking layer), UI validation and data transformation code. Each of these view models conforms to ```ObservableObject``` protocol. The main purpose of ```ObservableObject``` protocol is to define a new source of truth. Source of truth is one of the most important concepts in SwiftUI as it is responsible for keeping the data and the view in-sync. In a client/server application, source of truth is the server. So, if the source of truth is the same, why are we creating new source of truths for each view by conforming to ```ObservableObject``` protocol. 
 
-> This doesn't imply that you ought to restrict yourself to just one ObservableObject for your entire application. While you can certainly incorporate multiple ObservableObjects into your application, their introduction should not be solely driven by the inclusion of a new view. The primary motivation behind introducing a new ObservableObject should stem from the integration of a new source of truth. Furthermore, you'll come to understand that there are instances where you'll introduce ObservableObjects based on the bounded context of the application.
+> This doesn't imply that you have to restrict yourself to just one ```ObservableObject``` or source of truth for your entire application. While you can certainly incorporate multiple ObservableObjects into your application, their introduction should not be solely driven by the inclusion of a new view. The primary motivation behind introducing a new ObservableObject should stem from the integration of a new source of truth. Furthermore, you'll come to understand that there are instances where you'll introduce ObservableObjects based on the bounded context of the application. This is covered later in this article. 
 
-Another concern arises from the fact that each of these view models relies on the networking layer. This implies that a networking service must be provided as a dependency for every individual view model. In certain scenarios, you might even find yourself injecting a view model into a view that also relies on a network service. This can introduce significant complexity and become unwieldy, especially in larger applications featuring numerous view models.
+Another concerns arises from the fact that in a client/server application, most of these view models will need to communicate with the server. So, if you have a dozen screens and each screen is accompanied with a designated view models then it means you need to inject the networking layer to each of those view models using the principles of dependency injection. This can result in the following implementations: 
 
-This scenario is shown in the code below: 
-
-```swift
-protocol HTTPClientProtocol {
-    // contract
-}
-
-struct HTTPClient: HTTPClientProtocol {
-    // conform to the contract
-}
-
-struct Movie: Codable {
-    let name: String
-}
-
-class MovieListViewModel: ObservableObject {
-    
-    @Published var movies: [Movie] = []
-    let httpClient: HTTPClientProtocol
-    
-    init(httpClient: HTTPClientProtocol) {
-        self.httpClient = httpClient
-    }
-    
-    func loadMovies() {
-        // movies = httpClient.load(resource...)
-    }
-}
-
-struct MovieListView: View {
-    
-    let vm: MovieListViewModel
-    
-    var body: some View {
-        Text("Display Movies")
-    }
-}
-
+```swift 
 struct MoviesApp: App {
     var body: some Scene {
+        // httpClient can take HTTPClientProtocol 
         MovieListView(vm: MovieListViewModel(httpClient: HTTPClient()))
     }
 }
-
 ```
 
-Lastly, the functionality offered by a view model is already available in the view. The primary responsibility of a view model is to support binding. This is already possible inside the view through the use of ```@State```, ```@Binding```, ```@EnvironmentObject``` property wrappers. I strongly believe that Apple did a disservice to the iOS community by calling it a view. They should have called it a component or something similar. This has led to a lot of confusion in the iOS community. The word view entails that it is a visual only component like HTML in web development or XAML in WPF. But that is not the case. The view in SwiftUI is the return from the ```body``` property. Even that is not an actual view but just the declaration of the view. 
+```MovieListView``` depends on ```MovieListViewModel``` which depends on ```HTTPClient```. The main issue is not the dependency injection but that you have to do this for every view that consists of a view model and wants to communicate with the server. Consider repeating the same steps for ```AddMovieView``` and ```MovieDetailView```. This can make your code extremely hard to understand and with each ```ObservableObject``` you have created a new source of truth. With dozens of sources of truth, it becomes hard to manage and share state between different views in a client/server applications. 
 
-SwiftUI views are mapped to the UIView counter parts and then rendered on the screen. SwiftUI views are just basic value type structs. They have no knowledge on how to paint pixels on the screen. SwiftUI uses the declaration of the views to render actual UIViews. The mapping for some of the common SwiftUI to UIView is shown below:
+But the most important point is that the functionality offered by a view model is already baked in the view. The primary responsibility of a view model is to support binding. This is already possible inside the view through the use of ```@State```, ```@Binding```, ```@EnvironmentObject``` property wrappers. 
+
+> It's important to reiterate that this does not imply a shift towards placing all elements within a view. The integration of an ```ObservableObject``` is warranted when a new source of truth emerges. However, the inclusion of an ```ObservableObject``` shouldn't be prompted solely by the addition of a new view. Consider an example of ```LocationManager```. The purpose of a ```LocationManager``` is to provide the user with a new location, region, coordinates etc. This is a good candidate for ```ObservableObject```.  
+
+Now, let's move our focus to the view. I strongly believe that Apple did a disservice to the iOS community by calling it a view. They should have called it a component or something similar. The word view entails that it is a visual only component like HTML in web development or XAML in WPF. But that is not the case. The view in SwiftUI is the return from the ```body``` property. Even that is not an actual view but just the declaration of the view. 
+
+SwiftUI views are mapped to the UIView counter parts and then rendered on the screen. SwiftUI views are just basic value type structs. They have no knowledge on how to paint pixels on the screen. SwiftUI uses the declaration of the views to render actual UIViews. Below you can find some common mapping from SwiftUI views to UIKit views:
 
 | SwiftUI View | UIView |
 | --- | ----------- |
@@ -121,17 +96,19 @@ function App() {
 
 In the above ReactJS code, we have created a functional component called ```App```. The App component returns a ```<div>``` element containing a ```<h1>``` and ```<button>```. The thing to notice here is that those are not actual HTML elements. Those are virtual DOM (Document Object Model) elements managed by React framework. The main reason is that React needs to track changes to those elements so it can only render, what has changed. Once React finds out the changed elements using the diffing process, those virtual DOM elements are used to render real HTML elements on the screen.  
 
-I believe SwiftUI uses the same concepts internally. The views in the body property are not actual views but the declaration of views. Eventually, those views gets converted to real views and then displayed on the screen. John Sundell also talked about it in his article [SwiftUI views versus modifiers](https://www.swiftbysundell.com/articles/swiftui-views-versus-modifiers/). 
+SwiftUI uses the same concepts internally. The views in the body property are not actual views but the declaration of views. Eventually, those views gets converted to real views and then displayed on the screen. John Sundell also talked about it in his article [SwiftUI views versus modifiers](https://www.swiftbysundell.com/articles/swiftui-views-versus-modifiers/). 
 
 If you are interested in learning more about the concept of virtual DOM then check out this talk title [Tom Occhino and Jordan Walke: JS Apps at Facebook](https://youtu.be/GW0rj4sNH2w?t=301). This is the talk, where Facebook introduced ReactJS to the public. 
 
 ## Understanding the MV Pattern 
 
-The main idea behind the MV pattern is to allow views directly talk to the model. In MV pattern, **views are the view model**. This eliminates the need for creating unnecessary view models for each view, which simply contributes to the size of the project but does not provide any additional benefits. 
+The main idea behind the MV pattern is to allow views directly talk to the model. In MV pattern, **views are the view model**. This eliminates the need for creating unnecessary view models for each view, which simply contributes to the size of the project but does not provide any additional benefits. Keep in mind that every single line of code you write also needs to be maintained. This means that your code is not an asset but a liability.  
 
 > MV pattern does not advocate putting all the business logic inside a view. That particular pattern is known as [Container Pattern](https://www.patterns.dev/posts/presentational-container-pattern/). I have also talked about it on my blog. You can read about it [here](https://azamsharp.com/2023/01/24/introduction-to-container-pattern.html).   
 
 MV pattern can take different forms depending on the type of app you are writing. This article is mainly focused on a client/server apps, where a SwiftUI app serves as a client.
+
+> Although there is no official name for this pattern, I have seen most people call it MV Pattern since it does not include an extra layer of view models. This pattern has originated from Apple's documentation and code samples. 
 
 In WWDC 2020 talk titled [Data Essentials in SwiftUI](https://developer.apple.com/videos/play/wwdc2020/10040/) Apple presented the following diagram. 
 
@@ -174,7 +151,7 @@ struct NewsListScreen: View {
 
 The ```NewsListScreen``` serves as a container view. This means it is responsible for making the network call and fetching the data. Once the data is fetched, it can be passed down to the presentation view. At present the only reusable view we have in the above code is ```ArticleView```. Depending on your app and requirements, you can also extract out List into a separate ```ArticleListView``` component. 
 
-Another thing to notice in the above code is the use of ```sortedArticles``` private property. As I mentioned earlier that in MV pattern, views are the view models. This is no need to create a view model associated with ```NewsListScreen```. If your view is getting large then use view decomposition to break it into smaller pieces. Keep in mind that views in SwiftUI are value types. Value types are cheap to create. This gives you the flexibility to break your views into multiple reusable pieces.  
+Another thing to notice in the above code is the use of ```sortedArticles``` private property. As I mentioned earlier that in MV Pattern, views are the view models. This is no need to create a view model associated with ```NewsListScreen```. If your view is getting large then use the principles of view decomposition to break it into smaller pieces. Keep in mind that views in SwiftUI are value types. Value types are cheap to create. This gives you the flexibility to break your views into multiple reusable pieces.  
 
 > If you are wondering how would you test the sortedArticles property then keep reading. Testing will be covered in the later section of this article. 
 
