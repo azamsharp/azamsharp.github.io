@@ -1,8 +1,14 @@
-# The Ultimate Guide to Building SwiftData Applications  
+# The Ultimate Guide to Building SwiftData Applications 
+
+- Update (09/24/2022): Code samples updated for Xcode 15 
+- Update (09/24/2022): Added new section "Persisting and Filtering by Enums" 
+- Update (09/24/2022): Added new section "Transformable Types" 
 
 SwiftData made its debut at WWDC 2023 as a replacement for the Core Data framework. Serving as a wrapper on top of Core Data, SwiftData enables on-device persistence and seamless syncing to the cloud.
 
 One of the key benefits of utilizing SwiftData lies in its effortless integration with the SwiftUI framework. This article is structured into several sections, each delving into different aspects of the SwiftData framework. First, we will explore the foundational concepts of SwiftData, followed by an examination of its architectural design, relationship management, migration capabilities, and more. By navigating through these sections, you will gain a comprehensive understanding of SwiftData's features and functionalities, empowering them to leverage its full potential in your iOS development endeavors.
+
+If you like this article and want to support my work then check out my course [SwiftData - Declarative Data Persistence for SwiftUI](https://www.udemy.com/course/swiftdata-declarative-data-persistence-for-swiftui/?referralCode=A1303D0BA99171C90D9B). 
 
 > SwiftData is part of iOS 17 and at the time of this writing Xcode 15 is still in beta stage. This means content discussed in this article is subject to change. I will try my best to keep the article updated. 
 
@@ -13,6 +19,7 @@ The outline of this article is shown below:
 - [Relationships](#relationships)
 - [Querying Data](#querying-data)
 - [Persisting and Filtering by Enums](#persisting-and-filtering-by-enums) 
+- [Transformable Types](#transformable-types)
 - [Xcode Previews](#xcode-previews)
 - [Migrations](#migrations)
 - [Architecture](#architecture)
@@ -435,9 +442,214 @@ This allows you to move the creation of the query in the model itself instead of
 
 At the time of this writing there is also no way to dynamically change the predicate attached with the query. This means you will have to create a new instance of the query and provide the new predicate. In Core Data with ```@FetchRequest``` you were allowed to substitute the predicate with a new one. Maybe this is just a current limitation and will be addressed in the future versions of SwiftData framework. 
 
-# Persisting and Filtering by Enums 
+### Persisting and Filtering by Enums 
 
+Persisting enums works the same way as any other primitive type. The raw value of the enum is persisted to the database. Consider a scenario, where you want to persist the genre enum associated with each ```Movie``` model. The implementation of ```Movie``` model is shown below:  
 
+``` swift 
+enum Genre: Int, Codable {
+    case action = 1 
+    case kids
+    case horror
+}
+
+@Model
+class Movie {
+    var name: String
+    var genre: Genre
+    
+    init(name: String, genre: Genre) {
+        self.name = name
+        self.genre = genre
+    }
+}
+```
+
+There are couple of important things to note about how ```Genre``` enum is declared. First we are making sure that there is a raw value associated with the genre cases. In our example we used an ```Int``` but you can use any raw value like string etc. If you don't use raw values for your enum then each case will be used to construct a new column in the database. The result is shown below: 
+
+``` sql 
+CREATE TABLE ZMOVIE ( Z_PK INTEGER PRIMARY KEY, Z_ENT INTEGER, Z_OPT INTEGER, ZACTION VARCHAR, ZKIDS VARCHAR, ZHORROR VARCHAR, ZNAME VARCHAR ) 
+```
+
+You probably don't want to store each enum case as a separate column in the database. Fortunately, we provided ```Int``` as the raw value of our enum. This produced the following table in the database. 
+
+``` sql 
+CREATE TABLE ZMOVIE ( Z_PK INTEGER PRIMARY KEY, Z_ENT INTEGER, Z_OPT INTEGER, ZGENRE INTEGER, ZNAME VARCHAR )
+```
+
+This is much better as instead of having separate columns for each enum case, we have a single column storing the raw value of the enum. Also, keep in mind that we deliberately assigned our first enum case a value of 1. This will make sure that we are not storing 0 in the table. Each case after the first one will be assigned the next increment value i.e 2, 3, 4 etc. 
+
+The second important thing to note here is that ```Genre``` enum conforms to Codable. Codable allows the types to be serialized and deserialized. When storing SwiftData model with enum properties, the raw values of each enum is stored in the table. In the implementation below we have persisted ```Movie``` model to the database and also fetched it using ```@Query``` modifier to be displayed on the screen. 
+
+``` swift 
+struct ContentView: View {
+    
+    @Environment(\.modelContext) private var context
+    @Query private var movies: [Movie]
+    
+    var body: some View {
+        VStack {
+            
+            List(movies) { movie in
+                HStack {
+                    Text(movie.name)
+                    Spacer()
+                    Text(movie.genre.title)
+                }
+            }
+            
+            Button("Save Movie") {
+                let movie = Movie(name: "Batman", genre: .action)
+                context.insert(movie)
+            }
+        }
+        .padding()
+    }
+}
+```
+
+Nice and simple! 
+
+Now let's see how we can perform filtering using enums. The following code can be part of a nested view, where you pass genre to the initializer. This allows you to dynamically change the predicate of the query. 
+
+``` swift 
+ init(selectedGenre: Genre) {
+        _movies = Query(filter: #Predicate<Movie> { $0.genre == selectedGenre })
+    }
+```
+
+Unfortunately, the above code will not filter the items. This may be a bug in SwiftData and hopefully, it will be resolved in the future update. If the above code does not work then how can we perform filter based on enum. The only approach I found that works is to replace the enum struct with its raw value. This requires an update to the Movie model as shown below: 
+
+``` swift 
+@Model
+class Movie {
+    var name: String
+    var genreId: Int
+    
+    var genre: Genre {
+        Genre(rawValue: genreId)!
+    }
+    
+    init(name: String, genre: Genre) {
+        self.name = name
+        self.genreId = genre.rawValue
+    }
+}
+```
+
+We have replaced ```Genre``` enum with ```genreId```. The initializer for the Movie struct remain the same but we extract out the rawValue from the passed genre and assigned it to the ```genreId``` property. Now we can update our predicate to perform the filter based on ```genreId```. 
+
+ ``` swift    
+    init(selectedGenre: Genre) {
+        _movies = Query(filter: #Predicate<Movie> { $0.genreId == selectedGenre.rawValue })
+    }
+```
+
+The above predicate will filter movies based on the selected genre. 
+
+> Predicate only works on persisted properties and not computed properties. The reason is that behind the scenes, predicate needs to generate SQL based on the database columns. Since computed properties are not persisted, they cannot be used in the Predicate.
+
+As mentioned earlier, Apple may change how predicates work with enums but at this time the solution to persist and use their raw value does the trick. 
+
+### Transformable Types 
+
+SwiftData is not only capable of storing primitive types like (Int, String, Boolean etc) but also complex types. If you want to store a custom type in the database then you can use **transformable types**. Transformable types in SwiftData allow you to store non-standard data types, such as custom classes or objects, dictionaries, arrays, or any other complex data structure, as attributes in your SwiftData properties. SwiftData uses a process called "value transformation" to convert these custom data types into a format that can be stored in the persistent store (typically a SQLite database). 
+
+Consider a scenario that you want to store UIColor to the database using SwiftData. UIColor is a complex object and can be stored using transformable type. The implementation of the model is shown below: 
+
+``` swift 
+@Model
+class Room {
+    var name: String
+    @Attribute(.transformable(by: UIColorValueTransformer.self)) var color: UIColor
+    
+    init(name: String, color: UIColor) {
+        self.name = name
+        self.color = color
+    }
+}
+```
+
+The color property is using the ```@Attribute```, which is indicating that it is a transformable type and will be using ```UIColorValueTransformer``` to convert the UIColor to data and vice versa. This conversion is needed to persist UIColor to the database. The implementation of the ```UIColorValueTransformer``` is shown below: 
+
+``` swift 
+class UIColorValueTransformer: ValueTransformer {
+    
+    // return data
+    override func transformedValue(_ value: Any?) -> Any? {
+        guard let color = value as? UIColor else { return nil }
+        do {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: color, requiringSecureCoding: true)
+            return data
+        } catch {
+            return nil
+        }
+    }
+    
+    // return UIColor
+    override func reverseTransformedValue(_ value: Any?) -> Any? {
+        guard let data = value as? Data else { return nil }
+        
+        do {
+            let color = try NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data)
+            return color
+        } catch {
+            return nil 
+        }
+    }
+    
+}
+```
+
+After you have implemented ```UIColorValueTransformer``` you need to register it for your application. This can be done in the App file as shown below: 
+
+``` swift 
+@main
+struct RoomsAppApp: App {
+    
+    init() {
+        ValueTransformer.setValueTransformer(UIColorValueTransformer(), forName: NSValueTransformerName("UIColorValueTransformer"))
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .modelContainer(for: [Room.self])
+        }
+    }
+}
+```
+
+Now, you can persist color for your Room as shown below: 
+
+``` swift 
+ Button(action: {
+                let room = Room(name: name, color: UIColor(color))
+                context.insert(room)
+                name = ""
+            }, label: {
+                Text("Save")
+                    .frame(maxWidth: .infinity)
+            }).buttonStyle(.borderedProminent)
+                .padding([.top], 20)
+```
+
+And also display the colors in the user interface as implemented below: 
+
+```swift 
+ List(rooms) { room in
+                HStack {
+                    Text(room.name)
+                    Spacer()
+                    Rectangle()
+                        .fill(Color(uiColor: room.color))
+                        .frame(width: 50, height: 50)
+                        .clipShape(RoundedRectangle(cornerRadius: 10.0, style: .continuous))
+                }
+            }
+```
+
+> Please keep in mind that saving a complex object to the database can have an impact on performance. It's essential to make a judgment call based on your application's specific requirements and performance considerations.
 
 ### Xcode Previews 
 
