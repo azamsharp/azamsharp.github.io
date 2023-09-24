@@ -12,6 +12,7 @@ The outline of this article is shown below:
 - [Getting Started with SwiftData](#getting-started-with-swiftdata)
 - [Relationships](#relationships)
 - [Querying Data](#querying-data)
+- [Persisting and Filtering by Enums](#persisting-and-filtering-by-enums) 
 - [Xcode Previews](#xcode-previews)
 - [Migrations](#migrations)
 - [Architecture](#architecture)
@@ -131,7 +132,7 @@ final class Budget {
     var name: String
     var limit: Double
     
-    @Relationship(.cascade)
+    @Relationship(deleteRule: .cascade)
     var transactions: [Transaction] = []
     
     init(name: String, limit: Double) {
@@ -239,7 +240,7 @@ You can also add designated methods on budget class to perform add transaction o
 If you plan to use the above approach, you can also make your transactions property ```private(set)``` so that it cannot be altered from outside the budget class. 
 
 ``` swift 
- @Relationship(.cascade)
+ @Relationship(deleteRule: .cascade)
     private(set) var transactions: [Transaction] = []
 ```
 
@@ -349,7 +350,7 @@ struct BudgetListScreen: View {
 The ```@Query``` property wrapper also supports other arguments like filter, sort, order and animation. Here is the ```@Query``` implementation which supports sorting and ordering. 
 
 ``` swift 
- @Query(sort: \.name, order: .forward) private var budgets: [Budget]
+ @Query(sort: \Budget.name, order: .forward) private var budgets: [Budget]
 ```
 
 The budgets array will be sorted based on ```name``` property of the Budget type and organized in ascending order (.forward) parameter. 
@@ -433,6 +434,10 @@ This allows you to move the creation of the query in the model itself instead of
 > If you find yourself using the same query in multiple views, it indicates that you are retrieving and presenting the identical data. In such situations, it is advisable to concentrate on constructing smaller views that encapsulate that particular behavior instead of focusing on to move the ```@Query``` out of the view. 
 
 At the time of this writing there is also no way to dynamically change the predicate attached with the query. This means you will have to create a new instance of the query and provide the new predicate. In Core Data with ```@FetchRequest``` you were allowed to substitute the predicate with a new one. Maybe this is just a current limitation and will be addressed in the future versions of SwiftData framework. 
+
+# Persisting and Filtering by Enums 
+
+
 
 ### Xcode Previews 
 
@@ -535,7 +540,7 @@ final class Budget {
     var name: String
     var limit: Double
     
-    @Relationship(.cascade)
+    @Relationship(deleteRule: .cascade)
     var transactions: [Transaction] = []
     
     init(name: String, limit: Double) {
@@ -602,7 +607,7 @@ enum SpendTrackerSchemaV2: VersionedSchema {
         @Attribute(.unique) var name: String
         var limit: Double
         
-        @Relationship(.cascade)
+        @Relationship(deleteRule: .cascade)
         var transactions: [Transaction] = []
         
         init(name: String, limit: Double) {
