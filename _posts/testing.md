@@ -1,1736 +1,1038 @@
-# Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture
+# The Ultimate Guide to Building SwiftData Applications 
 
-Updated (08/31/2023)
-- Added "Problems with MVVM with SwiftUI". 
-- Updated "Understanding the MV Pattern" 
-- Updated "Navigation"
-- Updated "Displaying Errors"
-- Added "Formatting" 
+- Update (09/24/2023): Code samples updated for Xcode 15 
+- Update (09/24/2023): Added new section "Persisting and Filtering by Enums" 
+- Update (09/24/2023): Added new section "Transformable Types" 
 
-Software architecture is always a topic for hot debate, specially when there are so many different choices. For the last 8-12 months, I have been experimenting with MV pattern to build client/server apps and wrote about it in my original article [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). In this article, I will discuss how MV pattern can be applied to build large scale client/server applications. 
+SwiftData made its debut at WWDC 2023 as a replacement for the Core Data framework. Serving as a wrapper on top of Core Data, SwiftData enables on-device persistence and seamless syncing to the cloud.
 
-> Architecture and patterns depends on the type of application you are building. No single architecture will work in all scenarios. Choose the best architecture suitable for your application needs. 
+One of the key benefits of utilizing SwiftData lies in its effortless integration with the SwiftUI framework. This article is structured into several sections, each delving into different aspects of the SwiftData framework. First, we will explore the foundational concepts of SwiftData, followed by an examination of its architectural design, relationship management, migration capabilities, and more. By navigating through these sections, you will gain a comprehensive understanding of SwiftData's features and functionalities, empowering them to leverage its full potential in your iOS development endeavors.
+
+If you like this article and want to support my work then check out my course [SwiftData - Declarative Data Persistence for SwiftUI](https://www.udemy.com/course/swiftdata-declarative-data-persistence-for-swiftui/?referralCode=A1303D0BA99171C90D9B). 
+
+> SwiftData is part of iOS 17 and at the time of this writing Xcode 15 is still in beta stage. This means content discussed in this article is subject to change. I will try my best to keep the article updated. 
 
 The outline of this article is shown below: 
 
-- [Modular Architecture](#modular-architecture)
-- [Problems with MVVM with SwiftUI](#problems-with-mvvm-with-swiftui)
-- [Understanding the MV Pattern](#understanding-the-mv-pattern)    
-- [Screens vs Views](#screens-vs-views) 
-- [Multiple Aggregate Models](#multiple-aggregate-models) 
-- [View Specific Logic](#view-specific-logic)
-- [Validation](#validation) 
-- [Navigation](#navigation) 
-- [Displaying Errors](#displaying-errors)
-- [Grouping View Events](#grouping-view-events) 
-- [Formatting](#formatting)
-- [Testing](#testing) 
+- [Enable Core Data Debugging](#enable-core-data-debugging) 
+- [Getting Started with SwiftData](#getting-started-with-swiftdata)
+- [Relationships](#relationships)
+- [Querying Data](#querying-data)
+- [Persisting and Filtering by Enums](#persisting-and-filtering-by-enums) 
+- [Transformable Types](#transformable-types)
+- [Xcode Previews](#xcode-previews)
+- [Migrations](#migrations)
+- [Architecture](#architecture)
+- [SwiftData Integration with CloudKit (coming soon)]
+- [Testing](#testing)
+- [SwiftData with UIKit](#swiftdata-with-uikit)
+- [Resources](#resources)
+- [Conclusion](#conclusion)
 
-## Modular Architecture 
+### Enable Core Data Debugging
 
-Modular architecture in software refers to the design and organization of software systems into small, self contained modules or components. These modules can be tested and maintained independently of one another. Each module serves a specific purpose and solve a specific business requirement. 
+As I mentioned earlier, SwiftData uses Core Data behind the scenes. This means all the debugging techniques for Core Data should also work for SwiftData applications. One of the most common and easy to use debugging techniques is through the use of flags in launch arguments. There are several different launch arguments available, but for starting out you can use the following: 
 
-Modular architecture also provides advantages when working on large projects consisting of multiple teams. Each team can work on a particular module, without interfering with each other. 
-
-> If you are working on a module that will be consumed or used by other teams then make sure that you are communicating with them and not creating the module in complete isolation. A lot of problems in software development exists solely because of lack of communication between teams.   
-
-Modularity can be achieved in several different ways. You can expose each module as a package (SPM), which can be imported into different applications. Modularity can also be achieved by structuring your app based on specific grouping or folder structure. Keep in mind that when using folders for modularity you have to pay special attention to separation of concerns and single responsibility principles. 
-
-> The focus of this article is not Swift Package Manager, but how to achieve modularity by breaking the app based on the bounded context of the application. **Swift Package Manager can be used to package those dependencies into reusable modules.** 
-
-## Problems with MVVM with SwiftUI
-
-MVVM pattern originated from [Presentation Model](https://martinfowler.com/eaaDev/PresentationModel.html) architecture, which is known as Application Model to Visual Works Smalltalk users. The main idea behind the Presentation Model is that the state and the behavior of the view is pulled out to its own model. The Presentation Model communicates with the business logic layer and provides the data to the view. The view performs two way communication with the Presentation Model in which, the data can flow from the view to the Presentation Model and vice versa. 
-
-The main motivation for the Presentation Model is to provide an interface to the view so it can only get the data it needs, without directly dealing with the complicated business logic layer. Martin Fowler mentioned that one of the annoyances of Presentation Model is to write the synchronization code (binding) between the Presentation Model and the view. This was later resolved when Microsoft introduced WPF (Windows Presentation Foundation) framework. Windows Presentation Foundation consisted of built-in binding between the view (XAML) and view models (C#). Microsoft started calling it MVVM (Model View View Model).  
-
-In the conventional MVVM pattern, alongside the creation of a new view designed to function as a screen, a corresponding view model is also crafted in parallel. The view model's role is to manage bindings, handle network operations (using a network layer), manage validations, among other tasks. Imagine an application focused on presenting a list of movies from an API, affording users the ability to append new movies, and exhibiting comprehensive movie details. To architect such an application adhering to the MVVM pattern, you may end up with the following structure. 
-
-| View | View Model |
-| --- | ----------- |
-| MovieListView | MovieListViewModel |
-| AddMovieView | AddMovieViewModel |
-| MovieDetailView | MovieDetailViewModel | 
-
-Each view is represented by its own view model. Consider an application that consists of 20+ screens, you will end up with 20+ view models. A typical view model can consists of networking code (through a networking layer), UI validation and data transformation code. Each of these view models conforms to ```ObservableObject``` protocol. The main purpose of ```ObservableObject``` protocol is to define a new source of truth. Source of truth is one of the most important concepts in SwiftUI as it is responsible for keeping the data and the view in-sync. In a client/server application, source of truth is the server. So, if the source of truth is the same, why are we creating new source of truths for each view by introducing a view model by conforming to ```ObservableObject``` protocol. 
-
-> This does not imply that you have to restrict yourself to just one ```ObservableObject``` or source of truth for your entire application. While you can certainly incorporate multiple ObservableObjects into your application, their introduction should not be solely driven by the inclusion of a new view. The primary motivation behind introducing a new ObservableObject should stem from the integration of a new source of truth. Furthermore, you'll come to understand that there are instances where you'll introduce ObservableObjects based on the bounded context of the application. This is covered later in this article. 
-
-Another concerns arises from the fact that in a client/server application, most of these view models will need to communicate with the server. So, if you have a dozen screens and each screen is accompanied with a designated view model then it means you need to inject the networking layer to each of those view models using the principles of dependency injection. This can result in the following implementations: 
-
-```swift 
-struct MoviesApp: App {
-    var body: some Scene {
-        // httpClient can take HTTPClientProtocol 
-        MovieListView(vm: MovieListViewModel(httpClient: HTTPClient()))
-    }
-}
+``` swift
+-com.apple.CoreData.SQLDebug 1
 ```
 
-```MovieListView``` depends on ```MovieListViewModel``` which depends on ```HTTPClient```. The main issue is not the dependency injection but that you have to do this for every view that consists of a view model and wants to communicate with the server. Consider repeating the same steps for ```AddMovieView``` and ```MovieDetailView```. This can make your code extremely hard to understand and with each ```ObservableObject``` you have created a new source of truth. With dozens of sources of truth, it becomes hard to manage and share state between different views in a client/server applications. 
+This flag will output the path of the database as well as the SQL queries executed against the database. This aspect holds tremendous value, particularly when aiming to minimize excessive database queries and optimize code. It provides an opportunity to refactor and enhance code quality, leading to improved overall performance and efficiency.
 
-But the most important point is that the functionality offered by a view model is already baked into the view. The primary responsibility of a view model is to support binding. This is already possible inside the view through the use of ```@State```, ```@Binding```, ```@EnvironmentObject``` property wrappers. 
+If you want to learn more then check out this detailed [article](https://useyourloaf.com/blog/debugging-core-data/). 
 
-> It's important to reiterate that this does not imply a shift towards placing all elements within a view. The integration of an ```ObservableObject``` is warranted when a new source of truth emerges. However, the inclusion of an ```ObservableObject``` shouldn't be prompted solely by the addition of a new view. Consider an example of ```LocationManager```. The purpose of a ```LocationManager``` is to provide the user with a new location, region, coordinates etc. This is a good candidate for ```ObservableObject```.  
+### Getting Started with SwiftData
 
-Now, let's move our focus to the view. I strongly believe that Apple did a disservice to the iOS community by calling it a view. They should have called it a component or something similar. The word view entails that it is a visual only component like HTML in web development or XAML in WPF. But that is not the case. The view in SwiftUI is the return from the ```body``` property. Even that is not an actual view but just the declaration of the view. 
+SwiftData offers the convenience of declaring the schema directly in code, distinguishing itself from Core Data's requirement of a separate mapping file for schema creation. By utilizing the ```@Model``` attribute, SwiftData enables developers to indicate persistence and establish a definitive source of truth. This approach simplifies the development process, allowing for a more streamlined and cohesive schema definition within the codebase.
 
-SwiftUI views are mapped to the UIView counter parts and then rendered on the screen. SwiftUI views are just basic value type structs. They have no knowledge on how to paint pixels on the screen. SwiftUI uses the declaration of the views to render actual UIViews. Below you can find some common mapping from SwiftUI views to UIKit views:
+> Currently, there is no available tool to visualize the relationships between different SwiftData models in a graphical manner. It would be beneficial for developers if Apple could introduce a dedicated tool in the future to provide this visual representation. Such a tool would greatly enhance the understanding and analysis of complex relationships within the SwiftData models, facilitating easier navigation and comprehension of the data structure.
 
-| SwiftUI View | UIView |
-| --- | ----------- |
-| List | UICollectionView |
-| Text, Button | CGDrawingView |
-| TextField | UITextField | 
-
-All this mapping is hidden from the developers but you can always look at the inner details through the view debugging feature in Xcode. Below you can see through view debugging that List in SwiftUI maps to UICollectionView.  
-
-![View Debugging](/images/view-debugging.png)
-
-The views in SwiftUI, reminds me of ReactJS JSX syntax. Let's take a look at a very small example. 
+Below you can see the implementation of the ```Budget``` model:
 
 ``` swift 
-function App() {
-    return (
-        <div>
-            <h1>Hello World</h1>
-            <button>Save</button>
-        </div>
-    )
-}
-```
+import SwiftData
 
-In the above ReactJS code, we have created a functional component called ```App```. The App component returns a ```<div>``` element containing a ```<h1>``` and ```<button>```. The thing to notice here is that those are not actual HTML elements. Those are virtual DOM (Document Object Model) elements managed by React framework. The main reason is that React needs to track changes to those elements so it can only render, what has changed. Once React finds out the changed elements using the diffing process, those virtual DOM elements are used to render real HTML elements on the screen.  
-
-SwiftUI uses the same concepts internally. The views in the body property are not actual views but the declaration of views. Eventually, those views gets converted to real views and then displayed on the screen. John Sundell also talked about it in his article [SwiftUI views versus modifiers](https://www.swiftbysundell.com/articles/swiftui-views-versus-modifiers/). 
-
-If you are interested in learning more about the concept of virtual DOM then check out this talk title [Tom Occhino and Jordan Walke: JS Apps at Facebook](https://youtu.be/GW0rj4sNH2w?t=301). This is the talk, where Facebook introduced ReactJS to the public. 
-
-For three years, I've employed the conventional MVVM approach alongside SwiftUI, but consistently encountered struggles with the framework. I regrettably overlooked Apple's beneficial property wrappers, attempting instead to create solutions from scratch. This misguided effort led to increased complications, a surplus of code, and heightened maintenance demands. It was during this period that I realized the imperative for a more effective strategy.
-
-## Understanding the MV Pattern 
-
-The main idea behind the MV pattern is to allow views directly talk to the model. In MV pattern, **views are the view model**. This eliminates the need for creating unnecessary view models for each view, which simply contributes to the size of the project but does not provide any additional benefits. Keep in mind that every single line of code you write also needs to be maintained. This means that your code is not an asset but a liability.  
-
-> MV pattern does not advocate putting all the business logic inside a view. That particular pattern is known as [Container Pattern](https://www.patterns.dev/posts/presentational-container-pattern/). I have also talked about it on my blog. You can read about it [here](https://azamsharp.com/2023/01/24/introduction-to-container-pattern.html).   
-
-MV pattern can take different forms depending on the type of app you are writing. This article is mainly focused on a client/server apps, where a SwiftUI app serves as a client.
-
-> Although there is no official name for this pattern, I have seen most people call it MV Pattern since it does not include an extra layer of view models. This pattern has originated from Apple's documentation and code samples. 
-
-In WWDC 2020 talk titled [Data Essentials in SwiftUI](https://developer.apple.com/videos/play/wwdc2020/10040/) Apple presented the following diagram. 
-
-![ObservableObject as the data dependency surface](/images/single-source.png)
-
-The central concept revolves around granting views access to a unified layer or interface, which functions as the definitive source of information and grants entry to all components within the application. On occasions, this unified layer might correspond to the network layer. This approach is advisable in situations where your views autonomously consume the data, and making alterations to the data doesn't necessitate synchronization with other segments of your application. A straightforward example could involve a third-party service that furnishes a list of up-to-date news articles. In this case, your view can directly interact with the network layer to showcase the news articles. This concept is illustrated below:
-
-```swift
-struct NewsListScreen: View {
+@Model
+final class Budget {
     
-    @Environment(\.httpClient) private var httpClient
-    @State private var articles: [Article] = []
-    
-    private var sortedArticles: [Article] {
-        articles.sorted { lhs, rhs in
-            // sorting logic
-        }
-    }
-    
-    private func loadArticles() async {
-        let resource = Resource(Constants.Urls.articles)
-        do {
-            try articles = httpClient.load(resource)
-        } catch {
-            // handle error
-        }
-            
-    }
-    
-    var body: some View {
-        List(sortedArticles) { article in
-            ArticleView(article)
-        }.task {
-            await loadArticles()
-        }
+    var name: String
+    var limit: Double
         
+    init(name: String, limit: Double) {
+        self.name = name
+        self.limit = limit
     }
 }
 ```
 
-The ```NewsListScreen``` serves as a container view. This means it is responsible for making network calls and fetching the data. Once the data is fetched, it can be passed down to the presentation view. At present the only reusable view we have in the above code is ```ArticleView```. Depending on your app and requirements, you can also extract out List into a separate ```ArticleListView``` component. 
+The ```Budget``` class looks like a normal class, except that it is decorated with ```@Model``` macro. The ```@Model``` macro will generate the required code, which will allow the ```Budget``` class to be persisted to the persisted store. By default SwiftData uses SQLite database but it can be configured to persist data in XML, binary and even in-memory databases. 
 
-Another thing to notice in the above code is the use of ```sortedArticles``` private property. As I mentioned earlier that in MV Pattern, views are the view models. This is no need to create a view model associated with ```NewsListScreen```. If your view is getting large then use the principles of [view decomposition to break it into smaller pieces](https://youtu.be/rgckaWoSlwc?si=5ZaRLmFtRgf40Vbp). Keep in mind that views in SwiftUI are value types. Value types are cheap to create. This gives you the flexibility to break your views into multiple reusable pieces.  
+Keep in mind that the ```@Model``` macro can only be applied to classes. If you apply it to a type ```struct``` then you will be greeted with errors. This means your models must be a reference type and not value types.  
 
-> If you are wondering how would you test the sortedArticles property then keep reading. Testing will be covered in the later section of this article. 
+> SwiftData automatically handles the identification aspect of the model, eliminating the need for explicitly defining an `id` property or conforming to the `Identifiable` protocol.
 
-The above technique is ideal when the state is private to the view and is not shared with the rest of the application. You can still alter/modify the state by passing the state to child views using ```@Binding``` and ```@Bindable``` property wrappers and macros, but once you are passing the state into multiple levels of view hierarchy it becomes repetitive and time consuming. 
-
-When working on larger apps, you need the ability to share state with other views of the application without having to pass down through the view hierarchy. Apple has demonstrated this approach in few sample projects, which includes [Fruta](https://developer.apple.com/documentation/swiftui/fruta_building_a_feature-rich_app_with_swiftui) and [FoodTruck](https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app). These sample applications demonstrated how to use this pattern against a hard-coded data source. But in WWDC video title **"[Use Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/)"** Apple showed how to update the existing FoodTruck app and consume the data from an API response. 
-
-The screenshot below shows ```FoodTruckModel``` using the ```DonutsServerClient``` to retrieve list of donuts. ```DonutsServerClient``` is responsible for making an actual request to the server and downloading the donuts. Once the donuts are downloaded they are assigned to the serverDonuts property maintained by the FoodTruckModel.  
-
-![Use Xcode for server-side development](/images/xcode-server.png)
-
-[Use Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/)
-
-Here is the updated diagram to support the networking layer.  
-
-![Aggregate Root](/images/aggregate-model-updated.001.jpeg)
-
-> I know what you are thinking. Are we going to take advice based on Apple's code samples blindly? No! Never take any advice blindly. Always invest time and research and weigh the advantages and disadvantages of each approach. I have evaluated many different techniques and patterns and found this to be the best and simplest option when building client/server apps using SwiftUI. **Do your research!**.   
-
-Based on Apple's recommendation in their WWDC videos and code samples and my own personal experience, I have been implementing a single aggregate model, which holds the entire state of the application. For small and medium sized apps, a single aggregate model might be enough. For complicated apps, you can have multiple aggregate models which will group related entities together. Multiple aggregate models are discussed later in this article. 
-
-> Once again keep in mind that this article is about client/server apps. If you are using Core Data or anything else then you will have to do your research. For purely Core Data apps, I have been experimenting with Active Record Pattern. You can read about it [here](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html). 
-
-Following the pattern discussed in [Use Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/) talk, here is the StoreModel I have implemented for my application.  
-
-``` swift 
-class StoreModel: ObservableObject {
-    
-    private var storeHTTPClient: StoreHTTPClient
-    
-    init(storeHTTPClient: StoreHTTPClient) {
-        self.storeHTTPClient = storeHTTPClient
-    }
-    
-    @Published var products: [Product] = []
-    @Published var categories: [Category] = []
-    
-    func addProduct(_ product: Product) async throws {
-         try await storeHTTPClient.addProduct(product)
-    }
-    
-    func populateProducts() async throws {
-        self.products = try await storeHTTPClient.loadProducts()
-    }
-}
-```
-
-```StoreModel``` is an aggregate model that centralizes all the data for the application. Views communicate directly with the StoreModel to perform queries and persistence operations. StoreModel also utilizes ```StoreHTTPClient```, which is used to perform network operations. StoreHTTPClient is a stateless network layer. This means it can be used in other parts of the application that are not SwiftUI, meaning UIKit or even on a different platform (macOS).  
-
-> In Domain-Driven Design (DDD), an aggregate is a cluster of related objects that are treated as a single unit of work for the purpose of data consistency and transactional boundaries. An aggregate model, then, is a representation of an aggregate in code, typically as a class or group of classes.
-
-StoreModel can be used in a variety of different ways. You can use StoreModel as a @StateObject if you only want the data available to a particular view and if you want to tie the object with the lifetime of the view. But quite often I find myself adding StoreModel to @EnvironmentObject so that it can be available in the injected view and all of its sub views.   
+To persist Budget to the database you will need to configure the model container. This can be done in the App file as shown below: 
 
 ``` swift 
 @main
-struct StoreAppApp: App {
+struct SpendSmartARPApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(StoreModel(client: StoreHTTPClient()))
-            
-        }
-    }
-}
-```
-
-After the StoreModel is injected through the @EnvironmentObject, you can access the ```StoreModel``` as shown in the implementation below. 
-
-``` swift 
-struct ContentView: View {
-
-    @EnvironmentObject private var model: StoreModel
-    
-    var body: some View {
-        ProductListView(products: model.products)
-            .task {
-                do {
-                    try await model.populateProducts()
-                } catch {
-                    print(error.localizedDescription)
-                }
+            NavigationStack {
+                BudgetListScreen()
             }
+        }
+        .modelContainer(for: Budget.self)
     }
 }
 ```
 
-> You might be tempted to use ```@EnvironmentObject``` inside all the views. Although, it will work as expected but for larger applications you need to make presentation views free of any dependencies. Presentation views are usually child views that are created for the purpose of reusability. It you try to access ```@EnvironmentObject``` inside the child views then it effects their reusability status and they become less useful. The main reason is that now they are dependent on the ```@EnvironmentObject``` to provide data to them. Instead we should follow the top-down approach, where the data is passed from the parent view to the child view. This is also known as the [Container/Presentation pattern](https://www.patterns.dev/posts/presentational-container-pattern/).    
-
-Apart from fetching and persistence, StoreModel can also provide sorting, filtering, searching and other operations directly to the view. 
-
-> If I was using the traditional MVVM pattern then I would create several view models to accommodate each screen. This can include ```ProductListViewModel```, ```ProductViewModel```, ```AddProductViewModel```, ```ProductDetailViewModel``` and many more. Most of the time, these view models end up with one or two functions and maintaining a single source of truth can become very hard. In MV pattern, the view itself is the view model so we don't need to create unnecessary view models for most of the time. The view, which is also a view model is simply going to ask model (Aggregate Model) for the data. 
-
-**The source of truth in a client/server application is the server.**. This means you should not be adding view models conforming to ObservableObject (new source of truth) protocol just because you added a new view. The source of truth for that view has not changed, it is still the server. 
-
-A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover multiple aggregate models and how they benefit when working in large teams.  
-
-The MV pattern and MVVM pattern may appear similar at first glance, but they exhibit significant differences. In a client/server app using MVVM, a separate view model is created for each screen. For instance, in a movies management app, you might end up with multiple view models like MovieListViewModel, AddMovieViewModel, MovieDetailViewModel, and possibly MovieViewModel. 
-
-However, MV takes a different approach altogether, omitting the creation of view models. Instead, it directly binds the DTO objects (models from the server) to the view. In some cases, the view can directly utilize the network layer to fetch the DTO objects, while in others, a single Data Store or Aggregate Model (ObservableObject) aids in accessing the movies. Any required UI validation or data transformation is implemented within the view itself.
-
-To ensure reusability of child views, the container and presenter pattern come into play. One view is responsible for requesting and obtaining the data, while another view, known as the presenter, takes charge of displaying the data. This separation of responsibilities ensures a more modular and maintainable design.
-
-With MV, the overall structure differs from MVVM, allowing for a more direct handling of data and views without the need for multiple view models. By leveraging the container and presenter pattern, your app can achieve better organization and reusability of views.
-
-## Multiple Aggregate Models 
-
-As you learned in the previous section, the purpose of an aggregate model is to expose data to your view. As Luca explained in [Data Essentials in SwiftUI WWDC 2020 (11:30)](https://developer.apple.com/videos/play/wwdc2020/10040/) "The aggregate model is an ```ObservableObject```, which acts as your data dependency surface. This allows us to model the data using value type and manage its life cycle and side effects with a reference type."  
-
-As your business grows, a single aggregate model might not be enough to maintain the life cycle and side effects of an entire application. This is where we will introduce multiple aggregate models. These aggregate models are based on the bounded context of the application. Bounded context refers to a specific area of the system that has clear boundaries and is designed to serve a particular business purpose. 
-
-In an e-commerce application, we can have several bounded contexts including checkout process, inventory management system, catalog, fulfillment, shipment, ordering, marketing and customer management modules. 
-
-Defining bounded context is important in software development and it helps to break down the application into small manageable pieces. This also allows teams to work on different parts of the system without interfering with each other. 
-
-Developers are usually not good in finding bounded context for software applications. The main reason is that their technical knowledge does not directly map to domain knowledge. Domain knowledge requires different set of skills and a domain expert is a better suited for this kind of role. A domain expert is a person, who may not be tech savvy but understands how the business or a particular domain works. In large projects, you may have multiple domain experts, each handling a different business domain. This is why it is extremely important for developers to communicate with domain experts and understand the domain before starting any development.  
-
-Once, you have identified different bounded contexts associated with your application you can represent them in the form of aggregate models. This is shown in the diagram below. 
-
-![Multiple Aggregate Root](/images/aggregate-model-updated.002.jpeg)
-
-The network layer can also be divided into multiple HTTP clients or you can use a single generic network layer for your entire application. This is shown in the following diagram. 
-
-![Multiple Aggregate Root](/images/aggregate-model-updated.003.jpeg)
-
-The Catalog aggregate model will be responsible for providing views with all the entities associated with Catalog. This can include but not limited to: 
-
-- Product 
-- Category 
-- Brand 
-- Review 
-
-The Ordering aggregate model will be responsible for providing views with all the ordering related entities. This can include but not limited to:  
-
-- Order 
-- OrderLineItem 
-- OrderStatus
-- ShippingMethod 
-- Discount 
-
-The ```Catalog``` and ```Ordering``` aggregate models will be reference types conforming to ```ObservableObject``` protocol. And all the entities they provide will be value types. 
-
-The outline of ```Catalog``` aggregate model and ```Product``` entity is shown below: 
+Now you can persist the budget to the database by using the ```modelContext``` through the Environment in your view as shown below: 
 
 ``` swift 
+struct BudgetListScreen: View {
+    
+    @Environment(\.modelContext) private var context
 
-struct Product: Codable {
-    let productId: Int
+    @State private var name: String = ""
+    @State private var limit: Double?
+    
+    func saveBudget() {
+        // saveBudget is fired only after the data has been successfully validated
+        let budget = Budget(name: name, limit: limit!)
+        context.insert(budget)
+    }
+```
+
+One thing to notice is that we are not explicitly calling the save function on the context. The insert function will add the model to the context and then internally call save. SwiftData autosaves the model context. The autosave events are triggered based on the UI related events and user input as mentioned in [this](https://developer.apple.com/videos/play/wwdc2023/10154/) WWDC video.  
+
+Not all apps require autosave feature. If you are not interested in autosave then you can turn it off at the model container level as shown below: 
+
+``` swift 
+ var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                BudgetListScreen()
+            }
+        }
+        .modelContainer(for: Budget.self, isAutosaveEnabled: false)
+        
+    }
+```
+
+### Relationships 
+
+There is a saying in object oriented programming, "No object is an island". Relations are an integral part of a relational database. From database perspective, these relationships are handled by joining multiple tables together. In SwiftData these relationships are defined programmatically in code, implemented in the model. 
+
+There are two relationships we have to define. 
+
+1. A budget can have many transactions. 
+2. Each transaction can belong to a single budget.  
+
+We have modified the Budget class to support a list of transactions. This means one budget can have many transactions. This relationship is created using the ```@Relationship``` macro. The cascade option indicates that when the budget is deleted then all the transactions associated with the budget will also be deleted. 
+
+``` swift 
+@Model
+final class Budget {
+    
+    var name: String
+    var limit: Double
+    
+    @Relationship(deleteRule: .cascade)
+    var transactions: [Transaction] = []
+    
+    init(name: String, limit: Double) {
+        self.name = name
+        self.limit = limit
+    }
+```
+
+> If you are planning to use iCloud and CloudKit to sync your SwiftData records then you need to make sure that the relationships you define in SwiftData are optional with a default value. This means the above relationship will be written as ```@Relationship(.cascade)
+    var transactions: [Transaction]? = []```
+
+The other side of the relationship is from the transaction point of view. A transaction can belong to a budget. This relationship is shown below: 
+
+``` swift 
+@Model
+final class Transaction {
+    var note: String
+    var amount: Double
+    var date: Date
+    var hasReceipt: Bool = false
+    
+    @Relationship(inverse: \Budget.transactions)
+    var budget: Budget?
+    
+    init(note: String, amount: Double, date: Date, hasReceipt: Bool = false) {
+        self.note = note
+        self.amount = amount
+        self.date = date
+        self.hasReceipt = hasReceipt
+    }
+}
+```
+
+> The ```@Relationship``` macro on the Transaction class is not required. SwiftData implicitly discovers inverse relationships between models. Also make sure to set budget property as optional or else it will give you runtime error. 
+
+Another thing to keep in mind is that the relationships created in SwiftData only exists in the object graph and they are not the same as relationships between database tables. This means if you open the database using applications like [Base](https://menial.co.uk/base/) or [BeeKeeper](https://www.beekeeperstudio.io/), you will not find any foreign key constraints listed under the relationships section. **SwiftData is a framework, which can persist an object graph to different stores, but it is NOT an ORM**.   
+
+It is also important to note that you don't have to pass all the models used in your app to the model container in the ```SpendSmartARPApp``` struct. Depending on the relationships between the models you only need to pass the parent model and all the child relationships are automatically inferred.  
+
+In the example below, we are only passing ```Budget``` type to the modelContainer modifier. This is because Budget contains reference to ```Transaction``` class and modelContainer can infer those relationships based on the budget class. 
+
+``` swift 
+@main
+struct SpendSmartARPApp: App {
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                BudgetListScreen()
+            }
+        }
+        // passing Transaction.self is not needed in the modelContainer below
+        .modelContainer(for: Budget.self)
+    }
+}
+```
+
+Now that we have setup the relationship between budget and transaction, the next step is to add a transaction to a particular budget. There are several different ways of adding a transaction to a budget. It all depends on the requirements of your user interface. Below you can find the implementation where we create a brand new transaction and then assign it to the budget property. The budget was passed to the view through the view's constructor. 
+
+``` swift 
+struct BudgetDetailScreen: View {
+    
+    @Environment(\.modelContext) private var context
+    
+    let budget: Budget
+    
+    private func saveTransaction() {
+        // this function is fired after the validation of the form is successful 
+        let transaction = Transaction(note: note, amount: amount!, date: date, hasReceipt: hasReceipt)
+        transaction.budget = budget 
+    }
+
+    var body: some View {
+ TransactionListView(transactions: budget.transactions)
+    }
+```
+
+You don't need to call save or insert function since the model budget is already part of the context. **This will automatically update both sides of the relationship. It means transaction.budget will have a budget and a new transaction will be added to budget.transactions automatically.** 
+
+Unfortunately, this does not re-render ```TransactionListView```. Even though the transactions in budget instance are updated, it still does not trigger an update on the view. I believe it may be because the update was caused internally and not through the mechanism that invoke the observation behavior. 
+
+The correct way of adding a transaction to an existing budget which also re-renders the view is by adding it through the ```budget.transactions``` property as shown below: 
+
+``` swift 
+  private func saveTransaction() {
+        let transaction = Transaction(note: note, amount: amount!, date: date, hasReceipt: hasReceipt)
+        // This will also re-render the TransactionListView 
+        budget.transactions.append(transaction)
+    }
+
+      var body: some View {
+ TransactionListView(transactions: budget.transactions)
+    }
+```
+
+You can also add designated methods on budget class to perform add transaction or remove transaction operations. This allows you to run business logic prior to adding or removing transactions to a budget.    
+
+``` swift 
+ func addTransaction(_ transaction: Transaction) {
+        // add business domain rules here
+        self.transactions.append(transaction)
+    }
+```
+
+If you plan to use the above approach, you can also make your transactions property ```private(set)``` so that it cannot be altered from outside the budget class. 
+
+``` swift 
+ @Relationship(deleteRule: .cascade)
+    private(set) var transactions: [Transaction] = []
+```
+
+SwiftData relations are not limited to one-to-one or one-to-many but you can also construct many-to-many relationships, also known as siblings relationship. In the code below, we have defined two models ```Recipe``` and ```Ingredient```. The relationship between Recipe and Ingredient is many to many.
+
+- One recipe can have many ingredients 
+- One ingredient can belong to many recipes 
+
+``` swift 
+@Model
+final class Recipe {
     let name: String
-    let category: Category
-    let price: Double
-    let description: String
-    let reviews: [Review]?
+    
+    init(name: String) {
+        self.name = name
+    }
+    
+    @Relationship
+    var ingredients: [Ingredient] = []
 }
 
-@MainActor 
-class Catalog: ObservableObject {
+@Model
+final class Ingredient {
     
-    // designated or generic HTTP client 
-    let storeHTTPClient: StoreHTTPClient
+    let name: String
     
-    @Published var products: [Product]
-    @Published var categories: [Category]
+    @Relationship(inverse: \Recipe.ingredients)
+    var recipes: [Recipe] = []
     
-    init(storeHTTPClient: StoreHTTPClient) {
-        self.storeHTTPClient = storeHTTPClient
-    }
-    
-    func loadProducts() {
-         products = storeHTTPClient.loadProducts
-    }
-    
-    func getProductById(_ productId: Int) -> Product? {
-        // fetch product by id 
-    }
-    
-    func getProductsByCategory(_ categoryId: Int) -> [Product] {
-       // get products by category
-    }
-    
-    func getCategories() -> [Category] {
-        categories = storeHTTPClient.loadCategories()
+    init(name: String) {
+        self.name = name
     }
 }
 ```
 
-Catalog and Ordering aggregate models are injected into the application as an environment object. You can inject them directly in your application root view or the root view of each section of the application. The later is shown below: 
+When adding a new recipe with ingredients you must make sure that recipe has already been persisted. Take a look at the following code, which will result in an error: 
 
 ``` swift 
-@main
-struct StoreApp: App {
+   Button("Save") {
+                
+                let recipe = Recipe(name: recipeName)
+                let ingredients = ingredientNames.components(separatedBy: ",")
+                    .map { $0.trimmingCharacters(in: .whitespaces) }
+                
+                ingredients.forEach { name in
+                    let ingredient = Ingredient(name: name)
+                    recipe.ingredients.append(ingredient)
+                }
+                context.insert(recipe)
+            }
+```
+
+After creating the recipe instance, we loop though the ingredient names and append them to the recipe through the ingredients property. But since recipe is not yet added to the context, this will cause an exception. The fix is to add the recipe to the context right after the recipe instance is created. This is shown in the implementation below: 
+
+``` swift 
+  Button("Save") {
+                
+                let recipe = Recipe(name: recipeName)
+                
+                // recipe is inserted into the context
+                context.insert(recipe)
+
+                let ingredients = ingredientNames.components(separatedBy: ",")
+                    .map { $0.trimmingCharacters(in: .whitespaces) }
+                
+                
+                ingredients.forEach { name in
+                    let ingredient = Ingredient(name: name)
+                    recipe.ingredients.append(ingredient)
+                }
+            }
+```
+
+Now, when you run the code it will not have any exceptions. Behind the scenes, this operation is performed by at least 3 tables. One table for recipes, one for ingredients and one will be a pivot table used for the relationships between recipes and ingredients. 
+
+We have not provided the ```.cascade``` option for the relationships, because we don't want to delete all the ingredients when a recipe is deleted and vice versa. If you delete an ingredient from ```recipe.ingredients``` array then it will be simply be removed from the array. Same goes for removing a recipe from ```ingredients.recipes``` array.  
+
+### Querying Data 
+
+Once the data has been persisted, the next step is to display it on the screen. SwiftData uses the ```@Query``` property wrapper for fetching data from the database. In the code below we fetch all the budgets and then display it in the list. 
+
+``` swift 
+struct BudgetListScreen: View {
     
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environmentObject(Catalog(client: CatalogHTTPClient()))
-                .environmentObject(Ordering(client: OrderingHTTPClient()))
+    @Environment(\.modelContext) private var context
+    @Query private var budgets: [Budget]
+    
+    var body: some View {
+        Form {
             
+            Section("Budgets") {
+                List(budgets) { budget in
+                        HStack {
+                            Text(budget.name)
+                            Spacer()
+                            Text(budget.limit, format: .currency(code: "USD"))
+                        }
+                }
+            }
         }
     }
 }
 ```
 
-Now, inside a view you can use Catalog or Ordering models by accessing it through ```@EnvironmentObject```. The implementation is shown below: 
+> The ```@Query``` property wrapper may remind you of ```@FetchRequest``` property wrapper in Core Data. They do share a lot of common characteristics. 
+
+The ```@Query``` property wrapper also supports other arguments like filter, sort, order and animation. Here is the ```@Query``` implementation which supports sorting and ordering. 
 
 ``` swift 
-struct CatalogListScreen: View {
-    
-    @EnvironmentObject private var catalog: Catalog
-    
-    var body: some View {
-        List(catalog.products) { product in
-            Text(product.name)
-        }.task {
-            do {
-                try await catalog.loadProducts()
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-    }
-}
+ @Query(sort: \Budget.name, order: .forward) private var budgets: [Budget]
 ```
 
-If your view needs to access ordering information then it can utilize the Ordering aggregate model too.
+The budgets array will be sorted based on ```name``` property of the Budget type and organized in ascending order (.forward) parameter. 
+
+You can also provide the filter option using predicates. Predicates are implemented using the [freestanding macros](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/macros/) in Swift. Here is a simple ```Query``` using a predicate to only return  budgets with over $100 limit. 
 
 ``` swift 
-struct AdminDashboardScreen: View {
+@Query(filter: #Predicate { $0.limit > 100 }) private var budgets: [Budget]
+```
+
+Depending on your criteria, you can add multiple conditions in the predicate. One example is shown below: 
+
+``` swift 
+@Query(filter: #Predicate { $0.limit > 100 && $0.name.contains("Vac") }) private var budgets: [Budget]
+```
+
+Predicates are not always implemented using static/fixed values. You can also make dynamic predicates. This means predicate will be based on a parameter passed to it. This can be useful in scenarios where you are trying to execute a query based on the model passed from the previous view.  
+
+The following code snippet demonstrates the initialization of a view with the note parameter. This parameter plays a crucial role in initializing the ```Query``` object and enabling the creation of dynamic queries.   
+
+``` swift 
+@Query private var transactions: [Transaction]
     
-    @EnvironmentObject private var catalog: Catalog
-    @EnvironmentObject private var ordering: Ordering
+    init(note: String) {
+        _transactions = Query(filter: #Predicate { $0.note.contains(note) }) 
+}
+```
+
+Unfortunately, the dynamic queries does not work in all scenarios. Maybe it is just the current limitation of SwiftData framework, which will be fixed in the future release. Here is an example, which will cause compile time errors. 
+
+In the code below, we are trying to get all the transactions based on the budget's name. Unfortunately, this will result in an error.  
+
+``` swift 
+struct BudgetDetailScreen: View {
     
-    var body: some View {
-        VStack {
-            List(catalog.products) { product in
-                Text(product.name)
-            }
-            List(ordering.allOrders) { order in
-                Text(order.status)
-            }
-        }.task {
-            do {
-                try await catalog.loadProducts()
-                try await ordering.loadOrders()
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
+    @Environment(\.modelContext) private var context
+    
+    let budget: Budget
+    
+    @Query private var transactions: [Transaction]
+    
+    init(budget: Budget) {
+        self.budget = budget
+        // Missing argument label 'lhs:' in call
+        // Initializer 'init(_:)' requires that 'Budget' conform to 'Decodable'
+        // Initializer 'init(_:)' requires that 'Budget' conform to 'Encodable'
+        _transactions = Query(filter: #Predicate { $0.budget!.name.contains(budget.name) })
+    }
+```
+
+> This might be related to a bug in SwiftData. Keep in mind that at the time of this writing SwiftData is still not officially released. 
+
+As you learned earlier, queries are implemented using the ```@Query``` property wrapper. The ```@Query``` property wrapper is only available inside the view. But that does not mean that queries cannot be constructed outside of the view. In the implementation below, we have created a ```FetchDescriptor``` inside the Budget class itself, which is later injected into the ```@Query```. 
+
+``` swift 
+@Model
+final class Budget {
+    
+    var name: String
+    var limit: Double
+    
+    // other code ....
+    
+    static var all: FetchDescriptor<Budget> {
+        FetchDescriptor(sortBy: [SortDescriptor(\Budget.name, order: .reverse)])
+    }
+    
+}
+```
+
+Now inside the view you can use the ```all``` function of the Budget class. 
+
+``` swift 
+struct BudgetListScreen: View {   
+    @Query(Budget.all) private var allBudgets: [Budget]
+}
+```
+
+This allows you to move the creation of the query in the model itself instead of the view, allowing you to use the same query in other parts of the application. My recommendation is to start out having the query in the view. If your query is getting complicated and needs to be reused in other views then think about moving it to the model class.
+
+> If you find yourself using the same query in multiple views, it indicates that you are retrieving and presenting the identical data. In such situations, it is advisable to concentrate on constructing smaller views that encapsulate that particular behavior instead of focusing on to move the ```@Query``` out of the view. 
+
+At the time of this writing there is also no way to dynamically change the predicate attached with the query. This means you will have to create a new instance of the query and provide the new predicate. In Core Data with ```@FetchRequest``` you were allowed to substitute the predicate with a new one. Maybe this is just a current limitation and will be addressed in the future versions of SwiftData framework. 
+
+### Persisting and Filtering by Enums 
+
+Persisting enums works the same way as any other primitive type. The raw value of the enum is persisted to the database. Consider a scenario, where you want to persist the genre enum associated with each ```Movie``` model. The implementation of ```Movie``` model is shown below:  
+
+``` swift 
+enum Genre: Int, Codable {
+    case action = 1 
+    case kids
+    case horror
+}
+
+@Model
+class Movie {
+    var name: String
+    var genre: Genre
+    
+    init(name: String, genre: Genre) {
+        self.name = name
+        self.genre = genre
     }
 }
 ```
 
-There are scenarios when your aggregate model will need to access information from another aggregate model. In those cases, your aggregate model will simply use the network service to fetch the information that is needs. 
+There are couple of important things to note about how ```Genre``` enum is declared. First we are making sure that there is a raw value associated with the genre cases. In our example we used an ```Int``` but you can use any raw value like string etc. If you don't use raw values for your enum then each case will be used to construct a new column in the database. The result is shown below: 
 
-> It is important that your caching layer is called from within the network layer and not from aggregate models. This will allow aggregate models to take advantage of caching through the network layer, instead of implementing it on their own. By accessing caching layer from inside the network layer, all your aggregate models can benefit from faster response through the use of cached resources. 
+``` sql 
+CREATE TABLE ZMOVIE ( Z_PK INTEGER PRIMARY KEY, Z_ENT INTEGER, Z_OPT INTEGER, ZACTION VARCHAR, ZKIDS VARCHAR, ZHORROR VARCHAR, ZNAME VARCHAR ) 
+```
 
-> As mentioned earlier for small or even medium sized apps, you may only need a single aggregate model. For larger apps you can introduce new aggregate models. Make sure to consult with a domain expert before creating application boundaries. 
+You probably don't want to store each enum case as a separate column in the database. Fortunately, we provided ```Int``` as the raw value of our enum. This produced the following table in the database. 
 
-The concept of domain boundaries can also be applied to user interfaces. This allows us to reuse user interface elements in other applications. 
+``` sql 
+CREATE TABLE ZMOVIE ( Z_PK INTEGER PRIMARY KEY, Z_ENT INTEGER, Z_OPT INTEGER, ZGENRE INTEGER, ZNAME VARCHAR )
+```
 
-![Factor out common pieces](/images/user-interface.png)
-* Permission has been granted from the original author of the image to use it in this article.
+This is much better as instead of having separate columns for each enum case, we have a single column storing the raw value of the enum. Also, keep in mind that we deliberately assigned our first enum case a value of 1. This will make sure that we are not storing 0 in the table. Each case after the first one will be assigned the next increment value i.e 2, 3, 4 etc. 
 
-> You can factor out common interface elements using Swift Package Manager and import those packages into other applications. 
-
-Let's go ahead and zoom out and see how our architecture looks like with all the pieces in place. 
-
-![Architecture](/images/architecture-model-updated.jpeg)
-* This image has been updated and the permission has been granted from the original author of the image to use it in this article. 
-
-As discussed earlier, each bounded context is represented by its own module. These modules can be represented by a folder or a package dependency.
-
-**CatalogUI:** Represents user interface associated with catalog. This can include all the catalog specific stuff like AddCatalogScreen, UpdateCatalogScreen etc. 
-
-**Catalog:** Represents the models associated with catalog. This will contain the aggregate model and all the entities exposed by the aggregate model.
-
-**MyStoreKit**: Represents the HTTP client for performing network calls. 
-
-**Foundation Core**: Represents resources used by all modules. This can include helper classes/structs, reusable views, images, icons and even preview content used for testing. 
-
-> Each module like Shipping, Inventory, Ordering etc can be represented by a folder structure or a package dependency. This really depends on your needs and if you wish to reuse your modules in other projects. 
-
-Using this architecture, future business requirements and data access services can be added without interfering with existing ones. This also allows more collaborative environment as different teams can work on different modules without interfering with each other. 
-
-## View Specific Logic 
-
-In this last section, I talked about how aggregate models can serve as a single source of truth and provide required data to the views. But what about view specific logic? Where should that logic be placed and what options do we have to perform testing on that logic. 
-
-In the code below, we want to filter the products based on the minimum and maximum price. The implementation is shown below: 
+The second important thing to note here is that ```Genre``` enum conforms to Codable. Codable allows the types to be serialized and deserialized. When storing SwiftData model with enum properties, the raw values of each enum is stored in the table. In the implementation below we have persisted ```Movie``` model to the database and also fetched it using ```@Query``` modifier to be displayed on the screen. 
 
 ``` swift 
 struct ContentView: View {
     
-    let httpClient: HTTPClientProtocol
-    @State private var products: [Product] = []
-    @State private var min: Double?
-    @State private var max: Double?
-    @State private var filteredProducts: [Product] = []
-    
-    private func filterProducts() {
-        
-        guard let min = min,
-              let max = max else { return }
-        
-        filteredProducts = products.filter {
-            $0.price >= min && $0.price <= max
-        }
-    }
-    
-    private var isFormValid: Bool {
-        
-        guard let min = min,
-              let max = max else { return false }
-        
-        return min < max
-    }
+    @Environment(\.modelContext) private var context
+    @Query private var movies: [Movie]
     
     var body: some View {
         VStack {
-            HStack {
-                TextField("Min", value: $min, format: .number)
-                    .textFieldStyle(.roundedBorder)
-                TextField("Max", value: $max, format: .number)
-                    .textFieldStyle(.roundedBorder)
-            }
-            Text("Max must be larger than min.")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .font(.caption)
-                .padding([.bottom], 20)
             
-            Button("Apply") {
-                filterProducts()
-            }
-            
-            .disabled(!isFormValid)
-          
-            List(filteredProducts.isEmpty ? products: filteredProducts) { product in
+            List(movies) { movie in
                 HStack {
-                    Text(product.title)
+                    Text(movie.name)
                     Spacer()
-                    Text(product.price, format: .currency(code: "USD"))
+                    Text(movie.genre.title)
                 }
             }
-            .task {
-                do {
-                    products = try await httpClient.loadProducts()
-                } catch {
-                    print(error)
-                }
-        }
-        }.padding()
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(httpClient: HTTPClientStub())
-    }
-}
-```
-
-> If filterProducts or similar functions will be involved in any model logic then you can also put it inside the aggregate root model, instead of the view.  
-
-Please note that instead of invoking the real service, we are using a stubbed version of the HTTPClient that returns pre-configured response. Another good option would be to create separate JSON files for each response and read data from those files, when using Xcode previews. I covered that in one of my YouTube video, [Building SwiftUI Xcode Previews Using JSON File](https://youtu.be/EycwLxTU-EA). 
-
-> Keep in mind that in the above scenario, if no results are found during filtering then the original products array is returned. 
-
-We have two pieces of code in the view that constitute as logic, ```isFormValid``` and ```filterProducts```. If we want to test that code we have number of ways. 
-
-Use Xcode previews! I know this does not sound fancy but I encourage you to use Xcode previews to test your view based logic. Xcode previews is extremely fast (depending on the machine you are using) and it gives you the same feeling as Red/Green/Refactor cycle. For this particular scenario, Xcode previews will be my first choice. 
-
-> Xcode previews is not the answer to everything. If you are dealing with complicated view logic then it will be a good idea to move out all the logic into a separate struct and then write unit tests for that piece of code. Remember, one of the important aspects of why we test is to [gain confidence about our code](https://azamsharp.com/2023/02/15/testing-is-about-confidence.html). 
-
-Another option is to extract the logic from the view and then write unit tests against it. This is shown in the implementation below: 
-
-``` swift 
-struct ProductFilterForm {
-    
-    var min: Double?
-    var max: Double?
-    
-    func filterProducts(_ products: [Product]) -> [Product] {
-        
-        guard let min = min,
-              let max = max else { return [] }
-        
-        return products.filter {
-            $0.price >= min && $0.price <= max
-        }
-    }
-}
-```
-
-```ProductFilterForm``` can now be unit tested in isolation. The unit test is shown below: 
-
-``` swift 
-
-func test_user_can_filter_products_by_price() throws {
-        
-        self.continueAfterFailure = false
-      
-        let products = [
-            Product(id: 1, title: "Product 1", price: 10),
-            Product(id: 2, title: "Product 2", price: 100),
-            Product(id: 3, title: "Product 3", price: 200),
-            Product(id: 4, title: "Product 4", price: 500)
-        ]
-        
-        let expectedFilteredProducts = [
-            Product(id: 2, title: "Product 2", price: 100),
-            Product(id: 3, title: "Product 3", price: 200),
-            Product(id: 4, title: "Product 4", price: 500)
-        ]
-        
-        let productFilterForm = ProductFilterForm(min: 100, max: 500)
-        let filteredProducts = productFilterForm.filterProducts(products)
-        
-        for expectedProduct in expectedFilteredProducts {
             
-            let product = filteredProducts.first { $0.id == expectedProduct.id }
-            
-            XCTAssertNotNil(product)
-            XCTAssertEqual(product!.title, expectedProduct.title)
-            XCTAssertEqual(product!.price, expectedProduct.price)
-        }
-        
-    }
-
-```
-
-> Unit testing view's logic in isolation as shown above can be beneficial for complicated user interfaces. Keep in mind that just because your unit test passes, does not mean that your user interface is working as expected. 
-
-And the final kind of test you can write is an end-to-end test. E2E tests are great because they test the app from user's point of view and they are best against regression. The downside is that E2E tests are slower then running unit tests. The main reason they are slower is because they are testing the complete application instead of small units. Most of the issues in software exists because the application was tested at unit level and not at system level. I encourage you to spend some time writing meaningful E2E tests. 
-
-Here is an implementation of an E2E test for the above scenario. 
-
-``` swift 
-  func test_user_can_filter_products_based_on_price() {
-        
-        let app = XCUIApplication()
-        app.launchEnvironment = ["ENV": "TEST"]
-        app.launch()
-        
-        app.textFields["minTextField"].tap()
-        app.textFields["minTextField"].typeText("100")
-        
-        app.textFields["maxTextField"].tap()
-        app.textFields["maxTextField"].typeText("500")
-        
-        app.buttons["applyButton"].tap()
-        
-        // assert that the count is correct
-        XCTAssertEqual(3, app.collectionViews["productList"].cells.count)
-        // assert that the items are correct
-        XCTAssertEqual("Product 2", app.collectionViews["productList"].staticTexts["Product 2"].label)
-        XCTAssertEqual("Product 3", app.collectionViews["productList"].staticTexts["Product 3"].label)
-        XCTAssertEqual("Product 4", app.collectionViews["productList"].staticTexts["Product 4"].label)
-    }
-```
-
-In the end you will have to decide where in [testing pyramid](https://martinfowler.com/articles/practical-test-pyramid.html) you want to invest your time to get the best return on your investment.  
-
-> If you want to learn more about testing then you can check out my course [Test Driven Development in iOS Using Swift](https://www.udemy.com/course/test-driven-development-in-ios-using-swift/?referralCode=07649C41E6E184CE86B3). 
-
-## Screens vs Views 
-
-When I was working with Flutter, I observed a common pattern for organizing the widgets. Flutter developers were separating the widgets based on whether the widgets represents an entire screen of just a reusable control. Since React, Flutter and SwiftUI are extremely similar in nature we can apply the same principles when building SwiftUI applications. 
-
-For example when displaying details of a movie, instead of calling that view MovieDetailView, you can call it MovieDetailScreen. This will make it clear that the detail view is an actual screen and not some reusable child view. Here are few more examples. 
-
-**Screens** 
-- MovieDetailScreen
-- HomeScreen 
-- LoginScreen
-- RegisterScreen 
-- SettingsScreen 
-
-**Views** 
-- RatingsView 
-- MessageView 
-- ReminderListView
-- ReminderCellView 
-
-I find that it is always a good idea to keep a close eye on our friendly neighbors React and Flutter. You never know what ideas you will bring from other declarative frameworks into SwiftUI. 
-
-## Validation 
-
-There is a famous saying in software development, garbage in, garbage out. This means if you allow users to enter incorrect information (garbage) through the user interface then that garbage will eventually end up in your database. And usually when this happens, it becomes extremely difficult and time consuming to clean the database. 
-
-You must take necessary steps to prevent users from submitting incorrect information in the first place. 
-
-Consider a simple ```LoginScreen``` view with username and password TextFields. If we want to enable the login Button only when the view is validated correctly, we can use the implementation below: 
-
-``` swift 
-struct LoginScreen: View {
-    
-    @State private var username: String = ""
-    @State private var password: String = ""
-    
-    private var isFormValid: Bool {
-        !username.isEmptyOrWhiteSpace && !password.isEmptyOrWhiteSpace
-    }
-    
-    var body: some View {
-        Form {
-            TextField("Username", text: $username)
-            TextField("Password", text: $password)
-            Button("Login") {
-                
-            }.disabled(!isFormValid)
-        }
-    }
-}
-```
-
-For such trivial logic, you can use Xcode Previews to quickly perform manual testing and validate the outcome. 
-
-If you are working on a more complicated form, then it is advised to extract it into its own struct. This concept is shown in the implementation below. 
-
-``` swift 
-struct LoginFormConfig {
-    
-    var username: String = ""
-    var password: String = ""
-    
-    var isFormValid: Bool {
-        !username.isEmptyOrWhiteSpace && !password.isEmptyOrWhiteSpace
-    }
-}
-
-struct LoginScreen: View {
-    
-    @State private var loginFormConfig: LoginFormConfig = LoginFormConfig()
-    
-    var body: some View {
-        Form {
-            TextField("Username", text: $loginFormConfig.username)
-            TextField("Password", text: $loginFormConfig.password)
-            Button("Login") {
-                
-            }.disabled(!loginFormConfig.isFormValid)
-        }
-    }
-}
-```
-
-```LoginFormConfig``` encapsulates the form validation. This also allows us to write unit tests against the LoginFormConfig. Few unit tests are shown below: 
-
-``` swift 
-final class LearnTests: XCTestCase {
-
-    func test_login_form_validates_successfully() {
-        
-        let expectedOutputs: [[String: Any]] = [
-            ["username": "johndoe", "password": "password", "isFormValid": true],
-            ["username": "", "password": "password", "isFormValid": false],
-            ["username": "johndoe", "password": " ", "isFormValid": false],
-            ["username": "", "password": " ", "isFormValid": false],
-            ["username": "   ", "password": "password", "isFormValid": false],
-            ["username": " johndoe", "password": " password", "isFormValid": true]
-        ]
-        
-        for expectedOutput in expectedOutputs {
-            let username = expectedOutput["username"] as! String
-            let password = expectedOutput["password"] as! String
-            let isFormValid = expectedOutput["isFormValid"] as! Bool
-            
-            let loginFormConfig = LoginFormConfig(username: username, password: password)
-            XCTAssertEqual(loginFormConfig.isFormValid, isFormValid)
-        }
-    }
-}
-```
-
-In the end extracting the form validation into a separate struct and writing unit tests for it depends on your level of confidence. Simple forms can be tested easily through Xcode Previews and do not require additional structure or even unit tests.   
-
-> Validation helper functions like isEmptyOrWhiteSpace, isNumeric, isEmail, isLessThan can be moved into a separate Swift package. This will promote reusability and other projects can also benefit from using it.
-
-I covered few different ways of handling and displaying validation errors in one of my previous articles that you can read [here](https://azamsharp.com/2022/08/09/intro-to-mv-state-pattern.html). 
-
-
-## Grouping View Events 
-
-One way to create reusable views in SwiftUI is to delegate the events to the parent view. This allows views to be used in different scenarios and without tying them to a particular logic. One way to accomplish this is to use closures. 
-
-Consider a ```ReminderCellView```, which allows the user to perform check/uncheck and delete operations. The implementation is shown below: 
-
-``` swift 
-struct ReminderCellView: View {
-    
-    let index: Int
-    let onChecked: (Int) -> Void
-    let onDelete: (Int) -> Void
-
-    var body: some View {
-        HStack {
-            Image(systemName: "square")
-                .onTapGesture {
-                    onChecked(index)
-                }
-            Text("ReminderCellView \(index)")
-            Spacer()
-            Image(systemName: "trash")
-                .onTapGesture {
-                    onDelete(index)
-                }
-        }
-    }
-}
-```
-
-```ReminderCellView``` exposes ```onChecked``` and ```onDelete``` closures. The caller can use these closures to perform a particular task. The calling side is shown below: 
-
-``` swift 
-struct ContentView: View {
-
-    var body: some View {
-        List(1...20, id: \.self) { index in
-            ReminderCellView(index: index, onChecked: { index in
-                // do something
-            }, onDelete: { index in
-                // do something
-            })
-        }
-    }
-}
-```
-
-As the complexity of ```ReminderCellView``` increases and it exposes more events then the calling side will become more complicated.
-
-We can fix this issue by grouping all the events into a simple enum. This is shown below: 
-
-``` swift 
-enum ReminderCellEvents {
-    case onChecked(Int)
-    case onDelete(Int)
-}
-```
-
-The ```ReminderCellView``` can be updated to use ```ReminderCellEvents```. This is shown below: 
-
-``` swift 
-struct ReminderCellView: View {
-    
-    let index: Int
-    let onEvent: (ReminderCellEvents) -> Void
-    
-    var body: some View {
-        HStack {
-            Image(systemName: "square")
-                .onTapGesture {
-                    onEvent(.onChecked(index))
-                }
-            Text("ReminderCellView \(index)")
-            Spacer()
-            Image(systemName: "trash")
-                .onTapGesture {
-                    onEvent(.onDelete(index))
-                }
-        }
-    }
-}
-```
-
-Now, instead of dealing with multiple closures we are only handling a single enum based event structure. The calling site also looks much cleaner. 
-
-``` swift 
-struct ContentView: View {
-
-    var body: some View {
-        List(1...20, id: \.self) { index in
-            ReminderCellView(index: index) { event in
-                switch event {
-                    case .onChecked(let index):
-                        print(index)
-                    case .onDelete(let index):
-                        print(index)
-                }
+            Button("Save Movie") {
+                let movie = Movie(name: "Batman", genre: .action)
+                context.insert(movie)
             }
         }
+        .padding()
     }
 }
 ```
 
-In the end you will have to decide when you want to group events into an enum and when you want to use them individually (multiple closures). I tend to prefer using enum events if I have more than two closures exposed by the view. 
+Nice and simple! 
 
-## Navigation 
+Now let's see how we can perform filtering using enums. The following code can be part of a nested view, where you pass genre to the initializer. This allows you to dynamically change the predicate of the query. 
 
-SwiftUI introduced NavigationStack in iOS 16, which allowed developers to configure global routes for their application. This is similar to React Router, where routes can be configured in a single place. When I originally wrote this section, I used ```@EnvironmentObject``` to store the routes. Even though it worked as expected but it did not felt natural. The main purpose of ```@EnvironmentObject``` is to store state that will be shared with different views in the application. ```@EnvironmentObject``` can be really beneficial when you have to access state in a deeply nested view, without having to pass through all the parent views. 
-
-In terms of navigation, we are not sharing state with other views that will be displayed on the screen, we are sharing app environment configurations. For this scenario ```@Environment``` is a much better choice. ```@Environment``` values can be used to store configuration settings, services, application routers and more. You have already seen ```@Environment``` in action earlier when we stored ```httpClient``` as a custom environment value. 
-
-We will start by creating an enum to represent routes for our application. 
-
-```swift
-enum Route: Hashable {
-    case home
-    case login
-    case detail(Product)
-    case reviews
-    case reviewDetail
-}
+``` swift 
+ init(selectedGenre: Genre) {
+        _movies = Query(filter: #Predicate<Movie> { $0.genre == selectedGenre })
+    }
 ```
 
-> For larger apps you can create nested enums to divide the routes based on different sections of the application. 
+Unfortunately, the above code will not filter the items. This may be a bug in SwiftData and hopefully, it will be resolved in the future update. If the above code does not work then how can we perform filter based on enum. The only approach I found that works is to replace the enum struct with its raw value. This requires an update to the Movie model as shown below: 
 
-Next, we will implement custom Environment key and Environment values. 
-
-```swift
-
-enum NavigationType: Hashable {
-    case push(Route)
-    case unwind(Route)
-}
-
-struct NavigateEnvironmentKey: EnvironmentKey {
-    static var defaultValue: (NavigationType) -> Void = { _ in }
-}
-
-extension EnvironmentValues {
-    var navigate: (NavigationType) -> Void {
-        get { self[NavigateEnvironmentKey.self] }
-        set { self[NavigateEnvironmentKey.self] = newValue }
+``` swift 
+@Model
+class Movie {
+    var name: String
+    var genreId: Int
+    
+    var genre: Genre {
+        Genre(rawValue: genreId)!
+    }
+    
+    init(name: String, genre: Genre) {
+        self.name = name
+        self.genreId = genre.rawValue
     }
 }
 ```
 
-The important thing to notice here is the declaration and usage of ```NavigationType```. The ```NavigationType``` enum represents the two types of navigations that can be performed. This includes the default push navigation and also unwind navigation. Unwind navigation will allow users to go from View G to View C or root. 
+We have replaced ```Genre``` enum with ```genreId```. The initializer for the Movie struct remain the same but we extract out the rawValue from the passed genre and assigned it to the ```genreId``` property. Now we can update our predicate to perform the filter based on ```genreId```. 
 
-> There are multiple ways of handling unwinding of routes. Just like navigate closure, you can introduce an unwind closure that takes in a route instead of the NavigationType. For this article, I am using a single navigate closure to handle both push and unwind scenarios.  
+ ``` swift    
+    init(selectedGenre: Genre) {
+        _movies = Query(filter: #Predicate<Movie> { $0.genreId == selectedGenre.rawValue })
+    }
+```
 
-Next, we need to setup the routes and inject Environment values at the root of our application. Usually this is performed in the App file of your application. The implementation is shown below:
+The above predicate will filter movies based on the selected genre. 
 
-```swift
+> Predicate only works on persisted properties and not computed properties. The reason is that behind the scenes, predicate needs to generate SQL based on the database columns. Since computed properties are not persisted, they cannot be used in the Predicate.
+
+As mentioned earlier, Apple may change how predicates work with enums but at this time the solution to persist and use their raw value does the trick. 
+
+### Transformable Types 
+
+SwiftData is not only capable of storing primitive types like (Int, String, Boolean etc) but also complex types. If you want to store a custom type in the database then you can use **transformable types**. Transformable types in SwiftData allow you to store non-standard data types, such as custom classes or objects, dictionaries, arrays, or any other complex data structure, as attributes in your SwiftData properties. SwiftData uses a process called "value transformation" to convert these custom data types into a format that can be stored in the persistent store (typically a SQLite database). 
+
+Consider a scenario that you want to store UIColor to the database using SwiftData. UIColor is a complex object and can be stored using transformable type. The implementation of the model is shown below: 
+
+``` swift 
+@Model
+class Room {
+    var name: String
+    @Attribute(.transformable(by: UIColorValueTransformer.self)) var color: UIColor
+    
+    init(name: String, color: UIColor) {
+        self.name = name
+        self.color = color
+    }
+}
+```
+
+The color property is using the ```@Attribute```, which is indicating that it is a transformable type and will be using ```UIColorValueTransformer``` to convert the UIColor to data and vice versa. This conversion is needed to persist UIColor to the database. The implementation of the ```UIColorValueTransformer``` is shown below: 
+
+``` swift 
+class UIColorValueTransformer: ValueTransformer {
+    
+    // return data
+    override func transformedValue(_ value: Any?) -> Any? {
+        guard let color = value as? UIColor else { return nil }
+        do {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: color, requiringSecureCoding: true)
+            return data
+        } catch {
+            return nil
+        }
+    }
+    
+    // return UIColor
+    override func reverseTransformedValue(_ value: Any?) -> Any? {
+        guard let data = value as? Data else { return nil }
+        
+        do {
+            let color = try NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data)
+            return color
+        } catch {
+            return nil 
+        }
+    }
+    
+}
+```
+
+After you have implemented ```UIColorValueTransformer``` you need to register it for your application. This can be done in the App file as shown below: 
+
+``` swift 
 @main
-struct LearnApp: App {
+struct RoomsAppApp: App {
     
-    @State private var routes: [Route] = []
-    
-    var body: some Scene {
-        WindowGroup {
-            NavigationStack(path: $routes) {
-                ContentView()
-                    .navigationDestination(for: Route.self) { route in
-                        switch route {
-                            case .home:
-                                ContentView()
-                            case .login:
-                                Text("Login")
-                            case .detail(let product):
-                                ProductDetail(product: product)
-                            case .reviews:
-                                ReviewList()
-                            case .reviewDetail:
-                                ReviewDetail()
-                        }
-                    }
-            }.environment(\.navigate) { navType in
-               
-                switch navType {
-                    case .push(let route):
-                        routes.append(route)
-                    case .unwind(let route):
-                        
-                        if route == .home {
-                            routes = []
-                        } else {
-                            guard let index = routes.firstIndex(where: { $0 == route })  else { return }
-                            routes = Array(routes.prefix(upTo: index + 1))
-                        }
-                }
-            }
-        }
+    init() {
+        ValueTransformer.setValueTransformer(UIColorValueTransformer(), forName: NSValueTransformerName("UIColorValueTransformer"))
     }
-}
-```
-
-The ```NavigationStack``` tracks the routes using the $routes binding. Whenever a new route is added or removed, ```.navigationDestination``` is validated. The ```.navigationDestination``` modifier is responsible for returning the destination view based on the type of the route. In a similar fashion, environment values are injected to the ```NavigationStack```. The ```.navigate``` closure is responsible for appending new routes and even unwinding routes to a particular destination.
-
-Finally, views can perform programmatic navigation using the new ```@Environment``` key called ```navigate```. This is shown in the following implementation: 
-
-```swift
-struct ReviewList: View {
-    
-    @Environment(\.navigate) private var navigate
-    
-    var body: some View {
-        VStack {
-            Text("Reviews")
-            Button("Go to Product") {
-                 navigate(.push(.detail(Product(name: "Chair"))))
-            }
-            Button("Go back to Home View") {
-                navigate(.unwind(.home))
-            }
-        }
-    }
-}
-```
-
-While researching for this section, I tried out various ways to perform routing. One of the solutions included the following easy to use syntax: 
-
-```swift 
-navigate(.detail(Product(name: "Chair")))
-```
-
-The problem I ran into was the above implementation did not supported unwinding routes. One way to handle unwinding would be to simply check the routes array and then if the route already exists then drop all the indexes after that route. Although this can be implemented but it makes code unclear to the developer. Take a look at the following example: 
-
-```swift
-navigate(.reviews)
-```
-
-When the developer composes this code, the assumption is that it facilitates push navigation rather than unwinding. However, if the same function call is employed to execute an unwind operation exclusively in cases where the route already exists, it imposes an additional cognitive burden on the developer. Consequently, the developer is compelled to possess a more comprehensive understanding of the inner workings of the function before initiating its invocation.
-
-So, in the end it depends on your needs. If you have criteria to support unwinding routes then use the implementation above, on the other hand if you are just interested in normal push navigation then substitute ```NavigationType``` in navigate closure with Route. 
-
-> I am sure there are other ways of handling navigation in SwiftUI. Send me a [Gist](https://gist.github.com/) of your suggestion on [Twitter](https://twitter.com/azamsharp) and I will be more than happy to review it. 
-
-> I also wrote a book on Navigation API in SwiftUI. If you are interested, you can download it free of charge from [here](https://azamsharp.com/books). 
-
-## Displaying Errors 
-
-Displaying errors is an integral part of any application. In SwiftUI we have many different ways of displaying errors. In this section, we will cover three different techniques that can be used to display errors. 
-
-### Technique #1: 
-
-This technique was demonstrated in Apple's [Scrumdinger](https://developer.apple.com/tutorials/app-dev-training/getting-started-with-scrumdinger) application. We will start by creating an ```ErrorWrapper```, which will be responsible for wrapping the actual error and also providing guidance to the user on the next steps. The implementation is shown below:  
-
-``` swift 
-struct ErrorWrapper: Identifiable {
-    let id = UUID()
-    let error: Error
-    let guidance: String
-}
-```
-
-ErrorView is responsible for displaying the details of the error in a visual format. You can find basic implementation of an ErrorView below.
-
-``` swift 
-struct ErrorView: View {
-    
-    let errorWrapper: ErrorWrapper
-    
-    var body: some View {
-        VStack {
-            Text("Error has occured in the application.")
-                .font(.headline)
-                .padding([.bottom], 10)
-            Text(errorWrapper.error.localizedDescription)
-            Text(errorWrapper.guidance)
-                .font(.caption)
-        }.padding()
-    }
-}
-```
-
-> ErrorView is simply a view and you can customize it as much as you want. 
-
-The usage of ```ErrorWrapper``` and ```ErrorView``` is shown below: 
-
-``` swift 
-struct HomeView: View {
-    
-    @State private var errorWrapper: ErrorWrapper?
-    
-    private enum SampleError: Error {
-        case operationFailed
-    }
-    
-    var body: some View {
-        VStack {
-            Button("Throw Error") {
-                do {
-                    throw SampleError.operationFailed
-                } catch {
-                    errorWrapper = ErrorWrapper(error: error, guidance: "Operation failed. Please try again.")
-                }
-            }
-        }.sheet(item: $errorWrapper) { errorWrapper in
-            ErrorView(errorWrapper: errorWrapper)
-        }
-    }
-}
-```
-
-Now, when an error is thrown a sheet is presented with the details about the error along with the guidance for next steps. 
-
-At present, when the intention is to present an error in a distinct view, the process necessitates the creation of an "errorWrapper" along with the attachment of a sheet to the corresponding view for the error's visibility. But imagine a scenario where the display of errors could be consolidated into a centralized location.
-
-### Technique #2:
-
-Instead of attaching the sheet/alert to each screen of the application, we can attach it to the root view. This way we have a single place to handle, displaying of the errors. For this to work, we need global access to the errorWrapper so it can be set by any view. We will use the same technique we used in the [Navigation](#navigation) section and use a custom ```@Environment``` value to manage global access. The implementation for the custom key and the extension is shown below: 
-
-``` swift 
-struct ShowErrorEnvironmentKey: EnvironmentKey {
-    static var defaultValue: (Error, String) -> Void = { _, _ in }
-}
-
-extension EnvironmentValues {
-    var showError: (Error, String) -> Void {
-        get { self[ShowErrorEnvironmentKey.self] }
-        set { self[ShowErrorEnvironmentKey.self] = newValue }
-    }
-}
-```
-
-Now, we can use the ```showError``` Environment value in your view as implemented below: 
-
-```swift 
-struct HomeView: View {
-    
-    @Environment(\.showError) private var showError
-    
-    private enum SampleError: Error {
-        case operationFailed
-    }
-    
-    var body: some View {
-        VStack {
-            Button("Throw Error") {
-                do {
-                    throw SampleError.operationFailed
-                } catch {
-                   showError(error, "Please try again later.")
-                }
-            }
-        }
-    }
-}
-```
-
-Finally, will will attach the new Environment value to the root view of the application so it is easily accessible by all child views. 
-
-```swift 
-@main
-struct LearnApp: App {
-    
-    @State private var errorWrapper: ErrorWrapper?
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.showError) { error, guidance in
-                    errorWrapper = ErrorWrapper(error: error, guidance: guidance)
-                }
-                .sheet(item: $errorWrapper) { errorWrapper in
-                    Text(errorWrapper.error.localizedDescription)
-                }
+                .modelContainer(for: [Room.self])
         }
     }
 }
 ```
 
-We have now centralized the displaying of errors for our application. In the future if you want to make any changes then there is a single place you can update. 
-
-> New displays like .alert, .toast etc can be added by introducing an enum to the ErrorWrapper. You can check out the implementation [here](https://twitter.com/azamsharp/status/1695476201127645465?s=20). 
-
-### Technique #3: 
-
-I learned about this technique from my discussion with [Hussein EIRyalat](https://www.linkedin.com/in/hussc/). He used custom view modifiers to display of errors. I have changed the implementation a little bit to support ```ErrorWrapper```.   
-
-The first step is to implement the view modifiers and view extensions. The implementation is shown below: 
+Now, you can persist color for your Room as shown below: 
 
 ``` swift 
-struct ErrorViewModifier: ViewModifier {
-    
-    @Binding var errorWrapper: ErrorWrapper?
-    
-    init(errorWrapper: Binding<ErrorWrapper?>) {
-        self._errorWrapper = errorWrapper
-    }
-    
-    func body(content: Content) -> some View {
-        content
-            .sheet(item: $errorWrapper) { errorWrapper in
-                Text(errorWrapper.error.localizedDescription)
-            }
-    }
-}
-
-extension View {
-    
-    func onError(_ errorWrapper: Binding<ErrorWrapper?>) -> some View {
-        modifier(ErrorViewModifier(errorWrapper: errorWrapper))
-    }
-}
+ Button(action: {
+                let room = Room(name: name, color: UIColor(color))
+                context.insert(room)
+                name = ""
+            }, label: {
+                Text("Save")
+                    .frame(maxWidth: .infinity)
+            }).buttonStyle(.borderedProminent)
+                .padding([.top], 20)
 ```
 
-Now, we can directly call ```onError``` as shown in the implementation below: 
+And also display the colors in the user interface as implemented below: 
 
-``` swift 
-struct HomeView: View {
-    
-    @State private var errorWrapper: ErrorWrapper?
-    
-    private enum SampleError: Error {
-        case operationFailed
-    }
-    
-    var body: some View {
-        VStack {
-            Button("Throw Error") {
-                do {
-                    throw SampleError.operationFailed
-                } catch {
-                    errorWrapper = ErrorWrapper(error: error, guidance: "Please try again.")
+```swift 
+ List(rooms) { room in
+                HStack {
+                    Text(room.name)
+                    Spacer()
+                    Rectangle()
+                        .fill(Color(uiColor: room.color))
+                        .frame(width: 50, height: 50)
+                        .clipShape(RoundedRectangle(cornerRadius: 10.0, style: .continuous))
                 }
             }
-        }.onError($errorWrapper)
-    }
-}
 ```
 
-In this section, we covered three different ways of displaying errors in our SwiftUI application. Each approach has its own advantages and disadvantages. Try out different approaches and see which one fits your needs. 
+> Please keep in mind that saving a complex object to the database can have an impact on performance. It's essential to make a judgment call based on your application's specific requirements and performance considerations.
 
-## Formatting 
+### Xcode Previews 
 
-It is common practice to format the data before presenting it to the user. 
+Xcode previews plays a vital role in the development of SwiftUI applications, offering a significant advantage in rapidly iterating over designs and visually validating logic.
 
-When formatting data, it's crucial to exercise caution with regard to the user's present locale. Take a look at the following example. 
+In the talk [Build programmatic UI with Xcode Previews](https://developer.apple.com/videos/play/wwdc2023/10252/), Apple engineer mentioned that previews are like tests. They help you to quickly iterate over your user interface design and even UI logic. 
 
-```swift 
-struct HomeView: View {
-    
-    let amount: Double = 25.75
-    
-    var body: some View {
-        // displays $25.750000
-        Text("$\(amount)") 
-    }
-}
-```
+My experience with previews has been the same. I use it extensively for iterating over the app design and user interface logic. If the UI logic is more complicated then those parts can be separated out into independent data structs, where they can be tested individually using XCTest framework. 
 
-There are few problems with the above implementation. The first one is pretty basic. Users don't want to see ```$25.750000``` they want to see ```$25.75```. But the much bigger issue is the hard-coded ```$``` sign. This means that the amount will only be displayed in US dollar currency. It would be a much better idea to set the currency based on user's locale. 
+> Xcode previews are great for incrementally testing your UI and the logic contained in the UI, but they are not a replacement for different types of tests for your application. You **may** still need to write domain level unit tests, integration tests and end-to-end tests.I opted for the word **may** instead of **will** because not all applications necessarily require testing. The need for testing varies depending on the type of application being developed and whether the effort invested in writing tests yields the desired outcome.
 
-The following implementation shows how to display currency correctly based on user's locale.  
+One way to use previews in SwiftData is by implementing a custom ```ModelContainer```. This technique was shown in WWDC video titled [Build an app with SwiftData](https://developer.apple.com/videos/play/wwdc2023/10154/?time=530). The main idea is to create a model container just for the purpose of rendering Xcode previews. The model container can be in-memory containing fake data. The implementation is shown below: 
 
 ``` swift 
-extension Locale {
-    static var currencyCode: String {
-        Locale.current.currency?.identifier ?? "USD"
+import Foundation
+import SwiftData
+
+@MainActor
+let previewContainer: ModelContainer = {
+    
+    do {
+        let container = try ModelContainer(for: Budget.self, ModelConfiguration(inMemory: true))
+        SampleData.budgets.enumerated().forEach { index, budget in
+            container.mainContext.insert(budget)
+            let transaction = Transaction(note: "Note \(index + 1)", amount: (Double(index) * 10), date: Date())
+            budget.addTransaction(transaction)
+        }
+        
+        return container
+        
+    } catch {
+        fatalError("Failed to create container.")
+    }
+}()
+
+struct SampleData {
+    static let budgets: [Budget] = {
+        return (1...5).map { Budget(name: "Budget \($0)", limit: 100 * Double($0)) }
+    }()
+}
+```
+
+In the above code, we have not only created fake budget objects but also added some fake transactions to each budget item. You can even get more creative and populate fake data through a JSON file.
+
+> It is not mandatory that your model container for previews is always in-memory. You can always use an actual persistent model container too. This way your data will be available between preview refreshes. 
+
+Finally, you can use the ```previewContainer``` in your view as shown in the implementation below: 
+
+``` swift 
+struct BudgetDetailContainerView: View {
+    @Query private var budgets: [Budget]
+    
+    var body: some View {
+        NavigationStack {
+            BudgetDetailScreen(budget: budgets[0])
+        }
     }
 }
 
-struct HomeView: View {
-    
-    let amount: Double = 25.75
-    
-    var body: some View {
-        // displays $25.75 
-        Text(amount, format: .currency(code: Locale.currencyCode))
+#Preview { @MainActor in
+    BudgetDetailContainerView()
+        .modelContainer(previewContainer)
+}
+```
+
+Please note that the above code will cause a warning ```Converting function value of type '@MainActor () -> any View' to '() -> any View' loses global actor 'MainActor'```. At this point, it is not clear that if this is a bug or expected behavior.  
+
+> #Preview is a new macro introduced in SwiftUI, which automatically writes the necessary code to generate a preview for the view. These kind of macros are also known as freestanding macros. 
+
+Although using ```#Preview``` macro is the preferred choice, you can still use the ```PreviewProvider``` to create macros for your application. This is shown below:  
+
+``` swift 
+struct BudgetDetailContainer_Previews: PreviewProvider {
+    static var previews: some View {
+        BudgetDetailContainerView()
+            .modelContainer(previewContainer)
+        
     }
 }
 ```
 
-Formatting in SwiftUI is not just limited to currency but you can format dates, measurements and even lists. This is shown below: 
+### Migrations 
 
-**Formatting Dates:**
+As your application grows, your database schema also changes. It is important to keep track of these changes so you can revert back to the old schema, if needed. This also allows a new member on the team to quickly setup their environment. All they need to do is run database migrations and their system will be up to date with the current database schema. 
 
-![Date Formatting](/images/format-date.jpeg)
+> Think of migrations as the change history of the database structure/schema 
 
-**Formatting Lists:**
+Any changes to the database schema must be represented by a migration. These changes includes but are not limited to: 
 
-![Format Lists](/images/format-lists.jpeg)
+- Adding or removing constraints to a column 
+- Renaming an existing column 
+- Changing the data type of the column 
 
-**Formatting Distances**: 
+SwiftData allows you to perform migrations by defining different schema versions. Consider an example where you have a ```Budget``` model defined below: 
 
-You don't need to access locale from ```@Environment```. This was just used to demonstrate that it converts distances automatically based on the locale. 
-
-![Format Distances](/images/format-distances.jpeg)
-
-So, the next you are trying to format your data to be displayed in a SwiftUI view make sure to check out the built-in formatters. There is a very good chance that SwiftUI already provides utility functions for your needs.  
-
-## Testing 
-
-> This section of the article is taken from my post [Pragmatic Testing and Avoiding Common Pitfalls](https://azamsharp.com/2012/12/23/pragmatic-unit-testing.html)
-
-The main purpose of writing tests is to make sure that the software works as expected. Tests also gives you confidence that a change you make in one module is not going to break stuff in the same or other modules. 
-
-Not all applications requires writing tests. If you are building a basic application with a straight forward domain then you can test the complete app using manual testing. Having said that in most professional environments, you are working with a complicated domain with business rules. These business rules form the basis on which company operates and generates revenue. 
-
-In this article, I will discuss different techniques of writing tests and how a developer can write good tests to get the most return on their investment. 
-
-## Not all tests are created equal 
-
-Consider a scenario that you are writing an application for a bank. One of the business rules is to charge overdraft fees in case of insufficient funds. Banks generate [billions of dollars income by just fees](https://www.depositaccounts.com/blog/banks-income-fees.html) alone. As a developer, you must write good quality tests to make sure that overdraft fee calculation works as expected.
-
-In the same bank app, you may have features like rendering templates for emails or logging certain interactions. These features are important but may not produce the same return on investment as compared to charging overdraft fees. This means if the email template is not in the correct format then the banks are not going to loose millions of dollars and you will not receive a call in the middle of the night. If the logging is meant for developers then in most cases you don't even need to write tests for it. It is just an implementation detail. 
-
->> If you are building a logging framework then it is essential that you thoroughly test the public API exposed by your framework.  
-
-Next time you are writing a test, ask yourself how important this feature is for the business. If it is an integral part of the business then make sure to test it thoroughly and go for high code coverage.  
-
-## Test behavior not implementation 
-
-One of the biggest mistakes developers make is to focus on writing tests against the implementation details instead of the behavior of the application.
-
->> A trigger to add a new test is the requirement, not a class or a function. 
-
-Just because you added a new class or a function does not mean that you will start writing tests. That is just an implementation detail which can change overtime. Your tests should target the business requirements and not the implementation details. 
-
-Here are few examples of behaviors, derived from business requirements: 
-
-1. When a customer withdraw amount and has insufficient funds then charge an overdraft fee.  
-2. The number of stocks specified by customer are submitted for trade at a specified price, once the limit has reached. 
-
-The behavior stems from the requirement of the project. Tests that checks the implementation details instead of the behavior tends to be very brittle and can easily break when the implementation changes even though the behavior remains the same.  
-
-Let's consider a scenario, where you are building an application to display a list of products on the screen. The products are fetched from a JSON API and rendered using SwiftUI framework, following the principles of MVVM design pattern.
-
-First we will look at a common way of testing the above scenario that is adopted by most developers and then later we will implement tests in a more **pragmatic** way. 
-
-The complete app might look like the implementation below: 
-
-```swift 
-class Webservice {
+``` swift 
+@Model
+final class Budget {
     
-    func fetchProducts() async throws -> [Product] {
-        // ignore the hard-coded URL. We can inject the URL from using test configuration. 
-        let url = URL(string: "https://test.store.com/api/v1/products")!
-        let (data, _) = try await URLSession.shared.data(from: url)
-        return try JSONDecoder().decode([Product].self, from: data)
+    var name: String
+    var limit: Double
+    
+    @Relationship(deleteRule: .cascade)
+    var transactions: [Transaction] = []
+    
+    init(name: String, limit: Double) {
+        self.name = name
+        self.limit = limit
+    }    
+}
+```
+
+The Budget model currently does not have a unique constraints on the name. This means you can have duplicate budget names added to your application. What if we want to update our schema to support unique name constraints. We can't just update our Budget model and add the ```@Attribute(.unique)``` macro for the name property. The main reason is that we may have existing budget records in the database with the duplicated names and if we try to add the unique constraints then the database will throw an error since the unique constraints will be activated because of the existing duplicate records. 
+
+SwiftData supports two types of schema migrations, lightweight and custom. Lightweight migrations do not require any custom code. Specifying delete rules for the relationships and providing originalName are examples of lightweight migrations. Custom migrations are needed when you must run some additional code with your migration.   
+
+Since this operation requires the change to the schema as well as updating the data, we must write a **custom** migration to perform this action. A custom migration will take care of any existing duplicate budget records in the database to ensure data integrity. 
+
+Migrations in SwiftData are created using ```VersionedSchema``` protocol. You can create different versions for your schema by conforming to ```VersionedSchema``` protocol. Below, you can see the implementation of our original schema. 
+
+``` swift 
+enum SpendTrackerSchemaV1: VersionedSchema {
+    
+      static var versionIdentifier: String? = "Initial version of the model"
+    
+    static var models: [any PersistentModel.Type] {
+        [Budget.self]
     }
     
+    @Model
+    final class Budget {
+        
+        var name: String
+        var limit: Double
+        
+        @Relationship(.cascade)
+        var transactions: [Transaction] = []
+        
+        init(name: String, limit: Double) {
+            self.name = name
+            self.limit = limit
+        }
+        
+    }
+}
+```
+
+The ```versionIdentifier``` is used to specify the purpose of the migration. The ```models``` property is used to indicate, which models will be part of this schema. And finally, we have the complete implementation of the Budget model. 
+
+As you can see in the above implementation, we do not have a unique constraint on the name property. This is because in our original implementation, we did not have the unique constraint on the name property. These model/schema changes came later and that is the reason we need to implement a version 2 of the schema. 
+
+In the implementation below we have the V2 of the schema, which includes the unique attribute on the name property. 
+
+``` swift 
+
+enum SpendTrackerSchemaV2: VersionedSchema {
+    
+    static var versionIdentifier: String? = "Adding unique constraint to the name property"
+    
+    static var models: [any PersistentModel.Type] {
+        [Budget.self]
+    }
+    
+    @Model
+    final class Budget {
+        
+        @Attribute(.unique) var name: String
+        var limit: Double
+        
+        @Relationship(deleteRule: .cascade)
+        var transactions: [Transaction] = []
+        
+        init(name: String, limit: Double) {
+            self.name = name
+            self.limit = limit
+        }
+        
+    }
 }
 
-class ProductListViewModel: ObservableObject {
+```
+
+Once, you have implemented the new version of the schema. The next step is to work on a migration plan using ```SchemaMigrationPlan``` protocol. SchemaMigrationPlan provides an interface for describing the evolution of a schema and how to migrate between specific versions.
+
+A custom migration is created using the ```custom``` function on the ```MigrationStage``` enum. This function supports the ```willMigrate``` and ```didMigrate``` closures, which are fired during different lifetime events of the migration. In our case, we will be using ```willMigrate``` to update the current budget records to make sure the existing names are unique. 
+
+``` swift 
+ static let migrateV1toV2 = MigrationStage.custom(fromVersion: SpendTrackerSchemaV1.self, toVersion: SpendTrackerSchemaV2.self, willMigrate: { context in
+        
+        guard let budgets = try? context.fetch(FetchDescriptor<Budget>()) else { return }
+        
+        var duplicates = Set<Budget>()
+        var uniqueSet = Set<String>()
+        
+        for budget in budgets {
+            if !uniqueSet.insert(budget.name).inserted {
+                duplicates.insert(budget)
+            }
+        }
+        
+        // now change the names for duplicates
+        for budget in duplicates {
+            let budgetToBeUpdated = budgets.first(where: { $0.id == budget.id } )!
+            budgetToBeUpdated.name = budgetToBeUpdated.name + " \(generateUniqueRandomNumber())"
+        }
+        
+        // calling save is important
+        try? context.save()
+        
+        
+    }, didMigrate: nil)
+```
+
+In the above ```willMigrate``` implementation, we first find all the duplicate budgets based on their names. Once we find all the duplicated names, we go through them and update their name property to make it unique. Finally we persist the information to the database by calling ```context.save()``` function. 
+
+**Don't run your app yet!**
+
+Remember that our models are defined in versioned schema file and not in the ```Budget.swift file```. This means if you have already defined ```Budget``` class in Budget.swift file, you need to remove it or you will get duplicate declaration error. 
+
+So, what should we put in ```Budget.swift``` file? Once technique you can use is to create a ```typealias```, which represents the current model version. 
+
+ Open your ```Budget.swift``` file and make a ```typealias``` to point to the correct Budget model version. 
+
+``` swift
+typealias Budget = SpendTrackerSchemaV2.Budget
+```
+
+This means that in your code you can still refer to the ```Budget``` class by using Budget instead of using ```SpendTrackerSchemaV2.Budget```. 
+
+> The tip to use ```typealias``` was shared by Pol Piella in his article [Configuring SwiftData in a SwiftUI app](https://www.polpiella.dev/configuring-swiftdata-in-a-swiftui-app). 
+
+Finally, you need to update your SpendTrackerApp file to use the migration plan. This is shown below: 
+
+``` swift 
+@main
+struct SpendTrackerApp: App {
     
-    @Published var products: [ProductViewModel] = []
+    let container: ModelContainer
     
-    func populateProducts() async {
+    init() {
         do {
-            let products = try await Webservice().fetchProducts()
-            self.products = products.map(ProductViewModel.init)
+            container = try ModelContainer(for: [Budget.self], migrationPlan: SpendTrackerMigrationPlan.self, ModelConfiguration(for: [Budget.self]))
+        } catch {
+            fatalError("Could not initialize the container.")
+        }
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                BudgetListScreen()
+            }
+        }
+        .modelContainer(container)
+    }
+}
+```
+
+ Now if you run the app, the migration is going to run and add the unique constraint to the name property. Not only that but your existing duplicate budget names will be updated to satisfy the unique constraints.
+
+### Architecture 
+
+Architecture has always been a topic of hot debate, specially in the SwiftUI community. There are couple of reasons behind the confusion. First, Apple has never advocated openly about a particular architecture to follow when building SwiftUI applications. The primary rationale behind this is that, unlike UIKit applications that typically adhered to the MVC (Model-View-Controller) architecture by default, SwiftUI offers greater flexibility in terms of architectural choices. 
+
+> While Apple has not explicitly recommended a particular architecture for building SwiftUI or SwiftData applications, we can acquire valuable insights into the architectural patterns used by Apple through their sample code and WWDC videos.
+
+During [Platforms State of the Union 2023](https://developer.apple.com/videos/play/wwdc2023/102/?time=81), Darin Adler said **"the most natural way to write your code is also the best."**. This was again mentioned by Josh Shaffer (Engineering director with the UIKit and SwiftUI team at Apple) in the Under the Radar podcast [episode 270](https://www.relay.fm/radar/270). 
+
+This can mean different things to different people but for me it simply meant that let SwiftUI be SwiftUI. Instead of fighting the framework, try to work with it. 
+
+Since 2019, I have used many different architectural patterns when building SwiftUI applications. This included MVVM, Container pattern, Redux, MV pattern and Active Record Pattern. Apple has a sample SwiftData application called [Backyard Birds: Building an app with SwiftData and widgets](https://developer.apple.com/documentation/swiftui/backyard-birds-sample), which uses a variation of Active Record Pattern. 
+
+I say variation of Active Record Pattern because Apple puts all the logic in their models but still uses the model context for persistence operations like save and delete. This technique allows you to easily work with Xcode Previews for SwiftData applications since you can easily inject a model container for the previews. I covered working with Xcode previews [earlier](#xcode-previews) in this article.   
+
+Apple introduced ```@FetchRequest``` for Core Data and ```@Query``` for SwiftData. These property wrappers are optimized for working with SwiftUI framework. But sometimes in a quest to satisfy a certain architecture, we ignore SwiftUI built-in features and try to reinvent the wheel. I have seen a lot of developers ignoring the above mentioned property wrappers and manually implementing ```NSFetchedResultsController``` for their SwiftUI applications. I have done the same, I even have a video on it titled [Core Data MVVM in SwiftUI App Using NSFetchedResultsController](https://youtu.be/gGM_Qn3CUfQ). 
+
+Ultimately, my efforts resulted in more lines of code, contributing to an increased burden and liability. The key takeaway from this experience is to embrace SwiftUI as it was intended, avoiding unnecessary complications. Remember that the simplest and most natural approach often yields the best results.  
+
+If you are interested in further reading about SwiftUI architecture then I have written several articles on this topic. This includes [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html) and [Active Record Pattern for Building SwiftUI Apps with Core Data](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html). 
+
+
+### SwiftData Syncing Using CloudKit 
+
+SwiftData provides seamless integration with CloudKit, which enables you to sync your data with iCloud. For the most part, you don't have to write any additional code to make the syncing work. Basic SwiftData syncing with iCloud is supported by default. You just have to add CloudKit capabilities and make sure that your models are conforming to the requirements of CloudKit syncing protocols.  
+
+> At the time of this writing SwiftData only supported syncing with private database associated with the user. This means shared and public databases are not supported. 
+
+
+
+
+### Testing
+
+Testing plays a crucial role in software development, serving as a cornerstone of confidence. When dealing with a straightforward domain, I may opt for minimal or even zero tests. However, when tackling a complex business domain, I rely on the assistance of unit tests to ensure accuracy and reliability.
+
+In software development, domain is considered the most important part of the application. This is where all the rules and business logic is implemented. By testing the domain you get the best return on your investment. In our application, the domain logic is contained in the models. 
+
+In the code below we are validating that the budget total is calculated correctly.  
+
+``` swift 
+  func test_should_calculate_budget_total_successfully() {
+        
+        let budget = Budget(name: "Budger 1", limit: 100)
+        let transaction = Transaction(note: "Note 1", amount: 100, date: Date())
+        let transaction2 = Transaction(note: "Note 2", amount: 50, date: Date())
+        let transaction3 = Transaction(note: "Note 3", amount: 100, date: Date())
+        
+        budget.addTransaction(transaction)
+        budget.addTransaction(transaction2)
+        budget.addTransaction(transaction3)
+
+        XCTAssertEqual(250, budget.total)
+        
+    }
+```
+
+Testing is a vast and complicated topic. I have written few articles on my views on testing. You can read it [here](https://azamsharp.com/2012/12/23/pragmatic-unit-testing.html). If you are interested to learn more about testing then check out the book, [Unit Testing Principles, Practices and Patterns by Vladimir Khorikov](https://a.co/d/edDcv2q). 
+
+Sometime back I shared on Twitter that how I consider Xcode Previews to be kind of like tests for your views. This means all the presentation and transformation logic you have in your views can be easily tested using Xcode Previews. 
+
+![Xcode Previews as Tests](/images/xcode-previews-test.png)
+
+Apple also shared similar views in their WWDC 2023 video titled [Build programmatic UI with Xcode Previews](https://developer.apple.com/videos/play/wwdc2023/10252/). 
+
+![Apple Xcode Previews are Tests](/images/apple-xcode-previews.png)
+
+In the end, focus on writing tests for the most important parts of your application. In most cases, it is the domain. This will give you the best return on your investment.    
+
+### SwiftData with UIKit 
+
+SwiftData is primarily designed to work with SwiftUI, but it can be integrated with the UIKit framework. Apple discusses these steps these in the article [Preserving your app’s model data across launches](https://developer.apple.com/documentation/swiftdata/preservingyourappsmodeldataacrosslaunches). 
+
+You will start by setting up the model container for your app. This should be done at the start of your application. The implementation of the container property is shown below: 
+
+``` swift 
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    // other code 
+    
+    lazy var container: ModelContainer = {
+        //let configuration = ModelConfiguration(inMemory: true)
+        let container = try! ModelContainer(for: TodoItem.self)
+        return container
+    }()
+}
+```
+
+Once the container has been initialized, you can use it in your view controllers, just like you have for SwiftUI applications. Once thing to notice is that when working with SwiftData for your UIKit apps, you don't have access to the ```@Query``` property wrapper. This means you need to call the fetch function, which is part of the context to manually fetch the records. This is shown in the implementation below: 
+
+``` swift 
+ private func populateTodoItems() {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let context = appDelegate.container.mainContext
+        
+        let fetchDescriptor: FetchDescriptor<TodoItem> = FetchDescriptor()
+        
+        do {
+            self.todoItems = try context.fetch(fetchDescriptor)
+            tableView.reloadData()
         } catch {
             print(error)
         }
     }
-    
-}
-
-struct ProductViewModel: Identifiable {
-    
-    private let product: Product
-    
-    init(product: Product) {
-        self.product = product
-    }
-    
-    var id: Int {
-        product.id
-    }
-    
-    var title: String {
-        product.title
-    }
-}
-
-
-struct ProductListScreen: View {
-    
-    @StateObject private var vm = ProductListViewModel()
-    
-    var body: some View {
-        List(vm.products) { product in
-            Text(product.title)
-        }.task {
-            await vm.populateProducts()
-        }
-    }
-}
 ```
 
-The above application works as expected and produces the expected result. Instead of testing the concrete implementation of the ```Webservice```, we will introduce an interface/contract/protocol just so that we can inject a mock. The sole purpose of creating the protocol is to satisfy the tests, even though there is only one concrete implementation that conforms to that protocol/interface.  
+> There is no equivalent of ```NSFetchedResultsController``` in SwiftData. This also indicates Apple's intention that SwiftData is primarily created to work with SwiftUI and not with UIKit. Having said that you can, if you want still use SwiftData with UIKit.    
 
->> This is called [**Test Induced Damage**](https://dhh.dk/2014/test-induced-design-damage.html). The tests are dictating that we should add dependencies so you can mock out the service. The only purpose of introducing a protocol/contract/interface is so you can eventually mock it. Keep in mind there is nothing wrong with using protocols/contracts in your application. They do serve a very important purpose to hide the implementation details from the user and providing abstraction, but just to add contracts to satisfy testing goals in not a good practice as it complicates the implementation and your tests are directed away from testing the actual behavior of the app. 
+### Resources
 
-In the code below we have introduced a WebserviceProtocol. Both Webservice and the newly created MockedWebservice conforms to the WebserviceProtocol as shown below: 
+- [SwiftData official documentation](https://developer.apple.com/documentation/swiftdata)
+- [SwiftData WWDC Videos](https://www.google.com/search?q=wwdc+videos+swiftdata&oq=wwdc+videos+swiftdata&aqs=chrome..69i57j69i60l3.3658j0j7&sourceid=chrome&ie=UTF-8)
+- [SwiftData Udemy Course: SwiftData - Declarative Data Persistence for SwiftUI ](https://www.udemy.com/course/swiftdata-declarative-data-persistence-for-swiftui/?referralCode=A1303D0BA99171C90D9B)
+- [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html)
+- [Active Record Pattern for Building SwiftUI Apps with Core Data](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html)
 
-```swift 
-protocol WebserviceProtocol {
-    func fetchProducts() async throws -> [Product]
-}
 
-class Webservice: WebserviceProtocol {
-    
-    func fetchProducts() async throws -> [Product] {
-        
-        let url = URL(string: "https://test.store.com/api/v1/products")!
-        let (data, _) = try await URLSession.shared.data(from: url)
-        return try JSONDecoder().decode([Product].self, from: data)
-    }
-}
+### Conclusion 
 
-class MockedWebService: WebserviceProtocol {
-    func fetchProducts() async throws -> [Product] {
-        return [Product(id: 1, title: "Product 1"), Product(id: 2, title: "Product 2")]
-    }
-}
-```
+SwiftData is a highly anticipated and welcomed addition to the iOS framework, offering seamless integration with SwiftUI and a reliable migration path for Core Data applications. This exceptional framework not only effortlessly aligns with the powerful capabilities of SwiftUI but also provides a smooth transition for developers with existing Core Data projects. By leveraging the intuitive nature of SwiftUI and the versatility of SwiftData, developers can effectively manage data and create remarkable iOS applications with ease. The inclusion of SwiftData in the iOS framework represents a significant advancement, empowering developers to streamline their workflows and deliver exceptional user experiences.
 
->> You should probably use a better name, instead of calling it WebserviceProtocol. The main reason, I am calling it WebserviceProtocol is just for the sake of simplicity and convenience.   
+If you have enjoyed this article and want to support my work then check out my course on SwiftData on Udemy. I also have courses on SwiftUI, Vapor, Machine Learning and even Full Stack iOS Development. You can find list of all of my courses [here](https://azamsharp.com/courses).  
 
-The webservice is now injected as a dependency to our ProductListViewModel. This is shown below: 
+- [SwiftData Udemy Course: SwiftData - Declarative Data Persistence for SwiftUI ](https://www.udemy.com/course/swiftdata-declarative-data-persistence-for-swiftui/?referralCode=A1303D0BA99171C90D9B)
 
-```swift 
-class ProductListViewModel: ObservableObject {
-    
-    private let webservice: WebserviceProtocol
-    @Published var products: [ProductViewModel] = []
-    
-    init(webservice: WebserviceProtocol) {
-        self.webservice = webservice
-    }
-    
-    func populateProducts() async {
-        do {
-            let products = try await Webservice().fetchProducts()
-            self.products = products.map(ProductViewModel.init)
-        } catch {
-            print(error)
-        }
-    }
-    
-}
-```
 
-The view, ProductListScreen is also updated to reflect the change. 
-
-```swift 
-struct ProductListScreen: View {
-    
-    @StateObject private var vm = ProductListViewModel(webservice: WebserviceFactory.create())
-    
-    var body: some View {
-        List(vm.products) { product in
-            Text(product.title)
-        }.task {
-            await vm.populateProducts()
-        }
-    }
-}
-```
-
->> WebserviceFactory is responsible for either returning the Webservice or MockedWebservice, depending on the application environment. 
-
-Now, let's go ahead and check out the test. 
-
-```swift 
-final class ProductsTests: XCTestCase {
-    
-    func test_populate_products() async throws {
-        
-        let mockedWebService = MockedWebService()
-        let productListVM = ProductListViewModel(webservice: mockedWebService)
-        
-        await productListVM.populateProducts()
-        
-        // This line is verifying the implementation detail.
-        // Implementation details can change
-        // fetchProducts can change to getProducts and the test will fail. 
-        verify(mockedWebService.fetchProducts()).wasCalled()
-        
-        XCTAssertEqual(2, productListVM.products.count)
-    }
-}
-```
-
-We created an instance of ```MockedWebservice``` inside our test and pass it to the ```ProductListViewModel```. Next, we invoke the ```populateProducts``` function on the view model and then check to make sure that the ```fetchProducts``` on the mockedWebservice instance was called. Finally, the test checks the products property of the ````ProductListViewModel``` instance to make sure that is is populated correctly. 
- 
-The problem with the above test is that it is not testing the behavior but the implementation. The following line of code is an implementation detail. 
-
-```swift
-verify(mockedWebService.fetchProducts()).wasCalled()
-```
-
-This means if you decide to refactor your code and rename the function ```fetchProducts``` to ```getProducts``` then your test will fail. These kind of tests are often known as brittle tests as they break when the internal implementation changes even though the functionality/behavior provided by the API remains the same. This is also the main reason that your test should validate the behavior instead of the implementation.  
-
-> The code that you write is a liability, including tests. When writing tests, focus on the quality of the tests instead of the quantity. Remember, you are not only responsible for writing tests but also maintaining them. 
-
-> If you are using MVVM pattern then your VM may have logic. It is perfectly fine to write unit tests against the logic contained in the view model.   
-
-## End to End Testing 
-
-In the previous section, you learned that and mocking in most scenarios does not provide the return on your investment. Tests written that use mocking usually end up being too brittle and can fail because of refactoring, breaking all the dependent tests even though the behavior remained the same. 
-
-Human psychology also plays an important role when writing tests. As software developers we want fast feedback with small amounts of dopamine hit along the way. There is nothing wrong with receiving fast feedback. Fast feedback is one of the important characteristics of a unit test. Unfortunately, sometimes we are going too fast to realize that we were on the wrong path. We start behaving like a test addict, who wants to see green checkmarks alongside the tests instantly.  
-
-As explained earlier adding tests that test the implementation details instead of behavior does not provide any benefit to your project. It may even work against you in the long run since now you will be responsible for maintaining those test cases and anytime the implementation detail changes, all your test will break even though the functionality remained the same. 
-
-> I am not proposing that you should not write unit tests. Unit tests are great when you are testing small units of code. I am proposing that you must make sure that you are testing the behavior of the code and not implementation details. This means if you want to write unit tests for your view models, you can. 
-
-Apart from unit tests and integration tests, end to end tests are best against regression. A good end to end will test one complete story/behavior. Below you can find the implementation of an end to end test. 
-
-```swift 
-final class ProductTests: XCTestCase {
-    
-    private var webservice: Webservice!
-    // products
-    let products = [Product(id: 1, title: "Handmade Fresh Table"),Product(id: 2, title: "Durable Water Bottle")]
-    
-    override func setUp() {
-        // make sure the Webservice is using the TEST server endpoints and not PRODUCTION
-        webservice = Webservice()
-        
-        // add few products // seeding the database
-        for product in products {
-            await webservice.addProduct(product: product)
-        }
-    }
-    
-    func test_display_list_of_all_products() async {
-        
-        let app = XCUIApplication()
-        app.launch()
-        
-        let productList = app.tables["productList"]
-        
-        // check if the item numbers is correct
-        XCTAssertEqual(productList.tables.cells.count, 2)
-        
-        // check if the correct items are displayed
-        for(index, product) in products.enumerated() {
-            let cell = productList.cells.element(boundBy: index)
-            XCTAssertEqual(cell.staticTexts["productTitle"].label, product.title)
-        }
-        
-    }
-    
-    override func tearDown() async throws {
-        // make sure to delete ALL records from the database so future test results are not influenced
-        await webservice.deleteProductById(productId: 1)
-        await webservice.deleteProductById(productId: 2)
-    }
-    
-}
-```
-  
->> Developers can run E2E tests locally on their development machine. This will require initial setup such as testing framework, test environment, dependencies (database, services). E2E tests can be time-consuming, as a result developers may choose to run E2E tests less frequently than unit tests or other types of tests.  
-
-E2E tests are slower than the previous tests discussed earlier in the section but the main reason they are slower is because they tests all layers of the application. E2E tests are complete test and targets a particular behavior of the app. 
-
-End to end tests also requires some initial setup that will allow your test to run database migrations, insert seed data, simulate user interface events and then rolling back changes after the tests are completed. 
-
-End to end tests are NOT replacement of your domain model tests. You MUST write tests against your domain models, specially if your app is domain heavy and consists of lots of business rules. 
-
->> You will have to find the right balance as to how often to run end to end tests. If you run it with each code check-in then your continuous integration server will always be running 100% of the time. If you run it once every couple of days then you will be notified of failures much later than expected. Keep in mind that you can run E2E tests locally on your machine. Once you get the desired outcome, the CI server can run all the tests during the code check-in process.   
-
-## What about Integration Testing 
-
-Integration tests are performed to make sure that two different systems can work together. These systems can be external dependencies like database or API but it can also be different modules within the same system. 
-
-Dependencies can be classified as managed and unmanaged dependencies. A managed dependency includes database, file systems etc. For managed dependencies, it is important that you use real instance and not a mock. Unmanaged dependencies include SMTP server, payment gateway etc. For unmanaged dependencies use mocks to verify their behavior. 
-
-Let's check out a sample integration test for a network service for user login operation. 
-
-```swift 
-// This test is generated by ChatGPT AI 
-import XCTest
-
-class IntegrationTests: XCTestCase {
-    func testLogin() {
-        // Set up the URL for the login endpoint
-        let url = URL(string: "https://api.example.com/login")!
-
-        // Create a URL request
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        // Set the body of the request to a JSON object with the login credentials
-        let body = ["username": "user123", "password": "password"]
-        request.httpBody = try! JSONSerialization.data(withJSONObject: body)
-
-        // Create a URLSession and send the request
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-            // Make sure there is no error
-            XCTAssertNil(error)
-
-            // Check the response status code
-            let httpResponse = response as! HTTPURLResponse
-            XCTAssertEqual(httpResponse.statusCode, 200)
-
-            // Check the response data
-            XCTAssertNotNil(data)
-            let responseBody = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
-            XCTAssertEqual(responseBody["status"], "success")
-        }
-        task.resume()
-    }
-}
-
-```
-
-The above integration test makes sure that the HTTP client layer is working as expected. The integration is between the network client and the server. The client is making sure that the response is correct and valid for a successful login operation.  
-
-Unmanaged dependencies like payment gateway, SMTP clients etc can be mocked out during integration tests. For managed dependencies, use the concrete implementations. 
-
-## Code Coverage 
-
-Code coverage is a metric that calculates how much of your code is covered under test. Let's take a very simple example. In the code below we have a ```BankAccount``` class, which consists of ```deposit``` and ```withdraw``` functions. 
-
->> Keep in mind that in real world scenario, a bank account is not implemented as a calculator. A bank account is recorded in a ledger, where all financial transactions are persisted. 
-
-```swift 
-class BankAccount {
-    
-    private(set) var balance: Double
-    
-    init(balance: Double) {
-        self.balance = balance
-    }
-    
-    func deposit(_ amount: Double) {
-        self.balance += amount
-    }
-    
-    func withdraw(_ amount: Double) {
-        self.balance -= amount
-    }
-    
-}
-```
-
-One possible test for the BankAccount may check if the account is successfully deposited. 
-
-```swift 
-final class BankAccountTests: XCTestCase {
-    
-    func test_deposit_amount() {
-        
-        let bankAccount = BankAccount(balance: 0)
-        bankAccount.deposit(100)
-        XCTAssertEqual(100, bankAccount.balance)
-        
-    }
-}
-```
-
-If this is the only test we have in our test suite then our code coverage is not 100%. This means not all paths/functions are under test. This is true because we never implemented the test for ```withraw``` function. 
-
-You may be wondering that should you always have 100% code coverage. The simple answer is NO. But it also depends on the apps that you are working on. If you are writing code for NASA, where it will be responsible for landing rover on Mars then you better make sure that every single line is tested and your code coverage is 100%. 
-
-If you are implementing an app for a pace maker device that helps to regulate the heartbeat then you better make sure that your code coverage is 100%. One line of missed and untested code can result in someones life... literally. 
-
-So, what is the ideal code coverage number. It really depends on the app but any number above 70% is considered a decent code coverage. 
-
->> When calculating code coverage make sure to ignore the third party libraries/frameworks as their code coverage is not your responsibility. 
-
-## Unit Testing, Data Access and File Access 
-
-Most developers that I have talked to believe that a unit test cannot access a database or a file system. **That is incorrect and plain wrong**. A unit test CAN access a database or a file system. 
-
-It is very important to understand that ```Unit test is the isolation, not the thing under test```. This is so important that I am going to repeat it again. 
-
->> Unit test is the isolation, not the thing under test 
-
-One of the valid reasons of not accessing a database or a file system during unit tests is that a test may leave data behind which may cause other tests to behave in unexpected manner. The solution is to make sure that the database is always reverted to an initial state after each test is completed so that future tests gets a clean database without any side effects.  
-
-Some frameworks also allows you to construct in-memory databases. Core Data for instance uses SQLite by default but it can be configured to use an in-memory database as shown below: 
-
-```swift 
-storeDescription.type = NSInMemoryStoreType
-```
-
-In-memory database provides several benefits including: 
-
-- No removal of test data 
-- Run faster 
-- Can be initialized before each test run 
-
-Even thought these benefits looks appealing, I personally do not recommend using in-memory database for testing purposes. The main reason is that in-memory databases does not represent an actual production environment. This means you may not encounter the same issues during tests, which you may witness when using an actual database. 
-
->> It is always a good idea to to make sure that your test environment and production environment are nearly identical in nature. 
-
-## Testing View Model Does NOT Validate the User Interface  
-
-Couple of weeks ago, I was having a discussion with another developer, who was mentioning that they test their **user interface** through View Models in SwiftUI. I was not sure what he meant so I checked the source code and found that they had lot of unit tests for their View Models and they were just assuming that if the View Model tests are passing then the user interface will automatically work.
-
-> Please keep in mind that I am not suggesting that you should not write unit tests for your View Models. I am simply saying that your View Model unit tests does not validate that the user interface is working as expected. 
-
-Let's take a very simple example of building a counter application. 
-
-``` swift 
-class CounterViewModel: ObservableObject {
-    
-    @Published var count: Int = 0
-    
-    func increment() {
-        count += 1
-    }
-}
-
-struct ContentView: View {
-    
-    @StateObject private var counterVM = CounterViewModel()
-    
-    var body: some View {
-        VStack {
-            Text("\(counterVM.count)")
-            Button("Increment") {
-                counterVM.increment()
-            }
-        }
-    }
-}
-```
-
-When the increment button is pressed, we call the increment function on the CounterViewModel instance and increment the count. Since count property is decorated with @Published property wrapper, it notifies the view to reevaluate and eventually rerender. 
-
-In order to test that the count is incremented and displayed on the screen, the following unit test was written. 
-
-``` swift 
-import XCTest
-@testable import Learn
-
-final class LearnTests: XCTestCase {
-
-    func test_user_updated_count() {
-        let vm = CounterViewModel()
-        vm.increment()
-        XCTAssertEqual(1, vm.count)
-    }
-
-}
-```
-
-This is a perfectly **valid** unit test but it does not verify that the count has been updated and displayed on the screen. Let me repeat it again. **A View Model unit test does not verify that the count is successfully displayed on the screen. This is a unit test not a UI test.**
-
-To prove that a View Model unit test does not verify user interface elements, simply remove the Button view or even the Text view from the ContentView. The unit test will still pass. This can give you false confidence that your interface is working. 
-
-A better way to verify that a user interface is working as expected is to implement a UI test. Take a look at the following implementation. 
-
-``` swift 
-final class LearnUITests: XCTestCase {
-
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        app.buttons["incrementButton"].tap()
-        XCTAssertEqual("1", app.staticTexts["countLabel"].label)
-    }
-}
-```
-
-This test will launch the app in a simulator and verify that when the button is pressed, label is updated correctly. 
-
-> Depending on the complexity of the behavior you are testing, you may not even need to write a user interface test. I have found that most of the user interfaces can be tested quickly using Xcode Previews. 
-
-So what is the right balance? How many unit tests should you have for your View Model as compared to UI tests. 
-
-The answer is **it depends**. If you have complicated logic in your View Model then unit test can help. UITest (E2E) tests provide the best defense against regression. For each story, you can write couple of long happy path user interface tests and couple of edge cases. Once again, this really depends on the story and the complexities associated with the story. 
-
-In the end [testing is all about **confidence**](https://azamsharp.com/2023/02/15/testing-is-about-confidence.html). Sometimes you can gain confidence by writing fewer or no tests and other times you have to write more tests to achieve the level of confidence. 
-
-## The Ideal test 
-
-We talked about several different types of tests. You may be wondering what is the best kind of test to write. What is the ideal test? 
-
-Unfortunately, there is no ideal test. It all depends on your project and requirements. If your project is domain heavy then you should have more domain level tests. If your project is UI heavy then your should have end to end tests. Finally, if your project integrates with managed and unmanaged dependencies then integration tests will be more suitable in those scenarios.
-
-Remember to test the public API exposed by the module and not the implementation details. This way you can write useful quality tests, which will also help you to catch errors.  
-
-Don't create protocols/interfaces/contracts with the sole purpose of mocking. If a protocol consists of a single concrete implementation then use the concrete implementation and remove the interface/contract. Your architecture should be based on current business needs and not on what if scenarios that may never happen. Remember YAGNI (You aren't going to need it). Less code is better than more code. 
-
-## Conclusion 
-
-Application architecture is a complicated subject and in the end the best architecture for a project depends on many factors. These factors can include the size and complexity of the project, the team's skills and experience, the project's goals and requirements. 
-
-Ultimately, the key to a successful application architecture is to choose a pattern that fits the project's unique needs, and to constantly evaluate and adjust the architecture as the project evolves.
-
-By investing time and resources into designing a thoughtful and effective application architecture, teams can ensure that their codebase is maintainable, scalable, and flexible enough to adapt to changing requirements and technology trends.
