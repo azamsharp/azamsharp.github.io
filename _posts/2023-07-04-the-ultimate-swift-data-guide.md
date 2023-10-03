@@ -930,7 +930,6 @@ Ultimately, my efforts resulted in more lines of code, contributing to an increa
 
 If you are interested in further reading about SwiftUI architecture then I have written several articles on this topic. This includes [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html) and [Active Record Pattern for Building SwiftUI Apps with Core Data](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html). 
 
-
 ### Testing
 
 Testing plays a crucial role in software development, serving as a cornerstone of confidence. When dealing with a straightforward domain, I may opt for minimal or even zero tests. However, when tackling a complex business domain, I rely on the assistance of unit tests to ensure accuracy and reliability.

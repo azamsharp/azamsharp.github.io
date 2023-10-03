@@ -933,12 +933,25 @@ If you are interested in further reading about SwiftUI architecture then I have 
 
 ### SwiftData Syncing Using CloudKit 
 
-SwiftData provides seamless integration with CloudKit, which enables you to sync your data with iCloud. For the most part, you don't have to write any additional code to make the syncing work. Basic SwiftData syncing with iCloud is supported by default. You just have to add CloudKit capabilities and make sure that your models are conforming to the requirements of CloudKit syncing protocols.  
+SwiftData provides seamless integration with CloudKit, which enables you to sync your data with iCloud. For the most part, you don't have to write any additional code to make the syncing work.  
 
 > At the time of this writing SwiftData only supported syncing with private database associated with the user. This means shared and public databases are not supported. 
 
+Basic SwiftData syncing with iCloud is supported by default. You just have to add CloudKit capabilities and make sure that your models are conforming to the requirements of CloudKit syncing protocols. 
 
+The first step is to add CloudKit capabilities to your project. This can be done using the **Signing & Capabilities** tab as shown in the screenshot below: 
 
+![CloudKit Capabilities](/images/icloud-image-1.png)
+
+In iCloud capability make sure to select **CloudKit** under Services option and either select or add a unique container. 
+
+![CloudKit Container](/images/cloudkit-swiftdata-1.png)
+
+You can also click on **CloudKit Console** to navigate to it. There is a possibility that your new container may display error messages on the console. Don't worry just give it more time and those errors will go away in the CloudKit console.    
+
+Next, open the entitlements file which was created due to the addition of the CloudKit capability. Add a new entry in the entitlements file for **App Sandbox**. This is shown below: 
+
+![App Sandbox](/images/cloudkit-3.png)
 
 ### Testing
 
