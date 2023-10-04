@@ -23,7 +23,7 @@ The outline of this article is shown below:
 - [Xcode Previews](#xcode-previews)
 - [Migrations](#migrations)
 - [Architecture](#architecture)
-- [SwiftData Integration with CloudKit (coming soon)]
+- [SwiftData Syncing Using CloudKit](#swiftdata-syncing-using-cloudkit)
 - [Testing](#testing)
 - [SwiftData with UIKit](#swiftdata-with-uikit)
 - [Resources](#resources)
@@ -929,6 +929,81 @@ Apple introduced ```@FetchRequest``` for Core Data and ```@Query``` for SwiftDat
 Ultimately, my efforts resulted in more lines of code, contributing to an increased burden and liability. The key takeaway from this experience is to embrace SwiftUI as it was intended, avoiding unnecessary complications. Remember that the simplest and most natural approach often yields the best results.  
 
 If you are interested in further reading about SwiftUI architecture then I have written several articles on this topic. This includes [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html) and [Active Record Pattern for Building SwiftUI Apps with Core Data](https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html). 
+
+
+### SwiftData Syncing Using CloudKit 
+
+SwiftData provides seamless integration with CloudKit, which enables you to sync your data with iCloud. For the most part, you don't have to write any additional code to make the syncing work.  
+
+> At the time of this writing SwiftData only supported syncing with private database associated with the user. This means shared and public databases are not supported. 
+
+Basic SwiftData syncing with iCloud is supported by default. You just have to add CloudKit capabilities and make sure that your models are conforming to the requirements of CloudKit syncing protocols. 
+
+The first step is to add CloudKit capabilities to your project. This can be done using the **Signing & Capabilities** tab as shown in the screenshot below: 
+
+![CloudKit Capabilities](/images/icloud-image-1.png)
+
+In iCloud capability make sure to select **CloudKit** under Services option and either select or add a unique container. 
+
+![CloudKit Container](/images/cloudkit-swiftdata-1.png)
+
+You can also click on **CloudKit Console** to navigate to it. There is a possibility that your new container may display error messages on the console. Don't worry just give it more time and those errors will go away in the CloudKit console.    
+
+Next, add **Background Modes** capability to your project and make sure that **Remote notifications** is checked. Remote notifications are sent from the cloud to trigger updates on your device.  
+
+![Remote notifications](/images/remote-not.png)
+
+Next, open the entitlements file which was created due to the addition of the CloudKit capability. Add a new entry in the entitlements file for **App Sandbox**. This is shown below: 
+
+![App Sandbox](/images/cloudkit-3.png)
+
+Now we are done with CloudKit configuration. Let's move our focus to the actual code. SwiftData requires that your model properties have either a default value or should be optional. In the code below we have provided a default value or empty string to the ```name``` property and updated our ```notes``` relationship to optional. 
+
+``` swift 
+@Model
+class Vegetable {
+    
+    var name: String = ""
+    @Relationship(deleteRule: .cascade) var notes: [Note]?
+    
+    init(name: String) {
+        self.name = name
+    }
+}
+```
+
+You are also not allowed to use ```@Attribute(.unique)``` for SwiftData apps that sync using CloudKit. 
+
+And finally the most important thing to remember is to use the ```@Query``` macro for all fetching operations. ```@Query``` macro does a lot behind the scenes and this also includes tracking the state of the objects in the container and also seamless syncing between different devices. 
+
+This means that instead of using the following code: 
+ 
+ ``` swift 
+ List(vegetable.notes ?? []) { note in
+    Text(note.text)
+}
+```
+
+You should use the following: 
+
+``` swift 
+@Query private var notes: [Note]
+
+private var notesByVegetable: [Note] {
+    notes.filter { $0.vegetable!.id == vegetable.id }
+}
+
+List(notesByVegetable) { note in
+    Text(note.text)
+}
+            
+```
+
+The ```@Query``` macro has been fine-tuned for optimal performance within SwiftUI applications, and I strongly recommend its adoption over any alternative custom solutions you may consider building.
+
+> To experience live syncing between multiple devices you need to run it on a real device. Since syncing depends on remote notifications, it will not work as expected on simulator and/or Xcode previews. 
+
+If you are interested then you can also watch a video on this topic. The video is titled [SwiftData CloudKit Sync - The Complete Guide](https://youtu.be/un45CkTY5fM?si=pb8ki-hZK6P_Ggsy) and while you are there go ahead and subscribe to my YouTube channel too. 
 
 ### Testing
 
