@@ -3,6 +3,7 @@
 - Update (09/24/2023): Code samples updated for Xcode 15 
 - Update (09/24/2023): Added new section "Persisting and Filtering by Enums" 
 - Update (09/24/2023): Added new section "Transformable Types" 
+- Update (10/03/2023): Add new section "SwiftData Syncing Using CloudKit"
 
 SwiftData made its debut at WWDC 2023 as a replacement for the Core Data framework. Serving as a wrapper on top of Core Data, SwiftData enables on-device persistence and seamless syncing to the cloud.
 
