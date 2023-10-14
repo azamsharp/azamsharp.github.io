@@ -1018,6 +1018,58 @@ One of the requirements of the app was that a user cannot add the budget categor
 
 > I believe it is a bug for the app to crash when the unique constraints are violated. Hopefully this will be fixed in the future release. 
 
+The way to solve this problem is to implement the exists function, which checks whether the budget category already exists in the database or not. If the title already exists then a ```titleAlreadyExist``` error is thrown. The complete implementation is shown below: 
+
+```swift 
+
+@Model
+class BudgetCategory {
+    
+    @Attribute(.unique) var title: String = ""
+    var amount: Decimal = 0.0
+    @Relationship(deleteRule: .cascade) var transactions: [Transaction] = []
+    
+    init(title: String, amount: Decimal) {
+        self.title = title
+        self.amount = amount
+    }
+    
+    // exists function to check if title already exist or not
+    private func exists(context: ModelContext, title: String) -> Bool {
+        
+        let predicate = #Predicate<BudgetCategory> { $0.title == title }
+        let descriptor = FetchDescriptor(predicate: predicate)
+        
+        do {
+            let result = try context.fetch(descriptor)
+            return !result.isEmpty ? true: false
+        } catch {
+            return false
+        }
+    }
+    
+    func save(context: ModelContext) throws {
+        
+        // find if the budget category with the same name already exists
+        if !exists(context: context, title: self.title) {
+            // save it
+            context.insert(self)
+        } else {
+            // do something else
+            throw BudgetCategoryError.titleAlreadyExist
+        }
+    }
+}
+
+```
+
+So, how do we write unit test associated with the above behavior. One good thing about the above implementation is that all the code is in the model and not in the view. This allows you to easily write unit tests for the logical parts of your application also known as the domain logic. 
+
+
+
+
+
+
 
 
 
