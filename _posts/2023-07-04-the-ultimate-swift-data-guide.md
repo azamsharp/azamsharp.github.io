@@ -1008,17 +1008,17 @@ If you are interested then you can also watch a video on this topic. The video i
 
 ### Testing
 
-Testing plays a crucial role in software development, serving as a cornerstone of confidence. When dealing with a straightforward domain, I may opt for minimal or even zero tests. However, when tackling a complex business domain, I rely on the assistance of unit tests to ensure accuracy and reliability.
+Testing plays a crucial role in software development, serving as a cornerstone of confidence. When dealing with a straightforward domain, I may opt for minimal or even zero tests. However, when tackling a complex business domain, I rely on the assistance of tests to ensure accuracy and reliability.
 
 In software development, domain is considered the most important part of the application. This is where all the rules and business logic is implemented. By testing the domain you get the best return on your investment. 
 
-Recently, I worked on a small app for my Udemy course. The app allowed the user to keep track of their budget and expenses related to each budget. You can download the app [here](https://github.com/azamsharp/SpendSmart). When writing tests for a SwiftData app you need to make sure that the actual logic is contained in the model and not in the view.  
+Recently, I worked on a small app for my Udemy course. The app allowed the user to keep track of their budget and expenses related to each budget. You can download the app [here](https://github.com/azamsharp/SpendSmart). 
 
-One of the requirements of the app was that a user cannot add the budget category with the same name twice. SwiftData provides the ```@Attribute(.unique)```, which can be used to prevent duplicate entries. Unfortunately ```@Attribute(.unique)``` will not work as expected. First, the property marked with ```@Attribute(.unique)``` attribute will perform an upsert (Update an existing record) instead of indicating that the insert failed. Secondly, if you are editing an item using ```@Bindable``` and assign a non-unique name to a property marked with unique attribute then your app will simply crash. 
+One of the requirements of the app was that a user cannot add the budget category with the same name twice. SwiftData provides the ```@Attribute(.unique)```, which can be used to prevent duplicate entries. Unfortunately ```@Attribute(.unique)``` does not work as expected. First, the property marked with ```@Attribute(.unique)``` attribute will perform an upsert (Update an existing record) instead of indicating that the insert failed. Secondly, if you are editing an item using ```@Bindable``` and assign a non-unique name to a property marked with unique attribute then your app will simply crash. 
 
 > I believe it is a bug for the app to crash when the unique constraints are violated. Hopefully this will be fixed in the future release. 
 
-The way to solve this problem is to implement the exists function, which checks whether the budget category already exists in the database or not. If the title already exists then a ```titleAlreadyExist``` error is thrown. The complete implementation is shown below: 
+The way to solve this problem is to implement the exists function on your own which checks whether the budget category already exists in the database or not. If the title already exists then a ```titleAlreadyExist``` error is thrown. The complete implementation is shown below: 
 
 ```swift 
 
@@ -1063,44 +1063,189 @@ class BudgetCategory {
 
 ```
 
-So, how do we write unit test associated with the above behavior. One good thing about the above implementation is that all the code is in the model and not in the view. This allows you to easily write unit tests for the logical parts of your application also known as the domain logic. 
+So, how do we write unit test associated with the above behavior. One good thing about the above implementation is that all the code is in the model and not in the view. This allows us to easily write unit tests for the logical parts of your application also known as the domain model. Below you can find the implementation of a test, which checks that the exception is thrown when a budget category with the same name is added twice. 
 
-
-
-
-
-
-
-
-
-In the code below we are validating that the budget total is calculated correctly.  
-
-``` swift 
-  func test_should_calculate_budget_total_successfully() {
+``` swift
+ @MainActor
+    func testThrowtitleDuplicateExceptionWhenInsertingDuplicateBudgetCategoryTitle() throws {
         
-        let budget = Budget(name: "Budger 1", limit: 100)
-        let transaction = Transaction(note: "Note 1", amount: 100, date: Date())
-        let transaction2 = Transaction(note: "Note 2", amount: 50, date: Date())
-        let transaction3 = Transaction(note: "Note 3", amount: 100, date: Date())
+        // A budget category with the same name was added in the setup
         
-        budget.addTransaction(transaction)
-        budget.addTransaction(transaction2)
-        budget.addTransaction(transaction3)
+        let newBudgetCategory = BudgetCategory(title: "Travel", amount: 300)
+        
+        XCTAssertThrowsError(try newBudgetCategory.save(context: context), "No exception was thrown.") { error in
+            let thrownError = error as? BudgetCategoryError
+            XCTAssertNotNil(thrownError)
+            XCTAssertEqual(BudgetCategoryError.titleAlreadyExist, thrownError)
+        }
+        
+        context.insert(newBudgetCategory)
+    }
 
-        XCTAssertEqual(250, budget.total)
+```
+
+> Budget category with the same exact name was added in the setup function. Setup is invoked before each test is run. 
+
+The above test uses ```MockContainer```, which stores the data in-memory. This means data is wiped out for the next test.  
+
+```swift 
+@MainActor
+var mockContainer: ModelContainer {
+    do {
+        let container = try ModelContainer(for: BudgetCategory.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        print("returning a new container")
+        return container
+    } catch {
+        fatalError("Failed to create container.")
+    }
+}
+
+```
+
+> You don't have to use in-memory database for testing. You can persist test data to an actual storage (SQLite by default). Just make sure to remove the data before the next test runs. This will ensure that your tests are not passing or failing based on the data persisted by the previous tests. 
+
+Here is another test that calculates the remaining amount for a budget category. 
+
+```swift 
+ @MainActor
+    func testCalculateRemainingForBudgetCategory() {
         
+        let transactions = [Transaction(title: "Milk", amount: 10, quantity: 1), Transaction(title: "Bread", amount: 2.5, quantity: 2), Transaction(title: "Eggs", amount: 4.75, quantity: 4)]
+        
+        for transaction in transactions {
+            self.budgetCategory.addTransaction(context: context, transaction: transaction)
+        }
+        
+        XCTAssertEqual(266, budgetCategory.remaining)
     }
 ```
 
-Testing is a vast and complicated topic. I have written few articles on my views on testing. You can read it [here](https://azamsharp.com/2012/12/23/pragmatic-unit-testing.html). If you are interested to learn more about testing then check out the book, [Unit Testing Principles, Practices and Patterns by Vladimir Khorikov](https://a.co/d/edDcv2q). 
+> Unit testing becomes increasingly important as the complexity of the domain increases.  
 
-Sometime back I shared on Twitter that how I consider Xcode Previews to be kind of like tests for your views. This means all the presentation and transformation logic you have in your views can be easily tested using Xcode Previews. 
+Unit tests focuses on a small parts of your application. They do serve a very important purpose, which includes understanding a complex domain. But the best method against regression is end-to-end testing. 
 
-![Xcode Previews as Tests](/images/xcode-previews-test.png)
+End-to-End testing ensures that the app works as expected when it will be used in production. You can write end-to-end tests in SwiftUI using the built-in UITest framework. I opt for few long happy paths and few edge cases per story. For instance we can write the following long happy path test. 
 
-Apple also shared similar views in their WWDC 2023 video titled [Build programmatic UI with Xcode Previews](https://developer.apple.com/videos/play/wwdc2023/10252/). 
+"As a user I should be able to add category and then add a transaction and then finally remove that transaction"
 
-![Apple Xcode Previews are Tests](/images/apple-xcode-previews.png)
+It is important to note that your end-to-end test are as close to production environment as possible. This means instead of writing to an in-memory database, you should persist information in a real database. Just make sure to delete all the data once the test is finished. 
+
+A common technique is to pass launch arguments through the test and then read those arguments in the actual application. In the implementation below, we are passing ```UITEST``` as a launch argument.  
+
+```swift
+
+final class SpendSmartUITests: XCTestCase {
+
+    private var app = XCUIApplication()
+    
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+        app.launchArguments = ["UITEST"]
+        app.launch()
+    }
+}
+
+```
+
+Next, we read the value of the launch argument in our actual application and take appropriate action. In this case we create a model container and remove all the data from database.   
+
+```swift 
+struct ModelContainerFactory {
+   
+    @MainActor static func create() -> ModelContainer {
+        
+        var container: ModelContainer!
+        
+        let configuration = ModelConfiguration(for: BudgetCategory.self, isStoredInMemoryOnly: false)
+        container = try! ModelContainer(for: BudgetCategory.self, configurations: configuration)
+        
+        if ProcessInfo.processInfo.arguments.contains("UITEST") {
+            
+            try! container.mainContext.delete(model: BudgetCategory.self)
+        }
+        
+        return container
+    }
+}
+
+@main
+struct SpendSmartApp: App {
+    
+    var container: ModelContainer
+    
+    init() {
+        container = ModelContainerFactory.create()
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                BudgetListScreen()
+            }.withMessageWrapper()
+        }.modelContainer(container)
+    }
+}
+
+```
+
+> I personally don't like the idea of accessing launch arguments as it leaks testing details into the main app. Unfortunately, I have not found a better solution. 
+
+Here is the complete implementation of UITest. 
+
+```swift
+
+ func test_AddBudgetCategoryAndThenAddAndRemoveTransactionsToThatBudget() {
+        
+        var budgetListScreen = BudgetListScreen(app: app)
+        var budgetDetailScreen = BudgetListDetailScreen(app: app)
+        
+        budgetListScreen.addBudgetCategoryButton.tap()
+        
+        budgetListScreen.titleTextField.tap()
+        budgetListScreen.titleTextField.typeText("Travel")
+        
+        budgetListScreen.amountTextField.tap()
+        budgetListScreen.amountTextField.typeText("100")
+                
+        budgetListScreen.saveBudgetCategoryButton.tap()
+        XCTAssertTrue(app.collectionViews.staticTexts["Travel"].exists)
+        
+        // take the user to budget detail screen
+        budgetDetailScreen.budgetCategoryList.staticTexts["Travel"].tap()
+        
+        budgetDetailScreen.transactionTitleTextField.tap()
+        budgetDetailScreen.transactionTitleTextField.typeText("Airfare")
+            
+        budgetDetailScreen.transactionAmountTextField.tap()
+        budgetDetailScreen.transactionAmountTextField.typeText("48")
+        
+        budgetDetailScreen.transactionQuantityTextField.tap()
+        budgetDetailScreen.transactionQuantityTextField.tap()
+                
+        budgetDetailScreen.addTransactionButton.tap()
+                
+        XCTAssertEqual("Spent: $48.00", budgetDetailScreen.spentText.label)
+        XCTAssertEqual("Remaining: $52.00", budgetDetailScreen.remainingText.label)
+        
+        XCTAssertTrue(app.staticTexts["Airfare (1)"].exists)
+        
+        // deleting the transaction
+        let transactionList = app.collectionViews
+        transactionList.children(matching: .cell).element(boundBy: 10).children(matching: .other).element(boundBy: 1).children(matching: .other).element.swipeLeft()
+        transactionList.buttons["Delete"].tap()
+        
+        // check if the row is gone
+        XCTAssertFalse(app.staticTexts["Airfare (1)"].exists)
+        
+        XCTAssertEqual("Spent: $0.00", budgetDetailScreen.spentText.label)
+        XCTAssertEqual("Remaining: $100.00", budgetDetailScreen.remainingText.label)
+    }
+
+```
+
+As you can see the end-to-end test is pretty detailed. This is perfectly fine because the purpose of such tests is to verify the complete behavior of a user story. When working on apps with a complicated flow, make sure to implement quality end-to-end tests.  
+
+There is much more to be said about testing. Testing is a vast and complicated topic. I have written few articles on my views on testing. You can read it [here](https://azamsharp.com/2012/12/23/pragmatic-unit-testing.html). If you are interested to learn more about testing then check out the book, [Unit Testing Principles, Practices and Patterns by Vladimir Khorikov](https://a.co/d/edDcv2q). 
 
 In the end, focus on writing tests for the most important parts of your application. In most cases, it is the domain. This will give you the best return on your investment.    
 
