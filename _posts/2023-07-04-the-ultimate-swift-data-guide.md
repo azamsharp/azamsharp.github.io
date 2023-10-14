@@ -1010,7 +1010,16 @@ If you are interested then you can also watch a video on this topic. The video i
 
 Testing plays a crucial role in software development, serving as a cornerstone of confidence. When dealing with a straightforward domain, I may opt for minimal or even zero tests. However, when tackling a complex business domain, I rely on the assistance of unit tests to ensure accuracy and reliability.
 
-In software development, domain is considered the most important part of the application. This is where all the rules and business logic is implemented. By testing the domain you get the best return on your investment. In our application, the domain logic is contained in the models. 
+In software development, domain is considered the most important part of the application. This is where all the rules and business logic is implemented. By testing the domain you get the best return on your investment. 
+
+Recently, I worked on a small app for my Udemy course. The app allowed the user to keep track of their budget and expenses related to each budget. You can download the app [here](https://github.com/azamsharp/SpendSmart). When writing tests for a SwiftData app you need to make sure that the actual logic is contained in the model and not in the view.  
+
+One of the requirements of the app was that a user cannot add the budget category with the same name twice. SwiftData provides the ```@Attribute(.unique)```, which can be used to prevent duplicate entries. Unfortunately ```@Attribute(.unique)``` will not work as expected. First, the property marked with ```@Attribute(.unique)``` attribute will perform an upsert (Update an existing record) instead of indicating that the insert failed. Secondly, if you are editing an item using ```@Bindable``` and assign a non-unique name to a property marked with unique attribute then your app will simply crash. 
+
+> I believe it is a bug for the app to crash when the unique constraints are violated. Hopefully this will be fixed in the future release. 
+
+
+
 
 In the code below we are validating that the budget total is calculated correctly.  
 
