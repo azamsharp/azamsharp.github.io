@@ -12,6 +12,10 @@ If you want to support my work then please consider buying one of my courses bel
 
 [Patreon](https://www.patreon.com/azamsharp)
 
+[Reactive Programming in iOS Using Combine Framework](https://www.udemy.com/course/reactive-programming-in-ios-using-combine-framework/?referralCode=CDA42154BD2209C3BBB3)
+
+[Mastering SwiftUI MapKit - The Complete Guide](https://www.udemy.com/course/mastering-swiftui-mapkit-the-complete-guide/?referralCode=B5DE7FA9CB1DCC295D42)
+
 [SwiftData - Declarative Data Persistence for SwiftUI](https://www.udemy.com/course/swiftdata-declarative-data-persistence-for-swiftui/?referralCode=A1303D0BA99171C90D9B)
 
 [Mastering Full Stack iOS Development Using SwiftUI and Vapor](https://www.udemy.com/course/full-stack-ios-development-using-swiftui-and-vapor/?referralCode=5573DBDE821F2E6A80E8)

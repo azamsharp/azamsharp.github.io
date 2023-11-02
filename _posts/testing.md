@@ -1,4 +1,18 @@
-# The Ultimate Guide to Building SwiftData Applications 
+
+
+# The Complete Guide to JSON Web Tokens (JWT) Authentication in iOS 
+
+
+
+
+
+
+
+
+
+
+
+
 
 - Update (09/24/2023): Code samples updated for Xcode 15 
 - Update (09/24/2023): Added new section "Persisting and Filtering by Enums" 
