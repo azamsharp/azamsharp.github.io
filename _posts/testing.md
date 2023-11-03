@@ -121,7 +121,7 @@ Our user registration action is completed. Now we need to focus on the SwiftUI c
 
 ### User Registration (Client)
 
-Our next step is to implement the registration logic on the client side (SwiftUI). The communication between the client and the server will be handled by a network layer. The implementation of HTTPClient is shown below: 
+After validating the functionality of our registration endpoint, our next step will be to shift our focus to the client side. Rather than creating distinct network functions for various requests, such as login, registration, and fetching courses, we'll streamline our approach by introducing a JSON HTTPClient. This HTTPClient will take on the responsibility of handling network requests and delivering the model data to the caller. You can find the implementation details of the HTTPClient below:
 
 ``` swift 
 struct HTTPClient {
@@ -174,4 +174,10 @@ struct HTTPClient {
 
 > You can find the complete implementation of the HTTPClient [here](https://gist.github.com/azamsharp/91919badd2c70c75732ad715b1c3e01e). 
 
-HTTPClient serves as a generic JSON network layer, which is capable of encoding and decoding data based on their types. 
+You might be contemplating breaking down the "load" function into smaller sub-functions, perhaps with the expectation of reusing these components across your codebase. However, I'd recommend abstaining from such abstraction at this point. The primary rationale behind this recommendation is that the logic within the "load" function is presently exclusive to that function alone. There is currently no demand or necessity to employ isolated segments of the "load" function independently. If such a requirement arises in the future, we can always extract and modularize specific functions based on the existing "load" function's implementation.   
+
+> Code that goes together, stays together 
+
+
+
+
