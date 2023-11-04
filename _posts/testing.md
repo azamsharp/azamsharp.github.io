@@ -222,3 +222,102 @@ When writing tests for behaviors that interact with managed dependencies, it is 
 
 > One important thing to keep in mind when using concrete implementations is to always clean up the data after the test. This means that if you inserted a user into a database during a test then make sure to remove the user after the test is completed. This is usually performed in a ```teardown``` function in ```XCTest``` framework. 
 
+
+```Account``` is injected as an environment object to the root view of the application. The implementation is shown below: 
+
+``` swift 
+@main
+struct ExamPrepApp: App {
+    
+    @State private var account = Account(httpClient: HTTPClient())
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                ContentView()
+                    .environment(account)
+            }
+        }
+    }
+}
+```
+
+> As mentioned before, since HTTPClient is a managed dependency we are using the concrete implementation instead of a mock. 
+
+The view can access the ```Account``` instance using the ```@EnvironmentObject``` property wrapper. Once the view has access to the account, it can use the register function as shown below: 
+
+``` swift 
+ private func register() async {
+        do {
+            let response = try await account.register(email: email, password: password)
+            if response.success {
+                // navigate to the login screen
+                navigate(.login)
+            } else {
+                message = response.message ?? ""
+            }
+        } catch {
+            message = error.localizedDescription 
+        }
+    }
+```
+
+One thing to note about our interaction with the server is that the server is returning the messages to the client. These messages indicate the reasoning about the failure that occurred on the server.  
+
+If you are interested in learning how to build a navigation system in SwiftUI and handling messages globally then check out the following resources. 
+
+- [Navigation](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#navigation)
+- [Displaying Errors (Technique #2)](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#displaying-errors)
+
+> If you are interested in learning how to build a navigation system in SwiftUI then check [this](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#navigation) article. 
+
+After successful registration, user will be redirected to the login screen. At this point we need to go back to the server and implement the login endpoint. 
+
+### Login (Server)
+
+The login process for JWT authentication is composed for the following steps. 
+
+1. Validate parameters passed in the request body. 
+2. Fetch user based on username or email. 
+3. Compare password with the stored hashed password in the database. 
+4. If successful, create a JSON Web Token and sign it with userId and provide an expiration date. 
+5. Return the response with token to the user. 
+
+Here is the ```login``` route. 
+
+``` swift 
+exports.login = async (req, res) => {
+
+    const { email, password } = req.body
+     
+    // perform validation on email and password  
+
+    // check if the user exists 
+    const user = await models.User.findOne({
+        where: {
+            email: email
+        }
+    })
+
+    if (user) {
+        // check the password 
+        let result = await bcrypt.compare(password, user.password)
+        if (result) {
+            // generate the expiration time = 1 hour 
+            const expirationTime = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 60; // 60 days in seconds.. you can change that :) 
+            // generate the jwt token 
+            const token = jwt.sign({ userId: user.id, exp: expirationTime }, process.env.JWT_PRIVATE_KEY)
+            res.json({ success: true, token: token, exp: expirationTime, roleId: user.roleId })
+
+        } else {
+            res.status(400).json({ success: false, message: 'Incorrect password' })
+        }
+
+    } else {
+        res.status(400).json({ success: false, message: 'User not found' })
+        return
+    }
+
+}
+```
+
