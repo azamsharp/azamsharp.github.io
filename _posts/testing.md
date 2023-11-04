@@ -281,9 +281,9 @@ The login process for JWT authentication is composed for the following steps.
 2. Fetch user based on username or email. 
 3. Compare password with the stored hashed password in the database. 
 4. If successful, create a JSON Web Token and sign it with userId and provide an expiration date. 
-5. Return the response with token to the user. 
+5. Return the response with the token to the user. 
 
-Here is the ```login``` route. 
+Here is the implementation of the ```login``` route. 
 
 ``` swift 
 exports.login = async (req, res) => {
@@ -321,3 +321,4 @@ exports.login = async (req, res) => {
 }
 ```
 
+### Login (Client)
