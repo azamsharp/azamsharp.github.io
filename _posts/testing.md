@@ -121,7 +121,7 @@ Our user registration action is completed. Now we need to focus on the SwiftUI c
 
 ### User Registration (Client)
 
-After validating the functionality of our registration endpoint, our next step will be to shift our focus to the client side. Rather than creating distinct network functions for various requests, such as login, registration, and fetching courses, we'll streamline our approach by introducing a JSON HTTPClient. This HTTPClient will take on the responsibility of handling network requests and delivering the model data to the caller. You can find the implementation details of the HTTPClient below:
+After validating the functionality of our registration endpoint, our next step will be to shift our focus to the client side. Rather than creating distinct network functions for various requests, such as login, registration, fetching courses etc we'll streamline our approach by introducing a JSON HTTPClient. This HTTPClient wll take on the responsibility of handling network requests and delivering the model data to the caller. You can find the implementation details of the HTTPClient below:
 
 ``` swift 
 struct HTTPClient {
@@ -174,10 +174,51 @@ struct HTTPClient {
 
 > You can find the complete implementation of the HTTPClient [here](https://gist.github.com/azamsharp/91919badd2c70c75732ad715b1c3e01e). 
 
-You might be contemplating breaking down the "load" function into smaller sub-functions, perhaps with the expectation of reusing these components across your codebase. However, I'd recommend abstaining from such abstraction at this point. The primary rationale behind this recommendation is that the logic within the "load" function is presently exclusive to that function alone. There is currently no demand or necessity to employ isolated segments of the "load" function independently. If such a requirement arises in the future, we can always extract and modularize specific functions based on the existing "load" function's implementation.   
+You might be contemplating breaking down the ```load``` function into smaller sub-functions, perhaps with the expectation of reusing these components across your codebase. However, I'd recommend abstaining from such abstraction at this point. The primary rationale behind this recommendation is that the logic within the "load" function is presently exclusive to that function alone. There is currently no demand or necessity to employ isolated segments of the "load" function independently. If such a requirement arises in the future, we can always extract and modularize specific functions based on the existing "load" function's implementation.   
 
 > Code that goes together, stays together 
 
 
+There are various ways of invoking HTTPClient layer from the view. You can expose HTTPClient as an environment value and directly access it from within the view or you can introduce an ObservableObject like ```Account```. 
 
+Each approach has its own benefits. Environment value approach is much simpler and allows you to directly accessing the network layer in the view. This is ideal of scenarios, where the Web API is read-only and does not allow the view to mutate the data. 
+
+> In SwiftUI, view is the view model. If you want to read more about SwiftUI architecture then check out my article "Building Large Apps Using SwiftUI". 
+
+The ObservableObject approach is used in scenarios where you may want to reuse the results from the request in other views and also perform some logical operation on the data.    
+
+For this article, I am going to use the ObservableObject approach as it will allow us to persist state in the future when we are dealing with login and authentication. 
+
+The ```Account``` implementation is shown below: 
+
+``` swift 
+
+@Observable
+class Account {
+    
+    private var httpClient: HTTPClient
+    
+    init(httpClient: HTTPClient) {
+        self.httpClient = httpClient
+    }
+    
+    func register(email: String, password: String) async throws -> RegistrationResponse {
+        
+        let params = [JSON.Keys.email: email, JSON.Keys.password: password]
+        let body = try JSONEncoder().encode(params)
+        
+        let resource = Resource(url: API.endpointURL(for: .register), method: .post(body), modelType: RegistrationResponse.self)
+        let response = try await httpClient.load(resource)
+        return response
+    }
+    
+}
+
+```
+
+```Account``` has a dependency on HTTPClient. One thing to note is that we are not using an abstraction for HTTPClient but using the concrete implementation directly. The main reason is that HTTPClient is a managed dependency. Managed dependencies are dependencies that are completely in your control. They are not accessible by the outside world. This includes filesystem, databases etc.  
+
+When writing tests for behaviors that interact with managed dependencies, it is recommended to use the real implementation instead of mocks. Mocks should be used for un-managed dependencies. A common example of un-managed dependency is Payment Gateway. 
+
+> One important thing to keep in mind when using concrete implementations is to always clean up the data after the test. This means that if you inserted a user into a database during a test then make sure to remove the user after the test is completed. This is usually performed in a ```teardown``` function in ```XCTest``` framework. 
 
