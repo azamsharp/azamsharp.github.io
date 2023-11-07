@@ -2,20 +2,21 @@
 
 # The Complete Guide to JSON Web Tokens (JWT) Authentication in iOS 
 
-Authentication plays a pivotal role in all applications. In the context of client/server applications, especially when JSON is the predominant mode of communication, JWT authentication is widely recognized as a fundamental industry standard.
+Authentication plays a pivotal role in applications. In the context of client/server applications, especially when JSON is the predominant mode of communication, JWT authentication is widely recognized as a fundamental industry standard. 
+
+In this article, you are going to learn how to setup JSON Web Token authentication on the server and then perform the authentication from the client side using SwiftUI application. 
 
 
-> In this article, I've employed SwiftUI for the client and ExpressJS for the server. If you're an iOS developer, you might be curious about my choice to not opt for Vapor and stay within the iOS/Swift ecosystem. The reason is my extensive experience and comfort with ExpressJS. However, if you prefer to use Vapor, it's also an excellent option. You also might be interested in checking out my iOS Vapor course [Mastering Full Stack iOS Development Using SwiftUI and Vapor](https://www.udemy.com/course/full-stack-ios-development-using-swiftui-and-vapor/?referralCode=5573DBDE821F2E6A80E8). 
+> In this article, I've employed SwiftUI for the client and ExpressJS for the server. If you're an iOS developer, you might be curious about my choice to not opt for Vapor and stay within the iOS/Swift ecosystem. The reason is my extensive experience and comfort with ExpressJS. However, if you prefer to use Vapor, it's also an excellent option. You also might be interested in checking out my iOS Vapor course, [Mastering Full Stack iOS Development Using SwiftUI and Vapor](https://www.udemy.com/course/full-stack-ios-development-using-swiftui-and-vapor/?referralCode=5573DBDE821F2E6A80E8), where I also cover JWT authentication in detail . 
 
 ## User Registration (Server)  
 
-As mentioned previously, server is implemented using ExpressJS framework. PostgreSQL is used as the database using Sequelize as an ORM (Object Relational Mapping) framework. Server implementation follows the MVC (Model View Controller) design pattern. Some of the main components used on the server side are defined below: 
+As mentioned previously, server is implemented using ExpressJS framework. PostgreSQL is used as the database with Sequelize as an ORM (Object Relational Mapping) framework. Server implementation follows the MVC (Model View Controller) design pattern. Some of the main components used on the server side are defined below: 
 
-- **Routers**: Manages the routes for the application, represented by the endpoints used in the application.  
+- **Routers**: Manages the routes for application, represented by the endpoints used in the application.  
 - **Controllers**: Handles the request from the routers and communicate with the data access layer to perform operations on the models.  
 - **Models**: Defines the entities used in the application (User, Movie, Recipe) etc.   
 - **Middlewares**: Middleware are pieces of code that is executed before the request reaches the action. We will be using middleware to perform authentication on certain routes/endpoints.
-
 
 Before a user can be authenticated, we need to make sure that a user can successfully register. In order to register a new user, a valid email and password needs to be provided. User registration is handled by the ```authController```. The implementation is shown below: 
 
@@ -116,7 +117,7 @@ app.listen(8080, () => {
 
 Our user registration action is completed. Now we need to focus on the SwiftUI client to perform registration. 
 
-> It is important that you make sure that your register action is working as expected. This can be performed writing test on the server or integration tests on the client. If you are not writing tests then you can manually confirm the expected response by using a networking tool like [Postman](https://www.postman.com/). 
+> It is important that you make sure that your register action is working as expected. This can be performed writing test on the server or integration tests on the client. As minimum use [Postman](https://www.postman.com/) to test your endpoints. 
 
 
 ### User Registration (Client)
@@ -174,16 +175,15 @@ struct HTTPClient {
 
 > You can find the complete implementation of the HTTPClient [here](https://gist.github.com/azamsharp/91919badd2c70c75732ad715b1c3e01e). 
 
-You might be contemplating breaking down the ```load``` function into smaller sub-functions, perhaps with the expectation of reusing these components across your codebase. However, I'd recommend abstaining from such abstraction at this point. The primary rationale behind this recommendation is that the logic within the "load" function is presently exclusive to that function alone. There is currently no demand or necessity to employ isolated segments of the "load" function independently. If such a requirement arises in the future, we can always extract and modularize specific functions based on the existing "load" function's implementation.   
+You might be contemplating breaking down the ```load``` function into smaller sub-functions, perhaps with the expectation of reusing these components across your codebase. However, I'd recommend abstaining from such abstraction at this point. The primary rationale behind this recommendation is that the logic within the ```load``` function is presently exclusive to that function alone. There is currently no demand or necessity to employ isolated segments of the ```load``` function independently. If such a requirement arises in the future, we can always extract and modularize specific functions based on the existing ```load``` function's implementation.   
 
 > Code that goes together, stays together 
-
 
 There are various ways of invoking HTTPClient layer from the view. You can expose HTTPClient as an environment value and directly access it from within the view or you can introduce an ObservableObject like ```Account```. 
 
 Each approach has its own benefits. Environment value approach is much simpler and allows you to directly accessing the network layer in the view. This is ideal of scenarios, where the Web API is read-only and does not allow the view to mutate the data. 
 
-> In SwiftUI, view is the view model. If you want to read more about SwiftUI architecture then check out my article "Building Large Apps Using SwiftUI". 
+> In SwiftUI, view is the view model. If you want to read more about SwiftUI architecture then check out my article [Building Large Apps Using SwiftUI](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html). 
 
 The ObservableObject approach is used in scenarios where you may want to reuse the results from the request in other views and also perform some logical operation on the data.    
 
@@ -216,9 +216,7 @@ class Account {
 
 ```
 
-```Account``` has a dependency on HTTPClient. One thing to note is that we are not using an abstraction for HTTPClient but using the concrete implementation directly. The main reason is that HTTPClient is a managed dependency. Managed dependencies are dependencies that are completely in your control. They are not accessible by the outside world. This includes filesystem, databases etc.  
-
-When writing tests for behaviors that interact with managed dependencies, it is recommended to use the real implementation instead of mocks. Mocks should be used for un-managed dependencies. A common example of un-managed dependency is Payment Gateway. 
+```Account``` has a dependency on HTTPClient. One thing to note is that we are not using an abstraction for HTTPClient but using the concrete implementation directly. The main reason is that HTTPClient is a managed dependency. Managed dependencies are dependencies that are completely in your control. They are not accessible by the outside world. This includes filesystem, databases etc. When writing tests for behaviors that interact with managed dependencies, it is recommended to use the real implementation instead of mocks. Mocks should be used for un-managed dependencies. Common examples of un-managed dependency are payment gateways, local exchange services etc.   
 
 > One important thing to keep in mind when using concrete implementations is to always clean up the data after the test. This means that if you inserted a user into a database during a test then make sure to remove the user after the test is completed. This is usually performed in a ```teardown``` function in ```XCTest``` framework. 
 
@@ -262,26 +260,26 @@ The view can access the ```Account``` instance using the ```@EnvironmentObject``
     }
 ```
 
-One thing to note about our interaction with the server is that the server is returning the messages to the client. These messages indicate the reasoning about the failure that occurred on the server.  
+One thing to note about our interaction with the server is that the server is returning messages to the client. These messages indicate the reasoning about the failure that occurred on the server.  
 
 If you are interested in learning how to build a navigation system in SwiftUI and handling messages globally then check out the following resources. 
 
 - [Navigation](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#navigation)
 - [Displaying Errors (Technique #2)](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#displaying-errors)
 
-> If you are interested in learning how to build a navigation system in SwiftUI then check [this](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#navigation) article. 
-
 After successful registration, user will be redirected to the login screen. At this point we need to go back to the server and implement the login endpoint. 
 
 ### Login (Server)
 
-The login process for JWT authentication is composed for the following steps. 
+One of the most advantageous aspects of becoming proficient in JSON Web Token (JWT) authentication is that once you successfully implement it in one framework and programming language, you'll find it relatively straightforward to apply in any other framework. Personally, I've employed JWT in various contexts, including React, Flutter, and iOS, and discovered that, aside from language-specific syntax, the core principles remain consistent.
 
-1. Validate parameters passed in the request body. 
-2. Fetch user based on username or email. 
-3. Compare password with the stored hashed password in the database. 
-4. If successful, create a JSON Web Token and sign it with userId and provide an expiration date. 
-5. Return the response with the token to the user. 
+The JWT authentication login process comprises the following steps:
+
+1. Validate the parameters provided in the request body.
+2. Retrieve the user based on their username or email.
+3. Verify the submitted password against the hashed password stored in the database.
+4. Upon successful verification, generate a JSON Web Token, sign it with the user's ID, and set an expiration date.
+5. Provide the user with the token in the response.
 
 Here is the implementation of the ```login``` route. 
 
@@ -321,9 +319,9 @@ exports.login = async (req, res) => {
 }
 ```
 
-> It is important that you don't store JWT private key directly in the code itself. One of the reasons is that you don't want your private key to be visible on source control systems like GitHub. A better approach is to use environment variables through ```.env``` file and making sure that it is ignored by adding it to the ```.gitignore``` file. 
+> It's crucial to avoid storing the JWT private key directly within your code. One key reason is to prevent your private key from becoming visible in source control systems such as GitHub. A more secure approach involves using environment variables via a `.env` file and ensuring it remains confidential by adding the file to your `.gitignore` to keep it out of version control.
 
-Once again it is important that you test your ```login``` action. You can write  tests for your controllers, you can also write integration tests between your client (SwiftUI) and the server (ExpressJS). When writing integration tests, it is important to test longest happy paths and edge cases. 
+Once more, it's imperative to thoroughly test your `login` action. You have the option to write tests for your controllers, and you can also create integration tests that encompass both your client (SwiftUI) and your server (ExpressJS). In the context of integration tests, it's critical to assess the longest happy paths and examine edge cases to ensure robust and comprehensive testing.
 
 > Longest happy path means successful execution of a business scenario. 
 
@@ -331,7 +329,7 @@ Next step is to implement the client. This will include invoking the ```login```
 
 ### Login (Client)
 
-The first step is to implement the DTO object that will map the response from the server. Apart from ```success``` and ```message``` properties, server is also returning ```token```, which needs to be persisted on the client side. The implementation of ```LoginResponse``` is shown below: 
+The initial task involves creating a DTO object responsible for mapping the server's response. In addition to the expected properties like "success" and "message," the server also provides a "token" that must be stored on the client side. Below, you can find the implementation of the "LoginResponse" object:
 
 ``` swift 
 struct LoginResponse: Codable {
@@ -368,7 +366,9 @@ The next step is to implement the ```login``` function in out ```Account``` clas
     }
 ```
 
-The most important part of the ```login``` function is the use of Keychain to store the token. Keychain provides a secure storage option designed for storing sensitive data, such as passwords, tokens, or cryptographic keys. It's encrypted and protected, making it suitable for confidential information.
+The critical aspect of the `login` function lies in its utilization of Keychain for token storage. Keychain offers a highly secure storage solution specifically designed for safeguarding sensitive data, including passwords, tokens, and cryptographic keys. Its encryption and protective measures render it an ideal choice for safeguarding confidential information.
+
+> UserDefaults presents an alternative for storing key/value pairs; however, it's important to note that UserDefaults lacks encryption and should not be employed for persisting sensitive or secure data.
 
 Now, you can use the ```Account``` class in ```LoginScreen``` as shown below: 
 
@@ -432,7 +432,7 @@ exports.getCourses = async (req, res) => {
 }
 ```
 
-The above ```getCourses``` function is a protected resource. One of the requirement to access the resource is that a user must be authenticated. One option is to implement the authentication logic right inside the ```getCourses``` function. But we will need the authentication logic in other actions too, so it is a good idea to implement this feature in the middleware. By putting it in the middleware we can easily reuse it for other routes. 
+The "getCourses" function mentioned above serves as a protected resource, and one of the prerequisites for accessing it is user authentication. While one approach is to embed the authentication logic directly within the "getCourses" function, it's advisable to implement this functionality as middleware. This way, we can centralize the authentication logic and make it readily available for use in other actions and routes, enhancing reusability and maintainability.
 
 The ```authenticate``` function is implemented in ```authMiddleware.js``` as shown below: 
 
@@ -473,9 +473,11 @@ exports.authenticate = async (req, res, next) => {
 }
 ```
 
-We start by accessing the authorization header from the request. Once the authorization header is retrieved, we extract it to access the token. The token is verified using the verify function (verify function is part of the jsonwebtoken package). Once, the token is verified we assign the extracted userId to the request. This makes sure that the userId is available to the future requests. 
+Our initial step involves obtaining the authorization header from the request. After obtaining the authorization header, we proceed to extract the token contained within it. This token is then subjected to verification using the "verify" function, a component of the "jsonwebtoken" package. Upon successful verification, we assign the extracted userId to the request, ensuring its availability for use in future requests.
 
-After implementing the ```authMiddleware``` we need to register it for the routes we need to protect. This is implemented in the ```app.js``` file below: 
+> The `jsonwebtoken` package additionally handles token expiration checks. When a token has expired, the server will throw a `jwt.JsonWebTokenError`.
+
+Following the implementation of the `authMiddleware`, the next step is to register it for the routes that require protection. This registration process is carried out in the `app.js` file as shown below:
 
 ``` js
 app.use('/api/faculty', authenticate, facultyRouter)
@@ -488,3 +490,48 @@ In the next section, we will move our attention to the client side and learn how
 
 ### Accessing Protected Routes (Client)
 
+For a client to access a protected route on the server, it must send the token in the request headers. This operation can be implemented directly in the HTTPClient as shown below: 
+
+``` swift 
+struct HTTPClient {
+
+    static let shared = HTTPClient() 
+    private let session: URLSession
+    
+    private init() {
+        let configuration = URLSessionConfiguration.default
+        // get the token from the Keychain
+        let token: String? = Keychain.get("jwttoken")
+        
+        if let token {
+            configuration.httpAdditionalHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(token)"]
+        }
+        
+        self.session = URLSession(configuration: configuration)
+    }
+
+}
+
+// load function is implemented here. 
+
+```
+
+When the HTTPClient is initialized, we check the keychain for the persisted JSON web token. If the token is present then we add the ```Authorization``` header to the request. This makes sure that the token is part of every request sent by the client. 
+
+### Source Code 
+
+You can download the code from [here](https://github.com/azamsharp/ExamPrepCode). 
+
+### Conclusion: 
+
+In conclusion, this comprehensive guide has provided an in-depth understanding of JSON Web Token (JWT) authentication in the context of iOS development. Authentication is a crucial aspect of application security, and JWT is widely recognized as an industry standard for securing client/server applications, especially when JSON is the primary mode of communication.
+
+Throughout this article, you've learned how to set up JSON Web Token authentication on the server and perform authentication from the client side using a SwiftUI application. While the specific tools and frameworks used in this guide are SwiftUI for the client and ExpressJS for the server, the principles discussed can be applied across various platforms.
+
+The server-side implementation covered user registration and login, emphasizing the importance of security measures such as hashing passwords and the use of the Keychain for token storage. The server also protected certain routes by implementing middleware for user authentication.
+
+On the client side, you learned how to create an HTTPClient for handling network requests and securely storing and retrieving the JWT token from the Keychain. The client-side code showcased how to interact with the server, handle successful login, and navigate to different views in your SwiftUI application.
+
+This guide underscores the significance of thorough testing for your server and client code, covering aspects like unit tests and integration tests, which are crucial for robust application development.
+
+Overall, JWT authentication is a valuable skill for developers working on iOS and beyond. Whether you choose to follow the specific tools and practices outlined in this guide or adapt them to your preferred framework, the knowledge gained here can be applied to enhance the security and functionality of your applications.
