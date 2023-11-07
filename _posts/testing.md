@@ -321,4 +321,170 @@ exports.login = async (req, res) => {
 }
 ```
 
+> It is important that you don't store JWT private key directly in the code itself. One of the reasons is that you don't want your private key to be visible on source control systems like GitHub. A better approach is to use environment variables through ```.env``` file and making sure that it is ignored by adding it to the ```.gitignore``` file. 
+
+Once again it is important that you test your ```login``` action. You can write  tests for your controllers, you can also write integration tests between your client (SwiftUI) and the server (ExpressJS). When writing integration tests, it is important to test longest happy paths and edge cases. 
+
+> Longest happy path means successful execution of a business scenario. 
+
+Next step is to implement the client. This will include invoking the ```login``` action to authenticate the user. 
+
 ### Login (Client)
+
+The first step is to implement the DTO object that will map the response from the server. Apart from ```success``` and ```message``` properties, server is also returning ```token```, which needs to be persisted on the client side. The implementation of ```LoginResponse``` is shown below: 
+
+``` swift 
+struct LoginResponse: Codable {
+    let success: Bool
+    let message: String?
+    let token: String?
+}
+```
+
+> ```LoginResponse``` does not contain a property for ```userId```. The main reason is that ```userId``` is already signed into the token itself so server will be able to extract it out when needed.  
+
+The next step is to implement the ```login``` function in out ```Account``` class. 
+
+``` swift 
+  func login(email: String, password: String) async throws {
+        
+        let params = [JSON.Keys.email: email, JSON.Keys.password: password]
+        let body = try JSONEncoder().encode(params)
+        
+        let resource = Resource(url: API.endpointURL(for: .login), method: .post(body), modelType: LoginResponse.self)
+        let response = try await httpClient.load(resource)
+        
+        // Check if the login was successful
+        guard response.success, let token = response.token else {
+            throw LoginError.loginFailed
+        }
+        
+        // Store the JWT token in the Keychain
+        guard Keychain.set(token, forKey: "jwttoken") else {
+            throw LoginError.keychainError
+        }
+        
+        isLoggedIn = true
+    }
+```
+
+The most important part of the ```login``` function is the use of Keychain to store the token. Keychain provides a secure storage option designed for storing sensitive data, such as passwords, tokens, or cryptographic keys. It's encrypted and protected, making it suitable for confidential information.
+
+Now, you can use the ```Account``` class in ```LoginScreen``` as shown below: 
+
+``` swift 
+struct LoginScreen: View {
+    
+    @Environment(Account.self) private var account
+    
+    @State private var email: String = ""
+    @State private var password: String = ""
+    
+    @State private var authenticating: Bool = false
+    
+    private func login() async {
+        do {
+            try await account.login(email: email, password: password)
+            // navigate to the dashboard screen
+            navigate(.dashboard)
+        } catch {
+            print(error)
+        }
+    }
+    
+    var body: some View {
+        Form {
+            TextField("Email", text: $email)
+                .textInputAutocapitalization(.never)
+            SecureField("Password", text: $password)
+            Button("Login") {
+                authenticating = true
+            }.task(id: authenticating) {
+                if authenticating {
+                    await login()
+                    authenticating = false
+                }
+            }
+        }.navigationTitle("Login")
+    }
+}
+```
+
+On successful login, user is taken to the dashboard screen. 
+
+> If you are interested in learning about how to configure navigation in SwiftUI then check out my article [here](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#navigation). 
+
+In the next section, you are going to learn how to create protected routes on the server, which requires the user to be logged in. 
+
+### Implementing Protecting Routes on the Server 
+
+The term protected routes means that a user needs to be authenticated in order to be able to access the requested resources.  
+
+In ```facultyController``` we implement the following function to fetch all the courses offered by the faculty member. 
+
+``` swift 
+exports.getCourses = async (req, res) => {
+    
+    // fetch the courses from the database
+
+    // return courses 
+    res.json(courses)
+}
+```
+
+The above ```getCourses``` function is a protected resource. One of the requirement to access the resource is that a user must be authenticated. One option is to implement the authentication logic right inside the ```getCourses``` function. But we will need the authentication logic in other actions too, so it is a good idea to implement this feature in the middleware. By putting it in the middleware we can easily reuse it for other routes. 
+
+The ```authenticate``` function is implemented in ```authMiddleware.js``` as shown below: 
+
+``` swift 
+// authenticate middleware 
+exports.authenticate = async (req, res, next) => {
+
+    const authHeader = req.headers['authorization']
+    if(authHeader) {
+        // get the token out of the header 
+        const token = authHeader.split(' ')[1]
+        console.log(token)
+        if(token) {
+            // decode the token 
+            try {
+                const decodedToken = jwt.verify(token, process.env.JWT_PRIVATE_KEY)
+                const user = await models.User.findByPk(decodedToken.userId)
+                if(!user) {
+                    res.status(401).json({success: false, message: 'User not found'})
+                }
+                // store the userId in the request
+                req.userId = user.id 
+                next() 
+            } catch(error) {
+                if(error instanceof jwt.JsonWebTokenError) {
+                    res.status(401).json({success: false, message: 'Token expired'})
+                } else {
+                    res.status(500).json({success: false, message: 'Internal server error'})
+                }
+            }
+        } else {
+            res.status(401).json({success: false, message: 'Bearer token is missing'})
+        }
+
+    } else {
+        res.status(401).json({success: false, message: 'Required headers are missing'})
+    }
+}
+```
+
+We start by accessing the authorization header from the request. Once the authorization header is retrieved, we extract it to access the token. The token is verified using the verify function (verify function is part of the jsonwebtoken package). Once, the token is verified we assign the extracted userId to the request. This makes sure that the userId is available to the future requests. 
+
+After implementing the ```authMiddleware``` we need to register it for the routes we need to protect. This is implemented in the ```app.js``` file below: 
+
+``` js
+app.use('/api/faculty', authenticate, facultyRouter)
+app.use('/api/students', authenticate, studentRouter)
+``` 
+
+> Routes like ```login``` and ```register``` do not need to be protected. You cannot add a precondition to login to be already logged in. 
+
+In the next section, we will move our attention to the client side and learn how to extract the token and make it available to the protected requests. 
+
+### Accessing Protected Routes (Client)
+
