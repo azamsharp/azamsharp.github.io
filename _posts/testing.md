@@ -2,23 +2,26 @@
 
 # The Complete Guide to JSON Web Tokens (JWT) Authentication in iOS 
 
-Authentication plays a pivotal role in applications. In the context of client/server applications, especially when JSON is the predominant mode of communication, JWT authentication is widely recognized as a fundamental industry standard. 
+Authentication is a cornerstone of application development, safeguarding user interactions in both client and server applications. In a world where JSON reigns as the primary data exchange medium, JSON Web Token (JWT) authentication has emerged as an industry standard, ensuring data security and integrity.
 
-In this article, you are going to learn how to setup JSON Web Token authentication on the server and then perform the authentication from the client side using SwiftUI application. 
+Within this comprehensive guide, we embark on a journey through the intricacies of setting up JWT authentication on the server and seamlessly implementing this security measure on the client side using SwiftUI. This knowledge equips you with the essential skills needed to fortify your application's authentication mechanisms, ensuring reliability and robustness in today's ever-evolving digital landscape.
 
+In this article, the power of SwiftUI is harnessed for the client interface, while ExpressJS serves as the backbone for server-side operations. While this choice may pique the curiosity of iOS developers, it's grounded in my extensive experience with and confidence in ExpressJS, a robust and dependable tool for server development.
 
-> In this article, I've employed SwiftUI for the client and ExpressJS for the server. If you're an iOS developer, you might be curious about my choice to not opt for Vapor and stay within the iOS/Swift ecosystem. The reason is my extensive experience and comfort with ExpressJS. However, if you prefer to use Vapor, it's also an excellent option. You also might be interested in checking out my iOS Vapor course, [Mastering Full Stack iOS Development Using SwiftUI and Vapor](https://www.udemy.com/course/full-stack-ios-development-using-swiftui-and-vapor/?referralCode=5573DBDE821F2E6A80E8), where I also cover JWT authentication in detail . 
+However, it's crucial to note that Vapor remains a compelling alternative, offering seamless integration with Swift and the iOS ecosystem. For those keen on exploring Vapor's capabilities further, my iOS Vapor course, [Mastering Full Stack iOS Development Using SwiftUI and Vapor](https://www.udemy.com/course/full-stack-ios-development-using-swiftui-and-vapor/?referralCode=5573DBDE821F2E6A80E8), provides a valuable resource. In this course, I delve deep into JWT authentication, providing iOS developers with a comprehensive learning experience to navigate the intricacies of the Vapor framework.
 
 ## User Registration (Server)  
 
-As mentioned previously, server is implemented using ExpressJS framework. PostgreSQL is used as the database with Sequelize as an ORM (Object Relational Mapping) framework. Server implementation follows the MVC (Model View Controller) design pattern. Some of the main components used on the server side are defined below: 
+As previously mentioned, the server is constructed using the ExpressJS framework. For data storage, PostgreSQL is employed, accompanied by Sequelize, an ORM (Object Relational Mapping) framework. The server's architecture adheres to the MVC (Model View Controller) design pattern, ensuring a structured and organized approach to application development. Below, we outline some of the primary components utilized on the server side:
 
 - **Routers**: Manages the routes for application, represented by the endpoints used in the application.  
 - **Controllers**: Handles the request from the routers and communicate with the data access layer to perform operations on the models.  
 - **Models**: Defines the entities used in the application (User, Movie, Recipe) etc.   
 - **Middlewares**: Middleware are pieces of code that is executed before the request reaches the action. We will be using middleware to perform authentication on certain routes/endpoints.
 
-Before a user can be authenticated, we need to make sure that a user can successfully register. In order to register a new user, a valid email and password needs to be provided. User registration is handled by the ```authController```. The implementation is shown below: 
+Before a user can be authenticated, we need to make sure that a user can successfully register. In order to register a new user, a valid email and password needs to be provided. User registration is handled by the ```authController```. 
+
+The implementation is shown below: 
 
 ```javascript 
 exports.register = async (req, res) => {
@@ -535,3 +538,5 @@ On the client side, you learned how to create an HTTPClient for handling network
 This guide underscores the significance of thorough testing for your server and client code, covering aspects like unit tests and integration tests, which are crucial for robust application development.
 
 Overall, JWT authentication is a valuable skill for developers working on iOS and beyond. Whether you choose to follow the specific tools and practices outlined in this guide or adapt them to your preferred framework, the knowledge gained here can be applied to enhance the security and functionality of your applications.
+
+If you liked this article and want to learn about building Full Stack applications using SwiftUI and Vapor then checkout my course [Mastering Full Stack iOS Development Using SwiftUI and Vapor](https://www.udemy.com/course/full-stack-ios-development-using-swiftui-and-vapor/?referralCode=5573DBDE821F2E6A80E8). 
