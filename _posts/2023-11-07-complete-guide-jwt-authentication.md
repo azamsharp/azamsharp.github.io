@@ -589,6 +589,7 @@ struct DashboardScreen: View {
 }
 ```
 
+> This article does NOT cover refresh tokens. Maybe this is something that I can add in the future. The primary purpose of refresh tokens in JSON Web Tokens (JWTs) is to extend the lifetime of access tokens while maintaining a secure authentication mechanism. Access tokens, which are typically short-lived, are used to verify a user's identity for specific actions within an application. However, frequent re-authentications due to expiring access tokens can disrupt the user experience and hinder the application's usability.
 
 ### Source Code 
 
@@ -600,11 +601,9 @@ In conclusion, this comprehensive guide has provided an in-depth understanding o
 
 Throughout this article, you've learned how to set up JSON Web Token authentication on the server and perform authentication from the client side using a SwiftUI application. While the specific tools and frameworks used in this guide are SwiftUI for the client and ExpressJS for the server, the principles discussed can be applied across various platforms.
 
-The server-side implementation covered user registration and login, emphasizing the importance of security measures such as hashing passwords and the use of the Keychain for token storage. The server also protected certain routes by implementing middleware for user authentication.
+The server-side implementation covered user registration and login, emphasizing the importance of security measures such as hashing passwords. The server also protected certain routes by implementing middleware for user authentication.
 
 On the client side, you learned how to create an HTTPClient for handling network requests and securely storing and retrieving the JWT token from the Keychain. The client-side code showcased how to interact with the server, handle successful login, and navigate to different views in your SwiftUI application.
-
-This guide underscores the significance of thorough testing for your server and client code, covering aspects like unit tests and integration tests, which are crucial for robust application development.
 
 Overall, JWT authentication is a valuable skill for developers working on iOS and beyond. Whether you choose to follow the specific tools and practices outlined in this guide or adapt them to your preferred framework, the knowledge gained here can be applied to enhance the security and functionality of your applications.
 
