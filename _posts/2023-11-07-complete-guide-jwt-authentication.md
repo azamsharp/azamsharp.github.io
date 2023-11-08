@@ -373,6 +373,18 @@ The critical aspect of the `login` function lies in its utilization of Keychain 
 
 > UserDefaults presents an alternative for storing key/value pairs; however, it's important to note that UserDefaults lacks encryption and should not be employed for persisting sensitive or secure data.
 
+Once issue with the above implementation is that when the user launches the app again, the ```isLoggedIn``` property is set to false even though the user has successfully logged in. We can fix that by setting ```isLoggedIn``` value based on the token stored in keychain. This is implemented below: 
+
+```swift
+ init(httpClient: HTTPClient) {
+        self.httpClient = httpClient
+        // set the isLoggedIn to be the value from the keychain
+        isLoggedIn = Keychain<String>.get("jwttoken") != nil
+    }
+```
+
+Now, when you launch the app from scratch the ```isLoggedIn``` property will be initialized based on the JWT token. 
+
 Now, you can use the ```Account``` class in ```LoginScreen``` as shown below: 
 
 ``` swift 
