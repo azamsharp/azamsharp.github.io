@@ -8,6 +8,15 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [The Complete Guide to JSON Web Tokens (JWT) Authentication in iOS](_posts/2023-11-07-complete-guide-jwt-authentication.md)
+
+Authentication is a cornerstone of application development, safeguarding user interactions in both client and server applications. In a world where JSON reigns as the primary data exchange medium, JSON Web Token (JWT) authentication has emerged as an industry standard, ensuring data security and integrity.
+
+Within this comprehensive guide, we embark on a journey through the intricacies of setting up JWT authentication on the server and seamlessly implementing this security measure on the client side using SwiftUI. This knowledge equips you with the essential skills needed to fortify your application's authentication mechanisms, ensuring reliability and robustness in today's ever-evolving digital landscape.
+
+In this article, the power of SwiftUI is harnessed for the client interface, while ExpressJS serves as the backbone for server-side operations. While this choice may pique the curiosity of iOS developers, it's grounded in my extensive experience with and confidence in ExpressJS, a robust and dependable tool for server development.
+
+
 ### [Convenience Property Wrappers vs Custom Data Access Layer in SwiftUI](_posts/2023-07-15-property-wrappers-vs-data-access-layer.md)
 
 Yesterday, I had the opportunity to speak at [WomenWhoCode Mobile](https://www.womenwhocode.com/network/mobile/) event. It was a remote event and well attended. I spoke about SwiftUI architecture best practices. 
