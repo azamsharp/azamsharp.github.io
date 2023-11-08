@@ -135,6 +135,8 @@ struct HTTPClient {
     
     private init() {
         let configuration = URLSessionConfiguration.default
+         // add the default header
+        configuration.httpAdditionalHeaders = ["Content-Type": "application/json"]
         self.session = URLSession(configuration: configuration)
     }
     
@@ -162,8 +164,15 @@ struct HTTPClient {
         
         let (data, response) = try await session.data(for: request)
         
-        guard let _ = response as? HTTPURLResponse else {
-                throw NetworkError.invalidResponse
+        if let httpResponse = response as? HTTPURLResponse {
+            
+            switch httpResponse.statusCode {
+                case 401:
+                    throw NetworkError.unauthorized
+                // handle other cases here ...
+                default: break
+            }
+            
         }
         
         do {
@@ -515,12 +524,13 @@ struct HTTPClient {
     
     private init() {
         let configuration = URLSessionConfiguration.default
+         // add the default header
+        configuration.httpAdditionalHeaders = ["Content-Type": "application/json"]
         // get the token from the Keychain
         let token: String? = Keychain.get("jwttoken")
         
         if let token {
-            configuration.httpAdditionalHeaders = ["Content-Type": "application/json", "Authorization": "Bearer \(token)"]
-        }
+ configuration.httpAdditionalHeaders?["Authorization"] = "Bearer \(token)"        }
         
         self.session = URLSession(configuration: configuration)
     }
@@ -532,6 +542,53 @@ struct HTTPClient {
 ```
 
 When the HTTPClient is initialized, we check the keychain for the persisted JSON web token. If the token is present then we add the ```Authorization``` header to the request. This makes sure that the token is part of every request sent by the client.   
+
+Now, when the user launches the app you can check the status of ```isLoggedIn``` property in the **Account** class and redirect to the user to the correct screen, based on their login status. 
+
+``` swift 
+@main
+struct ExamPrepApp: App {
+    
+    @State private var account = Account(httpClient: HTTPClient.shared)
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                if account.isLoggedIn {
+                    DashboardScreen() 
+                } else {
+                    LoginScreen()
+                        .environment(account)
+                }
+            }
+        }
+    }
+}
+```
+
+In a similar scenario, if the user requests a resource and the token has expired then you can redirect the user to the login screen. This is shown in the implementation below: 
+
+``` swift 
+struct DashboardScreen: View {
+    
+    @Environment(Faculty.self) private var faculty
+    
+    var body: some View {
+        VStack {
+            Text("Dashboard")
+        }.task {
+            do {
+                try await faculty.loadCourses()
+            } catch NetworkError.unauthorized {
+                 navigate(.login)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+}
+```
+
 
 ### Source Code 
 
