@@ -589,6 +589,8 @@ struct DashboardScreen: View {
 }
 ```
 
+> It is best practice to validate the token on the server and the client. Client validation of the token will be added later to this article. 
+
 > This article does NOT cover refresh tokens. Maybe this is something that I can add in the future. The primary purpose of refresh tokens in JSON Web Tokens (JWTs) is to extend the lifetime of access tokens while maintaining a secure authentication mechanism. Access tokens, which are typically short-lived, are used to verify a user's identity for specific actions within an application. However, frequent re-authentications due to expiring access tokens can disrupt the user experience and hinder the application's usability.
 
 ### Source Code 
