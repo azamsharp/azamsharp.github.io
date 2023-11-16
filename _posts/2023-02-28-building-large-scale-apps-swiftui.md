@@ -863,7 +863,9 @@ enum Route: Hashable {
 
 > For larger apps you can create nested enums to divide the routes based on different sections of the application. 
 
-Next we will implement the ```NavigationAction``` struct that will be responsible for storing the closure, which is responsible for performing the navigation action. We will also utilize the SwiftUI built-in ```callAsFunction```, which is invoked automatically when you create an instance of ```NavigationAction```. 
+In my previous implementation, I was storing the closure associated with navigation directly in the ```Environment``` values. Some users suggested that this is not a good practice and it will cause unnecessary rendering of the views. I have personally not experienced any issues with the implementation but decided to update it to support structs as ```Environment``` value instead of closure. 
+
+```NavigationAction``` struct will be responsible for storing the action associated with navigation. We will also utilize the SwiftUI built-in ```callAsFunction```, which is invoked automatically when you create an instance of ```NavigationAction```. The primary purpose of ```NavigationAction``` is to wrap the closure into an action. This allows us to store a value type struct in the ```Environment``` value as oppose to a closure. The implementation of ```NavigationAction``` is shown below: 
 
 ``` swift 
 struct NavigateAction {
@@ -898,7 +900,7 @@ extension EnvironmentValues {
 
 The important thing to notice here is the declaration and usage of ```NavigationType```. The ```NavigationType``` enum represents the two types of navigation that can be performed. This includes the default push navigation and also unwind navigation. Unwind navigation will allow users to go from View G to View C or root. 
 
-> There are multiple ways of handling unwinding of routes. Just like navigate closure, you can introduce an unwind closure that takes in a route instead of the NavigationType. For this article, I am using a single navigate closure to handle both push and unwind scenarios.  
+> If your application does not support unwind navigation then you can exclude ```NavigationType``` completely and directly use ```Route``` instead. 
 
 We will also implement a ```onNavigate``` function on the view. This will allow us to easily inject the required environment values. 
 
