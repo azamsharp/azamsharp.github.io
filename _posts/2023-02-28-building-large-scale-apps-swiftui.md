@@ -858,12 +858,22 @@ enum Route: Hashable {
     case home
     case login
     case detail(Product)
-    case reviews
-    case reviewDetail
 }
 ```
 
 > For larger apps you can create nested enums to divide the routes based on different sections of the application. 
+
+Next we will implement the ```NavigationAction``` struct that will be responsible for storing the closure, which is responsible for performing the navigation action. We will also utilize the SwiftUI built-in ```callAsFunction```, which is invoked automatically when you create an instance of ```NavigationAction```. 
+
+``` swift 
+struct NavigateAction {
+    typealias Action = (NavigationType) -> ()
+    let action: Action
+    func callAsFunction(_ navigationType: NavigationType) {
+        action(navigationType)
+    }
+}
+```
 
 Next, we will implement custom Environment key and Environment values. 
 
@@ -875,20 +885,30 @@ enum NavigationType: Hashable {
 }
 
 struct NavigateEnvironmentKey: EnvironmentKey {
-    static var defaultValue: (NavigationType) -> Void = { _ in }
+    static var defaultValue: NavigateAction = NavigateAction(action: { _ in })
 }
 
 extension EnvironmentValues {
-    var navigate: (NavigationType) -> Void {
+    var navigate: (NavigateAction) {
         get { self[NavigateEnvironmentKey.self] }
         set { self[NavigateEnvironmentKey.self] = newValue }
     }
 }
 ```
 
-The important thing to notice here is the declaration and usage of ```NavigationType```. The ```NavigationType``` enum represents the two types of navigations that can be performed. This includes the default push navigation and also unwind navigation. Unwind navigation will allow users to go from View G to View C or root. 
+The important thing to notice here is the declaration and usage of ```NavigationType```. The ```NavigationType``` enum represents the two types of navigation that can be performed. This includes the default push navigation and also unwind navigation. Unwind navigation will allow users to go from View G to View C or root. 
 
 > There are multiple ways of handling unwinding of routes. Just like navigate closure, you can introduce an unwind closure that takes in a route instead of the NavigationType. For this article, I am using a single navigate closure to handle both push and unwind scenarios.  
+
+We will also implement a ```onNavigate``` function on the view. This will allow us to easily inject the required environment values. 
+
+``` swift 
+extension View {
+    func onNavigate(_ action: @escaping NavigateAction.Action) -> some View {
+        self.environment(\.navigate, NavigateAction(action: action))
+    }
+}
+```
 
 Next, we need to setup the routes and inject Environment values at the root of our application. Usually this is performed in the App file of your application. The implementation is shown below:
 
@@ -900,24 +920,19 @@ struct LearnApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack(path: $routes) {
+            NavigationStack {
                 ContentView()
                     .navigationDestination(for: Route.self) { route in
                         switch route {
                             case .home:
-                                ContentView()
+                                Text("HomeView")
                             case .login:
-                                Text("Login")
+                                Text("LoginView")
                             case .detail(let product):
-                                ProductDetail(product: product)
-                            case .reviews:
-                                ReviewList()
-                            case .reviewDetail:
-                                ReviewDetail()
+                                Text("ProductView \(product.name)")
                         }
                     }
-            }.environment(\.navigate) { navType in
-               
+            }.onNavigate { navType in
                 switch navType {
                     case .push(let route):
                         routes.append(route)
@@ -936,7 +951,7 @@ struct LearnApp: App {
 }
 ```
 
-The ```NavigationStack``` tracks the routes using the $routes binding. Whenever a new route is added or removed, ```.navigationDestination``` is validated. The ```.navigationDestination``` modifier is responsible for returning the destination view based on the type of the route. In a similar fashion, environment values are injected to the ```NavigationStack```. The ```.navigate``` closure is responsible for appending new routes and even unwinding routes to a particular destination.
+The ```NavigationStack``` tracks the routes using the $routes binding. Whenever a new route is added or removed, ```.navigationDestination``` is validated. The ```.navigationDestination``` modifier is responsible for returning the destination view based on the type of the route. In a similar fashion, environment values are injected to the ```NavigationStack``` using the ```onNavigate``` function. 
 
 Finally, views can perform programmatic navigation using the new ```@Environment``` key called ```navigate```. This is shown in the following implementation: 
 
