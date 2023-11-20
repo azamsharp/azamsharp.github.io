@@ -922,7 +922,7 @@ struct LearnApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
+            NavigationStack(path: $routes) {
                 ContentView()
                     .navigationDestination(for: Route.self) { route in
                         switch route {
