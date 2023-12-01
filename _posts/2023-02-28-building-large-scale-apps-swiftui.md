@@ -26,6 +26,8 @@ The outline of this article is shown below:
 - [Formatting](#formatting)
 - [Testing](#testing) 
 
+[![I Teach on Teachable](/images/ITeachOnTeachable.png)](https://azamsharp.teachable.com/)
+
 ## Modular Architecture 
 
 Modular architecture in software refers to the design and organization of software systems into small, self contained modules or components. These modules can be tested and maintained independently of one another. Each module serves a specific purpose and solve a specific business requirement. 

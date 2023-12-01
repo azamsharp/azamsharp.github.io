@@ -9,7 +9,8 @@ SwiftData made its debut at WWDC 2023 as a replacement for the Core Data framewo
 
 One of the key benefits of utilizing SwiftData lies in its effortless integration with the SwiftUI framework. This article is structured into several sections, each delving into different aspects of the SwiftData framework. First, we will explore the foundational concepts of SwiftData, followed by an examination of its architectural design, relationship management, migration capabilities, and more. By navigating through these sections, you will gain a comprehensive understanding of SwiftData's features and functionalities, empowering them to leverage its full potential in your iOS development endeavors.
 
-If you like this article and want to support my work then check out my course [SwiftData - Declarative Data Persistence for SwiftUI](https://www.udemy.com/course/swiftdata-declarative-data-persistence-for-swiftui/?referralCode=A1303D0BA99171C90D9B). 
+[![I Teach on Teachable](/images/ITeachOnTeachable.png)](https://azamsharp.teachable.com/)
+
 
 > SwiftData is part of iOS 17 and at the time of this writing Xcode 15 is still in beta stage. This means content discussed in this article is subject to change. I will try my best to keep the article updated. 
 
