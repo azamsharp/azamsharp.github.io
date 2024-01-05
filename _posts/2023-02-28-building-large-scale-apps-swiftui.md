@@ -26,7 +26,8 @@ The outline of this article is shown below:
 - [Formatting](#formatting)
 - [Testing](#testing) 
 
-[![I Teach on Teachable](/images/ITeachOnTeachable.png)](https://azamsharp.teachable.com/)
+
+> If you are interested in a video course on MV Pattern then check out [MV Pattern in iOS](https://azamsharp.teachable.com/p/mv-design-pattern-in-ios-build-swiftui-apps-apple-s-way2) published on Teachable platform. 
 
 ## Modular Architecture 
 
@@ -1753,3 +1754,5 @@ Application architecture is a complicated subject and in the end the best archit
 Ultimately, the key to a successful application architecture is to choose a pattern that fits the project's unique needs, and to constantly evaluate and adjust the architecture as the project evolves.
 
 By investing time and resources into designing a thoughtful and effective application architecture, teams can ensure that their codebase is maintainable, scalable, and flexible enough to adapt to changing requirements and technology trends.
+
+> If you are interested in a video course on MV Pattern then check out [MV Pattern in iOS](https://azamsharp.teachable.com/p/mv-design-pattern-in-ios-build-swiftui-apps-apple-s-way2) published on Teachable platform. 
