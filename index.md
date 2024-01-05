@@ -6,14 +6,13 @@
 
 [Home](https://azamsharp.github.io)
 [Courses](https://azamsharp.teachable.com/)
-[Deals](deals)
 [Books](books)
 [Articles](articles)
+[Newsletter](https://azamsharp.teachable.com/p/newsletter)
 [YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
 [Speaking](speaking)
 [Contact](contact)
    
-
 
 
 <img src="azam.jpg">

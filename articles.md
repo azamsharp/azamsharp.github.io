@@ -1,9 +1,10 @@
 # Articles 
 
 [Home](https://azamsharp.github.io)
-[Courses](/courses)
+[Courses](https://azamsharp.teachable.com/)
 [Books](/books)
 [Articles](/articles)
+[Newsletter](https://azamsharp.teachable.com/p/newsletter)
 [YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
 [Speaking](/speaking)
 [Contact](/contact)

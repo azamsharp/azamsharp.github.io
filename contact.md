@@ -1,7 +1,7 @@
 # Contact 
 
 [Home](https://azamsharp.github.io)
-[Courses](/courses)
+[Courses](https://azamsharp.teachable.com/)
 [Books](/books)
 [Articles](/articles)
 [YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
