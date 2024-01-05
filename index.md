@@ -24,5 +24,4 @@ Azam is also an international speaker and has been professionally speaking since
 
 [Twitter](https://twitter.com/azamsharp)
 [LinkedIn](https://www.linkedin.com/in/mohammad-azam-5537993/)
-[Udemy](https://www.udemy.com/user/mohammad-azam-2/)
 [Teachable](https://azamsharp.teachable.com/)
