@@ -5,7 +5,7 @@
 </head>
 
 [Home](https://azamsharp.github.io)
-[Courses](https://azamsharp.teachable.com/)
+[Courses](https://azamsharp.school/)
 [Books](books)
 [Articles](articles)
 [Newsletter](https://azamsharp.teachable.com/p/newsletter)

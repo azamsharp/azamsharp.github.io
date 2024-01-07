@@ -1,5 +1,5 @@
 [Home](https://azamsharp.github.io)
-[Courses](https://azamsharp.teachable.com/)
+[Courses](https://azamsharp.school/)
 [Books](/books)
 [Blog](https://medium.com/@azamsharp)
 [YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
