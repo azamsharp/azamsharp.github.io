@@ -8,7 +8,7 @@ In the tweet, Thomas mentioned that he has abandoned view models when developing
 
 This shift isn't an isolated incident. I've heard from numerous top developers that they're transitioning away from MVVM towards simpler patterns like the Container Pattern, MV Pattern, and others. Personally, I moved away from using classic MVVM last year and shared my thoughts about it on my blog and in my courses.
 
-> This post is a segment of my weekly newsletter where I share concise, thought-provoking articles. If you're someone interested in contemplating app architecture, testing, and design, I invite you to [subscribe to my newsletter](https://azamsharp.teachable.com/p/newsletter).
+> This post is a part of my weekly newsletter where I share concise, thought-provoking articles. If you're someone interested in contemplating app architecture, testing, and design, I invite you to [subscribe to my newsletter](https://azamsharp.teachable.com/p/newsletter).
 
 In summary, the shift away from traditional MVVM in SwiftUI, exemplified by leaders highlights a trend towards simpler patterns, advocating for logic embedded within views. This trend prompts reflection on whether these alternative approaches better suit individual development needs. Adapting to these changing paradigms is crucial in navigating the evolving landscape of app development.
 
