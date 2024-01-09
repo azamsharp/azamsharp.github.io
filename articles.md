@@ -9,6 +9,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Is MVVM Dead in SwiftUI?](_posts/2024-01-09-is-mvvm-dead-in-swiftui.md)
+A few weeks ago, I came across an interesting tweet on Twitter (or perhaps I should say X). The tweet originated from Thomas Ricouard, the creator of IceCubes, the famous Mastodon client for iOS. Here's a screenshot of the tweet.
+
 ### [The Complete Guide to JSON Web Tokens (JWT) Authentication in iOS](_posts/2023-11-07-complete-guide-jwt-authentication.md)
 
 Authentication is a cornerstone of application development, safeguarding user interactions in both client and server applications. In a world where JSON reigns as the primary data exchange medium, JSON Web Token (JWT) authentication has emerged as an industry standard, ensuring data security and integrity.
