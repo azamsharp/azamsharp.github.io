@@ -695,15 +695,37 @@ The ```saveFurniture``` function is implemented below, which resizes the image a
 
 If you look into the SQLite3 database, you will notice that the actual binary data is stored within the database. 
 
-![Binary Data Stored](/images/binary-data-store.png)
+```swift
+1|1|1|?PNG
+```
 
 This might be a reasonable solution for cases when binary data is small but it can cause performance concerns for large size data. 
 
 Luckily, SwiftData provides an easy way to persist the data on external storage. This can be activated by simply adding the ```externalStorage``` attribute on ```photo``` property.  
 
-![External Storage Attribute](/images/external-storage-attribute.png)
+```swift
 
-Once the ```externalStorage``` is decorated on the property, SwiftData will decide when to persist binary data within the database vs when you persist in external storage. 
+import Foundation
+import SwiftData
+
+@Model
+class Furniture {
+    
+    @Attribute(.externalStorage)
+    var photo: Data?
+    
+    init(photo: Data? = nil) {
+        self.photo = photo
+    }
+    
+}
+```
+
+Once the ```externalStorage``` is decorated on the property, SwiftData will decide when to persist binary data within the database vs when you persist in external storage. You can look into the SQLite database and see that instead of storing the image SwiftData stored a reference to the image. 
+
+```swift
+2|1|1|B88E3B59-5922-4442-8782-16E66820604E
+```
 
 > SwiftData looks at the file size and then decides the final location of the binary data. If the file size is up to 128 KB then SwiftData stores it right within the database. Anything over 128 KB is stored in external storage. 
 
