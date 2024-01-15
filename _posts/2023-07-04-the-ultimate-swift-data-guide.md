@@ -4,6 +4,7 @@
 - Update (09/24/2023): Added new section "Persisting and Filtering by Enums" 
 - Update (09/24/2023): Added new section "Transformable Types" 
 - Update (10/03/2023): Add new section "SwiftData Syncing Using CloudKit"
+- Update (01/14/2024): Added new section "Saving Binary Data"
 
 SwiftData made its debut at WWDC 2023 as a replacement for the Core Data framework. Serving as a wrapper on top of Core Data, SwiftData enables on-device persistence and seamless syncing to the cloud.
 
@@ -19,6 +20,7 @@ The outline of this article is shown below:
 - [Querying Data](#querying-data)
 - [Persisting and Filtering by Enums](#persisting-and-filtering-by-enums) 
 - [Transformable Types](#transformable-types)
+- [Saving Binary Data](#saving-binary-data)
 - [Xcode Previews](#xcode-previews)
 - [Migrations](#migrations)
 - [Architecture](#architecture)
@@ -649,6 +651,63 @@ And also display the colors in the user interface as implemented below:
 ```
 
 > Please keep in mind that saving a complex object to the database can have an impact on performance. It's essential to make a judgment call based on your application's specific requirements and performance considerations.
+
+### Saving Binary Data 
+
+SwiftData allows to easily persist binary data into either the persistent store or external storage. Let's create a simple model to represent a ```Furniture``` model.  
+
+```swift 
+@Model
+class Furniture {
+    
+    // we will take a look at attributes later 
+    var photo: Data?
+    
+    init(photo: Data? = nil) {
+        self.photo = photo
+    }
+    
+}
+```
+
+Binary data is represented by ```photo``` property in ```Furniture``` model. 
+
+The ```saveFurniture``` function is implemented below, which resizes the image and then persist it to the database using the model context. 
+
+```swift
+ private func saveFurniture(with imageData: Data) {
+        
+        guard let uiImage = UIImage(data: imageData) else {
+            print("Failed to create UIImage from data.")
+            return
+        }
+        
+        let resizedImage = uiImage.resizeTo(to: CGSize(width: 200, height: 200))
+        guard let resizedImageData = resizedImage.pngData() else {
+            print("Failed to convert UIImage to data.")
+            return
+        }
+        
+        let furniture = Furniture(photo: resizedImageData)
+        context.insert(furniture)
+    }
+```
+
+If you look into the SQLite3 database, you will notice that the actual binary data is stored within the database. 
+
+![Binary Data Stored](/images/binary-data-store.png)
+
+This might be a reasonable solution for cases when binary data is small but it can cause performance concerns for large size data. 
+
+Luckily, SwiftData provides an easy way to persist the data on external storage. This can be activated by simply adding the ```externalStorage``` attribute on ```photo``` property.  
+
+![External Storage Attribute](/images/external-storage-attribute.png)
+
+Once the ```externalStorage``` is decorated on the property, SwiftData will decide when to persist binary data within the database vs when you persist in external storage. 
+
+> SwiftData looks at the file size and then decides the final location of the binary data. If the file size is up to 128 KB then SwiftData stores it right within the database. Anything over 128 KB is stored in external storage. 
+
+In this section, you learned how SwiftData can be used to store binary data into the database. 
 
 ### Xcode Previews 
 
