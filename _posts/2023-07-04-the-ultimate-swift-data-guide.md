@@ -1362,6 +1362,6 @@ SwiftData is a highly anticipated and welcomed addition to the iOS framework, of
 
 If you have enjoyed this article and want to support my work then check out my course on SwiftData on Udemy. I also have courses on SwiftUI, Vapor, Machine Learning and even Full Stack iOS Development. You can find list of all of my courses [here](https://azamsharp.com/courses).  
 
-- [SwiftData Udemy Course: SwiftData - Declarative Data Persistence for SwiftUI ](https://www.udemy.com/course/swiftdata-declarative-data-persistence-for-swiftui/?referralCode=A1303D0BA99171C90D9B)
+> If you are interested in a video course on SwiftData then check out [SwiftData Bootcamp - A Comprehensive Guide to Building Data-Driven Applications](https://azamsharp.teachable.com/p/swiftdata-bootcamp)
 
 
