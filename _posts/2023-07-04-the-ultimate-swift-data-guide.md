@@ -5,6 +5,7 @@
 - Update (09/24/2023): Added new section "Transformable Types" 
 - Update (10/03/2023): Add new section "SwiftData Syncing Using CloudKit"
 - Update (01/14/2024): Added new section "Saving Binary Data"
+- Update (01/16/2024): Added new section "Common Issues in SwiftData"
 
 SwiftData made its debut at WWDC 2023 as a replacement for the Core Data framework. Serving as a wrapper on top of Core Data, SwiftData enables on-device persistence and seamless syncing to the cloud.
 
