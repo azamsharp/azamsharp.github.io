@@ -27,6 +27,7 @@ The outline of this article is shown below:
 - [SwiftData Syncing Using CloudKit](#swiftdata-syncing-using-cloudkit)
 - [Testing](#testing)
 - [SwiftData with UIKit](#swiftdata-with-uikit)
+- [Common Issues in SwiftData](#common-issues-and-limitations-of-swiftdata-framework)
 - [Resources](#resources)
 - [Conclusion](#conclusion)
 
@@ -1367,7 +1368,169 @@ Once the container has been initialized, you can use it in your view controllers
     }
 ```
 
-> There is no equivalent of ```NSFetchedResultsController``` in SwiftData. This also indicates Apple's intention that SwiftData is primarily created to work with SwiftUI and not with UIKit. Having said that you can, if you want still use SwiftData with UIKit.    
+> There is no equivalent of ```NSFetchedResultsController``` in SwiftData. This also indicates Apple's intention that SwiftData is primarily created to work with SwiftUI and not with UIKit. Having said that you can, if you want still use SwiftData with UIKit.   
+
+### Common Issues and Limitations of SwiftData Framework
+
+In this section, I will discuss some of the common issues and limitations of the SwiftData framework. Hopefully, these problems will be addressed in the future release of SwiftData. 
+
+#### Predicates Based on Relationships
+
+Consider a scenario, where you have an app with BudgetCategory and Transaction models. The relationship between budget category and transaction is one to many. One budget category can have multiple transactions and multiple transactions can belong to a single budget category. 
+
+If we want to construct a predicate to fetch all transactions based on budget category's title then we may implement something like the following: 
+
+```swift
+// THIS WILL NOT COMPILE
+_transactions = Query(filter: #Predicate<Transaction> { $0.budgetCategory!.title == budgetCategory.title })
+```
+
+Unfortunately, this will not compile and throw the following error: 
+
+```swift
+ Cannot convert value of type 'PredicateExpressions.Equal<PredicateExpressions.KeyPath<PredicateExpressions.ForcedUnwrap<PredicateExpressions.KeyPath<PredicateExpressions.Variable<Transaction>, BudgetCategory?>, BudgetCategory>, String>, PredicateExpressions.KeyPath<PredicateExpressions.Value<BudgetCategory>, String>>' to closure result type 'any StandardPredicateExpression<Bool>'
+```
+
+However, you can write the same predicate by moving the ```budgetCategory.title``` into a variable and then performing the comparison. 
+
+``` swift 
+// THIS WORKS
+let budgetTitle = budgetCategory.title
+        _transactions = Query(filter: #Predicate<Transaction> {
+            $0.budgetCategory?.title == budgetTitle
+}) 
+```
+
+> I am not certain if this is the expected behavior or not. I find it quite strange that we have to move the value into a separate variable to include it into the predicate. 
+
+#### Predicate with Enums
+
+SwiftData currently does not support using enums in predicates (at least not in a straight-forward way). Let's take a look at a small example. I have an enum called ```PaymentType``` implemented below: 
+
+``` swift 
+enum PaymentType: Int, Codable {
+    case credit
+    case debit
+    case check
+    case cash
+}
+
+extension PaymentType {
+    var title: String {
+        switch self {
+            case .credit:
+                return "Credit"
+            case .debit:
+                return "Debit"
+            case .check:
+                return "Check"
+            case .cash:
+                return "Cash"
+        }
+    }
+}
+```
+
+This enum is used in the ```Transaction``` model as shown below: 
+
+``` swift 
+@Model
+class Transaction {
+    
+    var title: String
+    var amount: Decimal
+    var quantity: Int
+    var budgetCategory: BudgetCategory? 
+    var paymentType: PaymentType?
+```
+
+Now, if you want to construct a predicate based on the payment type, you may try the following approaches.  
+
+``` swift 
+// THIS WILL NOT COMPILE 
+ _transactions = Query(filter: #Predicate<Transaction> { $0.paymentType == PaymentType.debit })
+
+// THIS WILL NOT COMPILE 
+ _transactions = Query(filter: #Predicate<Transaction> { $0.paymentType?.rawValue == PaymentType.debit.rawValue })
+
+// THIS WILL COMPILE BUT THROW A RUNTIME EXCEPTION 
+_transactions = Query(filter: #Predicate<Transaction> { $0.paymentType?.rawValue == 1 })
+
+// THIS WILL COMPILE BUT THROW A RUNTIME EXCEPTION 
+ let paymentTypeId = PaymentType.debit.rawValue
+        _transactions = Query(filter: #Predicate<Transaction> { $0.paymentType?.rawValue == paymentTypeId })
+
+
+// THIS WILL COMPILE. SwiftDataError WARNINGS ON OUTPUT WINDOW. NO RESULTS RETURNED 
+ let paymentTypeId = PaymentType.debit.rawValue
+        _transactions = Query(filter: #Predicate<Transaction> { $0.paymentType!.rawValue == paymentTypeId })
+
+```
+
+Basically, non of the approaches mentioned above produced the desired output. Even if you change paymentType from optional to non-optional it will not work. The only way I have found to make it work is to perform the predicate on a property that is not an enum and expose enum as a computed property. This is shown below: 
+
+```swift 
+@Model
+class Transaction {
+    
+    var title: String
+    var amount: Decimal
+    var quantity: Int
+    var budgetCategory: BudgetCategory? 
+    var paymentTypeId: Int
+    
+    var paymentType: PaymentType? {
+        PaymentType(rawValue: paymentTypeId)
+    }
+    
+    // other code
+}
+
+```
+
+Now, you can implement the predicate as follows: 
+
+``` swift 
+ let paymentTypeId = PaymentType.debit.rawValue
+        _transactions = Query(filter: #Predicate<Transaction> { $0.paymentTypeId == paymentTypeId })
+```
+
+Basically, we are not even using enum in the predicate. We ended up using paymentTypeId, which is an integer property. I hope this issue is fixed in the later release of SwiftData. 
+
+#### Unique Attribute Crashing the App When Used With @Bindable 
+
+This is a weird one! 
+
+If you put a unique attribute on a property and then update the property to a value that already exists then your app will crash. Let's see this in action. First, we will create a property on BudgetCategory model and mark is with unique attribute. 
+
+``` swift 
+@Model
+class BudgetCategory {
+    @Attribute(.unique) var title: String = ""
+
+    // other code... 
+}
+```
+
+Next, you need to pass an instance of ```BudgetCategory``` to the detail screen as a ```@Bindable```. 
+
+```swift 
+struct BudgetDetailScreen: View {   
+    @Bindable var budgetCategory: BudgetCategory
+}
+```
+
+And finally, you can bind ```budgetCategory.title``` directly to the TextField.
+
+``` swift 
+ TextField("Title", text: $budgetCategory.title)
+```
+
+Now, as soon as you write a title in the TextField that already exist, the whole app will crash. This is definitely not the expected behavior and I was assume that this is a bug.  
+
+> Unique constraint cannot be used when iCloud is enabled. For this example, iCloud is NOT enabled. 
+
+That's it for now! If I find more issues, I will make sure to add it to this section. 
 
 ### Resources
 
