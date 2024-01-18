@@ -19,6 +19,7 @@ The outline of this article is shown below:
 - [Getting Started with SwiftData](#getting-started-with-swiftdata)
 - [Relationships](#relationships)
 - [Querying Data](#querying-data)
+- [Dynamic Predicates](#dynamic-predicates)
 - [Persisting and Filtering by Enums](#persisting-and-filtering-by-enums) 
 - [Transformable Types](#transformable-types)
 - [Saving Binary Data](#saving-binary-data)
@@ -444,6 +445,69 @@ This allows you to move the creation of the query in the model itself instead of
 > If you find yourself using the same query in multiple views, it indicates that you are retrieving and presenting the identical data. In such situations, it is advisable to concentrate on constructing smaller views that encapsulate that particular behavior instead of focusing on to move the ```@Query``` out of the view. 
 
 At the time of this writing there is also no way to dynamically change the predicate attached with the query. This means you will have to create a new instance of the query and provide the new predicate. In Core Data with ```@FetchRequest``` you were allowed to substitute the predicate with a new one. Maybe this is just a current limitation and will be addressed in the future versions of SwiftData framework. 
+
+### Dynamic Predicates 
+
+When you initialize a query inside the view initializer then you cannot dynamically change the predicates based on that query. There might be situations when you want to perform a query against the database based on a user interface event. The trick is to provide access to the predicate as a private local state and compose your views in a way that they take predicate as a dependency. The implementation is shown below: 
+
+```swift 
+struct BudgetDetailScreen: View {
+    
+    @Query private var transactions: [Transaction]
+    @Environment(\.modelContext) private var context
+    
+    @Bindable var budgetCategory: BudgetCategory
+      
+    @State private var paymentType: PaymentType = .debit
+    @State private var predicate: Predicate<Transaction> = .true
+
+    // other code ...
+```
+
+Now, based on the user interface events we can update ```paymentType``` and ```predicate```. 
+
+``` swift 
+ Button("Debit") {
+    paymentType = .debit
+    predicate = #Predicate<Transaction> { $0.paymentTypeId == paymentType.rawValue }
+}
+            
+Button("Credit") {
+    paymentType = .credit
+    predicate = #Predicate<Transaction> { $0.paymentTypeId == paymentType.rawValue }
+}
+```
+
+> Buttons are just used as an example. Use view components that fit your needs. 
+
+Once the predicate is updated, we can pass the predicate to a child view which can display all the transactions using the predicate. 
+
+``` swift 
+ TransactionListView(predicate: predicate)
+```
+
+The implementation of ```TransactionListView``` is shown below: 
+
+``` swift 
+struct TransactionListView: View {
+    
+    @Query private var transactions: [Transaction]
+    
+    init(predicate: Predicate<Transaction>) {
+        _transactions = Query(filter: predicate)
+    }
+    
+    var body: some View {
+        List(transactions) { transaction in
+            Text(transaction.title)
+        }
+    }
+}
+```
+
+That's it! Now, the predicate will be updated dynamically and ```TransactionListView``` will be recalculated and rendered (if necessary). 
+
+Visit the original source [here](https://stackoverflow.com/questions/76742198/swiftdata-search-bar-and-predicate). 
 
 ### Persisting and Filtering by Enums 
 
