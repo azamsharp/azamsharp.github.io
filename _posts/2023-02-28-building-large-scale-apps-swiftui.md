@@ -995,6 +995,11 @@ When the developer composes this code, the assumption is that it facilitates pus
 
 So, in the end it depends on your needs. If you have criteria to support unwinding routes then use the implementation above, on the other hand if you are just interested in normal push navigation then substitute ```NavigationType``` in navigate closure with Route. 
 
+
+## Navigation with TabViews
+
+The above technique will not work, when your app contain tab views. The main reason is that each tab needs to hold a separate navigation stack so it can track independent history.    
+
 > I am sure there are other ways of handling navigation in SwiftUI. Send me a [Gist](https://gist.github.com/) of your suggestion on [Twitter](https://twitter.com/azamsharp) and I will be more than happy to review it. 
 
 > I also wrote a book on Navigation API in SwiftUI. If you are interested, you can download it free of charge from [here](https://azamsharp.com/books). 
