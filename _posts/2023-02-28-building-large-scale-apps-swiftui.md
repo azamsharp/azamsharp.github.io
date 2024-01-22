@@ -1049,7 +1049,7 @@ extension AppScreen {
 }
 ```
 
-The important part to note is the ```destination``` property. This property is responsible for returning the navigation stack based on the tab selected by the user. Since each tab will have its own navigation stack, it will maintaining its own navigation history. 
+The important part to note is the ```destination``` property. This property is responsible for returning the navigation stack based on the tab selected by the user. Since each tab will have its own navigation stack, it will maintaining its own navigation history.
 
 Once we are done with our AppScreen enum, we can display the tabs in our view. 
 
@@ -1132,7 +1132,6 @@ struct PlantsNavigationStack: View {
 That's it! 
 
 If you are interested in watching a video on this then check out [Programmatic Routing in SwiftUI for TabView Apps in SwiftUI](https://youtu.be/oXZkFaV6is0?si=KXLnVizt53jEXv3j). 
-
 
 > I published a course on SwiftUI Navigation called [SwiftUI Navigation Fundamentals - Beginner's Guide](https://azamsharp.teachable.com/p/swiftui-navigation-fundamentals-beginner-s-guide), which covers different navigation scenarios. 
 
