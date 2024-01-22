@@ -24,4 +24,4 @@ PS: I am super excited to announce that after days of hard work, I have publishe
 
 Additionally, I have activated “Free 7 Day Membership” option which will give you access to 21 courses, over 120+ hours of content.
 
-Visit https://azamsharp.school/ for more details.
+Visit [AzamSharp School](https://azamsharp.school/) for more details.
