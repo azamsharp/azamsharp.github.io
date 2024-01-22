@@ -9,6 +9,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Newsletter: Stop Testing Your UI Using View Models ](_posts/2024-01-22-stop-testing-your-ui-using-view-models.md) 
+A few months ago, I attended iOSDevHappyHour and engaged in a discussion with a young man. He was discussing how he tested his SwiftUI interface using view models. I asked him for clarification, and he explained that instead of writing UI tests, he simply wrote tests for the view models. According to him, if the view model tests passed, then the UI was working as expected.
+
 ### [Newsletter: Is MVVM Dead in SwiftUI?](_posts/2024-01-09-is-mvvm-dead-in-swiftui.md)
 A few weeks ago, I came across an interesting tweet on Twitter (or perhaps I should say X). The tweet originated from Thomas Ricouard, the creator of IceCubes, the famous Mastodon client for iOS. Here's a screenshot of the tweet.
 
