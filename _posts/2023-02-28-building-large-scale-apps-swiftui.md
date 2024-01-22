@@ -21,6 +21,7 @@ The outline of this article is shown below:
 - [View Specific Logic](#view-specific-logic)
 - [Validation](#validation) 
 - [Navigation](#navigation) 
+- [TabView Navigation](#navigation-with-tabviews) 
 - [Displaying Errors](#displaying-errors)
 - [Grouping View Events](#grouping-view-events) 
 - [Formatting](#formatting)
@@ -998,11 +999,139 @@ So, in the end it depends on your needs. If you have criteria to support unwindi
 
 ## Navigation with TabViews
 
-The above technique will not work, when your app contain tab views. The main reason is that each tab needs to hold a separate navigation stack so it can track independent history.    
+The above technique will not work, when your app contain tab views and wants to perform programmatic navigation. The main reason is that each tab needs to hold a separate navigation stack so it can track navigation history independently. 
 
-> I am sure there are other ways of handling navigation in SwiftUI. Send me a [Gist](https://gist.github.com/) of your suggestion on [Twitter](https://twitter.com/azamsharp) and I will be more than happy to review it. 
+Let's first start by creating tabs for our application. Each tab can be represented by a case in an enum as shown below: 
 
-> I also wrote a book on Navigation API in SwiftUI. If you are interested, you can download it free of charge from [here](https://azamsharp.com/books). 
+``` swift 
+enum AppScreen: Hashable, Identifiable, CaseIterable {
+    
+    case backyards
+    case birds
+    case plants
+    
+    var id: AppScreen { self }
+}
+```
+
+You can also extend ```AppScreen``` enum to add support for labels and destination. This is shown below: 
+
+``` swift 
+extension AppScreen {
+    
+    @ViewBuilder
+    var label: some View {
+        switch self {
+            case .backyards:
+                Label("Backyards", systemImage: "tree")
+            case .birds:
+                Label("Birds", systemImage: "bird")
+            case .plants:
+                Label("Plants", systemImage: "leaf")
+        }
+    }
+    
+    @ViewBuilder
+    var destination: some View {
+        switch self {
+            case .backyards:
+                BackyardNavigationStack()
+            case .birds:
+                BirdsNavigationStack()
+            case .plants:
+                PlantsNavigationStack()
+        }
+    }
+    
+}
+```
+
+The important part to note is the ```destination``` property. This property is responsible for returning the navigation stack based on the tab selected by the user. Since each tab will have its own navigation stack, it will maintaining its own navigation history. 
+
+Once we are done with our AppScreen enum, we can display the tabs in our view. 
+
+``` swift 
+struct AppTabView: View {
+    
+    @Binding var selection: AppScreen?
+    
+    var body: some View {
+        TabView(selection: $selection) {
+            ForEach(AppScreen.allCases) { screen in
+                screen.destination
+                    .tag(screen as AppScreen?)
+                    .tabItem { screen.label }
+            }
+        }
+    }
+}
+```
+
+The history of each tab will be maintained by ```Router```. Route is simply an ```Observable```, which is injected as a global state. The implementation is shown below: 
+
+``` swift 
+@Observable
+class Router {
+    var birdRoutes: [BirdRoute] = []
+    var plantRoutes: [PlantRoute] = []
+}
+```
+
+> If you find a way to expose Router as an EnvironmentValue instead of EnvironmentObject then let me know. It will read and look much better as an EnvironmentValue rather than EnvironmentObject. 
+
+The routes for each navigation stack are implemented below: 
+
+``` swift 
+enum PlantRoute {
+    case home
+    case detail
+}
+
+struct Bird: Hashable {
+    let name: String
+}
+
+enum BirdRoute: Hashable {
+    case home
+    case detail(Bird)
+}
+```
+
+And finally, here is the implementation of PlantsNavigationStack which uses the router from the Environment. 
+
+``` swift 
+struct PlantsNavigationStack: View {
+    
+    @Environment(Router.self) private var router
+    
+    var body: some View {
+        
+        @Bindable var router = router
+        
+        NavigationStack(path: $router.plantRoutes) {
+            Button("Plants Go to detail") {
+                router.plantRoutes.append(.detail)
+            }.navigationDestination(for: PlantRoute.self) { route in
+                switch route {
+                    case .home:
+                        Text("Home")
+                    case .detail:
+                        Text("Plant Detail")
+                }
+            }
+        }
+    }
+}
+```
+
+> Keep in mind that you only need router for dynamic routes. Normal routes utilize the ```navigationDestination``` view modifier. 
+
+That's it! 
+
+If you are interested in watching a video on this then check out [Programmatic Routing in SwiftUI for TabView Apps in SwiftUI](https://youtu.be/oXZkFaV6is0?si=KXLnVizt53jEXv3j). 
+
+
+> I published a course on SwiftUI Navigation called [SwiftUI Navigation Fundamentals - Beginner's Guide](https://azamsharp.teachable.com/p/swiftui-navigation-fundamentals-beginner-s-guide), which covers different navigation scenarios. 
 
 ## Displaying Errors 
 
