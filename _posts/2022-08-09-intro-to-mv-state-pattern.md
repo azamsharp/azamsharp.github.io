@@ -1,5 +1,7 @@
 # MV State Pattern - A Better Way of Building SwiftUI Apps 
 
+> Update: Please check out the most updated article called [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html). 
+
 I started working with SwiftUI framework in 2019. Like most developers, I also jumped on the MVVM bandwagon. I wrote books on it, gave presentations and even created a lot of videos. I managed to get MVVM working with SwiftUI in almost all of my projects. But it was a constant battle. I always felt that I am fighting SwiftUI framework. Even for small and medium sized projects, I felt that I was writing too much code and adding unnecessary layers. In this post, I will introduce MV pattern. This is not something I invented. This is the same pattern Apple use in their code samples for their SwiftUI apps. Check out the references section at the end of this post. 
 
 > I can understand that we should not take Apple's advice in terms of architecture of the app. But after working with SwiftUI and MVVM for last 3 years, I find MV pattern to be much better and easier to use (at least for me personally). This does not mean that MVVM is useless in the world of SwiftUI. Sometimes, you need a view model to flatten the data or even perform validation for large views. What I am against is creating a separate view model per screen. More than often, it is completely unnecessary and needlessly adds complexity to the project. If MVVM is working for you then more power to you!  
