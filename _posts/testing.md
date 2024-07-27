@@ -70,16 +70,210 @@ enum Route: Hashable {
 }
 ```
 
-You can start by declaring your routes. This can be done in several different ways but enum is considered a better c  
+Next, we can use the NavigationStack ```path``` parameter to initialize our route binding. This is shown in the implementation below: 
 
+``` swift 
+struct ContentView: View {
+    
+    @State private var routes: [Route] = []
+    
+    var body: some View {
+        NavigationStack(path: $routes) {
+            VStack {
+                Button("Login") {
+                    Task {
+                        // perform async call
+                        try! await Task.sleep(for: .seconds(2))
+                        // take user to dashboard screen
+                        routes.append(.dashboard)
+                    }
+                }
+            }.navigationDestination(for: Route.self) { route in
+                switch route {
+                    case .dashboard:
+                        DashboardScreen() 
+                    case .detail(let customer):
+                        CustomerDetailScreen(customer: customer)
+                }
+            }
+        }
+    }
+}
+```
 
-Dynamic routing also allows you to create unwind segues. Unwind segues is a technique where you can jump from View C to View A instantly instead of going through View B. 
+We start by creating the routes array as a private state. Once the Login button is tapped, we fake a call by waiting for 2 seconds and then add the dashboard route to the routes array. This causes the ```navigationDestination``` to trigger. Inside the ```navigationDestination``` we get access to the route enum and based on the selected case we direct the user to the correct destination screen.  
 
-### Enum Based Routing 
+Based on the complexity of your app, you can also organize your routes as nested enums. This can be helpful if your routing is based on different sections of the app. The implementation is shown below: 
+
+``` swift 
+enum Route: Hashable {
+    
+    case patient(PatientRoute)
+    case doctor(DoctorRoute)
+    
+    enum PatientRoute: Hashable {
+        case list
+        case create
+        case detail(Patient)
+    }
+    
+    enum DoctorRoute: Hashable {
+        case list
+        case create
+        case detail(Doctor)
+    }
+}
+```
+
+As you can see the ```Route``` enum serves as the parent enum and it contains other nested enums ```PatientRoute``` and ```DoctorRoute``` respectively. The nested enums specifies different sections of the application. 
+
+Next, we can attach ```navigationDestination``` to the root view and handle the routes. This is shown below: 
+
+``` swift 
+
+@State private var routes: [Route] = []
+
+var body: some View {
+        NavigationStack(path: $routes) {
+            VStack {
+                Button("Go to Patient List Screen") {
+                    routes.append(.patient(.list))
+                }
+            }.navigationDestination(for: Route.self) { route in
+                switch route {
+                    case .patient(let patient):
+                        handlePatientRoutes(patient)
+                    case .doctor(let doctor):
+                        handleDoctorRoutes(doctor)
+                }
+            }
+        }
+    }
+```
+
+> If you prefer you can create a Router to handle all the routes and then return the appropriate view based on the case. I am implementing it right inside the view to keep things simple. 
+
+All patient routes are handled inside the ```handlePatientRoutes``` function and all doctor routes are handled inside ```handleDoctorRoutes``` function. The implementation of ```handlePatientRoutes``` is shown below: 
+
+``` swift 
+ @ViewBuilder
+    private func handlePatientRoutes(_ patient: Route.PatientRoute) -> some View {
+        switch patient {
+            case .list:
+                Text("List")
+            case .create:
+                Text("Create")
+            case .detail(let patient):
+                Text(patient.name)
+        }
+    }
+```
+
+The ```handlePatientRoutes``` function is a ```@ViewBuilder``` and it returns the destination view. The usage is shown below: 
+
+``` swift 
+ Button("Go to Patient List Screen") {
+    routes.append(.patient(.list))
+}
+```
+
+Now, when you tap on the button you will be taken to the patient list screen. 
+
+> When structuring your nested enums, make sure to talk a domain expert and get insights of the business aspects of your application. Knowledge of domain will help you craft better and intuitive routes, which will provide seamless experience to the developers. 
+
+### Global Routing in SwiftUI
+
+In the last section, we implemented routing based on an enum. We also looked at nested enums and how nesting routes can help you organize and structure complicated scenarios in your application.
+
+We implemented the ```routes``` array as a local private state for the ```ContentView```. This means if you want to perform navigation from other screens, you won't be able to access the ```routes``` array. 
+
+One solution is to introduce global state through the use of ```@Observable``` macro. The implementation below shows ```Router```, which contains the routing behavior of the entire application. 
+
+``` swift 
+@Observable
+class Router {
+    
+    var routes: [Route] = []
+    
+    @ViewBuilder
+    func destination(for route: Route) -> some View {
+        switch route {
+            case .patient(let patient):
+                handlePatientRoutes(patient)
+            case .doctor(let doctor):
+                handleDoctorRoutes(doctor)
+        }
+    }
+    
+    @ViewBuilder
+    private func handleDoctorRoutes(_ doctor: Route.DoctorRoute) -> some View {
+        switch doctor {
+            case .list:
+                Text("List")
+            case .create:
+                Text("Create")
+            case .detail(let doctor):
+                Text(doctor.name)
+        }
+    }
+    
+    @ViewBuilder
+    private func handlePatientRoutes(_ patient: Route.PatientRoute) -> some View {
+        switch patient {
+            case .list:
+                Text("List")
+            case .create:
+                Text("Create")
+            case .detail(let patient):
+                Text(patient.name)
+        }
+    }
+}
+```
+
+The ```Router``` class exposes the destination function and returns the appropriate view based on the selected route. Nested routes are controlled by functions ```handleDoctorRoutes``` and ```handlePatientRoutes``` appropriately. These functions are marked private, since they are not meant to be available to be called from outside. 
+
+In order to use ```Router``` as a global state, it needs to be injected in the environment. This is shown below: 
+
+``` swift 
+#Preview {
+    ContentView()
+        .environment(Router())
+}
+```
+
+Now, we can access ```Router``` globally from the ```Environment``` inside the view. This is shown below: 
+
+``` swift 
+struct ContentView: View {
+    
+    @Environment(Router.self) private var router
+
+    var body: some View {
+        
+        @Bindable var router = router
+        
+        NavigationStack(path: $router.routes) {
+            VStack {
+                Button("Go to Patient List Screen") {
+                    router.routes.append(.patient(.list))
+                }
+            }.navigationDestination(for: Route.self) { route in
+                router.destination(for: route)
+            }
+        }
+    }
+}
+```
+
+Much simpler right! 
+
+The line ```@Bindable var router = router``` is required in order to bind routes array to the ```NavigationStack```. 
 
 ### Environment Values 
 
 ### TabView Navigation 
 
+### NavigationSplitView (Coming soon)
 
 ### Conclusion 
