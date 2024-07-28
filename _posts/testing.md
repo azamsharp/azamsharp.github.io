@@ -268,9 +268,13 @@ struct ContentView: View {
 
 Much simpler right! 
 
-The line ```@Bindable var router = router``` is required in order to bind routes array to the ```NavigationStack```. 
+The line ```@Bindable var router = router``` is required in order to bind routes array to the ```NavigationStack```. If you directly bind the ```router.routes``` from the Environment then it will cause errors. 
+
+In the next section I will talk about exposing navigation through Environment Values. This technique is similar to navigate hook in React. 
 
 ### Environment Values 
+
+
 
 ### TabView Navigation 
 
