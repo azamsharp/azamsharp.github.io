@@ -274,7 +274,48 @@ In the next section I will talk about exposing navigation through Environment Va
 
 ### Environment Values 
 
-React allow developers to perform navigation using a simple ```navigate``` hook. We can apply the same techniques to create relevant hooks using SwiftUI custom Environment Values. In this section, I will introduce a ```navigate``` hook   
+React allow developers to perform navigation using a hook called ```useNavigate```. Once imported you can use it inside your React components as shown below: 
+
+``` swift 
+navigate("/session-timed-out");
+```
+
+We can apply the same techniques to create relevant hooks using SwiftUI custom environment values. In this section, I will introduce a ```navigate``` custom environment value that allows users to perform programmatic navigation in SwiftUI.  
+
+We will start by implementing custom Environment Key as shown below: 
+
+``` swift 
+struct NavigateEnvironmentKey: EnvironmentKey {
+    static var defaultValue: NavigateAction = NavigateAction(action: { _ in })
+}
+```
+
+The NavigateAction is a struct containing action that represents the route closure. 
+
+``` swift 
+struct NavigateAction {
+    typealias Action = (Route) -> ()
+    let action: Action
+    func callAsFunction(_ route: Route) {
+        action(route)
+    }
+}
+```
+
+Next we extend EnvironmentValues to add a new custom environment. This is shown below: 
+
+``` swift 
+extension EnvironmentValues {
+    var navigate: (NavigateAction) {
+        get { self[NavigateEnvironmentKey.self] }
+        set { self[NavigateEnvironmentKey.self] = newValue }
+    }
+}
+```
+
+
+
+### Custom Views Removing Navigation Dependency 
 
 ### TabView Navigation 
 
