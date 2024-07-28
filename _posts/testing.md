@@ -274,7 +274,7 @@ In the next section I will talk about exposing navigation through Environment Va
 
 ### Environment Values 
 
-
+React allow developers to perform navigation using a simple ```navigate``` hook. We can apply the same techniques to create relevant hooks using SwiftUI custom Environment Values. In this section, I will introduce a ```navigate``` hook   
 
 ### TabView Navigation 
 
