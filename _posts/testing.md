@@ -302,7 +302,7 @@ struct NavigateAction {
 }
 ```
 
-Next we extend EnvironmentValues to add a new custom environment. This is shown below: 
+Next we can extend EnvironmentValues to add a new custom environment. This is shown below: 
 
 ``` swift 
 extension EnvironmentValues {
@@ -313,12 +313,173 @@ extension EnvironmentValues {
 }
 ```
 
+Once the custom environment key has been added, we are ready to use it in our application. The implementation is shown below: 
 
+``` swift 
+struct ContentContainerView: View {
+    
+    @State private var router = Router()
+    
+    var body: some View {
+        NavigationStack(path: $router.routes) {
+            ContentView() // This is the root view 
+                .navigationDestination(for: Route.self) { route in
+                    router.destination(for: route)
+                }
+        }
+        .environment(\.navigate, NavigateAction(action: { route in
+            router.routes.append(route)
+        }))
+       
+    }
+}
+```
 
-### Custom Views Removing Navigation Dependency 
+The ```navigate``` environment value on the NavigationStack and once the action is fired the received route is appended to the router routes collection. This results in navigationDestination being fired where the route is sent to the ```router.destination``` function and the appropriate view is returned.  
+
+The usage is shown below: 
+
+``` swift 
+struct ContentView: View {
+    
+    @Environment(\.navigate) private var navigate
+    
+    var body: some View {
+            VStack {
+                Button("Login") {
+                    // use task modifier if you want to
+                    Task {
+                        try! await Task.sleep(for: .seconds(2.0))
+                        navigate(.patient(.list))
+                    }
+                }
+            }
+    }
+}
+```
+
+The usage of ```navigate``` custom environment value provides an easy and intuitive way to create programmatic routes in SwiftUI. 
+
+> I have always advocated the idea of learning from other frameworks and platforms. React is a much mature framework as compared to SwiftUI and we can take ideas from it and see how they behave in SwiftUI world. The implementation and usage of ```navigate``` custom environment value is a clear example of something that already exists in React world but can also be utilized in SwiftUI applications. 
+
+When using navigation in custom reusable views, we have to be very careful about the usability narrative. This means we cannot tie the navigation to the implementation of custom views. Because this makes the views not reusable and they will always navigate to a hard-coded destination. In the next section, we will cover how to separate the navigation responsibility from view, making it more reusable. 
+
+### Removing Navigation Dependency from Custom Views 
+
+Consider a scenario that you have a view called ```ProductView```. In ```ProductView```, you have a button that can add the product as a favorite. After the product has been marked as favorite, the user is navigated back to the ```ProductListScreen```. This implementation is shown below: 
+
+``` swift 
+struct ProductView: View {
+    
+    @Environment(\.navigate) private var navigate
+    
+    var body: some View {
+        VStack {
+            Button("Add to Favorite") {
+                Task {  // use task modifier if you want to
+                    // perform a POST request and add to favorite
+                    try! await Task.sleep(for: .seconds(2.0))
+                    // navigate to ProductListScreen
+                    navigate(.product(.list))
+                }
+            }
+        }
+    }
+}
+```
+
+The code above works as expected. The problem arises when you have to use ```ProductView``` in a context, where it has to navigate to a different destination. The reason is that the navigation is tied up in the implementation of the ```ProductView```. ```ProductView``` will always navigate to the product list screen after successfully marking the product as favorite. 
+
+There are several ways to solve this problem. One approach is to pass the destination route in the ```ProductView``` initializer. This is implemented below: 
+
+``` swift 
+struct ProductView: View {
+    
+    @Environment(\.navigate) private var navigate
+    let destinationRoute: Route
+    
+    var body: some View {
+        VStack {
+            Button("Add to Favorite") {
+                Task {  // use task modifier if you want to
+                    // perform a POST request and add to favorite
+                    try! await Task.sleep(for: .seconds(2.0))
+                    // navigate to ProductListScreen
+                    navigate(destinationRoute)
+                }
+            }
+        }
+    }
+}
+```
+
+The ```ProductView``` is no longer hard-coded to a particular route. The destination route is passed as an argument, which is later utilized by the ```navigate``` function to perform the actual navigation.
+
+Even though this technique works, it does come with a limitation. You cannot perform any custom task when "Add to Favorite" button is tapped. For example, maybe you wanted to issue another POST request or log the behavior for the action. With this technique you are limited to only performing the navigation once the button is tapped. 
+
+The way to resolve this issue is to allow the parent to handle the "Add to Favorite" tap event. This will allow the parent view to add more behavior to the event if needed. The implementation is shown below: 
+
+``` swift 
+struct ProductView: View {
+    
+    let addToFavorite: (Product) -> Void
+    
+    var body: some View {
+        VStack {
+            Button("Add to Favorite") {
+                Task {  // use task modifier if you want to
+                    // perform a POST request and add to favorite
+                    try! await Task.sleep(for: .seconds(2.0))
+                    // call the addToFavorite closure
+                    addToFavorite(Product(name: "Shirt"))
+                }
+            }
+        }
+    }
+}
+```
+
+The ```ProductView``` now exposes a closure called ```addToFavorite```. When the button is tapped, the selected product is passed to the caller using the ```addToFavorite``` closure. This transfers the responsibility from the ```ProductView``` to the parent screen/view. 
+
+The parent can handle the callback as shown below: 
+
+``` swift 
+struct ContentView: View {
+    
+    @Environment(\.navigate) private var navigate
+    
+    var body: some View {
+            VStack {
+                Button("Login") {
+                    // use task modifier if you want to
+                    Task {
+                        try! await Task.sleep(for: .seconds(2.0))
+                        navigate(.patient(.list))
+                    }
+                }
+                
+                ProductView { product in
+                    // log the product
+                    // do other actions with the product
+                    navigate(.product(.detail(product)))
+                }
+            }
+    }
+}
+```
+
+The ```ContentView``` uses the ```ProductView``` and then handles the ```addToFavorite``` closure. This allows the ```ContentView``` to perform additional actions based on the result of ```addToFavorite``` closure. 
+
+The ```ProductView``` is now completely free from any navigation code, making it more reusable in different parts of the application. 
+
+> The big question is should we always implement our reusable views using the techniques discussed above (closures/passing routes). The answer is it depends. I personally start with a simple implementation of my views and when and if the time comes, I will refactor to include closures etc. There are scenarios, where you will keep the navigation inside the reusable views and reuse them in multiple places of the application. Those views will also perform the same navigation, so there is no point of extracting out the navigation and making it more complicated. 
 
 ### TabView Navigation 
 
-### NavigationSplitView (Coming soon)
+### What About Modals?
+
+Modals or sheets are not part of the NavigationStack period! They are displayed on top of the view and are never added to the navigation history. You can implement a similar approach for modals and it is recommended to keep it separate from all the approaches discussed above. 
 
 ### Conclusion    
+
+In this article, we discussed several different patterns for navigation in SwiftUI. Each pattern has its own set of advantages and disadvantages. It is important that you select the pattern, which fits perfectly for your requirements. When starting out, don't try to complicate things by introducing generics, protocols etc. These things can be added when and if they are needed in the future. Keep it simple! 
