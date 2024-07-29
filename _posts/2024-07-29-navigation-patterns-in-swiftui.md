@@ -19,7 +19,7 @@ The outline of the article is shown below:
 - [What About Modals?](#what-about-modals)
 - [Conclusion](#conclusion)
 
-> If you are interested in learning iOS development then check out my courses on https://azamsharp.school. 
+> If you are interested in learning iOS development then check out my courses on [AzamSharp School](https://azamsharp.school). 
 
 ### Basic List Navigation  
 
