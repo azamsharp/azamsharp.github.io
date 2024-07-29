@@ -10,9 +10,9 @@
 [Contact](/contact)
 
 ### [Navigation Patterns in SwiftUI](_posts/2024-07-29-navigation-patterns-in-swiftui.md)
-Navigation has often been a challenge in SwiftUI applications. Initially, SwiftUI introduced `NavigationView`, which was later replaced by `NavigationStack` in iOS 16.
+Navigation has often been a challenge in SwiftUI applications. Initially, SwiftUI introduced NavigationView, which was later replaced by NavigationStack in iOS 16.
 
-`NavigationStack` enhanced navigation by enabling dynamic and programmatic routing, and it also offered ways to centralize routes for the entire application. In this article, I'll explore common navigation patterns that can be employed when building SwiftUI applications.
+NavigationStack enhanced navigation by enabling dynamic and programmatic routing, and it also offered ways to centralize routes for the entire application. In this article, I'll explore common navigation patterns that can be employed when building SwiftUI applications.
 
 ### [Newsletter: Stop Testing Your UI Using View Models ](_posts/2024-01-22-stop-testing-your-ui-using-view-models.md) 
 A few months ago, I attended iOSDevHappyHour and engaged in a discussion with a young man. He was discussing how he tested his SwiftUI interface using view models. I asked him for clarification, and he explained that instead of writing UI tests, he simply wrote tests for the view models. According to him, if the view model tests passed, then the UI was working as expected.
