@@ -1,6 +1,10 @@
 
 # Navigation Patterns in SwiftUI  
 
+Updated (07/31/2024)
+
+- Added onChange modifier technique in section [Removing Navigation Dependency from Custom Views](#removing-navigation-dependency-from-custom-views)
+
 Navigation has often been a challenge in SwiftUI applications. Initially, SwiftUI introduced `NavigationView`, which was later replaced by `NavigationStack` in iOS 16.
 
 `NavigationStack` enhanced navigation by enabling dynamic and programmatic routing, and it also offered ways to centralize routes for the entire application. In this article, I'll explore common navigation patterns that can be employed when building SwiftUI applications.
@@ -488,6 +492,59 @@ struct ContentView: View {
 The `ContentView` uses the `ProductView` and then handles the `addToFavorite` closure. This allows `ContentView` to perform additional actions based on the result of the `addToFavorite` closure.
 
 The `ProductView` is now completely free from any navigation code, making it more reusable in different parts of the application.
+
+Another technique is to use SwiftUI ```@Binding``` feature to get a callback in the parent view. This will allow you to pass product as binding, change the ```isFavorite``` property to true and then capture the callback using the ```onChange``` modifier. This is shown below: 
+
+The ```ProductView``` implementation is shown below: 
+
+``` swift 
+struct ProductView: View {
+    
+    @Binding var product: Product
+    
+    var body: some View {
+        VStack {
+            Button("Add to Favorite") {
+                Task {  // use task modifier if you want to
+                    // perform a POST request and add to favorite
+                    try! await Task.sleep(for: .seconds(2.0))
+                    product.isFavorite = true
+                }
+            }
+        }
+    }
+}
+```
+
+The ```ContentView``` is updated to handle the ```onChange``` modifier. 
+
+``` swift 
+struct ContentView: View {
+    
+    @Environment(\.navigate) private var navigate
+    @State private var product = Product(name: "Shirts")
+    
+    var body: some View {
+            VStack {
+                Button("Login") {
+                    // use task modifier if you want to
+                    Task {
+                        try! await Task.sleep(for: .seconds(2.0))
+                        navigate(.patient(.list))
+                    }
+                }
+                
+               ProductView(product: $product)
+            }
+            .onChange(of: product) {
+                // do other stuff
+               // navigate(.product(.list))
+            }
+    }
+}
+```
+
+Both techniques discussed above work correctly and remove the dependency on navigation. This makes your views reusable and allows the parent to make decisions about the target destination.
 
 > The big question is: should we always implement our reusable views using the techniques discussed above (closures/passing routes)? The answer is, it depends. I personally start with a simple implementation of my views and, when and if the time comes, I will refactor to include closures, etc. There are scenarios where keeping the navigation inside the reusable views and reusing them in multiple places in the application can be simpler and more practical. In those cases, there is no point in extracting out the navigation and making it more complicated.
 
