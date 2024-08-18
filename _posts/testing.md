@@ -9,6 +9,19 @@ In this article, we’ll explore different patterns for displaying and managing 
 
 ### Displaying a Basic Sheet  
 
-Displaying a sheet in SwiftUI is quite simple. 
+There are various ways of displaying sheets in SwiftUI. The simplest approach is to use the ```isPresented``` argument to control when the sheet is shows. In the code below we are displaying a sheet when the ```isPresented``` property is changed.       
 
-
+``` swift 
+struct ContentView: View {
+    
+    @State private var isPresented: Bool = false
+    
+    var body: some View {
+        Button("Show Sheet") {
+            isPresented = true
+        }.sheet(isPresented: $isPresented, content: {
+            Text("Sheet")
+        })
+    }
+}
+```
