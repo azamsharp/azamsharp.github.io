@@ -52,3 +52,57 @@ struct ContentView: View {
 }
 ```
 
+Managing multiple sheets can become cumbersome over time, even if the current approach works. To simplify this complexity, you can introduce a private enum that encapsulates all the sheet types that can be presented within a screen. This allows for cleaner, more organized code and makes it easier to manage and extend the available sheet types.
+
+### Enum Based Sheets
+
+Instead of using multiple sheet view modifiers, we can make use of an enum with all the different options for a particular screen. The enum can be set to private since it will be for a particular screen. This is shown below: 
+
+``` swift 
+struct CustomerListScreen: View {
+    
+    private enum Sheet: Identifiable {
+        
+        case add
+        case update(Customer)
+        
+        var id: String { String(describing: self) }  
+    }
+}
+```
+
+The `Sheet` enum conforms to the `Identifiable` protocol to participate in binding operations, ensuring each case can be uniquely identified within SwiftUI views. Now we can start using our Sheet enum as shown below: 
+
+``` swift 
+struct CustomerListScreen: View {
+    
+    // Sheet definition 
+    
+    @State private var activeSheet: Sheet?
+    
+    var body: some View {
+        VStack {
+            
+            Button("Add Customer") {
+                activeSheet = .add
+            }
+            
+            Button("Update Customer") {
+                let customer = Customer(name: "John Doe")
+                activeSheet = .update(customer)
+            }
+        }.sheet(item: $activeSheet) { activeSheet in
+            switch activeSheet {
+                case .add:
+                    Text("Add Sheet")
+                case .update(let customer):
+                    Text("Updating \(customer.name)")
+            }
+        }
+    }
+}
+```
+
+Instead of managing multiple sheets, we're now using a single sheet modifier that binds to the ```activeSheet``` enum. When the value of ```activeSheet``` changes, the sheet modifier is automatically triggered. This approach allows you to dynamically return the view associated with the active sheet, streamlining the process and reducing the complexity of handling multiple sheets.
+
+
