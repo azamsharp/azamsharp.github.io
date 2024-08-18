@@ -25,3 +25,30 @@ struct ContentView: View {
     }
 }
 ```
+
+If you want to display multiple sheets then you can use multiple sheet modifiers, dependent on separate properties. This is shown in the implementation below:  
+
+``` swift 
+struct ContentView: View {
+    
+    @State private var isPresented: Bool = false
+    @State private var isChatPresented: Bool = false
+    
+    var body: some View {
+        VStack {
+            Button("Show Sheet") {
+                isPresented = true
+            }
+            Button("Show Chat") {
+                isChatPresented = true
+            }
+        }.sheet(isPresented: $isPresented, content: {
+            Text("Sheet")
+        })
+        .sheet(isPresented: $isChatPresented, content: {
+            Text("Chat Presented")
+    })
+    }
+}
+```
+
