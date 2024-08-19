@@ -1,11 +1,9 @@
 
 # Global Sheets Pattern in SwiftUI   
 
-SwiftUI’s ```sheet``` view modifier provides a straightforward way to present modals, but when your app requires multiple sheets across different screens, managing them can become cumbersome. Typically, developers resort to using multiple sheet modifiers or controlling the display with an enum. However, this approach often leads to redundant code scattered across various views.
+Managing sheet presentations in SwiftUI can quickly become complex, especially when your app requires multiple sheets across different screens. The default `sheet` view modifier provides a simple way to present modals, but as your app grows, using multiple sheet modifiers or manually controlling their display can lead to scattered, redundant code that’s hard to maintain.
 
-What if you could centralize the management of sheets, offering a cleaner, more maintainable solution with a user-friendly API?
-
-In this article, we’ll explore different patterns for displaying and managing sheets in SwiftUI. We'll also look at how adopting ideas from other platforms can enhance your app’s architecture, making sheet management more efficient and scalable.
+What if there was a way to centralize sheet management, creating a cleaner, more maintainable solution with a user-friendly API? In this article, we’ll explore the Global Sheets Pattern in SwiftUI—a method that simplifies the management of sheets by centralizing their logic. We’ll examine various approaches to displaying and managing sheets and demonstrate how adopting concepts from other platforms can improve your app’s architecture, making sheet handling more efficient and scalable.
 
 ### Displaying a Basic Sheet  
 
@@ -137,8 +135,136 @@ Don't worry the above code will not work right now since there is no such thing 
 
 Now that we have a clear vision of our final implementation, we can focus on the steps needed to achieve it.
 
-We will start by creating a custom Environment value. 
+We'll begin by creating a `Sheet` enum and a `SheetAction` struct. The `Sheet` enum will represent all the different sheets in the application, while the `SheetAction` struct will encapsulate the actions related to presenting or managing these sheets within a SwiftUI application.
 
+``` swift 
 
+enum Sheet: Identifiable, Hashable {
+    case settings
+    case contact(String)
+    
+    var id: Self { self }
+}
 
+struct SheetAction {
+    typealias Action = (Sheet) -> Void
+    let action: Action
+    
+    func callAsFunction(_ sheet: Sheet) {
+        action(sheet, dismiss)
+    }
+}
+```
 
+> In the above implementation, we are not handling the onDismiss behavior of the sheet. This will be covered later in the article. 
+
+Next we will implement ```SheetEnvironmentKey``` by conforming to ```EnvironmentKey``` protocol and also add a new custom property ```showSheet``` to the ```EnvironmentValues``` struct.  
+
+``` swift 
+struct ShowSheetKey: EnvironmentKey {
+    static var defaultValue: SheetAction = SheetAction { _ in }
+}
+
+extension EnvironmentValues {
+    var showSheet: (SheetAction) {
+        get { self[ShowSheetKey.self] }
+        set { self[ShowSheetKey.self] = newValue }
+    }
+}
+```
+
+> In iOS 18 you can use ```@Entry``` macro to remove boiler plate code needed to create a custom Environment value. 
+
+Finally, we inject the ```showSheet``` environment value to the root view of the application. This is shown below: 
+
+``` swift 
+@main
+struct LearnApp: App {
+    
+    @State private var selectedSheet: Sheet?
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                ContentView()
+                    .environment(\.showSheet, SheetAction(action: { sheet in
+                        selectedSheet = sheet
+                    }))
+                    .sheet(item: $selectedSheet) { sheet in
+                        switch sheet {
+                            case .settings:
+                                Text("Settings")
+                            case .contact(let name):
+                                Text("Contacting \(name)")
+                        }
+                    }
+            }
+        }
+    }
+}
+```
+
+Now, we can enjoy the fruits of our labor by utilizing the ```showSheet``` environment value in our views. This is shown below: 
+
+``` swift 
+struct ContentView: View {
+    
+    @Environment(\.showSheet) private var showSheet
+    
+    var body: some View {
+        VStack {
+            Button("Show Settings Screen") {
+                showSheet(.settings)
+            }
+            
+            Button("Show Contact Screen") {
+                showSheet(.contact("John Doe"))
+            }
+        }
+        .padding()
+    }
+}
+```
+
+Once you call `showSheet`, it sets the `selectedSheet` in the App file. This triggers a binding update, causing the `sheet` modifier to display the corresponding sheet.
+
+> Since you're using a single `sheet` view modifier, this approach also ensures that only one sheet can be displayed at a time, preventing multiple sheets from overlapping.
+
+You can also refactor your switch case in the App file and move it into a designated view. 
+
+``` swift 
+struct SheetView: View {
+    
+    let sheet: Sheet
+    
+    var body: some View {
+        switch sheet {
+            case .settings:
+                Text("Settings")
+            case .contact(let name):
+                Text("Contacting \(name)")
+        }
+    }
+}
+
+ ContentView()
+                    .environment(\.showSheet, SheetAction(action: { sheet in
+                        selectedSheet = sheet
+                    }))
+                    .sheet(item: $selectedSheet) { sheet in
+                        SheetView(sheet: sheet)
+                    }
+
+```
+
+> You can also conform Sheet to the view and implement the body property to return the appropriate view for the sheet. 
+
+### What about onDismiss?
+
+In certain situations you need to handle the ```onDismiss``` event of the ```sheet``` modifier. Currently, our implementation does not support ```onDismiss```.  
+
+### Conclusion
+
+The Global Sheets Pattern in SwiftUI provides a powerful and streamlined approach to managing multiple sheets across your application. By centralizing sheet management with a single `SheetAction` struct and leveraging custom environment values, you can reduce redundancy, simplify your codebase, and make your sheet presentation logic more scalable.
+
+This pattern not only enhances maintainability but also allows for a more flexible architecture, accommodating various sheets without cluttering your views with multiple modifiers. As demonstrated, adopting ideas from other platforms and implementing them in SwiftUI can lead to a cleaner and more efficient app design. Whether you're managing simple sheets or more complex workflows, this pattern offers a user-friendly API that ensures a smooth and cohesive user experience.
