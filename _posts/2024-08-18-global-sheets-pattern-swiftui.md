@@ -337,6 +337,10 @@ The `showSheet` function now supports a second argument for passing a dismiss cl
 
 In rare cases where you need to display one sheet on top of another, you can still use the default `sheet` modifier to present sheets in a stacked manner.
 
+### Source code: 
+
+You can download the complete source [here](https://gist.github.com/azamsharpschool/9e7732f85f85353de069425454d0e8dc).  
+
 ### Conclusion
 
 The Global Sheets Pattern in SwiftUI provides a powerful and streamlined approach to managing multiple sheets across your application. By centralizing sheet management with a single `SheetAction` struct and leveraging custom environment values, you can reduce redundancy, simplify your codebase, and make your sheet presentation logic more scalable.
