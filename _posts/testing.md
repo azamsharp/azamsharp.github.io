@@ -105,4 +105,40 @@ struct CustomerListScreen: View {
 
 Instead of managing multiple sheets, we're now using a single sheet modifier that binds to the ```activeSheet``` enum. When the value of ```activeSheet``` changes, the sheet modifier is automatically triggered. This approach allows you to dynamically return the view associated with the active sheet, streamlining the process and reducing the complexity of handling multiple sheets.
 
+Although this works but we still end up with multiple sheet modifiers for each screen. This is not a problem per se but maybe there is a room for improvement. 
+
+### Global Sheets 
+
+React Hooks are special functions in React that allow you to use state and other React features in functional components, which were previously only available in class components.
+
+One way to implement a similar behavior is by using custom Environment values in SwiftUI. This will allow us to reach a the following result. 
+
+``` swift 
+struct ContentView: View {
+    
+    @Environment(\.showSheet) private var showSheet
+    
+    var body: some View {
+        VStack {
+            Button("Show Settings Screen") {
+                showSheet(.settings)
+            }
+            
+            Button("Show Contact Screen") {
+                showSheet(.contact("John Doe"))
+            }
+        }
+        .padding()
+    }
+}
+```
+
+Don't worry the above code will not work right now since there is no such thing called ```showSheet```. 
+
+Now that we have a clear vision of our final implementation, we can focus on the steps needed to achieve it.
+
+We will start by creating a custom Environment value. 
+
+
+
 
