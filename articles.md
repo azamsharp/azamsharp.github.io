@@ -9,8 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [Global Sheets Pattern in SwiftUI]()
-Managing multiple sheets in SwiftUI can become cumbersome with traditional approaches. This article introduces the Global Sheets Pattern, a streamlined method for centralizing sheet management using a single `SheetAction` struct and custom environment values. By exploring various techniques for presenting sheets and leveraging ideas from other platforms, we demonstrate how this pattern simplifies sheet handling, improves code maintainability, and enhances app architecture.
+### [Global Sheets Pattern in SwiftUI](_posts/2024-08-18-global-sheets-pattern-swiftui.md)
+Managing multiple sheets in SwiftUI can become cumbersome with traditional approaches. This article introduces the Global Sheets Pattern, a streamlined method for centralizing sheet management using a single `SheetAction` struct and custom environment values. 
+
+By exploring various techniques for presenting sheets and leveraging ideas from other platforms, we demonstrate how this pattern simplifies sheet handling, improves code maintainability, and enhances app architecture.
 
 ### [Navigation Patterns in SwiftUI](_posts/2024-07-29-navigation-patterns-in-swiftui.md)
 Navigation has often been a challenge in SwiftUI applications. Initially, SwiftUI introduced NavigationView, which was later replaced by NavigationStack in iOS 16.

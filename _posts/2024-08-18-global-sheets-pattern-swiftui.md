@@ -5,6 +5,8 @@ Managing sheet presentations in SwiftUI can quickly become complex, especially w
 
 What if there was a way to centralize sheet management, creating a cleaner, more maintainable solution with a user-friendly API? In this article, we’ll explore the Global Sheets Pattern in SwiftUI—a method that simplifies the management of sheets by centralizing their logic. We’ll examine various approaches to displaying and managing sheets and demonstrate how adopting concepts from other platforms can improve your app’s architecture, making sheet handling more efficient and scalable.
 
+> If you're interested in iOS development courses and live workshops, check out [https://azamsharp.school](https://azamsharp.school).
+
 ### Displaying a Basic Sheet  
 
 There are various ways of displaying sheets in SwiftUI. The simplest approach is to use the ```isPresented``` argument to control when the sheet is shows. In the code below we are displaying a sheet when the ```isPresented``` property is changed.       
