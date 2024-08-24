@@ -4,6 +4,7 @@
 - Updated (07/31/2024) Added onChange modifier technique in section [Removing Navigation Dependency from Custom Views](#removing-navigation-dependency-from-custom-views).
 - Updated (08/23/2024) Added a new section on TabView Navigation using Environment Values (navigate) syntax. 
 
+--- 
 
 Navigation has often been a challenge in SwiftUI applications. Initially, SwiftUI introduced `NavigationView`, which was later replaced by `NavigationStack` in iOS 16.
 
