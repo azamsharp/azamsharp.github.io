@@ -1,9 +1,9 @@
 
 # Navigation Patterns in SwiftUI  
 
-Updated (07/31/2024)
+- Updated (07/31/2024) Added onChange modifier technique in section [Removing Navigation Dependency from Custom Views](#removing-navigation-dependency-from-custom-views).
+- Updated (08/23/2024) Added a new section on TabView Navigation using Environment Values (navigate) syntax. 
 
-- Added onChange modifier technique in section [Removing Navigation Dependency from Custom Views](#removing-navigation-dependency-from-custom-views)
 
 Navigation has often been a challenge in SwiftUI applications. Initially, SwiftUI introduced `NavigationView`, which was later replaced by `NavigationStack` in iOS 16.
 
@@ -17,6 +17,7 @@ The outline of the article is shown below:
 - [Implementing navigation Hook Using Environment Values](#implementing-navigation-hook-using-environment-values)
 - [Removing Navigation Dependency from Custom Views](#removing-navigation-dependency-from-custom-views)
 - [TabView Navigation](#tabview-navigation)
+- [TabView Navigation Using Hooks](#tabview-navigation-using-hooks-environment-values)
 - NavigationPath (Coming soon)
 - NavigationSplitView (Coming soon)
 - Navigation Interoperability Between UIKit & SwiftUI Apps (Coming soon)
@@ -688,6 +689,75 @@ class Router {
 If you have more tab items, you will create additional arrays for each. Keep in mind that Apple recommends having between 3-5 tab items on iPhone. You can have more tab items on iPad apps, but always aim for simplicity.
 
 You can download the code for TabView Navigation [here](https://gist.github.com/azamsharpschool/06322343914a5791ae0bc4833664b053).
+
+### TabView Navigation Using Hooks (Environment Values) 
+
+This section was added on 08/23/2024.
+
+While it's possible to use a `Router` class as an `Observable`, I’ve never been fond of that approach. The main reason is that I reserve `@Observable` for data that will be displayed or used directly in the body of a view. Navigation, on the other hand, feels more like a service, similar to an `HTTPClient`, that should be accessible through Environment Values rather than through Environment. Another reason is my preference for using structs over classes.
+
+If you follow the approach discussed in [Implementing Navigation Hook Using Environment Values](#implementing-navigation-hook-using-environment-values), it won’t work seamlessly with `TabViews`. The primary issue is that each tab in a `TabView` requires a separate `NavigationStack` to maintain its navigation history. However, this problem can be easily resolved while still using the intuitive syntax like `navigate(.patient(.list))`.
+
+The key is to update your `PatientNavigationStack` to track only patient-related routes. The `navigationDestination` view modifier should focus on the `PatientRoute` type, and the environment value for `NavigationAction` should only append `PatientRoute` types to the routes array. This allows each tab item to maintain its own route array. The implementation is shown below:
+
+``` swift 
+struct PatientNavigationStack: View {
+    
+    @State private var routes: [PatientRoute] = []
+    
+    var body: some View {
+        NavigationStack(path: $routes) {
+            PatientDashboardScreen()
+            .navigationDestination(for: PatientRoute.self) { route in
+                route.destination
+            }
+        }.environment(\.navigate, NavigateAction(action: { route in
+            if case let .patient(patientRoute) = route {
+                routes.append(patientRoute)
+            }
+        }))
+    }
+}
+```
+
+A similar implementation can be used for ```DoctorNavigationStack```. This is shown below: 
+
+``` swift 
+struct DoctorNavigationStack: View {
+    
+    @State private var routes: [DoctorRoute] = []
+    
+    var body: some View {
+        NavigationStack(path: $routes) {
+            DoctorDashboardScreen()
+            .navigationDestination(for: DoctorRoute.self) { route in
+                route.destination
+            }
+        }.environment(\.navigate, NavigateAction(action: { route in
+            if case let .doctor(doctorRoute) = route {
+                routes.append(doctorRoute)
+            }
+        }))
+    }
+}
+```
+
+Now, you can start using your new ```navigate``` environment value as shown below: 
+
+``` swift 
+struct PatientDashboardScreen: View {
+    
+    @Environment(\.navigate) private var navigate
+    
+    var body: some View {
+        Button("Patient List") {
+            navigate(.patient(.list))
+        }
+    }
+}
+```
+
+I like this approach much better and intuitive as compared to using ```Router```. 
 
 ### What About Modals?
 
