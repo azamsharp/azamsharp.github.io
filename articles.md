@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Introduction to Communication Patterns in SwiftUI](_posts/2024-09-22-introduction-to-communication-patterns-in-swiftui.md)
+SwiftUI provides a powerful and declarative way to build UIs, allowing views to react to state changes automatically. However, managing communication between views, especially when passing data or events from one view to another, can be challenging if not handled properly. In this article, we'll explore several communication patterns in SwiftUI that enable seamless data flow between views, ensuring that updates occur efficiently and in a way that aligns with SwiftUI’s architecture.
+
+
 ### [Global Sheets Pattern in SwiftUI](_posts/2024-08-18-global-sheets-pattern-swiftui.md)
 Managing multiple sheets in SwiftUI can become cumbersome with traditional approaches. This article introduces the Global Sheets Pattern, a streamlined method for centralizing sheet management using a single `SheetAction` struct and custom environment values. 
 
