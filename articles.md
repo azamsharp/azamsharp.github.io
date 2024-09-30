@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [The Hidden Cost of AI-Generated Unit Tests: Sacrificing Domain Knowledge](_posts/2024-09-30-hidden-cost-of-ai-unit-tests.md)
+Over the past 20 years, I have worked with a diverse range of large organizations across various industries, including retail, healthcare, oil and gas, and energy. The biggest challenge I encountered wasn't the programming languages, technologies, or platforms—it was the domain knowledge. To build high-quality software, it's crucial to fully grasp the business rules and understand the intricate processes that drive operations behind the scenes.
+
+
 ### [Global Sheets Pattern in SwiftUI](_posts/2024-08-18-global-sheets-pattern-swiftui.md)
 Managing multiple sheets in SwiftUI can become cumbersome with traditional approaches. This article introduces the Global Sheets Pattern, a streamlined method for centralizing sheet management using a single `SheetAction` struct and custom environment values. 
 
