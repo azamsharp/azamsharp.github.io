@@ -1,7 +1,7 @@
 # Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture
 
 Updated (10/10/2024)
-- Added new section Testing Logic in SwiftUI Views 
+- Added new section [Testing Logic in SwiftUI Views](#testing-logic-in-swiftui-views) 
 
 Updated (01/22/2024)
 - Added "TabView Navigation" 
