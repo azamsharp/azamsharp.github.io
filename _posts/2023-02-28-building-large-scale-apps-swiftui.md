@@ -1,14 +1,17 @@
 # Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture
 
+Updated (10/10/2024)
+- Added new section Testing Logic in SwiftUI Views 
+
+Updated (01/22/2024)
+- Added "TabView Navigation" 
+
 Updated (08/31/2023)
 - Added "Problems with MVVM with SwiftUI". 
 - Updated "Understanding the MV Pattern" 
 - Updated "Navigation"
 - Updated "Displaying Errors"
 - Added "Formatting" 
-
-Updated (01/22/2024)
-- Added "TabView Navigation" 
 
 Software architecture is always a topic for hot debate, specially when there are so many different choices. For the last 8-12 months, I have been experimenting with MV pattern to build client/server apps and wrote about it in my original article [SwiftUI Architecture - A Complete Guide to MV Pattern Approach](https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html). In this article, I will discuss how MV pattern can be applied to build large scale client/server applications. 
 
@@ -1713,6 +1716,136 @@ class IntegrationTests: XCTestCase {
 The above integration test makes sure that the HTTP client layer is working as expected. The integration is between the network client and the server. The client is making sure that the response is correct and valid for a successful login operation.  
 
 Unmanaged dependencies like payment gateway, SMTP clients etc can be mocked out during integration tests. For managed dependencies, use the concrete implementations. 
+
+## Testing Logic in SwiftUI Views 
+
+In SwiftUI, the code within views is primarily **presentation logic**, not business logic. The purpose of this code is to transform and present data that has already been processed by your business rules, making it suitable for display. As a result, any logic in the view is often straightforward and may not need dedicated testing. Instead, this kind of code is usually covered indirectly through end-to-end tests that validate the entire user flow, ensuring the application behaves as expected.
+
+Take a look at the following example: 
+
+``` swift 
+struct LoginView: View {
+    @State private var username: String = ""
+    @State private var password: String = ""
+    
+    private var isFormValid: Bool {
+        !username.isEmptyOrWhiteSpace && !password.isEmptyOrWhiteSpace
+    }
+    
+    var body: some View {
+        VStack {
+            Form {
+                TextField("User name", text: $username)
+                TextField("Password", text: $password)
+                Button("Login") {
+                    // Login action
+                }
+                .disabled(!isFormValid)
+            }
+        }
+    }
+}
+
+```
+
+In the example above, the form validation is performed directly in the view using the `isFormValid` property, which relies on the `isEmptyOrWhiteSpace` extension method for checking if the input is valid. To test the `isFormValid` property effectively, you can focus on writing unit tests for the `isEmptyOrWhiteSpace` extension, as it underpins the validation logic. Here’s how you can write those tests:
+
+``` swift 
+extension String {
+    var isEmptyOrWhiteSpace: Bool {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+}
+
+import XCTest
+
+class StringExtensionsTests: XCTestCase {
+    
+    func testIsEmptyOrWhiteSpace() {
+        // Test cases where the string should be considered empty or whitespace
+        XCTAssertTrue("".isEmptyOrWhiteSpace, "Empty string should be considered as empty or whitespace")
+        XCTAssertTrue("   ".isEmptyOrWhiteSpace, "String with only spaces should be considered as empty or whitespace")
+        XCTAssertTrue("\n\t".isEmptyOrWhiteSpace, "String with only newlines or tabs should be considered as empty or whitespace")
+        
+        // Test cases where the string should not be considered empty or whitespace
+        XCTAssertFalse("abc".isEmptyOrWhiteSpace, "String with characters should not be considered as empty or whitespace")
+        XCTAssertFalse(" abc ".isEmptyOrWhiteSpace, "String with characters and surrounding whitespace should not be considered as empty or whitespace")
+        XCTAssertFalse("123".isEmptyOrWhiteSpace, "String with numeric characters should not be considered as empty or whitespace")
+    }
+}
+
+```
+
+Sometimes the view may be responsible for sorting the records. This is specially true if you are using **Container/Presentation** pattern. The code is shown below: 
+
+``` swift 
+struct ContentView: View {
+    let httpClient: HTTPClientProtocol
+    @State private var products: [Product] = []
+    @State private var min: Double?
+    @State private var max: Double?
+    @State private var filteredProducts: [Product] = []
+    
+    private var filteredProducts: [Product] {
+        guard let min = min,
+              let max = max else { return }
+        
+        return products.filter {
+            $0.price >= min && $0.price <= max
+        }
+    }
+}
+```
+
+> I usually prefer to extract this kind of logic and place it in an `ObservableObject`, which makes it reusable across different views in the application. This approach allows you to keep the views focused on presentation while keeping the business logic separate.
+
+If you're using the **Container/Presentation** pattern, you can still test the `filterProducts` method by separating the filtering logic into its own struct. This enables you to write unit tests for the filtering functionality independently. Here's how you can achieve that:
+``` swift 
+struct ProductFilterForm {
+    var min: Double?
+    var max: Double?
+    
+    func filterProducts(_ products: [Product]) -> [Product] {
+        guard let min = min,
+              let max = max else { return [] }
+        
+        return products.filter {
+            $0.price >= min && $0.price <= max
+        }
+    }
+}
+
+func test_user_can_filter_products_by_price() throws {
+    self.continueAfterFailure = false
+
+    let products = [
+        Product(id: 1, title: "Product 1", price: 10),
+        Product(id: 2, title: "Product 2", price: 100),
+        Product(id: 3, title: "Product 3", price: 200),
+        Product(id: 4, title: "Product 4", price: 500)
+    ]
+
+    let expectedFilteredProducts = [
+        Product(id: 2, title: "Product 2", price: 100),
+        Product(id: 3, title: "Product 3", price: 200),
+        Product(id: 4, title: "Product 4", price: 500)
+    ]
+
+    let productFilterForm = ProductFilterForm(min: 100, max: 500)
+    let filteredProducts = productFilterForm.filterProducts(products)
+
+    for expectedProduct in expectedFilteredProducts {
+        let product = filteredProducts.first { $0.id == expectedProduct.id }
+
+        XCTAssertNotNil(product)
+        XCTAssertEqual(product!.title, expectedProduct.title)
+        XCTAssertEqual(product!.price, expectedProduct.price)
+    }
+}
+
+```
+
+The techniques discussed above can be applied to test the logic within your SwiftUI views, depending on the needs of your project. In my experience, most SwiftUI view logic is simple enough that dedicated testing is often unnecessary. I find it more valuable to focus on testing domain logic or writing end-to-end tests, which provide a better return on investment. Ultimately, the decision comes down to the specific requirements of your project and the way your application is structured.
 
 ## Code Coverage 
 
