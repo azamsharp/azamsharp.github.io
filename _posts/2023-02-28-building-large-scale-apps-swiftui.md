@@ -2,7 +2,6 @@
 
 Updated (10/10/2024)
 - Added new section [Testing Logic in SwiftUI Views](#testing-logic-in-swiftui-views) 
-- [Video: DC iOS: SwiftUI Architecture and Best Practices](https://youtu.be/MvNlsx5AP7k?si=_4JRUY8RlP6lRCCk) 
 
 Updated (01/22/2024)
 - Added "TabView Navigation" 
