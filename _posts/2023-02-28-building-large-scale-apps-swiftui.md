@@ -1797,7 +1797,7 @@ struct ContentView: View {
 }
 ```
 
-> I usually prefer to extract this kind of logic and place it in an `ObservableObject`, which makes it reusable across different views in the application. This approach allows you to keep the views focused on presentation while keeping the business logic separate.
+> I usually prefer to extract this kind of logic and place it in an `ObservableObject`, which makes it reusable across different views in the application. 
 
 If you're using the **Container/Presentation** pattern, you can still test the `filterProducts` method by separating the filtering logic into its own struct. This enables you to write unit tests for the filtering functionality independently. Here's how you can achieve that:
 ``` swift 
