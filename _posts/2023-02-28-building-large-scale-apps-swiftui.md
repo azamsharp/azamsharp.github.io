@@ -1847,6 +1847,8 @@ func test_user_can_filter_products_by_price() throws {
 
 The techniques discussed above can be applied to test the logic within your SwiftUI views, depending on the needs of your project. In my experience, most SwiftUI view logic is simple enough that dedicated testing is often unnecessary. I find it more valuable to focus on testing domain logic or writing end-to-end tests, which provide a better return on investment. Ultimately, the decision comes down to the specific requirements of your project and the way your application is structured.
 
+Another approach is to use [ViewInspector](https://github.com/nalexn/ViewInspector), a tool that allows you to access the view hierarchy at runtime in SwiftUI. With ViewInspector, you can write tests similar to React component tests or Flutter widget tests, making it possible to verify the structure, state, and behavior of your views more effectively. This enables you to validate view content, check bindings, and simulate user interactions in a way that's more targeted than traditional snapshot or UI testing.
+
 ## Code Coverage 
 
 Code coverage is a metric that calculates how much of your code is covered under test. Let's take a very simple example. In the code below we have a ```BankAccount``` class, which consists of ```deposit``` and ```withdraw``` functions. 
