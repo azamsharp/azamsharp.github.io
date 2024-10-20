@@ -9,6 +9,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Introduction to Communication Patterns in SwiftUI](_posts/2024-09-22-introduction-to-communication-patterns-in-swiftui.md)
+SwiftUI provides a powerful and declarative way to build UIs, allowing views to react to state changes automatically. However, managing communication between views, especially when passing data or events from one view to another, can be challenging if not handled properly. In this article, we'll explore several communication patterns in SwiftUI that enable seamless data flow between views, ensuring that updates occur efficiently and in a way that aligns with SwiftUI’s architecture.
+
 ### [The Hidden Cost of AI-Generated Unit Tests: Sacrificing Domain Knowledge](_posts/2024-09-30-hidden-cost-of-ai-unit-tests.md)
 Over the past 20 years, I have worked with a diverse range of large organizations across various industries, including retail, healthcare, oil and gas, and energy. The biggest challenge I encountered wasn't the programming languages, technologies, or platforms—it was the domain knowledge. To build high-quality software, it's crucial to fully grasp the business rules and understand the intricate processes that drive operations behind the scenes.
 
