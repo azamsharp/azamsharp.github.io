@@ -18,3 +18,6 @@
 16. [RailsConf 2014 - Keynote: Writing Software by David Heinemeier Hansson](https://youtu.be/9LfmrkyP81M)
 17. [The Ultimate Guide to Building SwiftData Applications](https://azamsharp.com/2023/07/04/the-ultimate-swift-data-guide.html)
 18. [Backyard Birds: Building an app with SwiftData and widgets](https://developer.apple.com/documentation/swiftui/backyard-birds-sample)
+19. [Introduction to Communication Patterns in SwiftUI](https://azamsharp.com/2024/09/22/introduction-to-communication-patterns-in-swiftui.html)
+20. [Global Sheets Pattern in SwiftUI](https://azamsharp.com/2024/08/18/global-sheets-pattern-swiftui.html)
+21. [Navigation Patterns in SwiftUI](https://azamsharp.com/2024/07/29/navigation-patterns-in-swiftui.html)
