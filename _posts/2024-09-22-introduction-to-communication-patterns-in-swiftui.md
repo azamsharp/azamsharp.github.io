@@ -5,8 +5,6 @@ SwiftUI provides a powerful and declarative way to build UIs, allowing views to 
 
 We will dive into a practical scenario: starting from a list screen, where a user can tap a button to open a sheet to add a new item. The focus of the article will be on different approaches that allow the newly added item to communicate back to the list screen and update it accordingly. By exploring these patterns—such as closures, bindings, and `@Environment` objects—you’ll learn best practices for ensuring your SwiftUI views interact harmoniously, without workarounds like boolean flags to force view refreshes.
 
-> Become a highly valued iOS developer with [AzamSharp School](https://azamsharp.school) — your ultimate destination for mastering app development through one of the largest collections of iOS video tutorials and workshops. Level up your skills and create exceptional apps!
-
 ### Option 1: Callback Using Closures 
 
 One of the simplest approaches to communication between views is using closures as callbacks. In this case, `UserListScreen` can pass a closure to `AddUserScreen`, which `AddUserScreen` will call after collecting and validating the necessary information. This allows the new data to be passed back to `UserListScreen` through the closure.
@@ -78,6 +76,21 @@ There are a couple of interesting points to highlight in `UserListScreen`. First
 > Choosing to maintain private state for model objects within a view depends on the specific use case. Local state is ideal when the data is only relevant to that view and does not need to be shared across other parts of the application.
 
 The `handleUserAdd` method, defined inside `UserListScreen`, is responsible for updating the `users` array by appending the new user to the list.  
+
+<div style="
+    background-color: #f0f8ff;
+    border-left: 5px solid #0073e6;
+    padding: 20px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    margin: 20px 0;
+">
+    <strong>Want to become a highly valued iOS developer?</strong> 
+    Check out AzamSharp School for comprehensive courses and hands-on learning at 
+    <a href="https://azamsharp.school" style="color: #0073e6; text-decoration: none; font-weight: bold;">azamsharp.school</a>.
+</div>
 
 ### Option 2: @Binding 
 

@@ -19,6 +19,21 @@ You can still be an effective developer without deep domain knowledge, but gaini
 
 As I mentioned before, one of the best way to understand an **unfamiliar** domain is to write unit tests for it. Let's take an example of a user story from medical insurance industry. 
 
+<div style="
+    background-color: #f0f8ff;
+    border-left: 5px solid #0073e6;
+    padding: 20px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    margin: 20px 0;
+">
+    <strong>Want to become a highly valued iOS developer?</strong> 
+    Check out AzamSharp School for comprehensive courses and hands-on learning at 
+    <a href="https://azamsharp.school" style="color: #0073e6; text-decoration: none; font-weight: bold;">azamsharp.school</a>.
+</div>
+
 #### User Story: Managing Complex Insurance Plan Coverage
 Title: Process Patient Claim Based on Specific Insurance Plan Rules
 

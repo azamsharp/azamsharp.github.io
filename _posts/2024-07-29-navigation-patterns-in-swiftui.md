@@ -202,6 +202,21 @@ Now, when you tap on the button, you will be taken to the patient list screen.
 
 > When structuring your nested enums, make sure to talk to a domain expert and gain insights into the business aspects of your application. Knowledge of the domain will help you craft better and more intuitive routes, providing a seamless experience for developers.
 
+<div style="
+    background-color: #f0f8ff;
+    border-left: 5px solid #0073e6;
+    padding: 20px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    margin: 20px 0;
+">
+    <strong>Want to become a highly valued iOS developer?</strong> 
+    Check out AzamSharp School for comprehensive courses and hands-on learning at 
+    <a href="https://azamsharp.school" style="color: #0073e6; text-decoration: none; font-weight: bold;">azamsharp.school</a>.
+</div>
+
 ### Global Routing in SwiftUI
 
 In the last section, we implemented routing based on an enum. We also looked at nested enums and how nesting routes can help you organize and structure complicated scenarios in your application.

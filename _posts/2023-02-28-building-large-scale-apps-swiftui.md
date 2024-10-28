@@ -118,6 +118,21 @@ If you are interested in learning more about the concept of virtual DOM then che
 
 For three years, I've employed the conventional MVVM approach alongside SwiftUI, but consistently encountered struggles with the framework. I regrettably overlooked Apple's beneficial property wrappers, attempting instead to create solutions from scratch. This misguided effort led to increased complications, a surplus of code, and heightened maintenance demands. It was during this period that I realized the imperative for a more effective strategy.
 
+<div style="
+    background-color: #f0f8ff;
+    border-left: 5px solid #0073e6;
+    padding: 20px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    margin: 20px 0;
+">
+    <strong>Want to become a highly valued iOS developer?</strong> 
+    Check out AzamSharp School for comprehensive courses and hands-on learning at 
+    <a href="https://azamsharp.school" style="color: #0073e6; text-decoration: none; font-weight: bold;">azamsharp.school</a>.
+</div>
+
 ## Understanding the MV Pattern 
 
 The main idea behind the MV pattern is to allow views directly talk to the model. In MV pattern, **views are the view model**. This eliminates the need for creating unnecessary view models for each view, which simply contributes to the size of the project but does not provide any additional benefits. Keep in mind that every single line of code you write also needs to be maintained. This means that your code is not an asset but a liability.  
@@ -2017,6 +2032,21 @@ Unfortunately, there is no ideal test. It all depends on your project and requir
 Remember to test the public API exposed by the module and not the implementation details. This way you can write useful quality tests, which will also help you to catch errors.  
 
 Don't create protocols/interfaces/contracts with the sole purpose of mocking. If a protocol consists of a single concrete implementation then use the concrete implementation and remove the interface/contract. Your architecture should be based on current business needs and not on what if scenarios that may never happen. Remember YAGNI (You aren't going to need it). Less code is better than more code. 
+
+<div style="
+    background-color: #f0f8ff;
+    border-left: 5px solid #0073e6;
+    padding: 20px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    margin: 20px 0;
+">
+    <strong>Want to become a highly valued iOS developer?</strong> 
+    Check out AzamSharp School for comprehensive courses and hands-on learning at 
+    <a href="https://azamsharp.school" style="color: #0073e6; text-decoration: none; font-weight: bold;">azamsharp.school</a>.
+</div>
 
 ## Conclusion 
 
