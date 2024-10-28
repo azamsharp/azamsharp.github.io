@@ -9,6 +9,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Simplifying List Sorting in SwiftUI: A Guide to Custom Environment Values](_posts/2024-10-27-simplifying-list-sorting-in-swiftui-a-guide-to-custom-environment-values.md)
+In React, **hooks** allow function components to access state and lifecycle features, with **custom hooks** enabling the reuse of common logic. Examples include `useFetch` for fetching data, `useLocalStorage` for persisting state, and `useSorting` for sorting lists. In SwiftUI, while there is no direct equivalent to hooks, similar functionality can be achieved using **custom Environment values** like `dismiss` and `colorScheme`. This article demonstrates how to create a custom Environment value in SwiftUI to implement reusable sorting logic, akin to React’s custom hooks.
+
 ### [Introduction to Communication Patterns in SwiftUI](_posts/2024-09-22-introduction-to-communication-patterns-in-swiftui.md)
 SwiftUI provides a powerful and declarative way to build UIs, allowing views to react to state changes automatically. However, managing communication between views, especially when passing data or events from one view to another, can be challenging if not handled properly. In this article, we'll explore several communication patterns in SwiftUI that enable seamless data flow between views, ensuring that updates occur efficiently and in a way that aligns with SwiftUI’s architecture.
 
