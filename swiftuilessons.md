@@ -1,5 +1,7 @@
 # Resources 
 
+- [Slides: SwiftUI Architecture: Patterns and Best Practices](https://docs.google.com/presentation/d/1o1CBfxABjp-AH13szrHf_QXoTq1oVXiAiiqkg1E7KgA/edit?usp=sharing)
+
 1. [Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture](https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html) 
 2. [Pragmatic Testing and Avoiding Common Pitfalls](https://azamsharp.com/2012/12/23/pragmatic-unit-testing.html)
 3. [A Better Way to Handle Events for SwiftUI Views](https://azamsharp.com/2023/01/24/grouping-events-swiftui-view-using-enums.md.html)
