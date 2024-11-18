@@ -9,6 +9,13 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Deep Dive into Environment in SwiftUI](_posts/2024-11-18-deep-dive-into-environment-in-swiftui.md)
+SwiftUI simplifies app development with its declarative syntax and reactive data handling, making it easy to build dynamic and responsive UIs. Central to this framework is the `@Environment` property wrapper and its tools, enabling seamless shared state management across views.  
+
+This article explores state management in SwiftUI, from `@EnvironmentObject` and `ObservableObject` to the new `@Observable` and `@Bindable` macros in iOS 17. You’ll learn how to inject and access global state, optimize state propagation, and streamline complex view hierarchies.  
+
+By the end, you’ll master using SwiftUI’s environment tools to create scalable, maintainable, and modular components. Whether you’re new to SwiftUI or refining your skills, this guide has you covered. Let’s dive in!
+
 ### [Simplifying List Sorting in SwiftUI: A Guide to Custom Environment Values](_posts/2024-10-27-simplifying-list-sorting-in-swiftui-a-guide-to-custom-environment-values.md)
 In React, **hooks** allow function components to access state and lifecycle features, with **custom hooks** enabling the reuse of common logic. Examples include `useFetch` for fetching data, `useLocalStorage` for persisting state, and `useSorting` for sorting lists. In SwiftUI, while there is no direct equivalent to hooks, similar functionality can be achieved using **custom Environment values** like `dismiss` and `colorScheme`. This article demonstrates how to create a custom Environment value in SwiftUI to implement reusable sorting logic, akin to React’s custom hooks.
 

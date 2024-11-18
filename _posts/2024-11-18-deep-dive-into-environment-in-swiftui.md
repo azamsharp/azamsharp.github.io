@@ -548,6 +548,3 @@ The transition from `@EnvironmentObject` to the `Observation` framework in iOS 1
 It's essential to strike a balance when using environment objects—leveraging their power for deeply nested view hierarchies while avoiding overuse that could lead to unwieldy dependencies. By passing only the necessary data to subviews and utilizing SwiftUI's diffing mechanism, you can optimize performance and maintain a clear data flow.  
 
 Ultimately, using `@Environment` effectively can lead to modular, testable, and maintainable SwiftUI applications. With these tools in your development toolkit, you can confidently architect AI systems or any complex application that requires shared state management, ensuring scalability and elegance in your design.
-
-
-
