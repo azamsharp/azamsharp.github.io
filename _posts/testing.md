@@ -1,160 +1,300 @@
 
-# Simplifying List Sorting in SwiftUI: A Guide to Custom Environment Values 
+# Deep Dive into Environment in SwiftUI 
 
-In React, **hooks** are special functions that enable you to tap into React's state and lifecycle features within function components. Additionally, you can create **custom hooks** to encapsulate and reuse logic across your components. Here are a few common examples of custom hooks:
+// TODO 
 
-- **`useFetch`**: A custom hook that manages data fetching from an API, returning the data, loading state, and any errors.
-- **`useLocalStorage`**: This hook helps manage state that persists in the browser’s localStorage.
-- **`useSorting`**: This hook provides sorting functionality for lists based on a specific property or criteria.
+### Observable Object Protocol
 
-> In React, components are similar to **views** in SwiftUI.
+Before the introduction of the `Observation` framework in iOS 17, SwiftUI developers primarily used the `ObservableObject` protocol to create new sources of truth for their applications. 
 
-While SwiftUI doesn’t have a direct equivalent to React hooks, you can achieve similar functionality using **custom Environment values**. You may already be familiar with built-in environment values like `dismiss`, `authorizationController`, `locale`, and `colorScheme`, which offer global access to shared values across your app.
+> I will discuss Observation framework later. 
 
-In this article, I’ll show you how to create a custom Environment value in SwiftUI that mimics the behavior of a custom hook, providing reusable sorting logic for your application.
+The ObservableObject protocol is a fundamental feature in SwiftUI used to create and manage shared data that can be observed by SwiftUI views. By conforming to ObservableObject, a class becomes a source of truth that SwiftUI views can automatically monitor for changes, allowing the views to update their UI dynamically when the data changes.
 
-### What Problem Are We Solving?
+One of the benefits of a class conforming to ```ObservableObject``` protocol is that the instance of the class can be placed in the Environment Object, making it available globally in the views. Globally is a loaded term since the availability of the Environment Object depends on where in the hierarchy the object was injected. 
 
-Sorting is a common requirement when displaying lists of items on the screen. Depending on the model’s properties, sorting criteria can vary. We aim to create a solution that makes it easy to sort lists inside your views, regardless of the data type.
+Take a look at the following hierarchy. 
 
-The goal is to provide a **clear and easy-to-use API**. Here’s what we want to achieve by the end of this guide:
+![SwiftUI View Hierarchy](/images/env-1.png)
 
-```swift
-struct MovieListView: View {
-    @Environment(\.sort) var sort
-    let movies: [Movie]
-    
-    private var sortedMovies: [Movie] {
-        sort(movies, by: \.title, .asc)
-    }
-}
-```
+The root view has two children and each child has further two children. If we inject an environment object at the root of the application then it will be available to all the views, including the root view. This is shown in the following screenshot. 
 
-This solution will simplify sorting and make your code cleaner and more reusable, similar to the power of custom hooks in React.
+![Injecting Environment Object](/images/env-2.png)
 
-### Solution:
+The environment object is injected at the root of the application, this means it is available in the root view and all the other views that are children of the root view. 
 
-The provided code offers a concise and efficient solution for sorting data in SwiftUI using custom environment values. This approach makes it easier to handle sorting logic within SwiftUI views, by centralizing the functionality in a reusable and declarative manner.
+If environment object was injected in one of the child views then it will only be available to that child and all the children of that child view. This is shown in the following screenshot. 
 
-#### 1. **`SortOrder` Enum:**
-The `SortOrder` enum defines two possible sorting options: ascending (`asc`) and descending (`desc`). This simple enum helps in specifying the order in which items should be sorted.
+![Injecting Environment Object](/images/env-3.png)
 
-```swift
-enum SortOrder {
-    case asc, desc
-}
-```
+You are also not limited to a single environment object. Based on your needs you can inject multiple environment objects at different or even same points of your application. This is shown in the screenshot below: 
 
-By providing this enum, we standardize sorting behavior and make it more explicit, allowing views or other parts of the code to easily choose the appropriate sorting order.
+![Multiple Environment Objects](/images/env-4.png)
 
-#### 2. **`Sort` Struct:**
-The `Sort` struct encapsulates the sorting logic. It defines a property `sortOrder` to store the current order (ascending by default) and uses a `callAsFunction` method to perform the actual sorting.
+Why would you choose to inject different environment objects at various points in your SwiftUI view hierarchy? Consider a scenario where you're building a hospital app with multiple tabs such as **Home**, **Patients**, and **Doctors**. 
 
-```swift
-struct Sort {
-    
-    var sortOrder: SortOrder = .asc
-    
-    func callAsFunction<T: Comparable, U>(_ array: [U], by keyPath: KeyPath<U, T>, _ order: SortOrder = .asc) -> [U] {
-        switch order {
-            case .asc:
-                return array.sorted { $0[keyPath: keyPath] < $1[keyPath: keyPath] }
-            case .desc:
-                return array.sorted { $0[keyPath: keyPath] > $1[keyPath: keyPath] }
-        }
-    }
-}
+In this case, each tab can have its own dedicated data store. For instance, the **Patients** tab could use a `PatientStore`, while the **Doctors** tab could use a `DoctorStore`. These stores manage data specific to their respective contexts and can be injected into their corresponding parts of the view hierarchy. 
 
-```swift
-extension EnvironmentValues {
-    @Entry var sort = Sort()
-}
-```
+Both `PatientStore` and `DoctorStore` could rely on a shared service layer to fetch the necessary data, ensuring a clean separation of concerns and efficient data handling tailored to each feature in the app. This approach promotes modularity, encapsulates dependencies, and simplifies state management within a complex SwiftUI application.
 
-- **`callAsFunction` Method**: This method allows the `Sort` struct to behave like a function. You can invoke it directly on an array, passing a key path for sorting. Depending on the provided `SortOrder`, it sorts the array in ascending or descending order.
-  
-- **KeyPath-based Sorting**: The sorting logic leverages Swift's powerful `KeyPath` feature, allowing the sorting to be done based on a specific property of each element in the array. This makes the solution versatile and applicable to any data model with comparable properties.
+However, a common practice among developers is to inject all environment objects at the root of the application. This makes them accessible from any part of the app's view hierarchy. While convenient, this approach can lead to tightly coupled components and potentially unnecessary dependencies being available everywhere, even in parts of the app that don’t require them. This overexposure can make the application harder to maintain and test, especially as it grows in complexity.
 
-#### 3. **`EnvironmentValues` Extension:**
-The extension on `EnvironmentValues` allows the sorting logic to be injected into SwiftUI’s environment, making it globally accessible in any view without needing to pass it explicitly as a parameter.
+![Environment Objects Injected at the Root](/images/env-5.png)
 
-- **`@Entry` Macro**: The `@Entry` macro simplifies the creation of environment values by eliminating boilerplate code, making the process more concise and streamlined.
+## Re-Evaluation (Diffing) vs Re-Rendering  
 
-<div style="
-    background-color: #f0f8ff;
-    border-left: 5px solid #0073e6;
-    padding: 20px;
-    border-radius: 5px;
-    font-family: Arial, sans-serif;
-    font-size: 1.1rem;
-    color: #333;
-    margin: 20px 0;
-">
-    <strong>Want to become a highly valued iOS developer?</strong> 
-    Check out AzamSharp School for comprehensive courses and hands-on learning at 
-    <a href="https://azamsharp.school" style="color: #0073e6; text-decoration: none; font-weight: bold;">azamsharp.school</a>.
-</div>
+One of the confusion regarding using environment objects is that developers believe that when using environment object, it will automatically re-render all the views that are dependent on it. In order to understand this we first must understand the difference between re-evaluation and re-rendering. 
 
-### How the Solution Works:
+In SwiftUI, when the state changes, the framework triggers a process called **re-evaluation** for the affected views. During this process, SwiftUI determines which parts of the view hierarchy need to be updated. 
 
-This approach allows sorting logic to be centralized and easily reusable across multiple views by placing it into the environment. The use of SwiftUI's environment system lets you access sorting functionality anywhere in your view hierarchy without needing to manually pass sorting functions down through props.
+Re-evaluation involves **diffing**, where SwiftUI compares the previous and current versions of the views to identify what has changed and what has remained the same. This efficient mechanism ensures that only the necessary views are updated, optimizing performance and minimizing the impact of state changes on the user interface. This declarative approach makes UI updates seamless and reactive to state changes in your application.
 
-### Usage Example:
+Take a look at the following code: 
+
 ``` swift 
-struct MovieListView: View {
-    @Environment(\.sort) var sort
-    @State private var sortOrder: SortOrder = .asc // State to track current sort order
-    let movies: [Movie]
+struct CounterView: View {
     
-    private var sortedMovies: [Movie] {
-        sort(movies, by: \.title, sortOrder)
-    }
+    @State private var count: Int = 0
     
     var body: some View {
+        let _ = Self._printChanges()
         VStack {
-            Text("Movies (List)")
-            
-            // Button to toggle the sort order
-            Button(action: {
-                // Toggle the sort order between ascending and descending
-                sortOrder = sortOrder == .asc ? .desc : .asc
-            }) {
-                Text("Sort by Title (\(sortOrder == .asc ? "Asc" : "Desc"))")
+            Text("\(count)")
+            Button("Increment Counter") {
+                count += 1
             }
-            .padding()
             
-            // Sorting the movies based on the current sortOrder
-            ForEach(sortedMovies) { movie in
-                Text("\(movie.title) - \(movie.rating)")
+            List(1...20, id: \.self) { index in
+                Text("\(index)")
             }
         }
     }
 }
 ```
 
-### Key Benefits of This Solution:
+When you press the button, the counter is incremented, and the view's `body` is re-evaluated. Inside the `body`, the line `let _ = Self._printChanges()` is executed, which logs information about changes whenever the `body` is re-evaluated. 
 
-1. **Declarative and Simple API**: Using the `callAsFunction` method makes the sorting functionality intuitive. You can use `sort` like a function to sort arrays based on a key path in a clean and readable manner.
+> It's important to understand that **re-evaluation of the body does not mean all views within it are re-rendered.** and usually the process of diffing is highly optimized and is performed really quickly. 
 
-2. **Reusability**: By embedding the sorting logic in the environment, the same `Sort` struct can be reused across multiple views, promoting DRY (Don't Repeat Yourself) principles and avoiding redundant code.
+In this example, only the `Text("\(count)")` view will be re-rendered because it directly depends on the `count` property. When `count` changes, SwiftUI uses its **diffing** mechanism to determine that this specific `Text` view needs updating, while other views in the hierarchy remain unchanged. This targeted update ensures efficient rendering and performance optimization.
 
-3. **Flexibility**: The `Sort` struct and `SortOrder` enum allow easy switching between ascending and descending sorting orders, and the use of `KeyPath` enables sorting on any comparable property of a data model.
+### Environment Object and View Rendering 
 
-4. **Global Access via Environment**: By extending `EnvironmentValues`, the sorting functionality becomes globally accessible throughout the SwiftUI view hierarchy, reducing the need for explicitly passing it down as a parameter.
+Let’s explore a simple example of using an **Environment Object** (iOS 16 and earlier) to understand its behavior during view rendering. Below is the implementation of a `Store` class that conforms to the `ObservableObject` protocol. This class has a `count` property, and the `ObservableObject` conformance makes the `Store` class a **source of truth**, enabling SwiftUI views to observe and react to changes in its state.
 
-### Source code: 
+```swift
+@MainActor
+class Store: ObservableObject {
+    @Published var count: Int = 0
+}
+```
 
-[Download](https://gist.github.com/azamsharpschool/1317c5d249a5c3052ebd4edd63b1c265)
+If we want to use `Store` as a shared global state, we can inject it into a specific view. Here’s how it’s done:
 
-### Summary:
+```swift
+#Preview {
+    ContentScreen()
+        .environmentObject(Store())
+}
+```
 
-This solution efficiently leverages SwiftUI’s environment system to provide a centralized and reusable sorting mechanism. By defining the sorting logic in the `Sort` struct and placing it into the environment, you enable flexible, easy-to-use sorting capabilities across your entire SwiftUI application. The declarative API, combined with the power of `KeyPath`, ensures that your views stay clean and maintainable while benefiting from consistent sorting behavior.
+This makes the `Store` instance accessible to the `ContentScreen` view and all its child views. By doing so, any view within this hierarchy can use the `Store` instance without needing to pass it explicitly as a parameter.
 
+To use the `Store` within a view, we can retrieve it using the `@EnvironmentObject` property wrapper. Here's an example:
 
+```swift
+struct ContentScreen: View {
+    
+    @EnvironmentObject private var store: Store
+    
+    var body: some View {
+        
+        let _ = Self._printChanges()
+        
+        VStack {
+            Text("\(store.count)")
+            Button("Increment") {
+                store.count += 1
+            }
+            
+        }
+    }
+}
+```
 
+When button is pressed, count property of ```Store``` is updated and displayed in a Text view. 
 
+Now, let's take a look at an example of what will happen if you add subviews to the ```ContentScreen```, which also accesses ```Store``` environment object. 
 
+We have added two new subviews inside the ```ContentScreen```. The implementation is shown below: 
 
+``` swift 
+struct NumberListView: View {
+    
+    @EnvironmentObject private var store: Store
+    
+    var body: some View {
+        let _ = Self._printChanges()
+        VStack {
+            Text("NumberListView")
+        }
+    }
+}
 
+struct LightBulbView: View {
+    
+    @EnvironmentObject private var store: Store
+    
+    var body: some View {
+        let _ = Self._printChanges()
+        VStack {
+            Text("LightBulbView")
+        }
+    }
+}
+```
+
+One interesting thing to note about both the views is that even though they have a reference to the environment object, none of them utilize any properties of the ```Store``` class in their body. 
+
+The ```ContentScreen``` is updated to the following implementation: 
+
+``` swift 
+struct ContentScreen: View {
+    
+    @EnvironmentObject private var store: Store
+    
+    var body: some View {
+        
+        let _ = Self._printChanges()
+        
+        VStack {
+            Text("\(store.count)")
+            Button("Increment") {
+                store.count += 1
+            }
+            
+            NumberListView()
+            LightBulbView()
+            
+        }
+    }
+}
+```
+
+Now, if you run the app and tap on the **Increment** button then you will see the following output. 
+
+``` swift 
+ContentScreen: _store changed.
+NumberListView: _store changed.
+LightBulbView: _store changed.
+```
+
+This means when you increment the number. All three views are getting re-evaluated and diffed. 
+
+> Once again this does not mean that all three views are getting re-rendered. Only views that are changed will be re-rendered. 
+
+To address the issue, we can improve our implementation by passing only the specific dependencies needed by each subview. This ensures that each subview is independent and only depends on the data it requires. For instance:
+
+**NumberListView** requires the count value.
+
+**LightBulbView** requires the isOn state.
+
+Here’s the updated implementation of these subviews:
+
+```swift
+struct NumberListView: View {
+    
+    let count: Int
+    
+    var body: some View {
+        let _ = Self._printChanges() // Logs view re-evaluation
+        VStack {
+            Text("\(count)")
+        }
+    }
+}
+
+struct LightBulbView: View {
+    
+    let isOn: Bool
+    
+    var body: some View {
+        let _ = Self._printChanges() // Logs view re-evaluation
+        VStack {
+            Text(isOn ? "ON" : "OFF")
+        }
+    }
+}
+```
+
+The ```Store``` class is updated to include the ```isOn``` property, which tracks the on/off state:
+
+``` swift 
+@MainActor 
+class Store: ObservableObject {
+    @Published var count: Int = 0
+    @Published var isOn: Bool = false
+}
+```
+
+The ContentScreen now passes only the required data to each subview:
+
+``` swift
+struct ContentScreen: View {
+    
+    @EnvironmentObject private var store: Store
+    
+    var body: some View {
+        let _ = Self._printChanges() // Logs view re-evaluation
+        
+        VStack {
+            Text("\(store.count)")
+            
+            Button("Add Number") {
+                store.count += 1
+            }
+            
+            Toggle(isOn: $store.isOn) {
+                EmptyView()
+            }
+            .fixedSize()
+            
+            // Passing only required data to subviews
+            NumberListView(count: store.count)
+            LightBulbView(isOn: store.isOn)
+        }
+    }
+}
+
+```
+
+This updated implementation improves the design by decoupling subviews, ensuring they rely only on the data they require, such as `NumberListView` depending solely on `count` and `LightBulbView` on `isOn`. This makes the subviews more reusable and easier to test. Additionally, the explicit passing of dependencies reduces reliance on `EnvironmentObject`, avoiding tight coupling and improving clarity. 
+
+Performance is also enhanced, as SwiftUI efficiently re-evaluates and updates only the affected parts of the UI, ensuring that changes in `store.count` or `store.isOn` do not trigger unnecessary re-renders elsewhere in the view hierarchy. This approach results in cleaner, more maintainable, and performance-optimized code.
+
+> It’s important to understand that in SwiftUI, the natural flow of data is from parent views to child views. Typically, the parent view is indicated by a name ending with the suffix `Screen`, while child views are represented with the suffix `View`. The key principle is to have the parent view handle data loading and then pass only the necessary data down to its child views. This approach ensures clarity, reduces unnecessary dependencies, and promotes reusable, modular components within the view hierarchy.
+
+### Environment Object and Navigation Stack 
+
+One of the powerful benefits of using `EnvironmentObject` in SwiftUI is that all screens within a `NavigationStack` automatically stay in sync with the shared data. This happens because all screens access the same global state, eliminating the need for manual updates. 
+
+In contrast, a common anti-pattern seen in the past is developers passing refresh flags between screens to ensure data synchronization after adding or updating an item. This approach not only adds unnecessary complexity but also indicates a misunderstanding of SwiftUI’s declarative nature. With `EnvironmentObject`, such workarounds become unnecessary, as SwiftUI handles state updates seamlessly, ensuring a clean and efficient implementation.
+
+This means that if your `EnvironmentObject` contains state used across 20 different screens within a `NavigationStack`, all those screens will automatically stay in sync without any additional effort on your part. SwiftUI ensures that all screens in the stack share and react to the same global state.
+
+The only adjustment you need to make is to inject the `Store` at the `NavigationStack` level, instead of at an individual screen level like `ContentScreen`. Here’s how you can do it:
+
+```swift
+NavigationStack {
+    ContentScreen()
+}
+.environmentObject(Store())
+```
+
+By injecting the `Store` at the `NavigationStack`, it becomes available to all screens in the navigation hierarchy, ensuring seamless state management and reducing boilerplate code.
+
+Keep in mind that the same diffing rules apply to screens inside the NavigationStack. This means that if you have 20 screens in the stack, and all of them use ```@EnvironmentObject```, each screen will be re-evaluated during a state change, even if they don’t directly depend on or use any properties from the global state.
+
+> How many screens do you really have in the NavigationStack at one time? 
 
 
