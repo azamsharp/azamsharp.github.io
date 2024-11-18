@@ -293,8 +293,32 @@ NavigationStack {
 
 By injecting the `Store` at the `NavigationStack`, it becomes available to all screens in the navigation hierarchy, ensuring seamless state management and reducing boilerplate code.
 
-Keep in mind that the same diffing rules apply to screens inside the NavigationStack. This means that if you have 20 screens in the stack, and all of them use ```@EnvironmentObject```, each screen will be re-evaluated during a state change, even if they don’t directly depend on or use any properties from the global state.
+Keep in mind that the same diffing rules apply to screens inside the NavigationStack. This means that if you have 20 screens in the stack, and all of them use ```@EnvironmentObject```, each screen will be re-evaluated during a state change, even if they don’t directly depend on or use any properties from the global state. 
 
-> How many screens do you really have in the NavigationStack at one time? 
+After re-evaluation, only the views that depend on the state change will get re-rendered. 
+
+> Developers often worry about screens in a `NavigationStack` being re-evaluated due to `@EnvironmentObject`. However, the more pertinent question to ask is: how many screens are typically in your `NavigationStack` at any given time?
+
+### New @Observable Macro
+
+In iOS 17, Apple introduced the **Observation** framework, offering a cleaner syntax and significant performance improvements. One key enhancement is that views that do not actively use the environment state properties are no longer re-evaluated, further optimizing SwiftUI’s rendering process. This improvement ensures that only views dependent on specific state changes are updated, reducing unnecessary computations and enhancing app performance.
+
+In order to update our current code to use Observation framework, we will start with the ```Store```. 
+
+``` swift 
+@MainActor
+@Observable
+class Store {
+    var count: Int = 0
+    var isOn: Bool = false
+}
+```
+
+We don't need to conform to ```ObservableObject``` anymore. We can simply use the ```@Observable``` macro. Also, if you noticed the ```@Published``` keyword has been removed. Both stored properties ```count``` and ```isOn``` are automatically published properties. 
+
+### Environment Usages
+
+
+
 
 
