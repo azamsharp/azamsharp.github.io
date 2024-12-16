@@ -68,6 +68,53 @@ In the next section, we will explore effective strategies for displaying a valid
 
 ### Validation Summary 
 
+A validation summary is an efficient way to display all form validation errors in a single location, enabling users to quickly review the issues and take appropriate action to correct them. This approach enhances usability by providing clear, consolidated feedback rather than scattering error messages throughout the form.
+
+The simplest way to implement a validation summary is by maintaining a single array to track all validation errors. While you can use a custom type to represent error objects for more flexibility, starting with a straightforward array of strings is often sufficient for basic implementations.
+
+``` swift 
+  @State private var validationErrors: [String] = [] // To store validation error messages
+```
+
+When the user submits the form by pressing the Submit button, we can trigger validation for the entire form. The validate function below handles this process by checking all form fields for compliance with their requirements. If any validation rules are violated, appropriate error messages are added to the validationErrors array.
+
+``` swift 
+ private func validate() -> Bool {
+        validationErrors = [] // Clear previous errors
+
+        // Validate each field
+        if fullName.trimmingCharacters(in: .whitespaces).isEmpty {
+            validationErrors.append("Full Name is required.")
+        }
+        if street.trimmingCharacters(in: .whitespaces).isEmpty {
+            validationErrors.append("Street is required.")
+        }
+        if city.trimmingCharacters(in: .whitespaces).isEmpty {
+            validationErrors.append("City is required.")
+        }
+        if selectedState.isEmpty {
+            validationErrors.append("State is required.")
+        }
+        if zipCode.trimmingCharacters(in: .whitespaces).isEmpty || !zipCode.isValidZipCode {
+            validationErrors.append("Zip Code must be in a valid format (e.g., 12345 or 12345-6789).")
+        }
+        if country.trimmingCharacters(in: .whitespaces).isEmpty {
+            validationErrors.append("Country is required.")
+        }
+        if selectedLicenseType.isEmpty {
+            validationErrors.append("License Type is required.")
+        }
+        if !agreementAccepted {
+            validationErrors.append("You must accept the terms and conditions.")
+        }
+
+        return validationErrors.isEmpty
+        
+    }
+```
+
+
+
 ### Inline Validation Error Messages (Inspired from Flutter)
 
 ### Model Validation Using Property Wrappers (Inspiring from ASP.NET)
