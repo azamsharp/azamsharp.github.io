@@ -113,11 +113,28 @@ When the user submits the form by pressing the Submit button, we can trigger val
     }
 ```
 
-
-
 ### Inline Validation Error Messages (Inspired from Flutter)
 
 ### Model Validation Using Property Wrappers (Inspiring from ASP.NET)
+
+ASP.NET is an extremely popular web technology from Microsoft that is extensively used in Enterprise settings. ASP.NET allows developers to validate by decorating the client side model with attributes. This is shown below: 
+
+``` swift 
+using System.ComponentModel.DataAnnotations;
+
+public class Product
+{
+    [Required(ErrorMessage = "Product name is required")]
+    [StringLength(50, ErrorMessage = "Product name cannot exceed 50 characters")]
+    public string Name { get; set; }
+
+    [Range(0.01, 9999.99, ErrorMessage = "Price must be between 0.01 and 9999.99")]
+    public decimal Price { get; set; }
+
+    [Required(ErrorMessage = "Category is required")]
+    public string Category { get; set; }
+}
+```
 
 ### Testing Validation Logic 
 
