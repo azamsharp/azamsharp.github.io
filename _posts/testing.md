@@ -113,11 +113,91 @@ When the user submits the form by pressing the Submit button, we can trigger val
     }
 ```
 
+If there are any errors then you can loop through the errors and display them. This is shown in the implementation below: 
 
+``` swift 
+ Form {
+                // Validation summary section
+                if !validationErrors.isEmpty {
+                    Section(header: Text("Validation Summary").foregroundColor(.red)) {
+                        ForEach(validationErrors, id: \.self) { error in
+                            Text(error).foregroundColor(.red)
+                        }
+                    }
+                }
+
+```
+
+The result is shown below: 
+
+![Validation Summary](../images/val-summary-1.png)
+
+Now, the user can address the errors one by one. As each error is resolved, the user can reattempt submission until all issues are fixed and the form is successfully submitted. This iterative process ensures that the user has clear guidance to complete the form correctly.
+
+It's likely that you'll need to display validation errors on other screens as well. To make your code more reusable and maintainable, you can extract this functionality into a standalone validation summary component, as shown below:
+
+``` swift 
+struct ValidationSummary: View {
+    let validationErrors: [String]
+    
+    var body: some View {
+        
+        Section(header: Text("Validation Summary").foregroundColor(.red)) {
+            ForEach(validationErrors, id: \.self) { error in
+                Text(error)
+                    .foregroundColor(.red)
+            }
+        }
+        
+    }
+}
+
+```
+
+> Feel free to customize validation summary control to fit your needs. This is a great opportunity to communicate with your designer and come up with an intuitive presentation of the validation error messages. 
+
+### Validation TextField Controls 
 
 ### Inline Validation Error Messages (Inspired from Flutter)
 
-### Model Validation Using Property Wrappers (Inspiring from ASP.NET)
+SwiftUI is not the only declarative user interface framework available. It shares the spotlight with other popular frameworks like React, Flutter, and Jetpack Compose. This diversity presents an excellent opportunity for SwiftUI developers to draw inspiration and learn from the best practices employed in these frameworks.
+
+For example, in Flutter, validating a `TextField` can be done using the following approach:
+
+``` dart 
+TextFormField(
+  // The validator receives the text that the user has entered.
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter some text';
+    }
+    return null;
+  },
+),
+```
+
+In Flutter, the `TextFormField` widget provides a `validator` property that makes validation straightforward. The `validator` function returns an error message if validation fails or `null` if the input is valid. Validation can then be triggered using a `_formKey`, as demonstrated in the example below:
+
+``` dart 
+ElevatedButton(
+  onPressed: () {
+    // Validate returns true if the form is valid, or false otherwise.
+    if (_formKey.currentState!.validate()) {
+      // If the form is valid, display a snackbar. In the real world,
+      // you'd often call a server or save the information in a database.
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Processing Data')),
+      );
+    }
+  },
+  child: const Text('Submit'),
+),
+```
+
+A similar approach can be adopted in SwiftUI, offering flexibility to implement validation in multiple ways. In this section, we will explore how to achieve this by using a custom view modifier. This approach not only keeps the code clean and reusable but also seamlessly integrates validation logic directly into SwiftUI views.
+
+
+### Model Validation Using Property Wrappers (Inspired from ASP.NET)
 
 ### Testing Validation Logic 
 
