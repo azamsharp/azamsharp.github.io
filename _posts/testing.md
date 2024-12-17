@@ -1,4 +1,4 @@
-# Validation Patterns in SwiftUI 
+# The Ultimate Guide to Validation Patterns in SwiftUI 
 
 Validation is a crucial component of app development, ensuring that only accurate and meaningful data is processed by your application. As the saying goes in software development, **Garbage in, garbage out.** If your app allows users to submit invalid data, it will inevitably result in unreliable and flawed outputs.
 
@@ -161,6 +161,286 @@ struct ValidationSummary: View {
 ### Inline Validation Error Messages (Inspired from Flutter)
 
 ### Model Validation Using Property Wrappers (Inspiring from ASP.NET)
+
+ASP.NET, a widely adopted web technology from Microsoft, is extensively utilized in enterprise applications. It provides developers with powerful tools to streamline client-side validation by decorating the model with attributes, as demonstrated in the example below:
+
+``` swift 
+using System.ComponentModel.DataAnnotations;
+
+public class Product
+{
+    [Required(ErrorMessage = "Product name is required")]
+    [StringLength(50, ErrorMessage = "Product name cannot exceed 50 characters")]
+    public string Name { get; set; }
+
+    [Range(0.01, 9999.99, ErrorMessage = "Price must be between 0.01 and 9999.99")]
+    public decimal Price { get; set; }
+
+    [Required(ErrorMessage = "Category is required")]
+    public string Category { get; set; }
+}
+```
+
+This allows developers to implement validation directly at the client-side model level, a technique that can be effectively applied in SwiftUI using property wrappers.
+
+The first step is to create a view state specifically for the `LoginScreen`. Since this state is only relevant to the `LoginScreen`, it can be defined within the view itself, as demonstrated below:
+
+``` swift 
+struct LoginScreen: View {
+    
+    struct LoginState {
+
+        var username: String = ""
+        var password: String = ""
+        var email: String = ""
+        
+        func validate() -> [String] {
+            // validate the fields 
+            return [] 
+        }
+    }
+}
+```
+
+Currently, the properties of `LoginState` do not use any property wrappers. Next, we will implement the `Required` property wrapper, which will enforce that a value is provided for the associated property.
+
+``` swift 
+@propertyWrapper
+struct Required {
+    
+    private var value: String
+    private let message: String
+
+    var wrappedValue: String {
+        get { value }
+        set { value = newValue }
+    }
+
+    var projectedValue: String? {
+        return value.isEmpty ? message : nil
+    }
+
+    init(wrappedValue: String, _ message: String) {
+        print(wrappedValue)
+        self.value = wrappedValue
+        self.message = message
+    }
+}
+```
+
+The `Required` property wrapper accepts two parameters: `value` and `message`. The `value` refers to the property it decorates, while the `message` specifies the error message to display when the validation fails.
+
+Now, we can apply the `Required` property wrapper to the properties in the `LoginState` and implement a `validate` function. This function will ensure that all decorated properties in the `LoginState` are validated successfully.
+
+``` swift 
+ struct LoginState {
+        @Required("Username is required")
+        var username: String = "johndoe"
+        @Required("Password is required")
+        var password: String = ""
+        
+        @Required("Email is required")
+        var email: String = ""
+        
+        func validate() -> [String] {
+            var errors: [String] = []
+            
+            if let usernameError = $username {
+                errors.append(usernameError)
+            }
+            
+            if let passwordError = $password {
+                errors.append(passwordError)
+            }
+            
+            if let emailError = $email {
+                errors.append(emailError)
+            }
+            
+            return errors
+        }
+    }
+```
+
+The usage in shown below: 
+
+``` swift 
+@State private var loginState = LoginState()
+@State private var errors: [String] = []
+    
+    var body: some View {
+        Form {
+            TextField("Username", text: $loginState.username)
+            TextField("Password", text: $loginState.password)
+            TextField("Email", text: $loginState.email)
+            
+            Button("Login") {
+                errors = loginState.validate()
+                if errors.isEmpty {
+                   // perform login 
+                }
+            }
+            
+            if !errors.isEmpty {
+                ForEach(errors, id: \.self) { error in
+                    Text(error)
+                }
+            }
+            
+        }.navigationTitle("Login")
+    }
+```
+
+The `loginState.validate` function performs validation on the form fields and returns an array of error messages for any invalid inputs. If the array contains error messages, it indicates that the form is invalid, and the errors are dynamically displayed on the screen. This ensures users receive immediate feedback on missing or incorrect fields before proceeding.
+
+This approach offers developers greater flexibility, as they can introduce new property wrappers to handle additional validation requirements as needed. For example, the `RegularExpression` property wrapper, shown below, can be used to validate a property's value against a specified regex pattern.
+
+``` swift 
+@propertyWrapper
+struct RegularExpression {
+    
+    private var value: String
+    private let pattern: String
+    private let message: String
+    
+    var wrappedValue: String {
+        get { value }
+        set { value = newValue }
+    }
+    
+    var projectedValue: String? {
+        // Validate the value against the regular expression pattern
+        if !matchesPattern(value) {
+            return message
+        }
+        return nil
+    }
+    
+    // Helper method to validate the value against the pattern
+    private func matchesPattern(_ value: String) -> Bool {
+        guard let regex = try? NSRegularExpression(pattern: pattern) else {
+            return false // Invalid regex pattern
+        }
+        let range = NSRange(location: 0, length: value.utf16.count)
+        return regex.firstMatch(in: value, options: [], range: range) != nil
+    }
+    
+    init(wrappedValue: String, pattern: String, message: String) {
+        self.value = wrappedValue
+        self.pattern = pattern
+        self.message = message
+    }
+    
+}
+```
+
+The usage is shown below: 
+
+``` swift 
+ @RegularExpression(pattern: "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",message: "Invalid email format")
+ var email: String = ""
+```
+
+Property wrappers offer a clean and efficient way for developers to separate validation logic from the rest of the code. This approach not only enhances code readability but also makes validation highly extensible, as new property wrappers can be introduced to address various validation scenarios with minimal effort.  
+
+What if you need to validate a property against multiple rules? For example, an email field that is both required and must match a valid email format. Unfortunately, Swift does not allow decorating multiple property wrappers on properties. 
+
+One approach to achieve this is by creating a `Validation` property wrapper that enables developers to pass an array of validation rules, making it easy to apply multiple validations to a single property. The implementation is shown below: 
+
+``` swift 
+
+enum ValidationRule {
+    case required(String)
+    case regularExpression(String, String) // pattern and the message
+}
+
+@propertyWrapper
+struct Validate {
+    private var value: String
+    private let rules: [ValidationRule]
+    private(set) var errorMessages: [String] = [] // Holds validation errors
+    
+    var wrappedValue: String {
+        get { value }
+        set {
+            value = newValue
+            validate()
+        }
+    }
+    
+    var projectedValue: [String] { // Projected value for accessing errors
+        errorMessages
+    }
+    
+    init(wrappedValue: String, _ rules: ValidationRule...) {
+        self.value = wrappedValue
+        self.rules = rules
+        validate()
+    }
+    
+    // MARK: - Validation Logic
+    private mutating func validate() {
+        errorMessages.removeAll()
+        
+        for rule in rules {
+            switch rule {
+            case .required(let message):
+                if value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    errorMessages.append(message)
+                }
+            case .regularExpression(let pattern, let message):
+                let range = NSRange(location: 0, length: value.utf16.count)
+                if let regex = try? NSRegularExpression(pattern: pattern),
+                   regex.firstMatch(in: value, options: [], range: range) == nil {
+                    errorMessages.append(message)
+                }
+            }
+        }
+    }
+}
+```
+
+> We have used variadic syntax in Validation initializer. This allows us to pass a single validation rule or a list of rules.  
+
+The `ValidationRule` enum centralizes all available validation rules in the application, providing a structured and reusable way to define validations. The `Validate` struct acts as the property wrapper, containing the `validate()` function, which executes the actual validation logic. For more complex validation scenarios, the logic can be refactored into a dedicated utility or service to ensure better organization and maintainability.
+
+The usage is shown below: 
+
+``` swift 
+struct LoginScreen: View {
+    
+    struct LoginState {
+       
+        @Validate(.required("Username is required"))
+        var username: String = "johndoe"
+        
+        @Validate(.required("Password is required"))
+        var password: String = ""
+        
+        @Validate(.required("Email is required"), .regularExpression("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$", "Email is in incorrect format."))
+        var email: String = ""
+                
+        func validate() -> [String] {
+              var errors: [String] = []
+              
+              if !$username.isEmpty {
+                  errors.append(contentsOf: $username) // Access error messages
+              }
+              
+              if !$password.isEmpty {
+                  errors.append(contentsOf: $password)
+              }
+            
+            if !$email.isEmpty {
+                errors.append(contentsOf: $email)
+            }
+              
+              return errors
+          }
+    }
+```
+
+This technique allows 
 
 ### Testing Validation Logic 
 
