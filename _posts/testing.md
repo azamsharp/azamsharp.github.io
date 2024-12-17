@@ -440,7 +440,7 @@ struct LoginScreen: View {
     }
 ```
 
-This technique allows 
+This approach offers a flexible and scalable way to extend validation rules. It also enables you to encapsulate the logic into a reusable validation package, which can be easily imported into other projects for consistent and efficient validation.
 
 ### Testing Validation Logic 
 
