@@ -160,44 +160,7 @@ struct ValidationSummary: View {
 
 ### Inline Validation Error Messages (Inspired from Flutter)
 
-SwiftUI is not the only declarative user interface framework available. It shares the spotlight with other popular frameworks like React, Flutter, and Jetpack Compose. This diversity presents an excellent opportunity for SwiftUI developers to draw inspiration and learn from the best practices employed in these frameworks.
-
-For example, in Flutter, validating a `TextField` can be done using the following approach:
-
-``` dart 
-TextFormField(
-  // The validator receives the text that the user has entered.
-  validator: (value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter some text';
-    }
-    return null;
-  },
-),
-```
-
-In Flutter, the `TextFormField` widget provides a `validator` property that makes validation straightforward. The `validator` function returns an error message if validation fails or `null` if the input is valid. Validation can then be triggered using a `_formKey`, as demonstrated in the example below:
-
-``` dart 
-ElevatedButton(
-  onPressed: () {
-    // Validate returns true if the form is valid, or false otherwise.
-    if (_formKey.currentState!.validate()) {
-      // If the form is valid, display a snackbar. In the real world,
-      // you'd often call a server or save the information in a database.
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
-      );
-    }
-  },
-  child: const Text('Submit'),
-),
-```
-
-A similar approach can be adopted in SwiftUI, offering flexibility to implement validation in multiple ways. In this section, we will explore how to achieve this by using a custom view modifier. This approach not only keeps the code clean and reusable but also seamlessly integrates validation logic directly into SwiftUI views.
-
-
-### Model Validation Using Property Wrappers (Inspired from ASP.NET)
+### Model Validation Using Property Wrappers (Inspiring from ASP.NET)
 
 ### Testing Validation Logic 
 
