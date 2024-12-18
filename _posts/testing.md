@@ -233,8 +233,43 @@ struct ValidatorViewModifier: ViewModifier {
 }
 ```
 
+The `ValidatorViewModifier` provides real-time validation feedback for a specific field in a SwiftUI view. It helps display validation messages and updates a shared state for validation results. Here's a breakdown of its components:
+
+**Properties:**
+
+- value: String:
+
+The current value of the field being validated (e.g., text entered in a text field).
+
+- field: String:
+
+The name or key of the field being validated (used as a key in the validationResults dictionary).
+
+- shouldValidate: Bool:
+
+A flag indicating whether validation should occur (e.g., after the user interacts with the field).
+
+- @Binding var validationResults: [String: Bool]:
+
+A shared dictionary that tracks the validation status (true if valid, false otherwise) for multiple fields.
+
+- validationRule: (String) -> String?:
+
+A closure that takes the field's value as input and returns an error message (String?) if validation fails or nil if it passes.
+
+- @State private var errorMessage: String?:
+
+A private state variable that stores the current validation error message for the field (or nil if the field is valid).
+
+The result is shown below: 
 
 
+
+While SwiftUI offers powerful tools for building declarative user interfaces, exploring similar frameworks like Flutter, React, and Jetpack Compose can inspire innovative approaches to common development challenges. Flutter's built-in form validation, for instance, demonstrates how a concise and intuitive API can streamline the validation process. By drawing inspiration from these frameworks, SwiftUI developers can enhance their own implementations, as shown with the `ValidatorViewModifier`.
+
+This custom modifier replicates live inline validation and error handling akin to Flutter's validator functions while retaining SwiftUI's declarative elegance. It provides a flexible and reusable way to manage real-time validation and on-demand validation triggers, making it a valuable addition to any SwiftUI developer's toolkit. 
+
+By learning from other frameworks and applying those insights, we not only expand our technical skills but also improve the user experience of our applications, demonstrating the versatility and adaptability of declarative UI development across platforms.
 
 ### Model Validation Using Property Wrappers (Inspired from ASP.NET)
 
