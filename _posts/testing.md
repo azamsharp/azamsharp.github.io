@@ -156,8 +156,6 @@ struct ValidationSummary: View {
 
 > Feel free to customize validation summary control to fit your needs. This is a great opportunity to communicate with your designer and come up with an intuitive presentation of the validation error messages. 
 
-### Validation TextField Controls 
-
 ### Inline Validation Error Messages (Inspired from Flutter)
 
 SwiftUI is not the only declarative UI framework out there—React, Flutter, and Jetpack Compose also belong to the same family. As a SwiftUI developer, it’s beneficial to explore these platforms to learn alternative techniques for solving problems and expanding your perspective.
@@ -194,7 +192,6 @@ Below is an example of how the validator view modifier might look at the calling
                         return nil
                     }
 ```
-
 
 Depending on your use case, you may not need to pass all parameters to the validator function. For our scenario, we aim to achieve live inline validation as the user types, while also providing the ability to trigger validation on demand (e.g., when a form is submitted).
 
@@ -263,7 +260,7 @@ A private state variable that stores the current validation error message for th
 
 The result is shown below: 
 
-
+![Inline Editing Flutter](/images/inline-validation-flutter.png)
 
 While SwiftUI offers powerful tools for building declarative user interfaces, exploring similar frameworks like Flutter, React, and Jetpack Compose can inspire innovative approaches to common development challenges. Flutter's built-in form validation, for instance, demonstrates how a concise and intuitive API can streamline the validation process. By drawing inspiration from these frameworks, SwiftUI developers can enhance their own implementations, as shown with the `ValidatorViewModifier`.
 
@@ -555,4 +552,104 @@ This approach offers a flexible and scalable way to extend validation rules. It 
 
 ### Testing Validation Logic 
 
-### Conclusion 
+Testing validation logic in SwiftUI views can be challenging because views are primarily declarative and don’t directly expose their internal state for testing. To address this, it is a best practice to separate business logic, such as form validation, from the view layer. By isolating the validation logic into a reusable helper or a dedicated model, we can make it independently testable and ensure that all edge cases are covered.
+
+In this example, we’ll demonstrate how to refactor the `LoginScreen` view to decouple its validation logic into a `LoginForm` model. This approach enables us to write unit tests for validation scenarios without relying on the UI framework. We’ll outline the steps for extracting the validation logic, integrating it back into the SwiftUI view, and writing comprehensive unit tests to verify its correctness.
+
+To test the validation logic of the `LoginScreen` view, we can isolate the `isFormValid` property logic and validate different scenarios programmatically. Since SwiftUI views aren't directly testable in terms of their internal state, we can extract the validation logic into a separate function or helper and test it using a unit test.
+
+Here’s how you can achieve this:
+
+---
+
+### Step 1: Extract Validation Logic
+Move the validation logic to a separate helper function or computed property that can be tested independently.
+
+```swift
+import Foundation
+
+extension String {
+    var isEmptyOrWhitespace: Bool {
+        return trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+}
+
+struct LoginForm {
+    
+    var username: String = ""
+    var password: String = ""
+     
+    static func isFormValid() -> Bool {
+        return !username.isEmptyOrWhitespace && !password.isEmptyOrWhitespace
+    }
+}
+```
+
+Now the `isFormValid` property in your `LoginScreen` can use this helper:
+
+```swift
+struct LoginScreen: View {
+    
+    @State loginForm = LoginForm() 
+    
+    private var isFormValid: Bool {
+        loginForm.isFormValid() 
+    }
+    
+    var body: some View {
+        Form {
+            TextField("Username", text: $loginForm.username)
+            TextField("Password", text: $loginForm.password)
+            Button("Login") {
+                
+            }.disabled(!isFormValid)
+        }
+    }
+}
+```
+
+---
+
+### Writing Unit Tests
+
+#### Test Cases:
+- Both fields are empty → Invalid.
+- Only `username` is empty → Invalid.
+- Only `password` is empty → Invalid.
+- Both fields are valid → Valid.
+- Either field contains only whitespace → Invalid.
+
+```swift
+import XCTest
+@testable import YourAppName
+
+class LoginFormTests: XCTestCase {
+    
+    func testFormValidation() {
+        // Test Case 1: Both fields are empty
+        var form = LoginForm(username: "", password: "")
+        XCTAssertFalse(form.isFormValid(), "Form should be invalid when both fields are empty")
+        
+        // Test Case 2: Username is empty, password is valid
+        form = LoginForm(username: "", password: "password")
+        XCTAssertFalse(form.isFormValid(), "Form should be invalid when username is empty")
+        
+        // Test Case 3: Password is empty, username is valid
+        form = LoginForm(username: "username", password: "")
+        XCTAssertFalse(form.isFormValid(), "Form should be invalid when password is empty")
+        
+        // Test Case 4: Both fields are valid
+        form = LoginForm(username: "username", password: "password")
+        XCTAssertTrue(form.isFormValid(), "Form should be valid when both fields are non-empty and valid")
+        
+        // Test Case 5: Either field contains only whitespace
+        form = LoginForm(username: "   ", password: "password")
+        XCTAssertFalse(form.isFormValid(), "Form should be invalid if username contains only whitespace")
+        
+        form = LoginForm(username: "username", password: "   ")
+        XCTAssertFalse(form.isFormValid(), "Form should be invalid if password contains only whitespace")
+    }
+}
+```
+
+This setup ensures that `LoginForm` validation logic is thoroughly tested. Since `LoginScreen` uses `LoginForm` for validation, any issues with validation logic will be caught at the unit test level.
