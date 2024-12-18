@@ -178,7 +178,62 @@ TextFormField(
 
 In this example, the validator function checks if the input is empty or does not match a specific email format. If validation fails, an error message is returned and displayed under the text field, showcasing Flutter's straightforward approach to form validation.
 
-We can take inspiration from Flutter and try to implement a similar behavior using SwiftUI view modifiers.  
+We can draw inspiration from Flutter's approach to form validation and implement similar behavior in SwiftUI using view modifiers. A good way to tackle this is by starting with the desired end result and working backward to the implementation.
+
+Below is an example of how the validator view modifier might look at the calling site:
+
+``` swift 
+ TextField("Username", text: $username)
+                .validator(
+                    for: username,
+                    field: "username", shouldValidate: shouldValidate, validationResults: $validationResults) { username in
+                        if username.isEmpty {
+                            return "Username cannot be empty."
+                        }
+                        
+                        return nil
+                    }
+```
+
+
+Depending on your use case, you may not need to pass all parameters to the validator function. For our scenario, we aim to achieve live inline validation as the user types, while also providing the ability to trigger validation on demand (e.g., when a form is submitted).
+
+Below you can find the complete implementation of the `Validator` view modifier: 
+
+``` swift 
+struct ValidatorViewModifier: ViewModifier {
+    
+    let value: String
+    let field: String
+    let shouldValidate: Bool
+    @Binding var validationResults: [String: Bool]
+    let validationRule: (String) -> String?
+    
+    @State private var errorMessage: String?
+    
+    func body(content: Content) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            content
+                .onChange(of: value, validate)
+                .onChange(of: shouldValidate, validate)
+            
+            if let errorMessage {
+                Text(errorMessage)
+                    .foregroundStyle(.red)
+                    .font(.caption)
+            }
+        }
+    }
+    
+    private func validate() {
+        errorMessage = validationRule(value)
+        validationResults[field] = (errorMessage == nil)
+    }
+    
+}
+```
+
+
 
 
 ### Model Validation Using Property Wrappers (Inspired from ASP.NET)
