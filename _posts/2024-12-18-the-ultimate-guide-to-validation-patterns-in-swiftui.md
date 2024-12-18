@@ -1,8 +1,56 @@
+   <style>
+    .share-container {
+      display: flex;
+      gap: 10px; /* Spacing between buttons */
+      margin-bottom: 20px; 
+    }
+    .share-button {
+      background-color: #0077b5; /* Default LinkedIn blue */
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    .twitter { background-color: #1da1f2; }
+    .linkedin { background-color: #0077b5; }
+    .bluesky { background-color: #353c63; }
+    .share-button:hover {
+      opacity: 0.8;
+    }
+  </style>
+
 # The Ultimate Guide to Validation Patterns in SwiftUI 
+ <div class="share-container">
+    <div>
+      <!-- Twitter -->
+      <a href="https://twitter.com/intent/tweet?url=https://azamsharp.com/2024/12/18/the-ultimate-guide-to-validation-patterns-in-swiftui.html&text=The Ultimate Guide to Validation Patterns in SwiftUI by @azamsharp"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button twitter">
+        Share on Twitter
+      </a>
+    </div>
+    <div>
+      <!-- LinkedIn -->
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://azamsharp.com/2024/12/18/the-ultimate-guide-to-validation-patterns-in-swiftui.html"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button linkedin">
+        Share on LinkedIn
+      </a>
+    </div>
+    
+  </div>
 
 Validation is a crucial component of app development, ensuring that only accurate and meaningful data is processed by your application. As the saying goes in software development, **Garbage in, garbage out.** If your app allows users to submit invalid data, it will inevitably result in unreliable and flawed outputs.
 
 In this article, we will explore various techniques for implementing robust validation in your SwiftUI apps to enhance data integrity and user experience.
+
+
 
 <div style="
     background-color: #f0f8ff;
@@ -54,7 +102,7 @@ Additionally, the choice of user interface components plays a crucial role in pr
 
 Take a look at the following screenshot: 
 
-![Driver License SignUp Form](/images/driver-lic-1.png)
+![Driver License SignUp Form](../images/driver-lic-1.png)
 
 At first glance, the form appears to be well-designed. However, upon closer inspection, there is a significant risk that users might provide incorrect input for critical fields like **state**, **license type**, and **country**. These fields often play a crucial role in processing and validation, making accurate data essential.
 
@@ -62,7 +110,7 @@ At first glance, the form appears to be well-designed. However, upon closer insp
 
 A straightforward and effective solution would be to replace the text input with a user interface component, such as a dropdown menu or picker, that allows users to select an option from predefined choices. This approach minimizes errors, ensures data consistency, and provides a more user-friendly experience. 
 
-![Driver License SignUp Form](/images/driv-lic-2.png)
+![Driver License SignUp Form](../images/driv-lic-2.png)
 
 The **Driver License Sign-Up Form** can greatly benefit from displaying error messages to the user. Since the form consists of multiple fields, each with specific requirements (e.g., format, type, or length), clear error messages help users understand and correct mistakes. This improves the overall user experience, reduces frustration, and ensures that the submitted data meets the necessary validation criteria.
 
@@ -132,7 +180,7 @@ If there are any errors then you can loop through the errors and display them. T
 
 The result is shown below: 
 
-![Validation Summary](/images/val-summary-1.png)
+![Validation Summary](../images/val-summary-1.png)
 
 Now, the user can address the errors one by one. As each error is resolved, the user can reattempt submission until all issues are fixed and the form is successfully submitted. This iterative process ensures that the user has clear guidance to complete the form correctly.
 
