@@ -9,6 +9,12 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [The Ultimate Guide to Validation Patterns in SwiftUI](_posts/2024-12-18-the-ultimate-guide-to-validation-patterns-in-swiftui.md)
+
+Validation is a crucial component of app development, ensuring that only accurate and meaningful data is processed by your application. As the saying goes in software development, **Garbage in, garbage out.** If your app allows users to submit invalid data, it will inevitably result in unreliable and flawed outputs.
+
+In this article, we will explore various techniques for implementing robust validation in your SwiftUI apps to enhance data integrity and user experience.
+
 ### [Deep Dive into Environment in SwiftUI](_posts/2024-11-18-deep-dive-into-environment-in-swiftui.md)
 SwiftUI simplifies app development with its declarative syntax and reactive data handling, making it easy to build dynamic and responsive UIs. Central to this framework is the `@Environment` property wrapper and its tools, enabling seamless shared state management across views.  
 
