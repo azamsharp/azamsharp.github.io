@@ -552,18 +552,16 @@ This approach offers a flexible and scalable way to extend validation rules. It 
 
 ### Testing Validation Logic 
 
-Testing validation logic in SwiftUI views can be challenging because views are primarily declarative and don’t directly expose their internal state for testing. To address this, it is a best practice to separate business logic, such as form validation, from the view layer. By isolating the validation logic into a reusable helper or a dedicated model, we can make it independently testable and ensure that all edge cases are covered.
+Testing validation logic in SwiftUI views can be challenging because views are primarily declarative and don't directly expose their internal state for testing. To address this, it is a best practice to separate presentation logic, such as form validation, from the view layer. By isolating the validation logic into a reusable helper or a dedicated model, we can make it independently testable and ensure that all edge cases are covered.
 
-In this example, we’ll demonstrate how to refactor the `LoginScreen` view to decouple its validation logic into a `LoginForm` model. This approach enables us to write unit tests for validation scenarios without relying on the UI framework. We’ll outline the steps for extracting the validation logic, integrating it back into the SwiftUI view, and writing comprehensive unit tests to verify its correctness.
+In this example, we'll demonstrate how to refactor the `LoginScreen` view to decouple its validation logic into a `LoginForm` model. This approach enables us to write unit tests for validation scenarios without relying on the UI framework. We'll outline the steps for extracting the validation logic, integrating it back into the SwiftUI view, and writing comprehensive unit tests to verify its correctness.
 
-To test the validation logic of the `LoginScreen` view, we can isolate the `isFormValid` property logic and validate different scenarios programmatically. Since SwiftUI views aren't directly testable in terms of their internal state, we can extract the validation logic into a separate function or helper and test it using a unit test.
-
-Here’s how you can achieve this:
+Here's how you can achieve this:
 
 ---
 
 ### Step 1: Extract Validation Logic
-Move the validation logic to a separate helper function or computed property that can be tested independently.
+Move the validation logic to a separate extension or a struct that can be tested independently.
 
 ```swift
 import Foundation
@@ -653,3 +651,17 @@ class LoginFormTests: XCTestCase {
 ```
 
 This setup ensures that `LoginForm` validation logic is thoroughly tested. Since `LoginScreen` uses `LoginForm` for validation, any issues with validation logic will be caught at the unit test level.
+
+### Conclusion
+
+Validation is an integral part of building robust and user-friendly SwiftUI applications. From simple form validations to more complex scenarios involving inline feedback, validation summaries, and reusable components, incorporating these techniques ensures that your application processes accurate and meaningful data while enhancing the user experience.
+
+In this guide, we explored a variety of validation patterns, including property wrappers, real-time validation, and inspiration from frameworks like ASP.NET and Flutter. These approaches not only demonstrate how to implement effective validation in SwiftUI but also highlight the importance of maintaining clean and reusable code for long-term maintainability.
+
+By adopting these patterns, you can create applications that guide users towards providing valid inputs, reducing errors, and improving overall reliability. Remember, robust validation is not just about preventing errors—it's about building trust with your users through thoughtful and intuitive design.
+
+As you continue to refine your SwiftUI skills, don't hesitate to experiment with and adapt these validation techniques to suit your app's unique needs. With practice, you'll be well-equipped to design powerful forms and create exceptional user experiences.
+
+---
+
+Looking for more in-depth SwiftUI learning? Explore courses at [AzamSharp School](https://azamsharp.school) and take your iOS development skills to the next level!
