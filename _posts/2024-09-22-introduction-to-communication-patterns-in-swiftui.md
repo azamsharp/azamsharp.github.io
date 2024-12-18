@@ -1,5 +1,52 @@
 
+  <style>
+    .share-container {
+      display: flex;
+      gap: 10px; /* Spacing between buttons */
+      margin-bottom: 20px; 
+    }
+    .share-button {
+      background-color: #0077b5; /* Default LinkedIn blue */
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    .twitter { background-color: #1da1f2; }
+    .linkedin { background-color: #0077b5; }
+    .bluesky { background-color: #353c63; }
+    .share-button:hover {
+      opacity: 0.8;
+    }
+  </style>
+
 # Introduction to Communication Patterns in SwiftUI
+
+ <div class="share-container">
+    <div>
+      <!-- Twitter -->
+      <a href="https://twitter.com/intent/tweet?url=https://azamsharp.com/2024/09/22/introduction-to-communication-patterns-in-swiftui.html&text=Introduction to Communication Patterns in SwiftUI by @azamsharp"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button twitter">
+        Share on Twitter
+      </a>
+    </div>
+    <div>
+      <!-- LinkedIn -->
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://azamsharp.com/2024/09/22/introduction-to-communication-patterns-in-swiftui.html"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button linkedin">
+        Share on LinkedIn
+      </a>
+    </div>
+    
+  </div>
 
 SwiftUI provides a powerful and declarative way to build UIs, allowing views to react to state changes automatically. However, managing communication between views, especially when passing data or events from one view to another, can be challenging if not handled properly. In this article, we'll explore several communication patterns in SwiftUI that enable seamless data flow between views, ensuring that updates occur efficiently and in a way that aligns with SwiftUI’s architecture.
 

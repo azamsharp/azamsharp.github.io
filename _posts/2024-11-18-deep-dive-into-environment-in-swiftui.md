@@ -1,5 +1,51 @@
+   <style>
+    .share-container {
+      display: flex;
+      gap: 10px; /* Spacing between buttons */
+      margin-bottom: 20px; 
+    }
+    .share-button {
+      background-color: #0077b5; /* Default LinkedIn blue */
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    .twitter { background-color: #1da1f2; }
+    .linkedin { background-color: #0077b5; }
+    .bluesky { background-color: #353c63; }
+    .share-button:hover {
+      opacity: 0.8;
+    }
+  </style>
 
 # Deep Dive into Environment in SwiftUI 
+
+ <div class="share-container">
+    <div>
+      <!-- Twitter -->
+      <a href="https://twitter.com/intent/tweet?url=https://azamsharp.com/2024/11/18/deep-dive-into-environment-in-swiftui.html&text=Deep Dive into Environment in SwiftUI by @azamsharp"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button twitter">
+        Share on Twitter
+      </a>
+    </div>
+    <div>
+      <!-- LinkedIn -->
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://azamsharp.com/2024/11/18/deep-dive-into-environment-in-swiftui.html"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button linkedin">
+        Share on LinkedIn
+      </a>
+    </div>
+    
+  </div>
 
 SwiftUI revolutionized app development with its declarative syntax and reactive data handling, making it easier to build dynamic and responsive user interfaces. At the heart of this framework lies the `@Environment` property wrapper and its related tools, which provide a seamless way to manage shared state across views. Whether you're building a small utility app or architecting a large-scale application, understanding how to use these tools effectively is key to creating scalable, maintainable, and efficient applications.
 

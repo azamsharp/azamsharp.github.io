@@ -1,4 +1,51 @@
+ <style>
+    .share-container {
+      display: flex;
+      gap: 10px; /* Spacing between buttons */
+      margin-bottom: 20px; 
+    }
+    .share-button {
+      background-color: #0077b5; /* Default LinkedIn blue */
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    .twitter { background-color: #1da1f2; }
+    .linkedin { background-color: #0077b5; }
+    .bluesky { background-color: #353c63; }
+    .share-button:hover {
+      opacity: 0.8;
+    }
+  </style>
+
 # Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture
+
+<div class="share-container">
+    <div>
+      <!-- Twitter -->
+      <a href="https://twitter.com/intent/tweet?url=https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html&text=Building Large-Scale Apps with SwiftUI: A Guide to Modular Architecture by @azamsharp"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button twitter">
+        Share on Twitter
+      </a>
+    </div>
+    <div>
+      <!-- LinkedIn -->
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button linkedin">
+        Share on LinkedIn
+      </a>
+    </div>
+    
+  </div>
 
 Updated (10/10/2024)
 - Added new section [Testing Logic in SwiftUI Views](#testing-logic-in-swiftui-views) 
