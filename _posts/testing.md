@@ -160,7 +160,28 @@ struct ValidationSummary: View {
 
 ### Inline Validation Error Messages (Inspired from Flutter)
 
-### Model Validation Using Property Wrappers (Inspiring from ASP.NET)
+SwiftUI is not the only declarative UI framework out there—React, Flutter, and Jetpack Compose also belong to the same family. As a SwiftUI developer, it’s beneficial to explore these platforms to learn alternative techniques for solving problems and expanding your perspective.
+
+For example, Flutter provides built-in support for form validation by allowing developers to implement a validator function directly on TextField widgets. This function enables real-time input validation and feedback to the user, as demonstrated below:
+
+``` dart 
+TextFormField(
+  // The validator receives the text that the user has entered.
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter some text';
+    }
+    return null;
+  },
+),
+```
+
+In this example, the validator function checks if the input is empty or does not match a specific email format. If validation fails, an error message is returned and displayed under the text field, showcasing Flutter's straightforward approach to form validation.
+
+We can take inspiration from Flutter and try to implement a similar behavior using SwiftUI view modifiers.  
+
+
+### Model Validation Using Property Wrappers (Inspired from ASP.NET)
 
 ASP.NET, a widely adopted web technology from Microsoft, is extensively utilized in enterprise applications. It provides developers with powerful tools to streamline client-side validation by decorating the model with attributes, as demonstrated in the example below:
 
