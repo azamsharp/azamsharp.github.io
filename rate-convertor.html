@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Converter App</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background: linear-gradient(180deg, #F3F4F6 30%, #FFFFFF 100%);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #4A90E2, #9013FE);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .brand {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .cta-btn {
+            background: white;
+            color: #4A90E2;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background: #4A90E2;
+            color: white;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .text-content {
+            max-width: 45%;
+            text-align: left;
+        }
+
+        .text-content h1 {
+            font-size: 42px;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        .text-content p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .image-content {
+            max-width: 50%;
+        }
+
+        .app-mockup {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 16px;
+   
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .app-mockup {
+        max-width: 300px; /* Smaller maximum width for smaller screens */
+        margin: 0 auto;   /* Center the image horizontally */
+    }
+}
+
+@media (max-width: 480px) {
+    .app-mockup {
+        max-width: 250px; /* Further reduce size for very small devices */
+    }
+}
+
+
+        /* Features Section */
+        .features {
+            background: #F9F9F9;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-item h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .feature-item p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* Screenshots Section */
+        .screenshots {
+            padding: 60px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #9013FE, #4A90E2);
+            color: white;
+        }
+
+        .screenshots h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        .screenshot-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .screenshot-gallery img {
+            width: 300px;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Call to Action Section */
+        .cta {
+            background: linear-gradient(135deg, #4A90E2, #9013FE);
+            color: white;
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .cta h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .cta-btn-large {
+            font-size: 18px;
+            padding: 14px 28px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <nav class="navbar">
+                <h1 class="brand">Rate Converter</h1>
+            </nav>
+            <div class="hero-content">
+                <div class="text-content">
+                    <h1>Effortless Rate Conversion at Your Fingertips</h1>
+                    <p>Quickly switch between hourly, weekly, monthly, and yearly rates in just seconds. Designed for professionals on the go.</p>
+                    <a href="#features" class="cta-btn">Learn More</a>
+                </div>
+                <div class="image-content1">
+                    <img src="images/rate-convertor.png" alt="Rate Converter App Mockup" class="app-mockup">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>Real-Time Conversion</h3>
+                    <p>Seamlessly switch between hourly, weekly, monthly, and yearly rates in seconds.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Elegant UI</h3>
+                    <p>Enjoy a modern and intuitive interface that looks great and is easy to use.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Accurate Calculations</h3>
+                    <p>Ensure precision in all your rate conversions with smart algorithms.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Localized Currency</h3>
+                    <p>Supports multiple currencies, making it perfect for global users.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section id="download" class="cta">
+        <div class="container">
+            <h2>Get Rate Converter Today</h2>
+            <p>Download now and start converting smarter and faster with our professional-grade app.</p>
+            <a href="#" class="cta-btn cta-btn-large">Download Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Rate Converter. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
