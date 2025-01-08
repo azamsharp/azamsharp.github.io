@@ -28,19 +28,20 @@
         "HealthBenefits": "Rich in beta-carotene, carrots promote eye health, boost immunity, and support healthy skin.",
         "Pests": [
             {
-                "name": "Carrot fly",
-                "description": "No detailed description available for Carrot fly.",
-                "symptoms": "Symptoms related to Carrot fly infestation are not detailed.",
-                "treatment": "No specific treatment information available for Carrot fly.",
+                "name": "Carrot Fly",
+                "description": "The carrot fly (Psila rosae) is a small, black-bodied insect with an orange head and legs. It is a common pest affecting carrots, parsnips, celery, and other Apiaceae plants. The larvae burrow into the roots of these plants, causing damage that results in stunted growth, discoloration, and increased susceptibility to secondary infections.",
+                "symptoms": "Rust-colored tunnels in the roots, yellowing and wilting foliage, and cracking of roots. Severely infested plants may rot and fail to thrive.",
+                "treatment": "Use fine mesh netting to cover plants and prevent adult flies from laying eggs. Practice crop rotation to disrupt the lifecycle of the pest. Remove and destroy infested plants immediately to prevent the spread of larvae. Companion planting with strong-smelling plants such as onions or garlic can also deter carrot flies.",
                 "photo": "http://www.azamsharp.com/images/carrotfly.png"
             },
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are tiny, soft-bodied insects that can vary in color, including green, yellow, brown, red, or black. They feed on plant sap by piercing leaves and stems with their mouthparts. Aphids are a common pest in gardens and farms, often forming large colonies on new growth.",
+                "symptoms": "Infested plants may show curling or yellowing leaves, stunted growth, and sticky honeydew residue on foliage. The honeydew can attract ants and lead to the development of sooty mold on the plant surfaces.",
+                "treatment": "Introduce natural predators such as ladybugs and lacewings to control aphid populations. Spray plants with a strong jet of water to dislodge the insects. Apply neem oil or insecticidal soap for organic pest management. Remove and destroy heavily infested parts of the plant to prevent further spread.",
                 "photo": "http://www.azamsharp.com/images/aphids.png"
             }
+            
         ]
     },
     {
@@ -72,19 +73,21 @@
         "HealthBenefits": "Hot peppers contain capsaicin, which may reduce pain, improve digestion, and boost metabolism.",
         "Pests": [
             {
-                "name": "Pepper weevil",
-                "description": "No detailed description available for Pepper weevil.",
-                "symptoms": "Symptoms related to Pepper weevil infestation are not detailed.",
-                "treatment": "No specific treatment information available for Pepper weevil.",
+                "name": "Pepper Weevil",
+                "description": "The pepper weevil (Anthonomus eugenii) is a small, dark-colored beetle with an oval body and a prominent snout. It is a significant pest of peppers and other Solanaceae plants, causing damage to flowers and fruits. The adult beetles feed on plant tissues, while the larvae develop inside the fruit, leading to significant crop losses.",
+                "symptoms": "Premature dropping of flower buds and fruits, yellowing of stems and calyx, and feeding scars or punctures on fruits. Infested fruits may contain larvae and show internal browning or rot.",
+                "treatment": "Effective management includes regular monitoring and removal of infested fruits and plants. Use pheromone traps to monitor and reduce adult populations. Practice crop rotation to minimize overwintering weevils. Apply insecticides labeled for pepper weevil control when necessary, and consider biological control agents like the parasitoid wasp Catolaccus hunteri.",
                 "photo": "https://example.com/pepper_weevil.jpg"
-            },
+            }
+            ,
             {
                 "name": "Thrips",
-                "description": "No detailed description available for Thrips.",
-                "symptoms": "Symptoms related to Thrips infestation are not detailed.",
-                "treatment": "No specific treatment information available for Thrips.",
+                "description": "Thrips are tiny, slender insects that feed on plants by puncturing their surfaces and sucking out the contents of cells. They are known to attack a wide variety of plants, including vegetables, fruits, and ornamental plants. Thrips can also transmit plant viruses, making them particularly damaging pests.",
+                "symptoms": "Infested plants may show silvery or stippled discoloration on leaves, distorted growth, and black fecal spots on the foliage. Flowers may appear deformed, and fruits can develop scars or become misshapen.",
+                "treatment": "Introduce natural predators such as lacewings and minute pirate bugs to control thrip populations. Use insecticidal soaps or neem oil for organic pest management. Sticky traps can help monitor and reduce adult populations. Remove and destroy heavily infested plants to prevent the spread of thrips and associated plant viruses.",
                 "photo": "https://example.com/thrips.jpg"
             }
+            
         ]
     },
     {
@@ -116,19 +119,21 @@
         "HealthBenefits": "Packed with fiber and vitamins, green beans support digestion and overall immune health.",
         "Pests": [
             {
-                "name": "Bean beetle",
-                "description": "No detailed description available for Bean beetle.",
-                "symptoms": "Symptoms related to Bean beetle infestation are not detailed.",
-                "treatment": "No specific treatment information available for Bean beetle.",
+                "name": "Bean Beetle",
+                "description": "The bean beetle, also known as the cowpea weevil (Callosobruchus maculatus), is a small, oval-shaped beetle that primarily affects legumes such as beans, lentils, and cowpeas. Adult beetles lay their eggs on beans, and the larvae burrow into the seeds, causing significant damage.",
+                "symptoms": "Hollowed-out or damaged beans with small exit holes. Infested seeds may have larvae feeding inside, which reduces germination and seed quality. Adult beetles are often seen near stored legumes.",
+                "treatment": "To manage bean beetle infestations, store beans in airtight containers or the freezer to kill eggs and larvae. Inspect and clean storage areas regularly to eliminate potential infestations. For larger-scale infestations, consider using biological control agents like parasitic wasps or applying food-safe insecticides.",
                 "photo": "https://example.com/bean_beetle.jpg"
-            },
+            }
+            ,
             {
-                "name": "Spider mites",
-                "description": "No detailed description available for Spider mites.",
-                "symptoms": "Symptoms related to Spider mites infestation are not detailed.",
-                "treatment": "No specific treatment information available for Spider mites.",
+                "name": "Spider Mites",
+                "description": "Spider mites are tiny arachnids, often less than 1 mm in size, that feed on the sap of plants. They thrive in hot and dry conditions, causing significant damage to a wide variety of plants, including vegetables, fruits, and ornamentals. Spider mites are known for creating fine webbing on plant surfaces.",
+                "symptoms": "Infested plants may exhibit stippled or yellowing leaves, with a bronze or dusty appearance. Severe infestations result in leaf drop and fine webbing on the undersides of leaves or between plant stems. Plants may appear weak or stunted.",
+                "treatment": "To manage spider mite infestations, spray plants with a strong jet of water to dislodge the mites. Introduce natural predators such as ladybugs or predatory mites. Use horticultural oils, insecticidal soaps, or neem oil to control populations. Keep the plants well-watered and humid to reduce the likelihood of infestation.",
                 "photo": "https://example.com/spider_mites.jpg"
             }
+            
         ]
     },
     {
@@ -160,19 +165,21 @@
         "HealthBenefits": "Onions are rich in antioxidants and compounds that fight inflammation and boost heart health.",
         "Pests": [
             {
-                "name": "Onion fly",
-                "description": "No detailed description available for Onion fly.",
-                "symptoms": "Symptoms related to Onion fly infestation are not detailed.",
-                "treatment": "No specific treatment information available for Onion fly.",
+                "name": "Onion Fly",
+                "description": "The onion fly (Delia antiqua) is a small, grayish fly resembling a housefly. It is a significant pest for onions, garlic, leeks, and other alliums. The larvae, also known as maggots, feed on the bulbs and roots of these plants, causing extensive damage and reducing crop yields.",
+                "symptoms": "Infested plants may show yellowing and wilting of leaves, stunted growth, and rotting bulbs. The presence of maggots in the bulb or roots is a clear sign of infestation.",
+                "treatment": "Prevent onion fly infestations by using crop rotation and avoiding planting alliums in the same location consecutively. Cover crops with fine mesh netting to prevent egg-laying. Remove and destroy infested plants immediately. Beneficial nematodes can be applied to the soil to target larvae. Chemical insecticides may be used as a last resort following label instructions.",
                 "photo": "https://example.com/onion_fly.jpg"
-            },
+            }
+            ,
             {
                 "name": "Thrips",
-                "description": "No detailed description available for Thrips.",
-                "symptoms": "Symptoms related to Thrips infestation are not detailed.",
-                "treatment": "No specific treatment information available for Thrips.",
+                "description": "Thrips are tiny, slender insects that feed on plant cells by puncturing leaves, flowers, and fruits and sucking out the contents. They are common pests that affect a wide range of crops, including vegetables, fruits, and ornamental plants. Thrips are also known to spread plant viruses, making them a serious agricultural concern.",
+                "symptoms": "Affected plants may exhibit silvery or stippled discoloration on leaves, distorted or deformed growth, and dark fecal spots on foliage. In severe infestations, flowers and fruits may appear scarred or damaged, and plant vigor may decline.",
+                "treatment": "Control thrips by introducing natural predators like lacewings and minute pirate bugs. Use sticky traps to monitor and reduce adult populations. Apply insecticidal soaps or neem oil for organic pest control. Prune and destroy heavily infested parts of the plant. Maintain proper plant hygiene and avoid excessive nitrogen fertilization, which can attract thrips.",
                 "photo": "https://example.com/thrips.jpg"
             }
+            
         ]
     },
     {
@@ -204,19 +211,21 @@
         "HealthBenefits": "Rich in lycopene, tomatoes promote heart health, reduce inflammation, and support skin health.",
         "Pests": [
             {
-                "name": "Tomato hornworm",
-                "description": "No detailed description available for Tomato hornworm.",
-                "symptoms": "Symptoms related to Tomato hornworm infestation are not detailed.",
-                "treatment": "No specific treatment information available for Tomato hornworm.",
+                "name": "Tomato Hornworm",
+                "description": "The tomato hornworm (Manduca quinquemaculata) is a large, green caterpillar with white V-shaped markings and a prominent horn-like projection on its rear. It is a destructive pest that feeds on the leaves, stems, and fruits of plants in the nightshade family, including tomatoes, peppers, and eggplants.",
+                "symptoms": "Infested plants may have defoliated stems, chewed or missing leaves, and visible caterpillars. Dark green or black droppings (frass) on the foliage are a common sign of tomato hornworm activity.",
+                "treatment": "Handpick hornworms from plants and drop them into soapy water for small-scale infestations. Introduce natural predators like parasitic wasps or birds to control populations. Apply Bacillus thuringiensis (Bt) or spinosad-based insecticides for organic management. Maintain a clean garden by removing weeds and debris that may harbor hornworms.",
                 "photo": "https://example.com/tomato_hornworm.jpg"
-            },
+            }
+            ,
             {
                 "name": "Whitefly",
-                "description": "No detailed description available for Whitefly.",
-                "symptoms": "Symptoms related to Whitefly infestation are not detailed.",
-                "treatment": "No specific treatment information available for Whitefly.",
+                "description": "Whiteflies are small, winged insects that resemble tiny white moths. They are sap-sucking pests that attack a wide variety of plants, including vegetables, fruits, and ornamentals. Whiteflies congregate on the undersides of leaves and are known to transmit plant diseases, further harming crops.",
+                "symptoms": "Infested plants may exhibit yellowing, wilting, or stunted growth. The undersides of leaves may have clusters of tiny white insects. A sticky substance called honeydew is often present, which can lead to sooty mold development.",
+                "treatment": "Introduce natural predators such as ladybugs and lacewings to control whitefly populations. Use yellow sticky traps to monitor and reduce their numbers. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves and maintain proper plant hygiene to prevent infestations.",
                 "photo": "https://example.com/whitefly.jpg"
             }
+            
         ]
     },
     {
@@ -248,19 +257,21 @@
         "HealthBenefits": "Radishes are low in calories and high in fiber, promoting digestion and hydration.",
         "Pests": [
             {
-                "name": "Root maggots",
-                "description": "No detailed description available for Root maggots.",
-                "symptoms": "Symptoms related to Root maggots infestation are not detailed.",
-                "treatment": "No specific treatment information available for Root maggots.",
+                "name": "Root Maggots",
+                "description": "Root maggots are the larvae of various fly species, including cabbage flies and onion flies. These tiny, cream-colored maggots feed on the roots of plants, particularly cruciferous vegetables like cabbage, radishes, and turnips. Their feeding weakens the plant, making it susceptible to diseases and reducing crop yields.",
+                "symptoms": "Plants infested with root maggots may show signs of wilting, yellowing leaves, stunted growth, and poor vigor. When roots are inspected, they often have small holes, tunnels, and evidence of larval feeding. Infested roots may rot over time.",
+                "treatment": "Prevent root maggot infestations by using row covers to exclude adult flies from laying eggs near plants. Practice crop rotation to disrupt the life cycle of maggots. Apply beneficial nematodes to the soil to target larvae. Remove and destroy heavily infested plants and sanitize garden tools to prevent spread. Diatomaceous earth can also be sprinkled around plant bases to deter egg-laying.",
                 "photo": "https://example.com/root_maggots.jpg"
-            },
+            }
+            ,
             {
-                "name": "Cabbage maggots",
-                "description": "No detailed description available for Cabbage maggots.",
-                "symptoms": "Symptoms related to Cabbage maggots infestation are not detailed.",
-                "treatment": "No specific treatment information available for Cabbage maggots.",
+                "name": "Cabbage Maggots",
+                "description": "Cabbage maggots are the larvae of the cabbage fly (Delia radicum), which primarily affect cruciferous vegetables such as cabbage, broccoli, cauliflower, and radishes. The small white maggots burrow into the roots, causing significant damage to the plant's root system and leading to reduced growth and yield.",
+                "symptoms": "Infested plants may wilt, yellow, and show stunted growth. Upon inspecting the roots, you may find small holes, tunnels, and rotting caused by maggot feeding. Severely damaged plants may die.",
+                "treatment": "Prevent cabbage maggot infestations by using floating row covers to exclude flies from laying eggs. Practice crop rotation to avoid repeated infestations in the same area. Apply beneficial nematodes to the soil to target larvae. Mound soil around the plant base to deter egg-laying. Remove and destroy infested plants to reduce the spread.",
                 "photo": "https://example.com/cabbage_maggots.jpg"
             }
+            
         ]
     },
     {
@@ -292,19 +303,21 @@
         "HealthBenefits": "Rich in antioxidants and vitamins, arugula supports bone health and boosts immunity.",
         "Pests": [
             {
-                "name": "Flea beetles",
-                "description": "No detailed description available for Flea beetles.",
-                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
-                "treatment": "No specific treatment information available for Flea beetles.",
+                "name": "Flea Beetles",
+                "description": "Flea beetles are small, jumping beetles that target a wide variety of plants, including vegetables like cabbage, eggplants, and tomatoes. They are named for their ability to jump like fleas when disturbed. These pests are known for chewing small holes in leaves, giving them a 'shot-hole' appearance.",
+                "symptoms": "Plants infested with flea beetles exhibit small, round holes in leaves, often resembling shotgun damage. Seedlings and young plants are especially vulnerable and may wilt, become stunted, or even die under severe infestations.",
+                "treatment": "Use floating row covers to protect young plants from flea beetles. Apply diatomaceous earth or neem oil to deter them. Plant trap crops like radishes to lure beetles away from main crops. Introducing natural predators, such as nematodes, and practicing crop rotation can help manage populations.",
                 "photo": "https://example.com/flea_beetles.jpg"
-            },
+            }
+            ,
             {
-                "name": "Cabbage worms",
-                "description": "No detailed description available for Cabbage worms.",
-                "symptoms": "Symptoms related to Cabbage worms infestation are not detailed.",
-                "treatment": "No specific treatment information available for Cabbage worms.",
+                "name": "Cabbage Worms",
+                "description": "Cabbage worms are the larvae of the small white butterfly (Pieris rapae), which are common pests of cruciferous vegetables like cabbage, broccoli, and kale. These green caterpillars have a velvety texture and are voracious feeders that can cause significant damage to plants.",
+                "symptoms": "Infested plants exhibit holes in leaves, chewed edges, and frass (caterpillar droppings) on the foliage. Heavy infestations can lead to defoliation, reduced growth, and poor-quality crops.",
+                "treatment": "Handpick cabbage worms from plants and dispose of them to control small infestations. Use floating row covers to prevent butterflies from laying eggs. Apply Bacillus thuringiensis (Bt) or spinosad-based insecticides for organic control. Encourage natural predators such as birds or parasitic wasps in the garden.",
                 "photo": "https://example.com/cabbage_worms.jpg"
             }
+            
         ]
     },
     {
@@ -336,19 +349,21 @@
         "HealthBenefits": "Corn provides energy, is rich in antioxidants, and supports healthy vision with its lutein content.",
         "Pests": [
             {
-                "name": "Corn earworm",
-                "description": "No detailed description available for Corn earworm.",
-                "symptoms": "Symptoms related to Corn earworm infestation are not detailed.",
-                "treatment": "No specific treatment information available for Corn earworm.",
+                "name": "Corn Earworm",
+                "description": "The corn earworm (Helicoverpa zea) is a moth larva that is a common pest of corn and other crops, including tomatoes, peppers, and beans. The caterpillars vary in color from green to brown and can grow up to 2 inches long. They are known for burrowing into corn ears and feeding on kernels.",
+                "symptoms": "Infested corn ears may have chewed kernels, silk damage, and the presence of frass (caterpillar droppings). Caterpillars can also cause damage to the tips of ears, leading to poor-quality harvests.",
+                "treatment": "Plant resistant corn varieties and apply Bacillus thuringiensis (Bt) to control larvae. Use insecticidal sprays targeted at early stages of larval development. Encourage natural predators such as birds and parasitic wasps. Ensure proper crop rotation to disrupt the pest's lifecycle.",
                 "photo": "https://example.com/corn_earworm.jpg"
-            },
+            }
+            ,
             {
                 "name": "Armyworms",
-                "description": "No detailed description available for Armyworms.",
-                "symptoms": "Symptoms related to Armyworms infestation are not detailed.",
-                "treatment": "No specific treatment information available for Armyworms.",
+                "description": "Armyworms are the larvae of moths belonging to the genus Spodoptera. They are named for their behavior of moving in large groups across fields, consuming crops in their path. These pests attack a wide variety of crops, including grains, corn, vegetables, and grasses. The caterpillars are greenish to brown with stripes and can grow up to 2 inches long.",
+                "symptoms": "Infested plants show signs of chewed leaves, skeletonized foliage, and damaged stems. Large infestations can lead to defoliation and significant crop losses. Armyworms often create patches of destroyed vegetation as they move through fields.",
+                "treatment": "Monitor fields regularly and handpick armyworms where possible. Apply Bacillus thuringiensis (Bt) or spinosad-based insecticides for organic control. Use pheromone traps to monitor moth activity and disrupt their breeding. Encourage natural predators such as birds, parasitic wasps, and ground beetles to reduce populations.",
                 "photo": "https://example.com/armyworms.jpg"
             }
+            
         ]
     },
     {
@@ -380,19 +395,21 @@
         "HealthBenefits": "Beets are high in nitrates, which can improve blood flow and lower blood pressure.",
         "Pests": [
             {
-                "name": "Leaf miners",
-                "description": "No detailed description available for Leaf miners.",
-                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
-                "treatment": "No specific treatment information available for Leaf miners.",
+                "name": "Leaf Miners",
+                "description": "Leaf miners are the larvae of various insect species, including flies, beetles, and moths, that feed on the tissue between the upper and lower surfaces of leaves. They create distinctive, winding tunnels or blotches as they move through the leaf. Leaf miners are common pests of vegetables, ornamental plants, and fruit trees.",
+                "symptoms": "Infested leaves exhibit winding, white or translucent trails (mines) that often turn brown over time. Leaves may become discolored, distorted, or drop prematurely, reducing the plant's vigor and photosynthetic ability.",
+                "treatment": "Prune and destroy infested leaves to prevent the larvae from maturing. Apply neem oil or insecticidal soap to deter adult leaf miners from laying eggs. Introduce natural predators, such as parasitic wasps, to control populations. Use floating row covers to protect crops from adult insects.",
                 "photo": "https://example.com/leaf_miners.jpg"
-            },
+            }
+            ,
             {
-                "name": "Beet armyworms",
-                "description": "No detailed description available for Beet armyworms.",
-                "symptoms": "Symptoms related to Beet armyworms infestation are not detailed.",
-                "treatment": "No specific treatment information available for Beet armyworms.",
+                "name": "Beet Armyworms",
+                "description": "Beet armyworms (Spodoptera exigua) are the larvae of moths that attack a wide range of crops, including beets, tomatoes, peppers, and lettuce. These caterpillars are light green to black with pale stripes running along their bodies. Beet armyworms are highly destructive, feeding on leaves, stems, and fruits of plants.",
+                "symptoms": "Infested plants exhibit skeletonized leaves, chewed foliage, and damage to stems or fruit. Severe infestations can result in defoliation and reduced crop yields. Egg clusters covered in a cottony material are often found on the undersides of leaves.",
+                "treatment": "Monitor plants regularly and remove egg clusters and larvae by hand. Apply Bacillus thuringiensis (Bt) or spinosad-based insecticides for organic control. Use pheromone traps to monitor and reduce adult moth populations. Encourage natural predators, such as parasitic wasps and birds, to help control infestations.",
                 "photo": "https://example.com/beet_armyworms.jpg"
             }
+            
         ]
     },
     {
@@ -424,19 +441,21 @@
         "HealthBenefits": "Cucumbers are hydrating and rich in antioxidants, promoting healthy skin and digestion.",
         "Pests": [
             {
-                "name": "Cucumber beetles",
-                "description": "No detailed description available for Cucumber beetles.",
-                "symptoms": "Symptoms related to Cucumber beetles infestation are not detailed.",
-                "treatment": "No specific treatment information available for Cucumber beetles.",
+                "name": "Cucumber Beetles",
+                "description": "Cucumber beetles are small, colorful beetles with either yellow and black stripes or spots, depending on the species. They are a significant pest for cucurbit plants like cucumbers, squash, melons, and pumpkins. In addition to feeding on plant foliage, flowers, and fruit, they can spread bacterial wilt and other plant diseases.",
+                "symptoms": "Plants infested with cucumber beetles may show chewed leaves and flowers, scarring on fruit, and stunted growth. Signs of bacterial wilt, such as leaf wilting and eventual plant death, can also indicate cucumber beetle activity.",
+                "treatment": "Use floating row covers to protect young plants from beetles. Apply neem oil or insecticidal soap to deter feeding. Introduce beneficial insects such as tachinid flies and soldier beetles to help control populations. Practice crop rotation and remove plant debris at the end of the growing season to reduce overwintering sites.",
                 "photo": "https://example.com/cucumber_beetles.jpg"
-            },
+            }
+            ,
             {
-                "name": "Squash bugs",
-                "description": "No detailed description available for Squash bugs.",
-                "symptoms": "Symptoms related to Squash bugs infestation are not detailed.",
-                "treatment": "No specific treatment information available for Squash bugs.",
+                "name": "Squash Bugs",
+                "description": "Squash bugs (Anasa tristis) are common pests that attack plants in the cucurbit family, including squash, pumpkins, and zucchini. They are shield-shaped, brownish-gray insects that feed on plant sap, causing significant damage to crops. Squash bugs are particularly harmful during the early growth stages of plants.",
+                "symptoms": "Infested plants may show yellowing and wilting leaves, with browning or black spots at feeding sites. Severely affected plants may have dried, crispy leaves and stunted growth. Eggs can often be found in clusters on the undersides of leaves.",
+                "treatment": "Handpick squash bugs and destroy them to reduce their population. Remove egg clusters from leaves and dispose of them. Use floating row covers to protect young plants. Apply neem oil or insecticidal soaps to manage infestations. Keep the garden clean by removing plant debris, which can harbor overwintering squash bugs.",
                 "photo": "https://example.com/squash_bugs.jpg"
             }
+            
         ]
     },
     {
@@ -468,19 +487,21 @@
         "HealthBenefits": "Eggplants contain antioxidants like nasunin, which protect brain function and reduce inflammation.",
         "Pests": [
             {
-                "name": "Flea beetles",
-                "description": "No detailed description available for Flea beetles.",
-                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
-                "treatment": "No specific treatment information available for Flea beetles.",
+                "name": "Flea Beetles",
+                "description": "Flea beetles are small, jumping insects that attack a wide range of plants, including vegetables like tomatoes, potatoes, eggplants, and leafy greens. These beetles are named for their ability to jump like fleas when disturbed. Their feeding behavior creates small holes in leaves, giving them a 'shot-hole' appearance.",
+                "symptoms": "Plants infested with flea beetles exhibit small, round holes in leaves, often resembling shotgun damage. Young seedlings are particularly vulnerable, and heavy infestations can lead to stunted growth, reduced vigor, and even plant death.",
+                "treatment": "Use floating row covers to protect seedlings from flea beetles. Apply diatomaceous earth around plants to deter them. Neem oil and insecticidal soaps are effective organic treatments. Plant trap crops like radishes to lure beetles away from main crops, and practice crop rotation to minimize future infestations.",
                 "photo": "https://example.com/flea_beetles.jpg"
-            },
+            }
+            ,
             {
-                "name": "Spider mites",
-                "description": "No detailed description available for Spider mites.",
-                "symptoms": "Symptoms related to Spider mites infestation are not detailed.",
-                "treatment": "No specific treatment information available for Spider mites.",
+                "name": "Spider Mites",
+                "description": "Spider mites are tiny arachnids that feed on plant sap, often found on the undersides of leaves. They are particularly problematic in hot, dry conditions and can infest a wide range of plants, including vegetables, fruits, and ornamental plants. Spider mites are known for their ability to produce fine webbing on plants.",
+                "symptoms": "Infested plants may exhibit stippled or yellowing leaves with a bronze or dusty appearance. In severe infestations, leaves may drop prematurely, and fine webbing can be found on the undersides of leaves or between plant stems.",
+                "treatment": "Spray plants with a strong jet of water to dislodge spider mites. Introduce natural predators like ladybugs or predatory mites. Use horticultural oils, neem oil, or insecticidal soaps to control populations. Maintain adequate humidity levels and ensure proper watering to reduce infestations.",
                 "photo": "https://example.com/spider_mites.jpg"
             }
+            
         ]
     },
     {
@@ -513,18 +534,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that come in a variety of colors, including green, yellow, brown, red, and black. They feed on plant sap by piercing stems, leaves, and buds with their mouthparts. Aphids reproduce rapidly and are common pests on vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curling or yellowing leaves, stunted growth, and sticky honeydew on leaves and stems. This honeydew can lead to the development of sooty mold, which further hampers photosynthesis. Large colonies of aphids are often visible on new growth or the undersides of leaves.",
+                "treatment": "Introduce natural predators such as ladybugs, lacewings, or parasitic wasps to control aphid populations. Spray plants with a strong jet of water to dislodge aphids. Apply neem oil or insecticidal soap as an organic treatment. Regularly inspect plants for early signs of infestation and remove heavily infested leaves or stems.",
                 "photo": "https://example.com/aphids.jpg"
-            },
+            }
+            ,
             {
-                "name": "Carrot weevils",
-                "description": "No detailed description available for Carrot weevils.",
-                "symptoms": "Symptoms related to Carrot weevils infestation are not detailed.",
-                "treatment": "No specific treatment information available for Carrot weevils.",
+                "name": "Carrot Weevils",
+                "description": "Carrot weevils (Listronotus oregonensis) are small, dark brown beetles that target carrots and other related plants, such as celery and parsley. The adults feed on foliage, while the larvae burrow into the roots, causing significant damage and reducing crop quality.",
+                "symptoms": "Infested carrots may show small holes or tunnels in the roots, which can lead to discoloration, secondary infections, and rotting. Plants may appear stunted or wilted, especially in severe infestations.",
+                "treatment": "Use floating row covers to prevent adult weevils from laying eggs near the plants. Remove plant debris and weeds in and around the garden to eliminate overwintering sites. Practice crop rotation to break the pest's life cycle. Beneficial nematodes can be applied to the soil to target larvae, and insecticides can be used if necessary.",
                 "photo": "https://example.com/carrot_weevils.jpg"
             }
+            
         ]
     },
     {
@@ -556,19 +579,21 @@
         "HealthBenefits": "Broccoli is rich in vitamins C and K, as well as fiber and antioxidants that support immune health.",
         "Pests": [
             {
-                "name": "Cabbage worms",
-                "description": "No detailed description available for Cabbage worms.",
-                "symptoms": "Symptoms related to Cabbage worms infestation are not detailed.",
-                "treatment": "No specific treatment information available for Cabbage worms.",
+                "name": "Cabbage Worms",
+                "description": "Cabbage worms are the larvae of the small white butterfly (Pieris rapae), a common pest of cruciferous vegetables like cabbage, broccoli, kale, and cauliflower. These green caterpillars have a velvety texture and are voracious feeders, causing significant damage to plants.",
+                "symptoms": "Infested plants exhibit holes in leaves, chewed edges, and frass (caterpillar droppings) on the foliage. In severe cases, defoliation can occur, reducing plant growth and yield.",
+                "treatment": "Handpick cabbage worms from plants and dispose of them to control small infestations. Use floating row covers to prevent butterflies from laying eggs. Apply Bacillus thuringiensis (Bt) or spinosad-based insecticides for organic control. Encourage natural predators, such as birds or parasitic wasps, in the garden.",
                 "photo": "https://example.com/cabbage_worms.jpg"
-            },
+            }
+            ,
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds. They come in various colors, such as green, yellow, black, red, or brown, depending on the species. Aphids reproduce rapidly and can form large colonies, often causing significant damage to plants.",
+                "symptoms": "Infested plants may show curling, yellowing, or distorted leaves, stunted growth, and sticky honeydew on foliage, which can attract ants and lead to the growth of sooty mold. Large colonies of aphids are often visible on new shoots or the undersides of leaves.",
+                "treatment": "Introduce natural predators, such as ladybugs, lacewings, and parasitic wasps, to control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil or insecticidal soaps for organic management. Remove heavily infested parts of the plant to prevent the spread of aphids.",
                 "photo": "https://example.com/aphids.jpg"
             }
+            
         ]
     },
     {
@@ -600,19 +625,21 @@
         "HealthBenefits": "Potatoes are a good source of potassium, vitamin C, and fiber, promoting heart health and digestion.",
         "Pests": [
             {
-                "name": "Potato beetle",
-                "description": "No detailed description available for Potato beetle.",
-                "symptoms": "Symptoms related to Potato beetle infestation are not detailed.",
-                "treatment": "No specific treatment information available for Potato beetle.",
+                "name": "Potato Beetle",
+                "description": "The potato beetle, also known as the Colorado potato beetle (Leptinotarsa decemlineata), is a common pest of potatoes, tomatoes, and eggplants. These beetles are orange-yellow with black stripes on their wings, and their larvae are reddish with black spots. Both adults and larvae feed voraciously on plant foliage, leading to significant crop damage.",
+                "symptoms": "Plants infested with potato beetles may exhibit defoliation, starting with small holes in leaves and progressing to complete leaf loss. Severe infestations can weaken plants, reduce yields, and even cause plant death. Clusters of orange eggs may be visible on the undersides of leaves.",
+                "treatment": "Handpick beetles and larvae from plants and destroy them. Use floating row covers to prevent beetles from reaching plants. Apply Bacillus thuringiensis (Bt) or spinosad-based insecticides for organic control. Introduce natural predators like ladybugs and lacewings to reduce beetle populations. Crop rotation and removing plant debris at the end of the season can help disrupt their lifecycle.",
                 "photo": "https://example.com/potato_beetle.jpg"
-            },
+            }
+            ,
             {
                 "name": "Wireworms",
-                "description": "No detailed description available for Wireworms.",
-                "symptoms": "Symptoms related to Wireworms infestation are not detailed.",
-                "treatment": "No specific treatment information available for Wireworms.",
+                "description": "Wireworms are the larvae of click beetles and are known for their hard, elongated bodies that resemble wires. They primarily target the roots and underground stems of plants, including potatoes, carrots, corn, and wheat. Wireworms can survive in the soil for several years, making them a persistent pest in agricultural and garden settings.",
+                "symptoms": "Plants infested with wireworms may exhibit poor germination, stunted growth, and wilting. Upon inspection, roots and tubers may have small, round holes caused by wireworm feeding. In severe cases, the damage can lead to secondary infections and plant death.",
+                "treatment": "Practice crop rotation to reduce wireworm populations in the soil. Use bait traps, such as buried pieces of potato, to monitor and capture wireworms. Apply beneficial nematodes to the soil to target larvae. Avoid planting susceptible crops in fields with a known wireworm history, and consider soil treatments with approved insecticides for severe infestations.",
                 "photo": "https://example.com/wireworms.jpg"
             }
+            
         ]
     },
     {
@@ -645,18 +672,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are tiny, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They can range in color from green, yellow, black, and red to brown, depending on the species. Aphids reproduce quickly and often form large colonies, making them a persistent pest for many types of plants, including vegetables, fruits, and ornamentals.",
+                "symptoms": "Infested plants may show signs of curling, yellowing, or distorted leaves, stunted growth, and the presence of sticky honeydew on the foliage. This honeydew can attract ants and lead to the growth of sooty mold, which blocks sunlight and reduces photosynthesis.",
+                "treatment": "Introduce beneficial insects such as ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray infested plants with a strong stream of water to dislodge aphids. Apply neem oil or insecticidal soap for organic control. Remove heavily infested leaves or stems to prevent further spread, and practice regular monitoring to catch infestations early.",
                 "photo": "https://example.com/aphids.jpg"
-            },
+            }
+            ,
             {
-                "name": "Leaf miners",
-                "description": "No detailed description available for Leaf miners.",
-                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
-                "treatment": "No specific treatment information available for Leaf miners.",
+                "name": "Leaf Miners",
+                "description": "Leaf miners are the larvae of various insect species, including flies, beetles, and moths. These pests feed between the upper and lower surfaces of leaves, creating distinctive winding tunnels or blotches. Leaf miners commonly infest vegetables, ornamental plants, and fruit trees.",
+                "symptoms": "Infested leaves exhibit white or translucent, winding trails (mines) caused by the larvae feeding inside. Over time, these trails may turn brown, and leaves may become distorted, discolored, or drop prematurely. Severe infestations can reduce plant vigor and photosynthesis.",
+                "treatment": "Remove and destroy infested leaves to prevent the larvae from maturing. Apply neem oil or insecticidal soap to deter adult leaf miners from laying eggs. Introduce beneficial insects such as parasitic wasps to control leaf miner populations. Use floating row covers to protect plants from adult insects.",
                 "photo": "https://example.com/leaf_miners.jpg"
             }
+            
         ]
     },
     {
@@ -688,19 +717,21 @@
         "HealthBenefits": "Cauliflower is rich in vitamins and antioxidants that promote digestion and reduce inflammation.",
         "Pests": [
             {
-                "name": "Cabbage worms",
-                "description": "No detailed description available for Cabbage worms.",
-                "symptoms": "Symptoms related to Cabbage worms infestation are not detailed.",
-                "treatment": "No specific treatment information available for Cabbage worms.",
+                "name": "Cabbage Worms",
+                "description": "Cabbage worms are the larvae of the small white butterfly (Pieris rapae), a common pest of cruciferous vegetables such as cabbage, broccoli, kale, and cauliflower. These velvety green caterpillars are voracious feeders and can cause significant damage to crops.",
+                "symptoms": "Infested plants exhibit holes in leaves, chewed edges, and the presence of frass (caterpillar droppings) on the foliage. Severe infestations can result in defoliation, reduced plant growth, and poor-quality harvests.",
+                "treatment": "Handpick cabbage worms from plants and dispose of them to manage small infestations. Use floating row covers to prevent butterflies from laying eggs on plants. Apply Bacillus thuringiensis (Bt) or spinosad-based insecticides for organic control. Encourage natural predators, such as birds or parasitic wasps, to help reduce cabbage worm populations.",
                 "photo": "https://example.com/cabbage_worms.jpg"
-            },
+            }
+            ,
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in a variety of colors, including green, yellow, black, red, and brown, depending on the species. Aphids reproduce quickly and can form large colonies, causing significant damage to many types of plants, including vegetables, fruits, and ornamentals.",
+                "symptoms": "Infested plants may show curled, yellowed, or distorted leaves. Stunted growth and the presence of sticky honeydew on the foliage are common. This honeydew can attract ants and lead to the growth of sooty mold, which blocks sunlight and reduces photosynthesis. Large colonies of aphids are often visible on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to control aphid populations naturally. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil or insecticidal soaps for organic control. Regularly inspect plants for early signs of infestation and remove heavily infested leaves or stems to prevent further spread.",
                 "photo": "https://example.com/aphids.jpg"
             }
+            
         ]
     },
     {
@@ -732,19 +763,21 @@
         "HealthBenefits": "Asparagus is high in folate and vitamins, supporting heart health and reducing oxidative stress.",
         "Pests": [
             {
-                "name": "Asparagus beetle",
-                "description": "No detailed description available for Asparagus beetle.",
-                "symptoms": "Symptoms related to Asparagus beetle infestation are not detailed.",
-                "treatment": "No specific treatment information available for Asparagus beetle.",
+                "name": "Asparagus Beetle",
+                "description": "The asparagus beetle (Crioceris asparagi) is a small, brightly colored beetle that primarily targets asparagus plants. These beetles are orange or red with black and white spots, and their larvae are soft-bodied, dark-headed grubs. They feed on asparagus spears, foliage, and berries, causing significant damage to the plant.",
+                "symptoms": "Infested plants may have chewed spears, which can become deformed or scarred. Foliage damage is common, with defoliated plants struggling to grow and store energy for the next season. Eggs may appear as small, dark dots on the spears or fronds.",
+                "treatment": "Handpick beetles and larvae from plants and drop them into soapy water. Remove and destroy eggs to reduce populations. Apply neem oil or insecticidal soap to manage infestations. Encourage natural predators, such as ladybugs and parasitic wasps, to help control asparagus beetle populations. Cut and remove old asparagus ferns in the fall to reduce overwintering sites.",
                 "photo": "https://example.com/asparagus_beetle.jpg"
-            },
+            }
+            ,
             {
                 "name": "Cutworms",
-                "description": "No detailed description available for Cutworms.",
-                "symptoms": "Symptoms related to Cutworms infestation are not detailed.",
-                "treatment": "No specific treatment information available for Cutworms.",
+                "description": "Cutworms are the larvae of several moth species, known for their habit of cutting down young plants at the soil level. These plump, smooth caterpillars are usually gray, brown, or green and curl into a C-shape when disturbed. They are active at night and feed on a wide variety of crops, including vegetables, flowers, and grasses.",
+                "symptoms": "Young plants may be severed at the base, leaving them wilted or lying on the ground. Seedlings and transplants are particularly vulnerable. Feeding damage may also appear on leaves and stems, especially near the soil surface.",
+                "treatment": "Place collars made of cardboard or plastic around the base of seedlings to protect them from cutworms. Handpick cutworms at night and destroy them. Use diatomaceous earth or other barriers around plants to deter movement. Apply Bacillus thuringiensis (Bt) or beneficial nematodes to the soil to target larvae. Keep the garden weed-free to eliminate shelter for cutworms.",
                 "photo": "https://example.com/cutworms.jpg"
             }
+            
         ]
     },
     {
@@ -777,18 +810,20 @@
         "Pests": [
             {
                 "name": "Nematodes",
-                "description": "No detailed description available for Nematodes.",
-                "symptoms": "Symptoms related to Nematodes infestation are not detailed.",
-                "treatment": "No specific treatment information available for Nematodes.",
+                "description": "Nematodes are microscopic roundworms that live in soil and water. While many nematodes are beneficial and help with pest control and nutrient cycling, plant-parasitic nematodes feed on roots, causing damage to crops. Common pest species include root-knot nematodes, lesion nematodes, and cyst nematodes, which target a variety of plants such as vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit stunted growth, yellowing or wilting leaves, and reduced vigor. Roots often show swelling, knots, or galls caused by root-knot nematodes. Lesions or dead patches on roots are common with other types of nematodes, leading to poor nutrient uptake and susceptibility to secondary infections.",
+                "treatment": "Plant nematode-resistant crop varieties when available. Rotate crops to disrupt nematode lifecycles. Add organic matter like compost or manure to improve soil health and encourage beneficial microbes that suppress nematodes. Solarize soil by covering it with clear plastic during the hot season to kill nematodes. Use nematicides or beneficial nematodes as biological controls to reduce populations.",
                 "photo": "https://example.com/nematodes.jpg"
-            },
+            }
+            ,
             {
-                "name": "Onion maggots",
-                "description": "No detailed description available for Onion maggots.",
-                "symptoms": "Symptoms related to Onion maggots infestation are not detailed.",
-                "treatment": "No specific treatment information available for Onion maggots.",
+                "name": "Onion Maggots",
+                "description": "Onion maggots (Delia antiqua) are the larvae of small gray flies that primarily attack onion plants but can also infest garlic, shallots, and leeks. These maggots feed on the bulbs and roots of plants, causing significant damage to crops and reducing yields.",
+                "symptoms": "Infested plants may exhibit yellowing and wilting leaves, stunted growth, and rotting bulbs. When bulbs are inspected, small tunnels or holes caused by maggot feeding may be visible. Severe infestations can lead to plant death.",
+                "treatment": "Use floating row covers to prevent flies from laying eggs near plants. Practice crop rotation to avoid planting onions or related crops in the same area consecutively. Remove and destroy infested plants immediately to reduce the spread of maggots. Apply beneficial nematodes to the soil to target larvae, and consider using insecticides labeled for onion maggots if necessary.",
                 "photo": "https://example.com/onion_maggots.jpg"
             }
+            
         ]
     },
     {
@@ -821,18 +856,20 @@
         "Pests": [
             {
                 "name": "Thrips",
-                "description": "No detailed description available for Thrips.",
-                "symptoms": "Symptoms related to Thrips infestation are not detailed.",
-                "treatment": "No specific treatment information available for Thrips.",
+                "description": "Thrips are tiny, slender insects that feed on plants by piercing their surfaces and sucking out the contents of cells. They are a common pest of vegetables, fruits, and ornamental plants, causing significant damage. In addition to physical damage, thrips are known to transmit plant viruses, making them a serious agricultural concern.",
+                "symptoms": "Infested plants may show silvery or stippled discoloration on leaves, distorted or deformed growth, and dark fecal spots on foliage. In severe infestations, flowers and fruits may be scarred or damaged, and plant vigor may decline.",
+                "treatment": "Introduce natural predators like lacewings and minute pirate bugs to control thrip populations. Use sticky traps to monitor and reduce adult populations. Apply neem oil, insecticidal soaps, or horticultural oils to affected plants. Remove and destroy heavily infested plant parts. Maintain proper plant hygiene and avoid over-fertilizing, as excessive nitrogen can attract thrips.",
                 "photo": "https://example.com/thrips.jpg"
-            },
+            }
+            ,
             {
-                "name": "Onion fly",
-                "description": "No detailed description available for Onion fly.",
-                "symptoms": "Symptoms related to Onion fly infestation are not detailed.",
-                "treatment": "No specific treatment information available for Onion fly.",
+                "name": "Onion Fly",
+                "description": "The onion fly (Delia antiqua) is a small gray fly that resembles a housefly. It is a significant pest for onions and other alliums, including garlic, shallots, and leeks. The larvae, also known as maggots, feed on the roots and bulbs of these plants, causing extensive damage and reducing crop yields.",
+                "symptoms": "Infested plants may exhibit yellowing and wilting of leaves, stunted growth, and rotting bulbs. Upon inspection, small tunnels or feeding damage caused by the maggots can be found inside the bulbs. Severely affected plants may die.",
+                "treatment": "Prevent onion fly infestations by using floating row covers to exclude adult flies. Practice crop rotation and avoid planting onions or related crops in the same location consecutively. Remove and destroy infested plants immediately to prevent further spread. Applying beneficial nematodes to the soil can target larvae effectively. If necessary, use insecticides labeled for onion flies, following the product's instructions.",
                 "photo": "https://example.com/onion_fly.jpg"
             }
+            
         ]
     },
     {
@@ -865,18 +902,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. These pests come in various colors, such as green, yellow, black, red, and brown, and are known for reproducing rapidly. Aphids infest many types of plants, including vegetables, fruits, and ornamentals, often forming large colonies that cause significant damage.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and the presence of sticky honeydew on foliage, which can attract ants and lead to the development of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to control aphid populations naturally. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Regularly inspect plants for early signs of infestation and remove heavily infested parts to prevent further spread.",
                 "photo": "https://example.com/aphids.jpg"
-            },
+            }
+            ,
             {
-                "name": "Leaf miners",
-                "description": "No detailed description available for Leaf miners.",
-                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
-                "treatment": "No specific treatment information available for Leaf miners.",
+                "name": "Leaf Miners",
+                "description": "Leaf miners are the larvae of various insect species, including flies, beetles, and moths. They burrow between the upper and lower layers of leaves, feeding on plant tissues and creating distinctive winding trails or blotches. Leaf miners commonly infest vegetables, ornamental plants, and fruit trees.",
+                "symptoms": "Infested leaves show winding, translucent trails or blotches that turn brown over time. The damage reduces photosynthesis and can lead to weakened plants. In severe infestations, leaves may become distorted, discolored, or drop prematurely.",
+                "treatment": "Remove and destroy infested leaves to prevent larvae from maturing. Use neem oil or insecticidal soap to deter adult insects from laying eggs. Introduce beneficial insects, such as parasitic wasps, to control leaf miner populations. Employ floating row covers to protect plants from adult insects. Maintaining proper plant health and avoiding over-fertilization can also reduce susceptibility.",
                 "photo": "https://example.com/leaf_miners.jpg"
             }
+            
         ]
     },
     {
@@ -909,19 +948,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in various colors, including green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests of vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the development of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             },
             {
-                "name": "Leaf miners",
-                "description": "No detailed description available for Leaf miners.",
-                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
-                "treatment": "No specific treatment information available for Leaf miners.",
+                "name": "Leaf Miners",
+                "description": "Leaf miners are the larvae of various insect species, including flies, beetles, and moths. These pests feed between the upper and lower layers of leaves, creating distinctive winding trails or blotches. Leaf miners commonly infest vegetables, ornamental plants, and fruit trees, causing visible damage and reducing plant vigor.",
+                "symptoms": "Infested leaves show winding, translucent trails or blotches that eventually turn brown. Severe infestations may cause leaves to become distorted, discolored, or drop prematurely. The damage reduces photosynthesis, leading to weakened plants.",
+                "treatment": "Remove and destroy infested leaves to prevent larvae from maturing. Use neem oil or insecticidal soap to deter adult insects from laying eggs. Introduce beneficial insects, such as parasitic wasps, to control leaf miner populations. Employ floating row covers to protect plants from adult insects. Maintain proper plant health and avoid over-fertilization to reduce susceptibility.",
                 "photo": "https://example.com/leaf_miners.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 69,
@@ -952,20 +992,21 @@
         "HealthBenefits": "Basil contains antioxidants and essential oils that support heart health and reduce inflammation.",
         "Pests": [
             {
-                "name": "Japanese beetles",
-                "description": "No detailed description available for Japanese beetles.",
-                "symptoms": "Symptoms related to Japanese beetles infestation are not detailed.",
-                "treatment": "No specific treatment information available for Japanese beetles.",
+                "name": "Japanese Beetles",
+                "description": "Japanese beetles (Popillia japonica) are metallic green and bronze beetles that are highly destructive pests of many plants, including roses, grapes, fruit trees, and vegetables. They feed on foliage, flowers, and fruit, leaving skeletonized leaves and damaged crops in their wake.",
+                "symptoms": "Infested plants show skeletonized leaves, with only the veins remaining. Flowers and fruits may have chewed edges or holes. Large numbers of beetles can strip plants of their foliage, severely weakening them.",
+                "treatment": "Handpick beetles from plants and place them in soapy water to kill them. Use floating row covers to protect plants during peak beetle activity. Apply neem oil or insecticidal soaps for organic control. Consider using milky spore powder or beneficial nematodes in the soil to target Japanese beetle larvae (grubs). Avoid planting highly attractive plants near susceptible crops to reduce infestations.",
                 "photo": "https://example.com/japanese_beetles.jpg"
             },
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in various colors, including green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests of vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the development of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 70,
@@ -996,20 +1037,21 @@
         "HealthBenefits": "Radicchio is rich in antioxidants and vitamins, promoting digestion and reducing inflammation.",
         "Pests": [
             {
-                "name": "Flea beetles",
-                "description": "No detailed description available for Flea beetles.",
-                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
-                "treatment": "No specific treatment information available for Flea beetles.",
+                "name": "Flea Beetles",
+                "description": "Flea beetles are small, jumping insects that feed on the leaves of various crops, including tomatoes, potatoes, eggplants, and leafy greens. They are named for their ability to jump like fleas when disturbed. Flea beetles create distinctive 'shot-hole' damage, making them a significant pest for young plants.",
+                "symptoms": "Infested plants exhibit small, round holes in leaves, giving them a perforated appearance. Severe infestations can stunt plant growth, reduce vigor, and even kill seedlings. The damage may lead to reduced photosynthesis and weakened plants.",
+                "treatment": "Use floating row covers to protect seedlings from flea beetles. Apply diatomaceous earth or neem oil to deter the beetles. Encourage natural predators such as parasitic wasps and tachinid flies to reduce populations. Plant trap crops like radishes to lure beetles away from the main crops. Practice crop rotation and keep the garden free of debris to minimize future infestations.",
                 "photo": "https://example.com/flea_beetles.jpg"
             },
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in various colors, including green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests of vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the development of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 71,
@@ -1041,19 +1083,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in various colors, including green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests of vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the growth of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             },
             {
                 "name": "Caterpillars",
-                "description": "No detailed description available for Caterpillars.",
-                "symptoms": "Symptoms related to Caterpillars infestation are not detailed.",
-                "treatment": "No specific treatment information available for Caterpillars.",
+                "description": "Caterpillars are the larvae of moths and butterflies, and they feed voraciously on leaves and other plant parts. Depending on the species, caterpillars can cause extensive damage to a wide variety of plants, including vegetables, fruits, and ornamental flowers. Some caterpillars can grow large and are easily visible, while others remain small and more difficult to spot.",
+                "symptoms": "Plants infested with caterpillars may show signs of chewed or eaten leaves, holes in foliage, and frass (droppings) on the plants. Larger infestations can result in significant defoliation and stunted plant growth. Some caterpillars may also feed on fruits and flowers, causing damage to the crop.",
+                "treatment": "Handpick caterpillars from plants and place them in soapy water for disposal. Apply Bacillus thuringiensis (Bt) or spinosad for organic control of caterpillar populations. Use floating row covers to prevent adult moths or butterflies from laying eggs. Encourage natural predators, such as birds and parasitic wasps, to help manage caterpillar populations.",
                 "photo": "https://example.com/caterpillars.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 73,
@@ -1084,20 +1127,21 @@
         "HealthBenefits": "Brussels sprouts are high in vitamins C and K, supporting immunity and bone health.",
         "Pests": [
             {
-                "name": "Cabbage worms",
-                "description": "No detailed description available for Cabbage worms.",
-                "symptoms": "Symptoms related to Cabbage worms infestation are not detailed.",
-                "treatment": "No specific treatment information available for Cabbage worms.",
+                "name": "Cabbage Worms",
+                "description": "Cabbage worms are the larvae of the small white butterfly (Pieris rapae), a common pest of cruciferous vegetables like cabbage, broccoli, kale, and cauliflower. These green caterpillars have a velvety texture and are voracious feeders, causing significant damage to plants.",
+                "symptoms": "Infested plants exhibit holes in leaves, chewed edges, and the presence of frass (caterpillar droppings) on the foliage. Severe infestations can result in defoliation, reduced plant growth, and poor-quality harvests.",
+                "treatment": "Handpick cabbage worms from plants and dispose of them to manage small infestations. Use floating row covers to prevent butterflies from laying eggs. Apply Bacillus thuringiensis (Bt) or spinosad-based insecticides for organic control. Encourage natural predators, such as birds or parasitic wasps, in the garden.",
                 "photo": "https://example.com/cabbage_worms.jpg"
             },
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in various colors, including green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests of vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the growth of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 74,
@@ -1128,20 +1172,21 @@
         "HealthBenefits": "Mustard greens are rich in antioxidants and vitamins, promoting heart and bone health.",
         "Pests": [
             {
-                "name": "Flea beetles",
-                "description": "No detailed description available for Flea beetles.",
-                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
-                "treatment": "No specific treatment information available for Flea beetles.",
+                "name": "Flea Beetles",
+                "description": "Flea beetles are small, jumping insects that feed on the leaves of various crops, including tomatoes, potatoes, eggplants, and leafy greens. They are named for their ability to jump like fleas when disturbed. Flea beetles create distinctive 'shot-hole' damage, making them a significant pest for young plants.",
+                "symptoms": "Infested plants exhibit small, round holes in leaves, often resembling shotgun damage. Severe infestations can stunt plant growth, reduce vigor, and even kill seedlings. The damage may lead to reduced photosynthesis and weakened plants.",
+                "treatment": "Use floating row covers to protect seedlings from flea beetles. Apply diatomaceous earth or neem oil to deter the beetles. Encourage natural predators such as parasitic wasps and tachinid flies to reduce populations. Plant trap crops like radishes to lure beetles away from the main crops. Practice crop rotation and keep the garden free of debris to minimize future infestations.",
                 "photo": "https://example.com/flea_beetles.jpg"
             },
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in a variety of colors, such as green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests of vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the growth of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 75,
@@ -1173,19 +1218,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They can be green, yellow, black, red, or brown, and they reproduce rapidly, forming large colonies. Aphids are common pests on many types of plants, including vegetables, fruits, and ornamental plants. Their feeding weakens plants, and they can transmit plant viruses.",
+                "symptoms": "Infested plants often show curled, yellowed, or distorted leaves. There may also be stunted growth and sticky honeydew on foliage, which attracts ants and promotes the growth of sooty mold. Aphids are usually visible in clusters on the undersides of leaves and new growth.",
+                "treatment": "To manage aphid infestations, encourage natural predators like ladybugs, lacewings, and parasitic wasps. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soap, or horticultural oils for organic control. Regularly inspect plants for aphids and remove heavily infested leaves or stems.",
                 "photo": "https://example.com/aphids.jpg"
             },
             {
-                "name": "Flea beetles",
-                "description": "No detailed description available for Flea beetles.",
-                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
-                "treatment": "No specific treatment information available for Flea beetles.",
+                "name": "Flea Beetles",
+                "description": "Flea beetles are small, jumping insects that feed on the leaves of a wide variety of crops, including tomatoes, potatoes, and leafy greens. These beetles get their name from their ability to jump like fleas when disturbed. Flea beetles create distinctive shot-hole damage to leaves, making them a serious pest for young plants.",
+                "symptoms": "Infested plants show small, round holes in the leaves, giving them a perforated appearance. Flea beetles can cause stunted plant growth, reduced vigor, and even kill seedlings under heavy infestations. The damage weakens the plant and may lead to secondary infections.",
+                "treatment": "To control flea beetles, use floating row covers to protect seedlings. Apply diatomaceous earth or neem oil to deter the beetles. Encourage natural predators such as tachinid flies and parasitic wasps to reduce populations. Plant trap crops like radishes to lure beetles away from the main crops. Practice crop rotation and remove plant debris to minimize future infestations.",
                 "photo": "https://example.com/flea_beetles.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 79,
@@ -1216,20 +1262,21 @@
         "HealthBenefits": "Sweet potatoes are rich in beta-carotene and fiber, promoting eye health and digestion.",
         "Pests": [
             {
-                "name": "Sweet potato weevil",
-                "description": "No detailed description available for Sweet potato weevil.",
-                "symptoms": "Symptoms related to Sweet potato weevil infestation are not detailed.",
-                "treatment": "No specific treatment information available for Sweet potato weevil.",
+                "name": "Sweet Potato Weevil",
+                "description": "The sweet potato weevil (Cylas formicarius) is a significant pest that attacks sweet potatoes and other root vegetables. These beetles are small, with reddish-brown bodies and long snouts. The larvae feed inside the tubers, causing damage to the flesh and creating tunnels, which can lead to decay and poor-quality crops.",
+                "symptoms": "Infested sweet potatoes may show signs of tunneling and small holes in the tubers. The leaves may yellow and wilt prematurely. In severe infestations, the tubers may rot, and the plants can die. Infested crops may also emit a distinctive, unpleasant odor.",
+                "treatment": "Use crop rotation to prevent build-up of sweet potato weevils in the soil. Apply floating row covers to protect young plants from adult beetles. Remove and destroy infested tubers immediately after harvest. Consider using insecticides labeled for use on sweet potatoes to target adult weevils and larvae, following safety guidelines.",
                 "photo": "https://example.com/sweet_potato_weevil.jpg"
             },
             {
                 "name": "Wireworms",
-                "description": "No detailed description available for Wireworms.",
-                "symptoms": "Symptoms related to Wireworms infestation are not detailed.",
-                "treatment": "No specific treatment information available for Wireworms.",
+                "description": "Wireworms are the larvae of click beetles and are known for their hard, elongated bodies that resemble wires. They primarily target the roots and underground stems of plants, including potatoes, carrots, corn, and wheat. Wireworms can survive in the soil for several years, making them a persistent pest in agricultural and garden settings.",
+                "symptoms": "Plants infested with wireworms may exhibit poor germination, stunted growth, and wilting. Upon inspection, roots and tubers may have small, round holes caused by wireworm feeding. In severe cases, the damage can lead to secondary infections and plant death.",
+                "treatment": "Practice crop rotation to reduce wireworm populations in the soil. Use bait traps, such as buried pieces of potato, to monitor and capture wireworms. Apply beneficial nematodes to the soil to target larvae. Avoid planting susceptible crops in fields with a known wireworm history, and consider soil treatments with approved insecticides for severe infestations.",
                 "photo": "https://example.com/wireworms.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 80,
@@ -1261,19 +1308,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in a variety of colors, such as green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests on many types of plants, including vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the growth of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             },
             {
                 "name": "Cutworms",
-                "description": "No detailed description available for Cutworms.",
-                "symptoms": "Symptoms related to Cutworms infestation are not detailed.",
-                "treatment": "No specific treatment information available for Cutworms.",
+                "description": "Cutworms are the larvae of several moth species that attack seedlings by cutting them off at the soil level. These caterpillars are typically gray, brown, or green and are known for their destructive feeding habits. They can cause significant damage to young plants, particularly in the early stages of growth.",
+                "symptoms": "Plants infested by cutworms often show signs of wilting, with the base of stems cut cleanly through. Seedlings may be completely severed, leaving them lying flat on the ground. In some cases, leaves may also be damaged or partially eaten.",
+                "treatment": "Place collars made of cardboard or plastic around the base of seedlings to protect them from cutworms. Handpick cutworms at night and destroy them. Use diatomaceous earth or other barriers around plants to deter movement. Apply Bacillus thuringiensis (Bt) or beneficial nematodes to the soil to target larvae. Keep the garden weed-free to eliminate shelter for cutworms.",
                 "photo": "https://example.com/cutworms.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 81,
@@ -1304,20 +1352,21 @@
         "HealthBenefits": "Chard is rich in vitamins A and K, promoting eye and bone health.",
         "Pests": [
             {
-                "name": "Leaf miners",
-                "description": "No detailed description available for Leaf miners.",
-                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
-                "treatment": "No specific treatment information available for Leaf miners.",
+                "name": "Leaf Miners",
+                "description": "Leaf miners are the larvae of various insect species, including flies, beetles, and moths. These pests burrow between the upper and lower layers of leaves, feeding on plant tissues and creating distinctive winding trails or blotches. Leaf miners commonly infest vegetables, ornamental plants, and fruit trees, reducing the plant's ability to photosynthesize.",
+                "symptoms": "Infested leaves show winding, translucent trails or blotches that turn brown over time. In severe cases, leaves may become distorted, discolored, or drop prematurely. The damage reduces photosynthesis and can lead to weakened plants.",
+                "treatment": "Remove and destroy infested leaves to prevent larvae from maturing. Use neem oil or insecticidal soap to deter adult insects from laying eggs. Introduce beneficial insects such as parasitic wasps to control leaf miner populations. Employ floating row covers to protect plants from adult insects. Maintaining plant health through proper irrigation and fertilization can also help reduce susceptibility.",
                 "photo": "https://example.com/leaf_miners.jpg"
             },
             {
-                "name": "Flea beetles",
-                "description": "No detailed description available for Flea beetles.",
-                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
-                "treatment": "No specific treatment information available for Flea beetles.",
+                "name": "Flea Beetles",
+                "description": "Flea beetles are small, jumping insects that feed on the leaves of a wide range of crops, including tomatoes, potatoes, and leafy greens. They are named for their ability to jump like fleas when disturbed. Flea beetles cause significant damage to young plants by creating small, round holes in leaves, often giving them a perforated or 'shot-hole' appearance.",
+                "symptoms": "Infested plants exhibit small, round holes in leaves, which appear like shot holes. Flea beetles can stunt plant growth, reduce vigor, and even kill seedlings under heavy infestations. The damage can reduce photosynthesis, weaken the plant, and make it more susceptible to other diseases.",
+                "treatment": "Use floating row covers to protect seedlings from flea beetles. Apply diatomaceous earth or neem oil to deter the beetles. Encourage natural predators such as tachinid flies and parasitic wasps to reduce flea beetle populations. Plant trap crops like radishes to lure beetles away from the main crops. Practice crop rotation and remove plant debris to minimize future infestations.",
                 "photo": "https://example.com/flea_beetles.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 82,
@@ -1349,19 +1398,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They can vary in color, including green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests that affect a wide variety of plants, including vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the development of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce natural predators like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             },
             {
-                "name": "Carrot weevils",
-                "description": "No detailed description available for Carrot weevils.",
-                "symptoms": "Symptoms related to Carrot weevils infestation are not detailed.",
-                "treatment": "No specific treatment information available for Carrot weevils.",
+                "name": "Carrot Weevils",
+                "description": "Carrot weevils (Listronotus oregonensis) are small, dark brown beetles that primarily target carrots but can also infest other root crops like parsnips, celery, and parsley. These weevils cause damage by laying eggs in the soil near plant roots, and their larvae burrow into the roots, causing tunneling and decay.",
+                "symptoms": "Infested plants may show signs of damaged or hollowed-out roots, which may appear discolored or rotting. Above-ground symptoms include yellowing leaves and stunted plant growth. Severe infestations can lead to reduced crop yields and poor-quality root vegetables.",
+                "treatment": "To prevent carrot weevil infestations, practice crop rotation and avoid planting carrots in the same soil for multiple years. Use row covers to keep adult beetles from laying eggs on the plants. Remove and destroy infected plants immediately after harvest. Consider using organic insecticides such as neem oil or spinosad, and incorporate beneficial nematodes into the soil to target larvae.",
                 "photo": "https://example.com/carrot_weevils.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 83,
@@ -1391,21 +1441,21 @@
         "DaysToHarvestSeedlings": 80,
         "HealthBenefits": "Leeks are high in vitamins and antioxidants, promoting heart health and reducing inflammation.",
         "Pests": [
-            {
-                "name": "Onion maggots",
-                "description": "No detailed description available for Onion maggots.",
-                "symptoms": "Symptoms related to Onion maggots infestation are not detailed.",
-                "treatment": "No specific treatment information available for Onion maggots.",
-                "photo": "https://example.com/onion_maggots.jpg"
-            },
-            {
-                "name": "Thrips",
-                "description": "No detailed description available for Thrips.",
-                "symptoms": "Symptoms related to Thrips infestation are not detailed.",
-                "treatment": "No specific treatment information available for Thrips.",
-                "photo": "https://example.com/thrips.jpg"
-            }
-        ]
+    {
+        "name": "Onion Maggots",
+        "description": "Onion maggots (Delia antiqua) are the larvae of small gray flies that infest onions and other allium plants, such as garlic, shallots, and leeks. The larvae feed on the roots and bulbs, causing significant damage to the plants. Onion maggots thrive in moist, cool conditions and are particularly problematic during the early stages of growth.",
+        "symptoms": "Infested plants may show yellowing and wilting of leaves, stunted growth, and rotting bulbs. Upon inspection, small tunnels or feeding damage caused by the larvae can be found inside the bulbs. In severe cases, the plants may die prematurely.",
+        "treatment": "To manage onion maggot infestations, use floating row covers to prevent flies from laying eggs near the plants. Practice crop rotation to avoid planting onions or related crops in the same location year after year. Remove and destroy infested plants immediately after harvest. Consider using insecticides labeled for use on onions or applying beneficial nematodes to the soil to target larvae.",
+        "photo": "https://example.com/onion_maggots.jpg"
+    },
+    {
+        "name": "Thrips",
+        "description": "Thrips are tiny, slender insects that feed on plants by piercing the surfaces and sucking out cell contents. They are a common pest of vegetables, fruits, and ornamental plants, causing both direct damage to the plant tissues and potentially transmitting plant viruses.",
+        "symptoms": "Infested plants may show silvery or stippled discoloration on leaves, distorted or deformed growth, and dark fecal spots on foliage. In severe infestations, flowers and fruits may be scarred, damaged, or prematurely drop. Thrips are often difficult to spot due to their small size.",
+        "treatment": "Introduce natural predators such as lacewings and minute pirate bugs to reduce thrip populations. Use sticky traps to monitor and control adult thrips. Apply neem oil, insecticidal soap, or horticultural oils to affected plants. Regularly inspect plants and remove heavily infested leaves or flowers. Maintaining proper plant health can also reduce the risk of thrip infestations.",
+        "photo": "https://example.com/thrips.jpg"
+    }
+]
     },
     {
         "VegetableId": 84,
@@ -1437,19 +1487,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in a variety of colors, including green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests of many types of plants, including vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the development of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             },
             {
-                "name": "Spider mites",
-                "description": "No detailed description available for Spider mites.",
-                "symptoms": "Symptoms related to Spider mites infestation are not detailed.",
-                "treatment": "No specific treatment information available for Spider mites.",
+                "name": "Spider Mites",
+                "description": "Spider mites are tiny arachnids that feed on plant sap, causing damage by piercing the plant cells with their sharp mouthparts. These pests thrive in hot, dry conditions and can infest a wide variety of plants, including vegetables, fruits, and ornamentals. They are often difficult to detect because of their small size, but the damage they cause is noticeable.",
+                "symptoms": "Infested plants may exhibit stippling or speckled discoloration on leaves, followed by yellowing and eventual leaf drop. Spider mites may also produce fine webbing on the undersides of leaves and stems. In severe cases, plant growth is stunted, and plants can die prematurely.",
+                "treatment": "Use a strong stream of water to wash off spider mites from infested plants. Apply miticides or insecticidal soaps labeled for spider mites. Encourage natural predators, such as predatory mites and ladybugs, to reduce populations. Maintain optimal humidity and watering to prevent spider mite infestations, as they thrive in dry conditions. Regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/spider_mites.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 85,
@@ -1480,20 +1531,21 @@
         "HealthBenefits": "Spinach is high in iron, vitamins, and antioxidants, supporting bone and eye health.",
         "Pests": [
             {
-                "name": "Leaf miners",
-                "description": "No detailed description available for Leaf miners.",
-                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
-                "treatment": "No specific treatment information available for Leaf miners.",
+                "name": "Leaf Miners",
+                "description": "Leaf miners are the larvae of various insect species, including flies, beetles, and moths, that feed between the upper and lower layers of leaves. They create distinctive winding trails or blotches on the surface of the leaves. Leaf miners infest many types of plants, including vegetables, fruits, and ornamental plants, reducing the plant's ability to photosynthesize.",
+                "symptoms": "Infested leaves exhibit winding, translucent trails or irregular blotches, which eventually turn brown. Over time, the affected leaves may become distorted, discolored, or drop prematurely. Severe infestations can weaken plants and reduce crop yields.",
+                "treatment": "Remove and destroy infested leaves to prevent larvae from maturing. Use neem oil or insecticidal soap to deter adult leaf miners from laying eggs. Introduce natural predators, such as parasitic wasps, to control populations. Floating row covers can be used to protect plants from adult insects. Maintaining healthy plants through proper watering and fertilization can help prevent infestations.",
                 "photo": "https://example.com/leaf_miners.jpg"
             },
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in various colors, including green, yellow, black, red, and brown, and reproduce rapidly. Aphids are common pests of many types of plants, including vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the development of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 86,
@@ -1524,20 +1576,21 @@
         "HealthBenefits": "Sweet peppers are rich in vitamin C and antioxidants, boosting immunity and promoting skin health.",
         "Pests": [
             {
-                "name": "Pepper weevils",
-                "description": "No detailed description available for Pepper weevils.",
-                "symptoms": "Symptoms related to Pepper weevils infestation are not detailed.",
-                "treatment": "No specific treatment information available for Pepper weevils.",
+                "name": "Pepper Weevils",
+                "description": "Pepper weevils (Anthonomus eugenii) are small, dark beetles that infest pepper plants. These pests cause damage by feeding on the buds, flowers, and young fruit of peppers. The adult beetles lay eggs in the flower buds, and when the larvae hatch, they feed on the developing fruit, leading to deformed or rotting peppers.",
+                "symptoms": "Infested pepper plants may show signs of deformed or damaged buds, flowers, and fruits. In severe cases, entire crops can be destroyed. You may also see small holes in the buds and premature dropping of the fruit. Larvae may be found inside the fruit, causing further decay.",
+                "treatment": "To manage pepper weevil infestations, remove and destroy infected fruit and flowers to reduce the pest population. Use floating row covers to protect plants from adult beetles. Apply neem oil or insecticidal soap to control larvae and adults. Practice crop rotation and remove any plant debris to prevent overwintering of the pest.",
                 "photo": "https://example.com/pepper_weevils.jpg"
             },
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in various colors, including green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests of many types of plants, including vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the growth of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 87,
@@ -1569,19 +1622,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in various colors, including green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests on many types of plants, including vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth and sticky honeydew on foliage, which can attract ants and lead to the development of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce beneficial insects like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             },
             {
-                "name": "Flea beetles",
-                "description": "No detailed description available for Flea beetles.",
-                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
-                "treatment": "No specific treatment information available for Flea beetles.",
+                "name": "Flea Beetles",
+                "description": "Flea beetles are small, jumping insects that feed on the leaves of various crops, including tomatoes, potatoes, eggplants, and leafy greens. They are named for their ability to jump like fleas when disturbed. Flea beetles create distinctive 'shot-hole' damage, making them a significant pest for young plants.",
+                "symptoms": "Infested plants exhibit small, round holes in leaves, giving them a perforated appearance. Severe infestations can stunt plant growth, reduce vigor, and even kill seedlings. The damage may lead to reduced photosynthesis and weakened plants.",
+                "treatment": "Use floating row covers to protect seedlings from flea beetles. Apply diatomaceous earth or neem oil to deter the beetles. Encourage natural predators such as parasitic wasps and tachinid flies to reduce populations. Plant trap crops like radishes to lure beetles away from the main crops. Practice crop rotation and keep the garden free of debris to minimize future infestations.",
                 "photo": "https://example.com/flea_beetles.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 88,
@@ -1613,19 +1667,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They can be green, yellow, black, red, or brown, and reproduce rapidly, often forming large colonies. Aphids are a common pest on many types of plants, including vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth, sticky honeydew on foliage, which can attract ants, and the development of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "To manage aphid infestations, encourage natural predators like ladybugs, lacewings, and parasitic wasps. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             },
             {
-                "name": "Spider mites",
-                "description": "No detailed description available for Spider mites.",
-                "symptoms": "Symptoms related to Spider mites infestation are not detailed.",
-                "treatment": "No specific treatment information available for Spider mites.",
+                "name": "Spider Mites",
+                "description": "Spider mites are tiny arachnids that feed on plant sap, causing damage by piercing the plant cells with their sharp mouthparts. They thrive in hot, dry conditions and can infest a variety of plants, including vegetables, fruits, and ornamental plants. Spider mites are often difficult to spot because of their small size, but the damage they cause is noticeable.",
+                "symptoms": "Infested plants may show stippling or speckled discoloration on leaves, followed by yellowing and eventual leaf drop. You may also notice fine webbing on the undersides of leaves and stems. In severe infestations, plant growth is stunted, and plants can die prematurely.",
+                "treatment": "To manage spider mites, wash off the mites with a strong stream of water. Apply miticides or insecticidal soaps that are labeled for spider mites. Introduce natural predators, such as predatory mites and ladybugs, to help control the population. Maintain optimal humidity and watering, as spider mites thrive in dry conditions. Regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/spider_mites.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 89,
@@ -1657,19 +1712,20 @@
         "Pests": [
             {
                 "name": "Aphids",
-                "description": "No detailed description available for Aphids.",
-                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
-                "treatment": "No specific treatment information available for Aphids.",
+                "description": "Aphids are small, soft-bodied insects that feed on plant sap by piercing stems, leaves, and buds with their mouthparts. They come in various colors, such as green, yellow, black, red, and brown, and reproduce rapidly, often forming large colonies. Aphids are common pests of many types of plants, including vegetables, fruits, and ornamental plants.",
+                "symptoms": "Infested plants may exhibit curled, yellowed, or distorted leaves. Other symptoms include stunted growth, sticky honeydew on foliage, which can attract ants and lead to the growth of sooty mold. Aphids are often visible in clusters on the undersides of leaves or new shoots.",
+                "treatment": "Introduce natural predators like ladybugs, lacewings, and parasitic wasps to naturally control aphid populations. Spray plants with a strong stream of water to dislodge aphids. Apply neem oil, insecticidal soaps, or horticultural oils for organic control. Remove heavily infested leaves or stems to prevent further spread and regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/aphids.jpg"
             },
             {
-                "name": "Spider mites",
-                "description": "No detailed description available for Spider mites.",
-                "symptoms": "Symptoms related to Spider mites infestation are not detailed.",
-                "treatment": "No specific treatment information available for Spider mites.",
+                "name": "Spider Mites",
+                "description": "Spider mites are tiny arachnids that feed on plant sap, causing damage by piercing the plant cells with their sharp mouthparts. They thrive in hot, dry conditions and can infest a wide variety of plants, including vegetables, fruits, and ornamental plants. Spider mites are often difficult to detect due to their small size, but the damage they cause is noticeable.",
+                "symptoms": "Infested plants may show stippling or speckled discoloration on leaves, followed by yellowing and eventual leaf drop. You may also notice fine webbing on the undersides of leaves and stems. In severe infestations, plant growth is stunted, and plants can die prematurely.",
+                "treatment": "To manage spider mites, wash off the mites with a strong stream of water. Apply miticides or insecticidal soaps that are labeled for spider mites. Introduce natural predators, such as predatory mites and ladybugs, to help control the population. Maintain optimal humidity and watering conditions, as spider mites thrive in dry environments. Regularly inspect plants for early signs of infestation.",
                 "photo": "https://example.com/spider_mites.jpg"
             }
         ]
+        
     },
     {
         "VegetableId": 90,
