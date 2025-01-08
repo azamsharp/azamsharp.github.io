@@ -32,14 +32,14 @@
                 "description": "No detailed description available for Carrot fly.",
                 "symptoms": "Symptoms related to Carrot fly infestation are not detailed.",
                 "treatment": "No specific treatment information available for Carrot fly.",
-                "photo": "http://www.azamsharp.com/images/pests/carrotfly.png"
+                "photo": "http://www.azamsharp.com/images/carrotfly.png"
             },
             {
                 "name": "Aphids",
                 "description": "No detailed description available for Aphids.",
                 "symptoms": "Symptoms related to Aphids infestation are not detailed.",
                 "treatment": "No specific treatment information available for Aphids.",
-                "photo": "https://example.com/aphids.jpg"
+                "photo": "http://www.azamsharp.com/images/aphids.png"
             }
         ]
     },
