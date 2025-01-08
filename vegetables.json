@@ -25,11 +25,23 @@
         "Season": "Spring,Fall,Summer,Winter",
         "DaysToHarvestSeeds": 90,
         "DaysToHarvestSeedlings": 70,
+        "HealthBenefits": "Rich in beta-carotene, carrots promote eye health, boost immunity, and support healthy skin.",
         "Pests": [
-            "Carrot fly",
-            "Aphids"
-        ],
-        "HealthBenefits": "Rich in beta-carotene, carrots promote eye health, boost immunity, and support healthy skin."
+            {
+                "name": "Carrot fly",
+                "description": "No detailed description available for Carrot fly.",
+                "symptoms": "Symptoms related to Carrot fly infestation are not detailed.",
+                "treatment": "No specific treatment information available for Carrot fly.",
+                "photo": "http://www.azamsharp.com/images/pests/carrotfly.png"
+            },
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 7,
@@ -57,11 +69,23 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 85,
         "DaysToHarvestSeedlings": 64,
+        "HealthBenefits": "Hot peppers contain capsaicin, which may reduce pain, improve digestion, and boost metabolism.",
         "Pests": [
-            "Pepper weevil",
-            "Thrips"
-        ],
-        "HealthBenefits": "Hot peppers contain capsaicin, which may reduce pain, improve digestion, and boost metabolism."
+            {
+                "name": "Pepper weevil",
+                "description": "No detailed description available for Pepper weevil.",
+                "symptoms": "Symptoms related to Pepper weevil infestation are not detailed.",
+                "treatment": "No specific treatment information available for Pepper weevil.",
+                "photo": "https://example.com/pepper_weevil.jpg"
+            },
+            {
+                "name": "Thrips",
+                "description": "No detailed description available for Thrips.",
+                "symptoms": "Symptoms related to Thrips infestation are not detailed.",
+                "treatment": "No specific treatment information available for Thrips.",
+                "photo": "https://example.com/thrips.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 8,
@@ -89,11 +113,23 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 50,
         "DaysToHarvestSeedlings": 35,
+        "HealthBenefits": "Packed with fiber and vitamins, green beans support digestion and overall immune health.",
         "Pests": [
-            "Bean beetle",
-            "Spider mites"
-        ],
-        "HealthBenefits": "Packed with fiber and vitamins, green beans support digestion and overall immune health."
+            {
+                "name": "Bean beetle",
+                "description": "No detailed description available for Bean beetle.",
+                "symptoms": "Symptoms related to Bean beetle infestation are not detailed.",
+                "treatment": "No specific treatment information available for Bean beetle.",
+                "photo": "https://example.com/bean_beetle.jpg"
+            },
+            {
+                "name": "Spider mites",
+                "description": "No detailed description available for Spider mites.",
+                "symptoms": "Symptoms related to Spider mites infestation are not detailed.",
+                "treatment": "No specific treatment information available for Spider mites.",
+                "photo": "https://example.com/spider_mites.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 9,
@@ -121,11 +157,23 @@
         "Season": "Spring,Fall,Summer,Winter",
         "DaysToHarvestSeeds": 139,
         "DaysToHarvestSeedlings": 60,
+        "HealthBenefits": "Onions are rich in antioxidants and compounds that fight inflammation and boost heart health.",
         "Pests": [
-            "Onion fly",
-            "Thrips"
-        ],
-        "HealthBenefits": "Onions are rich in antioxidants and compounds that fight inflammation and boost heart health."
+            {
+                "name": "Onion fly",
+                "description": "No detailed description available for Onion fly.",
+                "symptoms": "Symptoms related to Onion fly infestation are not detailed.",
+                "treatment": "No specific treatment information available for Onion fly.",
+                "photo": "https://example.com/onion_fly.jpg"
+            },
+            {
+                "name": "Thrips",
+                "description": "No detailed description available for Thrips.",
+                "symptoms": "Symptoms related to Thrips infestation are not detailed.",
+                "treatment": "No specific treatment information available for Thrips.",
+                "photo": "https://example.com/thrips.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 10,
@@ -153,11 +201,23 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 80,
         "DaysToHarvestSeedlings": 60,
+        "HealthBenefits": "Rich in lycopene, tomatoes promote heart health, reduce inflammation, and support skin health.",
         "Pests": [
-            "Tomato hornworm",
-            "Whitefly"
-        ],
-        "HealthBenefits": "Rich in lycopene, tomatoes promote heart health, reduce inflammation, and support skin health."
+            {
+                "name": "Tomato hornworm",
+                "description": "No detailed description available for Tomato hornworm.",
+                "symptoms": "Symptoms related to Tomato hornworm infestation are not detailed.",
+                "treatment": "No specific treatment information available for Tomato hornworm.",
+                "photo": "https://example.com/tomato_hornworm.jpg"
+            },
+            {
+                "name": "Whitefly",
+                "description": "No detailed description available for Whitefly.",
+                "symptoms": "Symptoms related to Whitefly infestation are not detailed.",
+                "treatment": "No specific treatment information available for Whitefly.",
+                "photo": "https://example.com/whitefly.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 11,
@@ -185,11 +245,23 @@
         "Season": "Spring,Summer",
         "DaysToHarvestSeeds": 25,
         "DaysToHarvestSeedlings": 14,
+        "HealthBenefits": "Radishes are low in calories and high in fiber, promoting digestion and hydration.",
         "Pests": [
-            "Root maggots",
-            "Cabbage maggots"
-        ],
-        "HealthBenefits": "Radishes are low in calories and high in fiber, promoting digestion and hydration."
+            {
+                "name": "Root maggots",
+                "description": "No detailed description available for Root maggots.",
+                "symptoms": "Symptoms related to Root maggots infestation are not detailed.",
+                "treatment": "No specific treatment information available for Root maggots.",
+                "photo": "https://example.com/root_maggots.jpg"
+            },
+            {
+                "name": "Cabbage maggots",
+                "description": "No detailed description available for Cabbage maggots.",
+                "symptoms": "Symptoms related to Cabbage maggots infestation are not detailed.",
+                "treatment": "No specific treatment information available for Cabbage maggots.",
+                "photo": "https://example.com/cabbage_maggots.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 13,
@@ -217,11 +289,23 @@
         "Season": "Spring,Fall",
         "DaysToHarvestSeeds": 45,
         "DaysToHarvestSeedlings": 60,
+        "HealthBenefits": "Rich in antioxidants and vitamins, arugula supports bone health and boosts immunity.",
         "Pests": [
-            "Flea beetles",
-            "Cabbage worms"
-        ],
-        "HealthBenefits": "Rich in antioxidants and vitamins, arugula supports bone health and boosts immunity."
+            {
+                "name": "Flea beetles",
+                "description": "No detailed description available for Flea beetles.",
+                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Flea beetles.",
+                "photo": "https://example.com/flea_beetles.jpg"
+            },
+            {
+                "name": "Cabbage worms",
+                "description": "No detailed description available for Cabbage worms.",
+                "symptoms": "Symptoms related to Cabbage worms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Cabbage worms.",
+                "photo": "https://example.com/cabbage_worms.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 14,
@@ -249,11 +333,23 @@
         "Season": "Summer,Spring",
         "DaysToHarvestSeeds": 89,
         "DaysToHarvestSeedlings": 70,
+        "HealthBenefits": "Corn provides energy, is rich in antioxidants, and supports healthy vision with its lutein content.",
         "Pests": [
-            "Corn earworm",
-            "Armyworms"
-        ],
-        "HealthBenefits": "Corn provides energy, is rich in antioxidants, and supports healthy vision with its lutein content."
+            {
+                "name": "Corn earworm",
+                "description": "No detailed description available for Corn earworm.",
+                "symptoms": "Symptoms related to Corn earworm infestation are not detailed.",
+                "treatment": "No specific treatment information available for Corn earworm.",
+                "photo": "https://example.com/corn_earworm.jpg"
+            },
+            {
+                "name": "Armyworms",
+                "description": "No detailed description available for Armyworms.",
+                "symptoms": "Symptoms related to Armyworms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Armyworms.",
+                "photo": "https://example.com/armyworms.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 15,
@@ -281,11 +377,23 @@
         "Season": "Spring,Summer",
         "DaysToHarvestSeeds": 60,
         "DaysToHarvestSeedlings": 40,
+        "HealthBenefits": "Beets are high in nitrates, which can improve blood flow and lower blood pressure.",
         "Pests": [
-            "Leaf miners",
-            "Beet armyworms"
-        ],
-        "HealthBenefits": "Beets are high in nitrates, which can improve blood flow and lower blood pressure."
+            {
+                "name": "Leaf miners",
+                "description": "No detailed description available for Leaf miners.",
+                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
+                "treatment": "No specific treatment information available for Leaf miners.",
+                "photo": "https://example.com/leaf_miners.jpg"
+            },
+            {
+                "name": "Beet armyworms",
+                "description": "No detailed description available for Beet armyworms.",
+                "symptoms": "Symptoms related to Beet armyworms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Beet armyworms.",
+                "photo": "https://example.com/beet_armyworms.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 16,
@@ -313,11 +421,23 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 45,
         "DaysToHarvestSeedlings": 30,
+        "HealthBenefits": "Cucumbers are hydrating and rich in antioxidants, promoting healthy skin and digestion.",
         "Pests": [
-            "Cucumber beetles",
-            "Squash bugs"
-        ],
-        "HealthBenefits": "Cucumbers are hydrating and rich in antioxidants, promoting healthy skin and digestion."
+            {
+                "name": "Cucumber beetles",
+                "description": "No detailed description available for Cucumber beetles.",
+                "symptoms": "Symptoms related to Cucumber beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Cucumber beetles.",
+                "photo": "https://example.com/cucumber_beetles.jpg"
+            },
+            {
+                "name": "Squash bugs",
+                "description": "No detailed description available for Squash bugs.",
+                "symptoms": "Symptoms related to Squash bugs infestation are not detailed.",
+                "treatment": "No specific treatment information available for Squash bugs.",
+                "photo": "https://example.com/squash_bugs.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 17,
@@ -345,11 +465,23 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 80,
         "DaysToHarvestSeedlings": 60,
+        "HealthBenefits": "Eggplants contain antioxidants like nasunin, which protect brain function and reduce inflammation.",
         "Pests": [
-            "Flea beetles",
-            "Spider mites"
-        ],
-        "HealthBenefits": "Eggplants contain antioxidants like nasunin, which protect brain function and reduce inflammation."
+            {
+                "name": "Flea beetles",
+                "description": "No detailed description available for Flea beetles.",
+                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Flea beetles.",
+                "photo": "https://example.com/flea_beetles.jpg"
+            },
+            {
+                "name": "Spider mites",
+                "description": "No detailed description available for Spider mites.",
+                "symptoms": "Symptoms related to Spider mites infestation are not detailed.",
+                "treatment": "No specific treatment information available for Spider mites.",
+                "photo": "https://example.com/spider_mites.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 18,
@@ -377,11 +509,23 @@
         "Season": "Summer,Spring,Fall,Winter",
         "DaysToHarvestSeeds": 80,
         "DaysToHarvestSeedlings": 56,
+        "HealthBenefits": "Celery is low in calories and high in antioxidants, supporting heart health and reducing inflammation.",
         "Pests": [
-            "Aphids",
-            "Carrot weevils"
-        ],
-        "HealthBenefits": "Celery is low in calories and high in antioxidants, supporting heart health and reducing inflammation."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Carrot weevils",
+                "description": "No detailed description available for Carrot weevils.",
+                "symptoms": "Symptoms related to Carrot weevils infestation are not detailed.",
+                "treatment": "No specific treatment information available for Carrot weevils.",
+                "photo": "https://example.com/carrot_weevils.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 19,
@@ -409,11 +553,23 @@
         "Season": "Fall,Spring,Summer,Winter",
         "DaysToHarvestSeeds": 75,
         "DaysToHarvestSeedlings": 60,
+        "HealthBenefits": "Broccoli is rich in vitamins C and K, as well as fiber and antioxidants that support immune health.",
         "Pests": [
-            "Cabbage worms",
-            "Aphids"
-        ],
-        "HealthBenefits": "Broccoli is rich in vitamins C and K, as well as fiber and antioxidants that support immune health."
+            {
+                "name": "Cabbage worms",
+                "description": "No detailed description available for Cabbage worms.",
+                "symptoms": "Symptoms related to Cabbage worms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Cabbage worms.",
+                "photo": "https://example.com/cabbage_worms.jpg"
+            },
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 20,
@@ -441,11 +597,23 @@
         "Season": "Summer,Spring,Fall,Winter",
         "DaysToHarvestSeeds": 120,
         "DaysToHarvestSeedlings": 90,
+        "HealthBenefits": "Potatoes are a good source of potassium, vitamin C, and fiber, promoting heart health and digestion.",
         "Pests": [
-            "Potato beetle",
-            "Wireworms"
-        ],
-        "HealthBenefits": "Potatoes are a good source of potassium, vitamin C, and fiber, promoting heart health and digestion."
+            {
+                "name": "Potato beetle",
+                "description": "No detailed description available for Potato beetle.",
+                "symptoms": "Symptoms related to Potato beetle infestation are not detailed.",
+                "treatment": "No specific treatment information available for Potato beetle.",
+                "photo": "https://example.com/potato_beetle.jpg"
+            },
+            {
+                "name": "Wireworms",
+                "description": "No detailed description available for Wireworms.",
+                "symptoms": "Symptoms related to Wireworms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Wireworms.",
+                "photo": "https://example.com/wireworms.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 21,
@@ -473,11 +641,23 @@
         "Season": "Fall,Spring,Summer,Winter",
         "DaysToHarvestSeeds": 75,
         "DaysToHarvestSeedlings": 60,
+        "HealthBenefits": "Lettuce is low in calories and high in vitamins, supporting hydration and overall health.",
         "Pests": [
-            "Aphids",
-            "Leaf miners"
-        ],
-        "HealthBenefits": "Lettuce is low in calories and high in vitamins, supporting hydration and overall health."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Leaf miners",
+                "description": "No detailed description available for Leaf miners.",
+                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
+                "treatment": "No specific treatment information available for Leaf miners.",
+                "photo": "https://example.com/leaf_miners.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 22,
@@ -505,11 +685,23 @@
         "Season": "Fall",
         "DaysToHarvestSeeds": 60,
         "DaysToHarvestSeedlings": 45,
+        "HealthBenefits": "Cauliflower is rich in vitamins and antioxidants that promote digestion and reduce inflammation.",
         "Pests": [
-            "Cabbage worms",
-            "Aphids"
-        ],
-        "HealthBenefits": "Cauliflower is rich in vitamins and antioxidants that promote digestion and reduce inflammation."
+            {
+                "name": "Cabbage worms",
+                "description": "No detailed description available for Cabbage worms.",
+                "symptoms": "Symptoms related to Cabbage worms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Cabbage worms.",
+                "photo": "https://example.com/cabbage_worms.jpg"
+            },
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 23,
@@ -537,11 +729,23 @@
         "Season": "Spring",
         "DaysToHarvestSeeds": 750,
         "DaysToHarvestSeedlings": 690,
+        "HealthBenefits": "Asparagus is high in folate and vitamins, supporting heart health and reducing oxidative stress.",
         "Pests": [
-            "Asparagus beetle",
-            "Cutworms"
-        ],
-        "HealthBenefits": "Asparagus is high in folate and vitamins, supporting heart health and reducing oxidative stress."
+            {
+                "name": "Asparagus beetle",
+                "description": "No detailed description available for Asparagus beetle.",
+                "symptoms": "Symptoms related to Asparagus beetle infestation are not detailed.",
+                "treatment": "No specific treatment information available for Asparagus beetle.",
+                "photo": "https://example.com/asparagus_beetle.jpg"
+            },
+            {
+                "name": "Cutworms",
+                "description": "No detailed description available for Cutworms.",
+                "symptoms": "Symptoms related to Cutworms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Cutworms.",
+                "photo": "https://example.com/cutworms.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 24,
@@ -569,11 +773,23 @@
         "Season": "Spring,Summer,Fall",
         "DaysToHarvestSeeds": 210,
         "DaysToHarvestSeedlings": 190,
+        "HealthBenefits": "Garlic boosts the immune system and may help lower blood pressure and cholesterol levels.",
         "Pests": [
-            "Nematodes",
-            "Onion maggots"
-        ],
-        "HealthBenefits": "Garlic boosts the immune system and may help lower blood pressure and cholesterol levels."
+            {
+                "name": "Nematodes",
+                "description": "No detailed description available for Nematodes.",
+                "symptoms": "Symptoms related to Nematodes infestation are not detailed.",
+                "treatment": "No specific treatment information available for Nematodes.",
+                "photo": "https://example.com/nematodes.jpg"
+            },
+            {
+                "name": "Onion maggots",
+                "description": "No detailed description available for Onion maggots.",
+                "symptoms": "Symptoms related to Onion maggots infestation are not detailed.",
+                "treatment": "No specific treatment information available for Onion maggots.",
+                "photo": "https://example.com/onion_maggots.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 25,
@@ -601,11 +817,23 @@
         "Season": "Spring",
         "DaysToHarvestSeeds": 125,
         "DaysToHarvestSeedlings": 90,
+        "HealthBenefits": "Green onions are rich in vitamins A and C, supporting vision and immunity.",
         "Pests": [
-            "Thrips",
-            "Onion fly"
-        ],
-        "HealthBenefits": "Green onions are rich in vitamins A and C, supporting vision and immunity."
+            {
+                "name": "Thrips",
+                "description": "No detailed description available for Thrips.",
+                "symptoms": "Symptoms related to Thrips infestation are not detailed.",
+                "treatment": "No specific treatment information available for Thrips.",
+                "photo": "https://example.com/thrips.jpg"
+            },
+            {
+                "name": "Onion fly",
+                "description": "No detailed description available for Onion fly.",
+                "symptoms": "Symptoms related to Onion fly infestation are not detailed.",
+                "treatment": "No specific treatment information available for Onion fly.",
+                "photo": "https://example.com/onion_fly.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 67,
@@ -633,11 +861,23 @@
         "Season": "Spring",
         "DaysToHarvestSeeds": 90,
         "DaysToHarvestSeedlings": 75,
+        "HealthBenefits": "Parsley is high in vitamins K and C, promoting bone health and reducing oxidative stress.",
         "Pests": [
-            "Aphids",
-            "Leaf miners"
-        ],
-        "HealthBenefits": "Parsley is high in vitamins K and C, promoting bone health and reducing oxidative stress."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Leaf miners",
+                "description": "No detailed description available for Leaf miners.",
+                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
+                "treatment": "No specific treatment information available for Leaf miners.",
+                "photo": "https://example.com/leaf_miners.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 68,
@@ -665,11 +905,23 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 60,
         "DaysToHarvestSeedlings": 45,
+        "HealthBenefits": "Cilantro is rich in antioxidants and supports detoxification and digestive health.",
         "Pests": [
-            "Aphids",
-            "Leaf miners"
-        ],
-        "HealthBenefits": "Cilantro is rich in antioxidants and supports detoxification and digestive health."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Leaf miners",
+                "description": "No detailed description available for Leaf miners.",
+                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
+                "treatment": "No specific treatment information available for Leaf miners.",
+                "photo": "https://example.com/leaf_miners.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 69,
@@ -697,11 +949,23 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 85,
         "DaysToHarvestSeedlings": 68,
+        "HealthBenefits": "Basil contains antioxidants and essential oils that support heart health and reduce inflammation.",
         "Pests": [
-            "Japanese beetles",
-            "Aphids"
-        ],
-        "HealthBenefits": "Basil contains antioxidants and essential oils that support heart health and reduce inflammation."
+            {
+                "name": "Japanese beetles",
+                "description": "No detailed description available for Japanese beetles.",
+                "symptoms": "Symptoms related to Japanese beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Japanese beetles.",
+                "photo": "https://example.com/japanese_beetles.jpg"
+            },
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 70,
@@ -729,11 +993,23 @@
         "Season": "Fall",
         "DaysToHarvestSeeds": 80,
         "DaysToHarvestSeedlings": 65,
+        "HealthBenefits": "Radicchio is rich in antioxidants and vitamins, promoting digestion and reducing inflammation.",
         "Pests": [
-            "Flea beetles",
-            "Aphids"
-        ],
-        "HealthBenefits": "Radicchio is rich in antioxidants and vitamins, promoting digestion and reducing inflammation."
+            {
+                "name": "Flea beetles",
+                "description": "No detailed description available for Flea beetles.",
+                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Flea beetles.",
+                "photo": "https://example.com/flea_beetles.jpg"
+            },
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 71,
@@ -761,18 +1037,30 @@
         "Season": "Spring,Fall",
         "DaysToHarvestSeeds": 115,
         "DaysToHarvestSeedlings": 100,
+        "HealthBenefits": "Dill is rich in antioxidants and supports digestion and bone health.",
         "Pests": [
-            "Aphids",
-            "Caterpillars"
-        ],
-        "HealthBenefits": "Dill is rich in antioxidants and supports digestion and bone health."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Caterpillars",
+                "description": "No detailed description available for Caterpillars.",
+                "symptoms": "Symptoms related to Caterpillars infestation are not detailed.",
+                "treatment": "No specific treatment information available for Caterpillars.",
+                "photo": "https://example.com/caterpillars.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 73,
         "VegetableCode": "025",
         "CatalogId": 13,
         "Name": "Brussels Sprouts",
-        "Description": "Brussels sprouts (Brassica oleracea var. gemmifera) are small, leafy green buds that grow along a tall stalk, prized for their slightly nutty and earthy flavor. They can be roasted, steamed, sautéed, or added to salads and casseroles. Rich in vitamins C and K, fiber, and antioxidants, Brussels sprouts support immune health, bone strength, and digestion. Thriving in cool climates and fertile, well-drained soil, they are a rewarding crop for home gardeners and a staple in healthy cooking.",
+        "Description": "Brussels sprouts (Brassica oleracea var. gemmifera) are small, leafy green buds that grow along a tall stalk, prized for their slightly nutty and earthy flavor. They can be roasted, steamed, saut\u00e9ed, or added to salads and casseroles. Rich in vitamins C and K, fiber, and antioxidants, Brussels sprouts support immune health, bone strength, and digestion. Thriving in cool climates and fertile, well-drained soil, they are a rewarding crop for home gardeners and a staple in healthy cooking.",
         "ThumbnailImage": "http://www.azamsharp.com/images/brusselssprouts.png",
         "SeedDepth": "1/4\" (6 mm)",
         "GerminationSoilTemp": "75-80 F (24-27 C)",
@@ -793,11 +1081,23 @@
         "Season": "Fall,Winter",
         "DaysToHarvestSeeds": 95,
         "DaysToHarvestSeedlings": 78,
+        "HealthBenefits": "Brussels sprouts are high in vitamins C and K, supporting immunity and bone health.",
         "Pests": [
-            "Cabbage worms",
-            "Aphids"
-        ],
-        "HealthBenefits": "Brussels sprouts are high in vitamins C and K, supporting immunity and bone health."
+            {
+                "name": "Cabbage worms",
+                "description": "No detailed description available for Cabbage worms.",
+                "symptoms": "Symptoms related to Cabbage worms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Cabbage worms.",
+                "photo": "https://example.com/cabbage_worms.jpg"
+            },
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 74,
@@ -825,18 +1125,30 @@
         "Season": "Spring",
         "DaysToHarvestSeeds": 36,
         "DaysToHarvestSeedlings": 18,
+        "HealthBenefits": "Mustard greens are rich in antioxidants and vitamins, promoting heart and bone health.",
         "Pests": [
-            "Flea beetles",
-            "Aphids"
-        ],
-        "HealthBenefits": "Mustard greens are rich in antioxidants and vitamins, promoting heart and bone health."
+            {
+                "name": "Flea beetles",
+                "description": "No detailed description available for Flea beetles.",
+                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Flea beetles.",
+                "photo": "https://example.com/flea_beetles.jpg"
+            },
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 75,
         "VegetableCode": "027",
         "CatalogId": 2,
         "Name": "Orach",
-        "Description": "Orach (Atriplex hortensis), also known as mountain spinach, is a leafy vegetable with vibrant green, red, or purple leaves and a mild, slightly salty flavor. It is often used as a substitute for spinach in salads, soups, and sautés. Orach is rich in vitamins A and C, iron, and antioxidants, supporting immune health, blood health, and overall vitality. Thriving in warm climates and well-drained soil, orach is a hardy and visually striking addition to home gardens.",
+        "Description": "Orach (Atriplex hortensis), also known as mountain spinach, is a leafy vegetable with vibrant green, red, or purple leaves and a mild, slightly salty flavor. It is often used as a substitute for spinach in salads, soups, and saut\u00e9s. Orach is rich in vitamins A and C, iron, and antioxidants, supporting immune health, blood health, and overall vitality. Thriving in warm climates and well-drained soil, orach is a hardy and visually striking addition to home gardens.",
         "ThumbnailImage": "http://www.azamsharp.com/images/orach.png",
         "SeedDepth": "1/2\" (13 mm)",
         "GerminationSoilTemp": "50-65 F (10-18 C)",
@@ -857,11 +1169,23 @@
         "Season": "Spring,Fall",
         "DaysToHarvestSeeds": 40,
         "DaysToHarvestSeedlings": 30,
+        "HealthBenefits": "Orach is high in iron and antioxidants, supporting blood health and reducing inflammation.",
         "Pests": [
-            "Aphids",
-            "Flea beetles"
-        ],
-        "HealthBenefits": "Orach is high in iron and antioxidants, supporting blood health and reducing inflammation."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Flea beetles",
+                "description": "No detailed description available for Flea beetles.",
+                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Flea beetles.",
+                "photo": "https://example.com/flea_beetles.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 79,
@@ -889,11 +1213,23 @@
         "Season": "Fall",
         "DaysToHarvestSeeds": 115,
         "DaysToHarvestSeedlings": 90,
+        "HealthBenefits": "Sweet potatoes are rich in beta-carotene and fiber, promoting eye health and digestion.",
         "Pests": [
-            "Sweet potato weevil",
-            "Wireworms"
-        ],
-        "HealthBenefits": "Sweet potatoes are rich in beta-carotene and fiber, promoting eye health and digestion."
+            {
+                "name": "Sweet potato weevil",
+                "description": "No detailed description available for Sweet potato weevil.",
+                "symptoms": "Symptoms related to Sweet potato weevil infestation are not detailed.",
+                "treatment": "No specific treatment information available for Sweet potato weevil.",
+                "photo": "https://example.com/sweet_potato_weevil.jpg"
+            },
+            {
+                "name": "Wireworms",
+                "description": "No detailed description available for Wireworms.",
+                "symptoms": "Symptoms related to Wireworms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Wireworms.",
+                "photo": "https://example.com/wireworms.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 80,
@@ -921,18 +1257,30 @@
         "Season": "Spring",
         "DaysToHarvestSeeds": 150,
         "DaysToHarvestSeedlings": 110,
+        "HealthBenefits": "Artichokes are high in fiber and antioxidants, supporting liver health and digestion.",
         "Pests": [
-            "Aphids",
-            "Cutworms"
-        ],
-        "HealthBenefits": "Artichokes are high in fiber and antioxidants, supporting liver health and digestion."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Cutworms",
+                "description": "No detailed description available for Cutworms.",
+                "symptoms": "Symptoms related to Cutworms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Cutworms.",
+                "photo": "https://example.com/cutworms.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 81,
         "VegetableCode": "030",
         "CatalogId": 13,
         "Name": "Chard",
-        "Description": "Chard (Beta vulgaris subsp. cicla), also known as Swiss chard, is a leafy green vegetable with vibrant stems in shades of red, yellow, or white. Known for its mild, slightly earthy flavor, chard is versatile and can be sautéed, added to soups, or used in salads. Packed with vitamins A, C, and K, as well as iron and magnesium, chard supports bone health, immunity, and overall vitality. Thriving in cool climates and well-drained soil, chard is a resilient crop and a favorite among gardeners.",
+        "Description": "Chard (Beta vulgaris subsp. cicla), also known as Swiss chard, is a leafy green vegetable with vibrant stems in shades of red, yellow, or white. Known for its mild, slightly earthy flavor, chard is versatile and can be saut\u00e9ed, added to soups, or used in salads. Packed with vitamins A, C, and K, as well as iron and magnesium, chard supports bone health, immunity, and overall vitality. Thriving in cool climates and well-drained soil, chard is a resilient crop and a favorite among gardeners.",
         "ThumbnailImage": "http://www.azamsharp.com/images/chard.png",
         "SeedDepth": "1/4\" (6 cm)",
         "GerminationSoilTemp": "40-95 F",
@@ -953,11 +1301,23 @@
         "Season": "Spring,Fall",
         "DaysToHarvestSeeds": 70,
         "DaysToHarvestSeedlings": 50,
+        "HealthBenefits": "Chard is rich in vitamins A and K, promoting eye and bone health.",
         "Pests": [
-            "Leaf miners",
-            "Flea beetles"
-        ],
-        "HealthBenefits": "Chard is rich in vitamins A and K, promoting eye and bone health."
+            {
+                "name": "Leaf miners",
+                "description": "No detailed description available for Leaf miners.",
+                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
+                "treatment": "No specific treatment information available for Leaf miners.",
+                "photo": "https://example.com/leaf_miners.jpg"
+            },
+            {
+                "name": "Flea beetles",
+                "description": "No detailed description available for Flea beetles.",
+                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Flea beetles.",
+                "photo": "https://example.com/flea_beetles.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 82,
@@ -985,18 +1345,30 @@
         "Season": "Spring",
         "DaysToHarvestSeeds": 118,
         "DaysToHarvestSeedlings": 100,
+        "HealthBenefits": "Fennel is rich in antioxidants and fiber, supporting digestion and reducing inflammation.",
         "Pests": [
-            "Aphids",
-            "Carrot weevils"
-        ],
-        "HealthBenefits": "Fennel is rich in antioxidants and fiber, supporting digestion and reducing inflammation."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Carrot weevils",
+                "description": "No detailed description available for Carrot weevils.",
+                "symptoms": "Symptoms related to Carrot weevils infestation are not detailed.",
+                "treatment": "No specific treatment information available for Carrot weevils.",
+                "photo": "https://example.com/carrot_weevils.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 83,
         "VegetableCode": "032",
         "CatalogId": 13,
         "Name": "Leeks",
-        "Description": "Leeks (Allium ampeloprasum) are a mild, onion-like vegetable known for their sweet, subtle flavor. They are commonly used in soups, stews, and sautés, adding depth and richness to dishes. Leeks are rich in vitamins A, K, and C, as well as antioxidants, promoting heart health and supporting the immune system. Thriving in cool climates, leeks are a hardy crop that rewards gardeners with a versatile kitchen ingredient.",
+        "Description": "Leeks (Allium ampeloprasum) are a mild, onion-like vegetable known for their sweet, subtle flavor. They are commonly used in soups, stews, and saut\u00e9s, adding depth and richness to dishes. Leeks are rich in vitamins A, K, and C, as well as antioxidants, promoting heart health and supporting the immune system. Thriving in cool climates, leeks are a hardy crop that rewards gardeners with a versatile kitchen ingredient.",
         "ThumbnailImage": "http://www.azamsharp.com/images/leeks.png",
         "SeedDepth": "1/4\" (6 cm)",
         "GerminationSoilTemp": "75 F (24 C)",
@@ -1017,11 +1389,23 @@
         "Season": "Spring,Fall,Summer,Winter",
         "DaysToHarvestSeeds": 90,
         "DaysToHarvestSeedlings": 80,
+        "HealthBenefits": "Leeks are high in vitamins and antioxidants, promoting heart health and reducing inflammation.",
         "Pests": [
-            "Onion maggots",
-            "Thrips"
-        ],
-        "HealthBenefits": "Leeks are high in vitamins and antioxidants, promoting heart health and reducing inflammation."
+            {
+                "name": "Onion maggots",
+                "description": "No detailed description available for Onion maggots.",
+                "symptoms": "Symptoms related to Onion maggots infestation are not detailed.",
+                "treatment": "No specific treatment information available for Onion maggots.",
+                "photo": "https://example.com/onion_maggots.jpg"
+            },
+            {
+                "name": "Thrips",
+                "description": "No detailed description available for Thrips.",
+                "symptoms": "Symptoms related to Thrips infestation are not detailed.",
+                "treatment": "No specific treatment information available for Thrips.",
+                "photo": "https://example.com/thrips.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 84,
@@ -1049,11 +1433,23 @@
         "Season": "Spring,Summer,Fall,Winter",
         "DaysToHarvestSeeds": 100,
         "DaysToHarvestSeedlings": 70,
+        "HealthBenefits": "Mint aids digestion, reduces nausea, and provides a refreshing flavor.",
         "Pests": [
-            "Aphids",
-            "Spider mites"
-        ],
-        "HealthBenefits": "Mint aids digestion, reduces nausea, and provides a refreshing flavor."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Spider mites",
+                "description": "No detailed description available for Spider mites.",
+                "symptoms": "Symptoms related to Spider mites infestation are not detailed.",
+                "treatment": "No specific treatment information available for Spider mites.",
+                "photo": "https://example.com/spider_mites.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 85,
@@ -1081,11 +1477,23 @@
         "Season": "Spring",
         "DaysToHarvestSeeds": 55,
         "DaysToHarvestSeedlings": 38,
+        "HealthBenefits": "Spinach is high in iron, vitamins, and antioxidants, supporting bone and eye health.",
         "Pests": [
-            "Leaf miners",
-            "Aphids"
-        ],
-        "HealthBenefits": "Spinach is high in iron, vitamins, and antioxidants, supporting bone and eye health."
+            {
+                "name": "Leaf miners",
+                "description": "No detailed description available for Leaf miners.",
+                "symptoms": "Symptoms related to Leaf miners infestation are not detailed.",
+                "treatment": "No specific treatment information available for Leaf miners.",
+                "photo": "https://example.com/leaf_miners.jpg"
+            },
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 86,
@@ -1113,11 +1521,23 @@
         "Season": "Summer,Spring,Fall,Winter",
         "DaysToHarvestSeeds": 79,
         "DaysToHarvestSeedlings": 60,
+        "HealthBenefits": "Sweet peppers are rich in vitamin C and antioxidants, boosting immunity and promoting skin health.",
         "Pests": [
-            "Pepper weevils",
-            "Aphids"
-        ],
-        "HealthBenefits": "Sweet peppers are rich in vitamin C and antioxidants, boosting immunity and promoting skin health."
+            {
+                "name": "Pepper weevils",
+                "description": "No detailed description available for Pepper weevils.",
+                "symptoms": "Symptoms related to Pepper weevils infestation are not detailed.",
+                "treatment": "No specific treatment information available for Pepper weevils.",
+                "photo": "https://example.com/pepper_weevils.jpg"
+            },
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 87,
@@ -1145,11 +1565,23 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 65,
         "DaysToHarvestSeedlings": 48,
+        "HealthBenefits": "Okra is high in fiber and antioxidants, supporting digestion and reducing inflammation.",
         "Pests": [
-            "Aphids",
-            "Flea beetles"
-        ],
-        "HealthBenefits": "Okra is high in fiber and antioxidants, supporting digestion and reducing inflammation."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Flea beetles",
+                "description": "No detailed description available for Flea beetles.",
+                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Flea beetles.",
+                "photo": "https://example.com/flea_beetles.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 88,
@@ -1177,18 +1609,30 @@
         "Season": "Spring,Fall",
         "DaysToHarvestSeeds": 115,
         "DaysToHarvestSeedlings": 100,
+        "HealthBenefits": "Oregano is rich in antioxidants and essential oils, supporting immune health, reducing inflammation, and promoting digestive well-being.",
         "Pests": [
-            "Aphids",
-            "Spider mites"
-        ],
-        "HealthBenefits": "Oregano is rich in antioxidants and essential oils, supporting immune health, reducing inflammation, and promoting digestive well-being."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Spider mites",
+                "description": "No detailed description available for Spider mites.",
+                "symptoms": "Symptoms related to Spider mites infestation are not detailed.",
+                "treatment": "No specific treatment information available for Spider mites.",
+                "photo": "https://example.com/spider_mites.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 89,
         "VegetableCode": "038",
         "CatalogId": 13,
         "Name": "Strawberry",
-        "Description": "Strawberries (Fragaria × ananassa) are sweet, juicy berries known for their vibrant red color and refreshing flavor. They can be enjoyed fresh, in desserts, or as a topping for cereals and salads. Rich in vitamin C, fiber, and antioxidants, strawberries support heart health, skin health, and immunity. Thriving in sunny conditions with fertile soil, strawberries are a popular and rewarding crop for home gardens.",
+        "Description": "Strawberries (Fragaria \u00d7 ananassa) are sweet, juicy berries known for their vibrant red color and refreshing flavor. They can be enjoyed fresh, in desserts, or as a topping for cereals and salads. Rich in vitamin C, fiber, and antioxidants, strawberries support heart health, skin health, and immunity. Thriving in sunny conditions with fertile soil, strawberries are a popular and rewarding crop for home gardens.",
         "ThumbnailImage": "http://www.azamsharp.com/images/strawberry.png",
         "SeedDepth": "1/8-1/4\"  (3-6 mm)",
         "GerminationSoilTemp": "65-75 F (18-24 C)",
@@ -1209,18 +1653,30 @@
         "Season": "Spring",
         "DaysToHarvestSeeds": 70,
         "DaysToHarvestSeedlings": 60,
+        "HealthBenefits": "Strawberries are rich in vitamin C, antioxidants, and dietary fiber, supporting immune health, promoting heart health, and improving skin vitality.",
         "Pests": [
-            "Aphids",
-            "Spider mites"
-        ],
-        "HealthBenefits": "Strawberries are rich in vitamin C, antioxidants, and dietary fiber, supporting immune health, promoting heart health, and improving skin vitality."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Spider mites",
+                "description": "No detailed description available for Spider mites.",
+                "symptoms": "Symptoms related to Spider mites infestation are not detailed.",
+                "treatment": "No specific treatment information available for Spider mites.",
+                "photo": "https://example.com/spider_mites.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 90,
         "VegetableCode": "039",
         "CatalogId": 2,
         "Name": "Summer Squash",
-        "Description": "Summer squash (Cucurbita pepo) includes a variety of tender, mild-flavored vegetables such as zucchini and yellow squash. These versatile vegetables can be grilled, roasted, sautéed, or used in soups and salads. Packed with vitamins A and C, fiber, and antioxidants, summer squash supports digestion and overall health. Thriving in warm climates, summer squash is a high-yielding crop that is easy to grow.",
+        "Description": "Summer squash (Cucurbita pepo) includes a variety of tender, mild-flavored vegetables such as zucchini and yellow squash. These versatile vegetables can be grilled, roasted, saut\u00e9ed, or used in soups and salads. Packed with vitamins A and C, fiber, and antioxidants, summer squash supports digestion and overall health. Thriving in warm climates, summer squash is a high-yielding crop that is easy to grow.",
         "ThumbnailImage": "http://www.azamsharp.com/images/summersquash.png",
         "SeedDepth": "1/2-1\" (1.2 - 2.5 cm)",
         "GerminationSoilTemp": "70-95 F (21-35 C)",
@@ -1241,8 +1697,8 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 60,
         "DaysToHarvestSeedlings": 36,
-        "Pests": [],
-        "HealthBenefits": "Summer squash is low in calories and high in vitamins A, C, and potassium, supporting eye health, boosting immunity, and promoting healthy digestion."
+        "HealthBenefits": "Summer squash is low in calories and high in vitamins A, C, and potassium, supporting eye health, boosting immunity, and promoting healthy digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 91,
@@ -1270,8 +1726,8 @@
         "Season": "Fall",
         "DaysToHarvestSeeds": 80,
         "DaysToHarvestSeedlings": 60,
-        "Pests": [],
-        "HealthBenefits": "Winter squash is rich in beta-carotene, fiber, and vitamin C, supporting eye health, boosting immunity, and improving digestion."
+        "HealthBenefits": "Winter squash is rich in beta-carotene, fiber, and vitamin C, supporting eye health, boosting immunity, and improving digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 92,
@@ -1299,8 +1755,8 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 60,
         "DaysToHarvestSeedlings": 43,
-        "Pests": [],
-        "HealthBenefits": "Peas are a good source of protein, fiber, and vitamins A, C, and K, promoting healthy digestion, supporting immunity, and improving bone health."
+        "HealthBenefits": "Peas are a good source of protein, fiber, and vitamins A, C, and K, promoting healthy digestion, supporting immunity, and improving bone health.",
+        "Pests": []
     },
     {
         "VegetableId": 93,
@@ -1328,8 +1784,8 @@
         "Season": "Spring, Fall",
         "DaysToHarvestSeeds": 45,
         "DaysToHarvestSeedlings": 30,
-        "Pests": [],
-        "HealthBenefits": "Kale is packed with vitamins A, C, and K, as well as antioxidants and fiber, supporting bone health, boosting immunity, and reducing inflammation."
+        "HealthBenefits": "Kale is packed with vitamins A, C, and K, as well as antioxidants and fiber, supporting bone health, boosting immunity, and reducing inflammation.",
+        "Pests": []
     },
     {
         "VegetableId": 94,
@@ -1357,8 +1813,8 @@
         "Season": "Spring,Summer,Fall,Winter",
         "DaysToHarvestSeeds": 75,
         "DaysToHarvestSeedlings": 60,
-        "Pests": [],
-        "HealthBenefits": "Cabbage is rich in vitamins C and K, fiber, and antioxidants, supporting digestion, boosting immunity, and promoting heart health."
+        "HealthBenefits": "Cabbage is rich in vitamins C and K, fiber, and antioxidants, supporting digestion, boosting immunity, and promoting heart health.",
+        "Pests": []
     },
     {
         "VegetableId": 95,
@@ -1386,8 +1842,8 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 90,
         "DaysToHarvestSeedlings": 75,
-        "Pests": [],
-        "HealthBenefits": "Melons are hydrating and rich in vitamins A and C, supporting skin health, boosting immunity, and promoting hydration."
+        "HealthBenefits": "Melons are hydrating and rich in vitamins A and C, supporting skin health, boosting immunity, and promoting hydration.",
+        "Pests": []
     },
     {
         "VegetableId": 96,
@@ -1415,8 +1871,8 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 50,
         "DaysToHarvestSeedlings": 38,
-        "Pests": [],
-        "HealthBenefits": "Zucchini is low in calories and high in vitamins A and C, supporting eye health, boosting immunity, and aiding digestion."
+        "HealthBenefits": "Zucchini is low in calories and high in vitamins A and C, supporting eye health, boosting immunity, and aiding digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 97,
@@ -1444,8 +1900,8 @@
         "Season": "Spring,Summer",
         "DaysToHarvestSeeds": 75,
         "DaysToHarvestSeedlings": 110,
-        "Pests": [],
-        "HealthBenefits": "Sunflower seeds are rich in healthy fats, protein, and vitamin E, supporting heart health, improving skin vitality, and boosting immunity."
+        "HealthBenefits": "Sunflower seeds are rich in healthy fats, protein, and vitamin E, supporting heart health, improving skin vitality, and boosting immunity.",
+        "Pests": []
     },
     {
         "VegetableId": 98,
@@ -1473,8 +1929,8 @@
         "Season": "Fall,Winter",
         "DaysToHarvestSeeds": 210,
         "DaysToHarvestSeedlings": 180,
-        "Pests": [],
-        "HealthBenefits": "Raspberries are rich in antioxidants, fiber, and vitamin C, supporting heart health, boosting immunity, and promoting healthy digestion."
+        "HealthBenefits": "Raspberries are rich in antioxidants, fiber, and vitamin C, supporting heart health, boosting immunity, and promoting healthy digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 99,
@@ -1502,8 +1958,8 @@
         "Season": "Spring,Summer,Fall,Winter",
         "DaysToHarvestSeeds": 56,
         "DaysToHarvestSeedlings": 40,
-        "Pests": [],
-        "HealthBenefits": "Turnips are rich in fiber, vitamins C and K, and antioxidants, supporting digestion, boosting immunity, and promoting bone health."
+        "HealthBenefits": "Turnips are rich in fiber, vitamins C and K, and antioxidants, supporting digestion, boosting immunity, and promoting bone health.",
+        "Pests": []
     },
     {
         "VegetableId": 100,
@@ -1531,8 +1987,8 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 115,
         "DaysToHarvestSeedlings": 95,
-        "Pests": [],
-        "HealthBenefits": "Marjoram is rich in antioxidants and essential oils, supporting digestive health, reducing inflammation, and promoting a healthy immune system."
+        "HealthBenefits": "Marjoram is rich in antioxidants and essential oils, supporting digestive health, reducing inflammation, and promoting a healthy immune system.",
+        "Pests": []
     },
     {
         "VegetableId": 101,
@@ -1560,8 +2016,8 @@
         "Season": "Fall",
         "DaysToHarvestSeeds": 80,
         "DaysToHarvestSeedlings": 60,
-        "Pests": [],
-        "HealthBenefits": "Pumpkin is rich in beta-carotene, fiber, and vitamin A, supporting eye health, boosting immunity, and promoting healthy digestion."
+        "HealthBenefits": "Pumpkin is rich in beta-carotene, fiber, and vitamin A, supporting eye health, boosting immunity, and promoting healthy digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 102,
@@ -1589,8 +2045,8 @@
         "Season": "spring, summer, fall, winter",
         "DaysToHarvestSeeds": 90,
         "DaysToHarvestSeedlings": 75,
-        "Pests": [],
-        "HealthBenefits": "Parsnips are high in fiber, vitamins C and K, and antioxidants, supporting digestion, boosting immunity, and promoting heart health."
+        "HealthBenefits": "Parsnips are high in fiber, vitamins C and K, and antioxidants, supporting digestion, boosting immunity, and promoting heart health.",
+        "Pests": []
     },
     {
         "VegetableId": 103,
@@ -1618,8 +2074,8 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 115,
         "DaysToHarvestSeedlings": 95,
-        "Pests": [],
-        "HealthBenefits": "Thyme is rich in antioxidants and vitamin C, supporting immune health, improving respiratory function, and reducing inflammation."
+        "HealthBenefits": "Thyme is rich in antioxidants and vitamin C, supporting immune health, improving respiratory function, and reducing inflammation.",
+        "Pests": []
     },
     {
         "VegetableId": 104,
@@ -1647,8 +2103,8 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 85,
         "DaysToHarvestSeedlings": 64,
-        "Pests": [],
-        "HealthBenefits": "Jalapenos are rich in capsaicin, vitamin C, and antioxidants, boosting metabolism, supporting immunity, and reducing inflammation."
+        "HealthBenefits": "Jalapenos are rich in capsaicin, vitamin C, and antioxidants, boosting metabolism, supporting immunity, and reducing inflammation.",
+        "Pests": []
     },
     {
         "VegetableId": 105,
@@ -1676,8 +2132,8 @@
         "Season": "Spring, fall",
         "DaysToHarvestSeeds": 100,
         "DaysToHarvestSeedlings": 85,
-        "Pests": [],
-        "HealthBenefits": "Rosemary is rich in antioxidants and anti-inflammatory compounds, supporting memory, boosting immunity, and promoting digestion."
+        "HealthBenefits": "Rosemary is rich in antioxidants and anti-inflammatory compounds, supporting memory, boosting immunity, and promoting digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 106,
@@ -1705,8 +2161,8 @@
         "Season": "Spring,summer,fall,winter",
         "DaysToHarvestSeeds": 75,
         "DaysToHarvestSeedlings": 65,
-        "Pests": [],
-        "HealthBenefits": "Savory contains antioxidants and has antimicrobial properties, supporting digestive health and reducing inflammation."
+        "HealthBenefits": "Savory contains antioxidants and has antimicrobial properties, supporting digestive health and reducing inflammation.",
+        "Pests": []
     },
     {
         "VegetableId": 107,
@@ -1734,8 +2190,8 @@
         "Season": "Spring, fall",
         "DaysToHarvestSeeds": 140,
         "DaysToHarvestSeedlings": 100,
-        "Pests": [],
-        "HealthBenefits": "Chives are rich in vitamins A and C, supporting eye health, boosting immunity, and aiding digestion."
+        "HealthBenefits": "Chives are rich in vitamins A and C, supporting eye health, boosting immunity, and aiding digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 108,
@@ -1763,8 +2219,8 @@
         "Season": "Spring, summer, fall",
         "DaysToHarvestSeeds": 100,
         "DaysToHarvestSeedlings": 60,
-        "Pests": [],
-        "HealthBenefits": "Sage contains antioxidants and compounds that support brain health, reduce inflammation, and improve digestion."
+        "HealthBenefits": "Sage contains antioxidants and compounds that support brain health, reduce inflammation, and improve digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 109,
@@ -1792,8 +2248,8 @@
         "Season": "Spring,Fall,Summer,Winter",
         "DaysToHarvestSeeds": 139,
         "DaysToHarvestSeedlings": 60,
-        "Pests": [],
-        "HealthBenefits": "Red onions are rich in antioxidants and flavonoids, supporting heart health and reducing inflammation."
+        "HealthBenefits": "Red onions are rich in antioxidants and flavonoids, supporting heart health and reducing inflammation.",
+        "Pests": []
     },
     {
         "VegetableId": 110,
@@ -1821,8 +2277,8 @@
         "Season": "Spring, summer, fall, winter",
         "DaysToHarvestSeeds": 100,
         "DaysToHarvestSeedlings": 75,
-        "Pests": [],
-        "HealthBenefits": "Lemongrass has antimicrobial properties and supports digestion, reduces stress, and boosts immunity."
+        "HealthBenefits": "Lemongrass has antimicrobial properties and supports digestion, reduces stress, and boosts immunity.",
+        "Pests": []
     },
     {
         "VegetableId": 111,
@@ -1850,8 +2306,8 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 50,
         "DaysToHarvestSeedlings": 35,
-        "Pests": [],
-        "HealthBenefits": "Bush beans are high in fiber, vitamins, and antioxidants, promoting digestion and supporting heart health."
+        "HealthBenefits": "Bush beans are high in fiber, vitamins, and antioxidants, promoting digestion and supporting heart health.",
+        "Pests": []
     },
     {
         "VegetableId": 112,
@@ -1879,8 +2335,8 @@
         "Season": "Summer",
         "DaysToHarvestSeeds": 50,
         "DaysToHarvestSeedlings": 35,
-        "Pests": [],
-        "HealthBenefits": "Pole beans are rich in fiber and vitamins A and C, supporting healthy digestion and boosting immunity."
+        "HealthBenefits": "Pole beans are rich in fiber and vitamins A and C, supporting healthy digestion and boosting immunity.",
+        "Pests": []
     },
     {
         "VegetableId": 113,
@@ -1908,8 +2364,8 @@
         "Season": "Spring, summer, fall, winter",
         "DaysToHarvestSeeds": 2555,
         "DaysToHarvestSeedlings": 1460,
-        "Pests": [],
-        "HealthBenefits": "Lemons are high in vitamin C and antioxidants, boosting immunity, supporting skin health, and aiding digestion."
+        "HealthBenefits": "Lemons are high in vitamin C and antioxidants, boosting immunity, supporting skin health, and aiding digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 114,
@@ -1937,8 +2393,8 @@
         "Season": "Spring,Fall,Summer,Winter",
         "DaysToHarvestSeeds": 2555,
         "DaysToHarvestSeedlings": 1460,
-        "Pests": [],
-        "HealthBenefits": "Limes are rich in vitamin C and antioxidants, promoting immunity, aiding digestion, and supporting healthy skin."
+        "HealthBenefits": "Limes are rich in vitamin C and antioxidants, promoting immunity, aiding digestion, and supporting healthy skin.",
+        "Pests": []
     },
     {
         "VegetableId": 115,
@@ -1966,8 +2422,8 @@
         "Season": "Spring, summer, fall",
         "DaysToHarvestSeeds": 2555,
         "DaysToHarvestSeedlings": 1460,
-        "Pests": [],
-        "HealthBenefits": "Oranges are packed with vitamin C and fiber, boosting immunity, supporting heart health, and promoting skin vitality."
+        "HealthBenefits": "Oranges are packed with vitamin C and fiber, boosting immunity, supporting heart health, and promoting skin vitality.",
+        "Pests": []
     },
     {
         "VegetableId": 116,
@@ -1995,8 +2451,8 @@
         "Season": "Spring, summer, fall",
         "DaysToHarvestSeeds": 1000,
         "DaysToHarvestSeedlings": 1000,
-        "Pests": [],
-        "HealthBenefits": "Blueberries are rich in antioxidants, vitamin C, and fiber, supporting brain health, boosting immunity, and improving digestion."
+        "HealthBenefits": "Blueberries are rich in antioxidants, vitamin C, and fiber, supporting brain health, boosting immunity, and improving digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 117,
@@ -2024,8 +2480,8 @@
         "Season": "Fall, spring, summer",
         "DaysToHarvestSeeds": 730,
         "DaysToHarvestSeedlings": 730,
-        "Pests": [],
-        "HealthBenefits": "Blackberries are high in fiber, vitamins C and K, and antioxidants, promoting heart health and supporting digestion."
+        "HealthBenefits": "Blackberries are high in fiber, vitamins C and K, and antioxidants, promoting heart health and supporting digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 118,
@@ -2053,8 +2509,8 @@
         "Season": "Spring,Summer,Fall,Winter",
         "DaysToHarvestSeeds": 100,
         "DaysToHarvestSeedlings": 70,
-        "Pests": [],
-        "HealthBenefits": "Siam Queen (Thai basil) contains essential oils and antioxidants, reducing inflammation and supporting digestion."
+        "HealthBenefits": "Siam Queen (Thai basil) contains essential oils and antioxidants, reducing inflammation and supporting digestion.",
+        "Pests": []
     },
     {
         "VegetableId": 119,
@@ -2082,8 +2538,8 @@
         "Season": "Spring,Summer",
         "DaysToHarvestSeeds": 3652,
         "DaysToHarvestSeedlings": 1826,
-        "Pests": [],
-        "HealthBenefits": "Avocados are rich in healthy fats, fiber, and vitamins, promoting heart health, supporting digestion, and improving skin health."
+        "HealthBenefits": "Avocados are rich in healthy fats, fiber, and vitamins, promoting heart health, supporting digestion, and improving skin health.",
+        "Pests": []
     },
     {
         "VegetableId": 94,
@@ -2111,11 +2567,23 @@
         "Season": "Spring, Fall",
         "DaysToHarvestSeeds": 90,
         "DaysToHarvestSeedlings": 70,
+        "HealthBenefits": "Rutabagas are high in fiber, vitamin C, and potassium, supporting digestion, boosting immunity, and promoting heart health.",
         "Pests": [
-            "Flea beetles",
-            "Root maggots"
-        ],
-        "HealthBenefits": "Rutabagas are high in fiber, vitamin C, and potassium, supporting digestion, boosting immunity, and promoting heart health."
+            {
+                "name": "Flea beetles",
+                "description": "No detailed description available for Flea beetles.",
+                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Flea beetles.",
+                "photo": "https://example.com/flea_beetles.jpg"
+            },
+            {
+                "name": "Root maggots",
+                "description": "No detailed description available for Root maggots.",
+                "symptoms": "Symptoms related to Root maggots infestation are not detailed.",
+                "treatment": "No specific treatment information available for Root maggots.",
+                "photo": "https://example.com/root_maggots.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 95,
@@ -2143,12 +2611,30 @@
         "Season": "Spring, Fall",
         "DaysToHarvestSeeds": 60,
         "DaysToHarvestSeedlings": 40,
+        "HealthBenefits": "Endive is low in calories and high in fiber and vitamins, promoting digestion and supporting immune health.",
         "Pests": [
-            "Aphids",
-            "Slugs",
-            "Snails"
-        ],
-        "HealthBenefits": "Endive is low in calories and high in fiber and vitamins, promoting digestion and supporting immune health."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Slugs",
+                "description": "No detailed description available for Slugs.",
+                "symptoms": "Symptoms related to Slugs infestation are not detailed.",
+                "treatment": "No specific treatment information available for Slugs.",
+                "photo": "https://example.com/slugs.jpg"
+            },
+            {
+                "name": "Snails",
+                "description": "No detailed description available for Snails.",
+                "symptoms": "Symptoms related to Snails infestation are not detailed.",
+                "treatment": "No specific treatment information available for Snails.",
+                "photo": "https://example.com/snails.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 96,
@@ -2176,12 +2662,30 @@
         "Season": "Spring, Fall",
         "DaysToHarvestSeeds": 70,
         "DaysToHarvestSeedlings": 55,
+        "HealthBenefits": "Collard greens are rich in vitamins A, C, and K, supporting bone health, boosting immunity, and aiding digestion.",
         "Pests": [
-            "Cabbage worms",
-            "Aphids",
-            "Flea beetles"
-        ],
-        "HealthBenefits": "Collard greens are rich in vitamins A, C, and K, supporting bone health, boosting immunity, and aiding digestion."
+            {
+                "name": "Cabbage worms",
+                "description": "No detailed description available for Cabbage worms.",
+                "symptoms": "Symptoms related to Cabbage worms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Cabbage worms.",
+                "photo": "https://example.com/cabbage_worms.jpg"
+            },
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Flea beetles",
+                "description": "No detailed description available for Flea beetles.",
+                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Flea beetles.",
+                "photo": "https://example.com/flea_beetles.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 97,
@@ -2209,11 +2713,23 @@
         "Season": "Spring, Fall",
         "DaysToHarvestSeeds": 60,
         "DaysToHarvestSeedlings": 40,
+        "HealthBenefits": "Watercress is packed with vitamins A and C, supporting immunity, improving bone health, and promoting skin vitality.",
         "Pests": [
-            "Aphids",
-            "Snails"
-        ],
-        "HealthBenefits": "Watercress is packed with vitamins A and C, supporting immunity, improving bone health, and promoting skin vitality."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Snails",
+                "description": "No detailed description available for Snails.",
+                "symptoms": "Symptoms related to Snails infestation are not detailed.",
+                "treatment": "No specific treatment information available for Snails.",
+                "photo": "https://example.com/snails.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 98,
@@ -2241,11 +2757,23 @@
         "Season": "Spring, Fall",
         "DaysToHarvestSeeds": 175,
         "DaysToHarvestSeedlings": 145,
+        "HealthBenefits": "Horseradish contains antioxidants and compounds that support immune health and promote digestion.",
         "Pests": [
-            "Flea beetles",
-            "Cabbage worms"
-        ],
-        "HealthBenefits": "Horseradish contains antioxidants and compounds that support immune health and promote digestion."
+            {
+                "name": "Flea beetles",
+                "description": "No detailed description available for Flea beetles.",
+                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Flea beetles.",
+                "photo": "https://example.com/flea_beetles.jpg"
+            },
+            {
+                "name": "Cabbage worms",
+                "description": "No detailed description available for Cabbage worms.",
+                "symptoms": "Symptoms related to Cabbage worms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Cabbage worms.",
+                "photo": "https://example.com/cabbage_worms.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 99,
@@ -2273,11 +2801,23 @@
         "Season": "Spring, Summer",
         "DaysToHarvestSeeds": 150,
         "DaysToHarvestSeedlings": 150,
+        "HealthBenefits": "Jicama is high in fiber and vitamin C, supporting digestion, boosting immunity, and promoting hydration.",
         "Pests": [
-            "Aphids",
-            "Root nematodes"
-        ],
-        "HealthBenefits": "Jicama is high in fiber and vitamin C, supporting digestion, boosting immunity, and promoting hydration."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Root nematodes",
+                "description": "No detailed description available for Root nematodes.",
+                "symptoms": "Symptoms related to Root nematodes infestation are not detailed.",
+                "treatment": "No specific treatment information available for Root nematodes.",
+                "photo": "https://example.com/root_nematodes.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 100,
@@ -2305,12 +2845,30 @@
         "Season": "Spring, Fall",
         "DaysToHarvestSeeds": 50,
         "DaysToHarvestSeedlings": 30,
+        "HealthBenefits": "Bok choy is rich in vitamins A, C, and K, supporting bone health, boosting immunity, and aiding digestion.",
         "Pests": [
-            "Cabbage worms",
-            "Aphids",
-            "Flea beetles"
-        ],
-        "HealthBenefits": "Bok choy is rich in vitamins A, C, and K, supporting bone health, boosting immunity, and aiding digestion."
+            {
+                "name": "Cabbage worms",
+                "description": "No detailed description available for Cabbage worms.",
+                "symptoms": "Symptoms related to Cabbage worms infestation are not detailed.",
+                "treatment": "No specific treatment information available for Cabbage worms.",
+                "photo": "https://example.com/cabbage_worms.jpg"
+            },
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Flea beetles",
+                "description": "No detailed description available for Flea beetles.",
+                "symptoms": "Symptoms related to Flea beetles infestation are not detailed.",
+                "treatment": "No specific treatment information available for Flea beetles.",
+                "photo": "https://example.com/flea_beetles.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 101,
@@ -2338,11 +2896,23 @@
         "Season": "Spring, Fall",
         "DaysToHarvestSeeds": 60,
         "DaysToHarvestSeedlings": 50,
+        "HealthBenefits": "Snap peas are high in fiber and vitamins A and C, supporting digestion and boosting immunity.",
         "Pests": [
-            "Aphids",
-            "Pea weevils"
-        ],
-        "HealthBenefits": "Snap peas are high in fiber and vitamins A and C, supporting digestion and boosting immunity."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Pea weevils",
+                "description": "No detailed description available for Pea weevils.",
+                "symptoms": "Symptoms related to Pea weevils infestation are not detailed.",
+                "treatment": "No specific treatment information available for Pea weevils.",
+                "photo": "https://example.com/pea_weevils.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 102,
@@ -2370,11 +2940,23 @@
         "Season": "Spring, Fall",
         "DaysToHarvestSeeds": 60,
         "DaysToHarvestSeedlings": 50,
+        "HealthBenefits": "Snow peas are low in calories and rich in vitamins A and C, promoting digestion and supporting immune health.",
         "Pests": [
-            "Aphids",
-            "Pea weevils"
-        ],
-        "HealthBenefits": "Snow peas are low in calories and rich in vitamins A and C, promoting digestion and supporting immune health."
+            {
+                "name": "Aphids",
+                "description": "No detailed description available for Aphids.",
+                "symptoms": "Symptoms related to Aphids infestation are not detailed.",
+                "treatment": "No specific treatment information available for Aphids.",
+                "photo": "https://example.com/aphids.jpg"
+            },
+            {
+                "name": "Pea weevils",
+                "description": "No detailed description available for Pea weevils.",
+                "symptoms": "Symptoms related to Pea weevils infestation are not detailed.",
+                "treatment": "No specific treatment information available for Pea weevils.",
+                "photo": "https://example.com/pea_weevils.jpg"
+            }
+        ]
     },
     {
         "VegetableId": 103,
@@ -2402,10 +2984,22 @@
         "Season": "Spring, Fall",
         "DaysToHarvestSeeds": 90,
         "DaysToHarvestSeedlings": 60,
+        "HealthBenefits": "Shallots are rich in antioxidants and compounds that support heart health, boost immunity, and reduce inflammation.",
         "Pests": [
-            "Onion maggots",
-            "Thrips"
-        ],
-        "HealthBenefits": "Shallots are rich in antioxidants and compounds that support heart health, boost immunity, and reduce inflammation."
+            {
+                "name": "Onion maggots",
+                "description": "No detailed description available for Onion maggots.",
+                "symptoms": "Symptoms related to Onion maggots infestation are not detailed.",
+                "treatment": "No specific treatment information available for Onion maggots.",
+                "photo": "https://example.com/onion_maggots.jpg"
+            },
+            {
+                "name": "Thrips",
+                "description": "No detailed description available for Thrips.",
+                "symptoms": "Symptoms related to Thrips infestation are not detailed.",
+                "treatment": "No specific treatment information available for Thrips.",
+                "photo": "https://example.com/thrips.jpg"
+            }
+        ]
     }
 ]
