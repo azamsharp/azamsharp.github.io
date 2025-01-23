@@ -27,7 +27,7 @@
  <div class="share-container">
     <div>
       <!-- Twitter -->
-      <a href="https://twitter.com/intent/tweet?url=https://azamsharp.com/2025-01-23-filtering-swiftdata-models-using-enum.html&text=Filtering SwiftData Models Using Enum by @azamsharp"
+      <a href="https://twitter.com/intent/tweet?url=https://azamsharp.com/2025/01/23/filtering-swiftdata-models-using-enum.html&text=Filtering SwiftData Models Using Enum by @azamsharp"
          target="_blank" 
          rel="noopener noreferrer" 
          class="share-button twitter">
@@ -36,7 +36,7 @@
     </div>
     <div>
       <!-- LinkedIn -->
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://azamsharp.com/2025-01-23-filtering-swiftdata-models-using-enum.html"
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://azamsharp.com/2025/01/23/filtering-swiftdata-models-using-enum.html"
          target="_blank" 
          rel="noopener noreferrer" 
          class="share-button linkedin">
