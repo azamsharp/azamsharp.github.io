@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Filtering SwiftData Models Using Enum](_posts/2025-01-23-filtering-swiftdata-models-using-enum.md)
+
+SwiftData, Apple’s modern persistence framework, provides a streamlined approach to managing on-device data. However, it introduces challenges when working with enums, particularly when filtering data using their `rawValue`. This article explores the limitations of querying `SwiftData` models with enums and offers a practical solution. By replacing the enum property with its `rawValue` in the model and retaining the enum as a computed property, we achieve compatibility with SwiftData while preserving the advantages of enums, such as type safety and clarity. Through a step-by-step implementation, including dynamic queries and a SwiftUI interface, this article provides a comprehensive guide to effectively handling enum-based filtering in SwiftData applications.
+
 ### [The Ultimate Guide to Validation Patterns in SwiftUI](_posts/2024-12-18-the-ultimate-guide-to-validation-patterns-in-swiftui.md)
 
 Validation is a crucial component of app development, ensuring that only accurate and meaningful data is processed by your application. As the saying goes in software development, **Garbage in, garbage out.** If your app allows users to submit invalid data, it will inevitably result in unreliable and flawed outputs.

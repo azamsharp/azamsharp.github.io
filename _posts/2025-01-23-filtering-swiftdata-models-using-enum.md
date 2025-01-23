@@ -1,4 +1,4 @@
-   <style>
+<style>
     .share-container {
       display: flex;
       gap: 10px; /* Spacing between buttons */
@@ -27,7 +27,7 @@
  <div class="share-container">
     <div>
       <!-- Twitter -->
-      <a href="https://twitter.com/intent/tweet?url=https://azamsharp.com/2024/12/18/the-ultimate-guide-to-validation-patterns-in-swiftui.html&text=The Ultimate Guide to Validation Patterns in SwiftUI by @azamsharp"
+      <a href="https://twitter.com/intent/tweet?url=https://azamsharp.com/2025-01-23-filtering-swiftdata-models-using-enum.html&text=Filtering SwiftData Models Using Enum by @azamsharp"
          target="_blank" 
          rel="noopener noreferrer" 
          class="share-button twitter">
@@ -36,7 +36,7 @@
     </div>
     <div>
       <!-- LinkedIn -->
-      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://azamsharp.com/2024/12/18/the-ultimate-guide-to-validation-patterns-in-swiftui.html"
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://azamsharp.com/2025-01-23-filtering-swiftdata-models-using-enum.html"
          target="_blank" 
          rel="noopener noreferrer" 
          class="share-button linkedin">

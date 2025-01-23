@@ -1,136 +1,221 @@
-# Convenience Property Wrappers vs Custom Data Access Layer in SwiftUI
+# Filtering SwiftData Models Using Enum 
 
-Yesterday, I had the opportunity to speak at [WomenWhoCode Mobile](https://www.womenwhocode.com/network/mobile/) event. It was a remote event and well attended. I spoke about SwiftUI architecture best practices. 
+SwiftData is Apple’s modern on-device persistence framework, designed to replace Core Data. As a relatively new addition, it still has some bugs and limitations. In this post, I’ll address one of the most frequently asked questions about SwiftData: *How can I perform a query using an enum?*
 
-When I was covering Core Data I mentioned that you should use ```@FetchRequest``` property wrappers as they are optimized to work with SwiftUI. Same is true for ```@Query``` property wrapper in SwiftData. 
+<div class="share-container">
+    <div>
+      <!-- Twitter -->
+      <a href="https://twitter.com/intent/tweet?url=https://azamsharp.com/2024/12/18/the-ultimate-guide-to-validation-patterns-in-swiftui.html&text=The Ultimate Guide to Validation Patterns in SwiftUI by @azamsharp"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button twitter">
+        Share on Twitter
+      </a>
+    </div>
+    <div>
+      <!-- LinkedIn -->
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://azamsharp.com/2024/12/18/the-ultimate-guide-to-validation-patterns-in-swiftui.html"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button linkedin">
+        Share on LinkedIn
+      </a>
+    </div>
+    
+  </div>
 
-During this time an interesting question was raised. An attendee asked what if you want to change the data access layer in the future. Currently our views are tightly coupled with either Core Data or SwiftData but what happens if we want to use Realm or GRDB. 
+### Implementation 
 
-I have thought about this question for a very long time. This is one of those questions, which does not have a straight forward answer or a single answer to be exact. The answer is opinion based so let's take a look at both sides of the equation. I will use SwiftData in my examples.  
+Imagine a scenario where you need to filter expense items by their type. While expense types can vary, for this example, we'll focus on two categories: business and personal. Below is the implementation of the ExpenseItem and ExpenseType structures:
 
-### Property Wrappers
+``` swift 
+enum ExpenseType: Int, Codable, CaseIterable, Identifiable {
+    case business, personal
 
-Consider a scenario that we are building a simple TodoList application. We add our model ```TodoItem```, which consists of a single property ```title```. We add a ```TodoListView```, which uses the ```@Query``` property wrapper to fetch and also monitor the changes in the model context of the application. In just a few lines of code we are able to display todo items on our screen. The code is listed below: 
-
-```swift 
+    var id: Self { self }
+    
+    var title: String {
+        switch self {
+        case .business:
+            return "Business"
+        case .personal:
+            return "Personal"
+        }
+    }
+}
 
 @Model
-class TodoItem {
+class ExpenseItem: Identifiable {
+    var name: String
+    var type: ExpenseType
     
-    var title: String
-    
-    init(title: String) {
-        self.title = title
+    init(name: String, type: ExpenseType) {
+        self.name = name
+        self.type = type
     }
 }
+```
 
-struct TodoItemView: View {
+The `ExpenseType` enum conforms to `Codable`, as required for inclusion in a SwiftData model.
+
+Next, we define a `previewContainer` to supply data for SwiftUI previews. The implementation is shown below:
+
+
+``` swift 
+@MainActor
+var previewContainer: ModelContainer = {
     
-    let todoItem: TodoItem
+    let container = try! ModelContainer(for: ExpenseItem.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     
-    var body: some View {
-        Text(todoItem.title)
+    for expenseItem in SampleData.expenseItems {
+        
+        container.mainContext.insert(expenseItem)
+        try! container.mainContext.save()
+
     }
-}
+    
+    return container
+    
+}()
 
-struct TodoListView: View {
+struct SampleData {
     
-    @Query private var todoItems: [TodoItem]
-    
-    var body: some View {
-        List(todoItems) { todoItem in
-           TodoItemView(todoItem: todoItem)
-        }
+    static var expenseItems: [ExpenseItem] {
+        return [
+            ExpenseItem(name: "Office Supplies", type: .business),
+            ExpenseItem(name: "Groceries", type: .personal),
+            ExpenseItem(name: "Client Lunch", type: .business),
+            ExpenseItem(name: "Movie Ticket", type: .personal),
+            ExpenseItem(name: "Software Subscription", type: .business),
+            ExpenseItem(name: "Gasoline", type: .personal),
+            ExpenseItem(name: "Conference Fee", type: .business),
+            ExpenseItem(name: "Dinner Out", type: .personal),
+            ExpenseItem(name: "Marketing Materials", type: .business),
+            ExpenseItem(name: "Clothing", type: .personal),
+            ExpenseItem(name: "Travel Expenses", type: .business),
+            ExpenseItem(name: "Household Repairs", type: .personal),
+            ExpenseItem(name: "Consulting Fees", type: .business),
+            ExpenseItem(name: "Entertainment", type: .personal),
+            ExpenseItem(name: "Equipment Purchase", type: .business),
+            ExpenseItem(name: "Personal Care", type: .personal),
+            ExpenseItem(name: "Training Course", type: .business),
+            ExpenseItem(name: "Hobbies", type: .personal),
+            ExpenseItem(name: "Legal Fees", type: .business),
+            ExpenseItem(name: "Gifts", type: .personal)
+        ]
+
     }
     
 }
 ```
 
-But what if few weeks later you decided that you want to replace SwiftData with Realm. And we are also assuming that you are interested in using Realm SwiftUI property wrappers in your application. This means all those ```@Query``` property wrappers will not work. Realm uses ```@ObservedResults``` property wrapper instead of ```@Query``` property wrapper. Also Realm models are not decorated with ```@Model``` macro so you need to remove that too. 
+Next, we implemented the user interface, which includes a segmented control for selecting the expense type and a list that dynamically displays expenses based on the selected type.
 
-> If your intention is to utilize Realm, it's crucial to note that all of your models will necessitate updating, irrespective of the approach you choose.
-
-The ```TodoItemView``` also needs to be updated as Realm uses ```@ObservedRealmObject``` or similar instead of ```[TodoItem]```. 
-
-Ultimately, it becomes apparent that altering the data persistence framework will have a ripple effect throughout a significant portion of our application.
-
-### Custom Data Access Layer 
-
-Now, let's see the what happens when we implement our own custom data access layer. 
-
-We will start with implementing the protocol. 
-
-``` swift
-protocol TodoServiceProtocol {
-    func saveTodoItem(_ todoItem: TodoItem)
-    func getTodoItems() throws -> [TodoItem]
-}
-```
-
-Next, we will implement the concrete implementation of our data access service: 
-
-``` swift
-class SwiftDataTodoService: TodoServiceProtocol {
-    
-    private var context: ModelContext
-    
-    init(context: ModelContext) {
-        self.context = context
-    }
-    
-    func saveTodoItem(_ todoItem: TodoItem) {
-        context.insert(todoItem)
-    }
-    
-    func getTodoItems() throws -> [TodoItem] {
-        return try context.fetch(FetchDescriptor<TodoItem>())
-    }
-}
-```
-
-And finally, you can use the ```SwiftDataTodoService``` in your application. 
-
-``` swift
+``` swift 
 struct ContentView: View {
     
-    private var service: TodoServiceProtocol
-    @State private var todoItems: [TodoItem] = []
-    
-    init(service: TodoServiceProtocol) {
-        self.service = service
-    }
-    
-    private func loadTodoItems() {
-        // get all the items
-        do {
-            todoItems = try service.getTodoItems()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
+    @State private var selectedExpenseType: ExpenseType = .business
     
     var body: some View {
         VStack {
-            Button("Insert Todo Item") {
-                service.saveTodoItem(TodoItem(title: "Feed the Rabbit"))
-                // load the todo items from db
-                loadTodoItems()
-            }
+            Picker("Select expense type", selection: $selectedExpenseType) {
+               
+                    ForEach(ExpenseType.allCases) { expenseType in
+                        Text(expenseType.title)
+                            .tag(expenseType)
+                    }
+               
+            }.pickerStyle(.segmented)
+
+            ExpenseItemSearchResults(expenseType: selectedExpenseType)
             
-            List(todoItems) { todoItem in
-                Text(todoItem.title)
-            }.task {
-                loadTodoItems()
-            }
         }
         .padding()
     }
 }
 ```
-This is definitely a lot more code as compared to our previous approach. We pass the ```TodoService``` as a dependency to our ContentView and then uses the ```saveTodoItem``` and ```getTodoItems``` functions to perform appropriate actions. By not using the built-in property wrappers like ```@FetchRequest``` or ```@Query``` we lost the ability of tracking changes but gained the flexibility of swapping out the data access layers when and if needed. 
 
-### Final Words 
+The `ExpenseItemSearchResults` class handles dynamically fetching expense items based on the user's selection. Here's the implementation:
 
-When determining which option is superior, the answer is **it depends**. If convenience is your priority, then SwiftUI property wrappers are recommended. However, if you value flexibility to accommodate future changes, implementing a custom data access layer would be more suitable.
+``` swift 
+struct ExpenseItemSearchResults: View {
+    
+    let expenseType: ExpenseType
+    
+    @Query private var expenseItems: [ExpenseItem]
+    
+    init(expenseType: ExpenseType) {
+        self.expenseType = expenseType
+        _expenseItems = Query(filter: #Predicate { $0.type == expenseType })
+    }
+    
+    var body: some View {
+        List(expenseItems) { expenseItem in
+            HStack {
+                Text(expenseItem.name)
+                Spacer()
+                Text(expenseItem.type.title)
+            }
+        }
+    }
+}
+```
 
-I pose a question for you to contemplate: When was the last instance in which you entirely swapped out your data access layers?
+The core of this dynamic query lies in the initializer, where we assign `_expenseItems` to a new query that updates based on the user's selection. However, if you run this code as is, you'll notice it displays an empty list.
+
+> This behavior is a limitation of SwiftData, as it does not inherently recognize the need to map the `rawValue` of the `expenseType` enum to its corresponding database column.
+
+
+The solution is to replace the `ExpenseType` property in the `ExpenseItem` model with an `Int` to directly store the raw value of the enum. The updated implementation is shown below:
+
+
+Let me know if you'd like the example code included as well!
+
+``` swift 
+@Model
+class ExpenseItem: Identifiable {
+    var name: String
+    var type: Int
+    
+    var expenseType: ExpenseType {
+        ExpenseType(rawValue: type) ?? .business
+    }
+    
+    init(name: String, type: Int) {
+        self.name = name
+        self.type = type
+    }
+}
+```
+
+We retained the `expenseType` enum as a computed property in the `ExpenseItem` model. This approach allows seamless access to properties like `title`, which are part of the `ExpenseType` enum.
+
+```ExpenseItemSearchResults``` is also updated as shown below: 
+
+``` swift 
+struct ExpenseItemSearchResults: View {
+    
+    let expenseType: ExpenseType
+    
+    @Query private var expenseItems: [ExpenseItem]
+    
+    init(expenseType: ExpenseType) {
+        self.expenseType = expenseType
+        _expenseItems = Query(filter: #Predicate { $0.type == expenseType.rawValue })
+    }
+    
+    var body: some View {
+        List(expenseItems) { expenseItem in
+            HStack {
+                Text(expenseItem.name)
+                Spacer()
+                Text(expenseItem.expenseType.title)
+            }
+        }
+    }
+}
+```
+
+As you can see that now the ```#Predicate``` is based on the ```Int``` properties. This allows the predicate to work as expected and display filtered items based on the user selection. 
+
+

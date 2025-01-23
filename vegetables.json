@@ -2566,7 +2566,44 @@
         "DaysToHarvestSeeds": 100,
         "DaysToHarvestSeedlings": 70,
         "HealthBenefits": "Siam Queen (Thai basil) contains essential oils and antioxidants, reducing inflammation and supporting digestion.",
-        "Pests": []
+        "Pests": [
+            {
+                "name": "Aphids",
+                "description": "Aphids are small, soft-bodied insects that feed on the sap of plants by piercing stems, leaves, and buds with their mouthparts. They reproduce rapidly and form large colonies, often weakening the plant and transmitting diseases.",
+                "symptoms": "Leaves may become curled, yellowed, or distorted. Aphids excrete honeydew, which can lead to the growth of sooty mold. Infested plants may exhibit stunted growth.",
+                "treatment": "Introduce natural predators like ladybugs, lacewings, and parasitic wasps. Apply insecticidal soap or neem oil for organic control. Regularly check the undersides of leaves and remove aphids manually if necessary.",
+                "photo": "https://www.azamsharp.com/images/aphids.png"
+            },
+            {
+                "name": "Whiteflies",
+                "description": "Whiteflies are small, winged insects that feed on the underside of leaves, sucking out plant juices. They can also transmit plant viruses.",
+                "symptoms": "Yellowing of leaves, wilting, and a sticky residue (honeydew) on the foliage. Whiteflies can also cause distorted growth and reduced yield.",
+                "treatment": "Use yellow sticky traps to catch adult whiteflies. Apply insecticidal soap or neem oil for organic control. Encourage natural predators like ladybugs and parasitic wasps.",
+                "photo": "https://www.azamsharp.com/images/whiteflies.png"
+            },
+            {
+                "name": "Spider Mites",
+                "description": "Spider mites are tiny arachnids that feed on the sap of plants, causing damage to the leaves. They are more likely to appear in dry, hot conditions.",
+                "symptoms": "Speckled or stippled discoloration on leaves, with webbing appearing on the undersides. The plant may become stunted and show signs of stress, such as yellowing and leaf drop.",
+                "treatment": "Spray with water to reduce mite populations. Use miticides or neem oil for control. Introduce natural predators like predatory mites to help reduce spider mite numbers.",
+                "photo": "https://www.azamsharp.com/images/spider_mites.png"
+            },
+            {
+                "name": "Leafhoppers",
+                "description": "Leafhoppers are small insects that feed on plant sap. They can also transmit plant viruses, causing significant damage to basil plants.",
+                "symptoms": "Yellowing and curling of leaves. The plant may exhibit stunted growth and may also attract ants due to the honeydew they excrete.",
+                "treatment": "Apply insecticidal soap or neem oil for control. Encourage natural predators like birds and beneficial insects. Use row covers to protect plants from infestation.",
+                "photo": "https://www.azamsharp.com/images/leafhoppers.png"
+            },
+            {
+                "name": "Slugs",
+                "description": "Slugs are mollusks that feed on leaves, especially during wet and rainy conditions. They are known to cause significant damage to young plants and seedlings.",
+                "symptoms": "Irregular holes or ragged edges on leaves. Slug trails, which are slimy and shiny, may also be visible on plants and surrounding areas.",
+                "treatment": "Handpick slugs during the night or early morning. Use copper tape or crushed eggshells around the base of plants to deter them. Set up beer traps or use iron phosphate-based slug baits.",
+                "photo": "https://www.azamsharp.com/images/slugs.png"
+            }
+        ]
+        
     },
     {
         "VegetableId": 119,
