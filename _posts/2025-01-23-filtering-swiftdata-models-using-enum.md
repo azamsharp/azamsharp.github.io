@@ -212,10 +212,9 @@ The core of this dynamic query lies in the initializer, where we assign `_expens
 > This behavior is a limitation of SwiftData, as it does not inherently recognize the need to map the `rawValue` of the `expenseType` enum to its corresponding database column.
 
 
-The solution is to replace the `ExpenseType` property in the `ExpenseItem` model with an `Int` to directly store the raw value of the enum. The updated implementation is shown below:
+The solution is to use the rawValue of the `ExpenseType` instead of the enum itself. 
 
-
-Let me know if you'd like the example code included as well!
+The updated implementation is shown below:
 
 ``` swift 
 @Model
@@ -227,9 +226,9 @@ class ExpenseItem: Identifiable {
         ExpenseType(rawValue: type) ?? .business
     }
     
-    init(name: String, type: Int) {
+    init(name: String, expenseType: ExpenseType) {
         self.name = name
-        self.type = type
+        self.type = expenseType.rawValue
     }
 }
 ```
