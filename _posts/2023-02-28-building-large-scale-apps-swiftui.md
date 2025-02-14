@@ -272,6 +272,7 @@ class FoodTruckStore {
     
     let httpClient: HTTPClient
     private(set) var products: [Product] = []
+    private(set) var orders: [Order] = [] 
     
     init(httpClient: HTTPClient) {
         self.httpClient = httpClient
@@ -287,11 +288,18 @@ class FoodTruckStore {
         products.sorted { $0.salesCount > $1.salesCount }
     }
     
+    // Computed property to get most recent orders
+    var mostRecentOrders: [Order] {
+        orders.sorted { $0.createdAt > $1.createdAt } // Sort by creation date in descending order
+    }
+    
+    // Load all products
     func loadAllProducts() async throws {
         let resource = Resource(url: Constants.Urls.products, modelType: [Product].self)
         products = try await httpClient.load(resource)
     }
    
+    // Save a new product
     func saveProduct(_ product: Product) async throws {
         let resource = Resource(url: Constants.Urls.createProduct, method: .post(product.encode()), modelType: CreateProductResponse.self)
         let response = try await httpClient.load(resource)
@@ -301,6 +309,15 @@ class FoodTruckStore {
             throw ProductError.operationFailed(response.message ?? "")
         }
     }
+    
+    // MARK: - Orders Functionality
+    
+    // Load all orders
+    func loadAllOrders() async throws {
+        let resource = Resource(url: Constants.Urls.orders, modelType: [Order].self)
+        orders = try await httpClient.load(resource)
+    }
+}
    
 ```
 
