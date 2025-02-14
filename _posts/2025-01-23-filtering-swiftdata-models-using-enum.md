@@ -46,7 +46,7 @@
     
   </div>
 
-# Introduction
+### Introduction
 
 Enums are a powerful feature in Swift, allowing developers to define a type with a fixed set of values. When working with `SwiftData`, Apple’s modern persistence framework designed to replace Core Data, integrating enums can simplify code and improve clarity. However, `SwiftData` introduces certain limitations when it comes to querying models using enums directly.
 

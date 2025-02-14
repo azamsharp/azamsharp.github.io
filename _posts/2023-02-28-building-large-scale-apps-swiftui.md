@@ -83,6 +83,10 @@ The outline of this article is shown below:
 
 > If you are interested learning more about SwiftUI then check out my course [SwiftUI Architecture - Patterns and Best Practices](https://azamsharp.teachable.com/p/swiftui-architecture-patterns-and-best-practices) published on Teachable platform. 
 
+## Note 
+
+In this article, I previously used the term *aggregate model*. Now, I refer to these models as **Store**. However, the underlying concept remains the same. The primary reason for this change was to eliminate confusion between client-side JSON model objects and observable objects (Store).
+
 ## Modular Architecture 
 
 Modular architecture in software refers to the design and organization of software systems into small, self contained modules or components. These modules can be tested and maintained independently of one another. Each module serves a specific purpose and solve a specific business requirement. 
