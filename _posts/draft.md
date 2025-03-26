@@ -73,7 +73,7 @@ struct BudgetListScreen: View {
 
 ```
 
-
+There are several important things to notice about the above implementation. First, for Xcode Previews we have injected a modelContainer and specifically used inMemory 
 
 
 ### Business Rules 
