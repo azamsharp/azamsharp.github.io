@@ -73,8 +73,13 @@ struct BudgetListScreen: View {
 
 ```
 
-There are several important things to notice about the above implementation. First, for Xcode Previews we have injected a modelContainer and specifically used inMemory 
+There are several key aspects to note about the implementation above. First, for Xcode Previews, we’ve injected a `modelContainer` with `inMemory` explicitly set to `true`. This ensures that preview data is not persisted to the actual database, allowing for safe and isolated testing within the preview environment.
 
+When the user taps the button, a new `Budget` object is instantiated, its values are assigned, and it is inserted into the model context. There's no need to explicitly call the `save()` function on the model context, as SwiftData automatically persists changes in response to certain app events—such as navigation or when the app moves to the background.
+
+SwiftData also introduces the `@Query` macro, which enables seamless tracking and fetching of records from the database. It functions similarly to the `@FetchRequest` property wrapper in Core Data, which internally relies on `NSFetchedResultsController` to monitor changes and update the UI accordingly. When a new budget is added, the `@Query` macro automatically fetches the updated list of budgets and reflects the changes on the screen.  
+
+Currently, our application doesn't implement any business rules. So far, we've focused solely on persisting budgets and retrieving them. In the next section, we’ll explore how to incorporate domain logic and business rules into your SwiftData application.
 
 ### Business Rules 
 
