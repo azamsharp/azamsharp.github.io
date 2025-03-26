@@ -83,7 +83,50 @@ Currently, our application doesn't implement any business rules. So far, we've f
 
 ### Business Rules 
 
+To ensure that each budget has a unique name—meaning no two budgets can share the same name—we need to introduce a validation step. While SwiftData provides the #Unique macro for enforcing uniqueness, it doesn't throw an error or offer a clean way to handle violations when the rule is broken.
 
+As a workaround, we can implement an exists function in the Budget model that checks whether a budget with the given name already exists in the database.
+
+Although it's possible to place this logic directly in the BudgetListScreen, a better approach is to encapsulate it within the Budget class. This not only makes the code more reusable and easier to maintain but also enables unit testing the logic independently of the UI layer.
+
+The implementation is shown below: 
+
+``` swift 
+@Model
+class Budget {
+    var name: String
+    var limit: Double
+    
+    init(name: String, limit: Double) {
+        self.name = name
+        self.limit = limit
+    }
+    
+    private func exists(context: ModelContext, name: String) throws -> Bool {
+       
+        let predicate = #Predicate<Budget> { budget in
+            budget.name.localizedStandardContains(name)
+        }
+
+        let fetchDescriptor = FetchDescriptor<Budget>(predicate: predicate)
+        let results: [Budget] = try context.fetch(fetchDescriptor)
+        return !results.isEmpty
+    }
+    
+    func save(context: ModelContext) throws {
+        
+        if try exists(context: context, name: name) {
+            throw BudgetError.duplicateName
+        }
+        
+        context.insert(self)
+    }
+}
+```
+
+We’ve added our business logic directly inside the Budget model. At the moment, we have a single rule: to prevent users from adding duplicate budget names to persistent storage. This rule is enforced through the exists function, as shown in the implementation above.
+
+The exists function is marked as private, making it inaccessible from outside the Budget class. However, you can still unit test this logic indirectly by using the publicly available save function, which internally relies on exists to enforce the uniqueness rule.
 
 
 ## Debugging 
