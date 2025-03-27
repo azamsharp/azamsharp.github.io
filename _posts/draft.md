@@ -362,7 +362,34 @@ struct BudgetListScreen: View {
 
 This approach also makes it easier to write unit tests for your queries and promotes reusability. If you find yourself needing the same query in multiple places, extracting it into a shared model function is helpful. That said, if you're reusing the **exact same query and presentation**, it may be even better to make the **view itself reusable** so it can be embedded in different parts of your application with minimal duplication.
 
-But what about dynamic queries? How will you implement queries in SwiftData that depends on a value.
+But what about **dynamic queries**? How do you implement queries in SwiftData that depend on a runtime value? Unfortunately, there’s no straightforward way to change the predicate once `@Query` has been defined.
+
+One approach—demonstrated in [Apple’s sample code](https://developer.apple.com/documentation/swiftui/backyard-birds-sample)—involves creating a **subview** and passing the filter or sort order as a parameter. Inside the subview's initializer, you can then define the `@Query` using that dynamic value. This technique allows for more flexible, runtime-driven queries, as shown below:
+
+``` swift 
+struct BudgetListView: View {
+    
+    let sortOrder: SortOrder
+    
+    @Query private var budgets: [Budget] = []
+    
+    init(sortOrder: SortOrder) {
+        self.sortOrder = sortOrder
+        
+        let sortDescriptor = SortDescriptor<Budget>(\.name, order: sortOrder == .asc ? .forward: .reverse)
+        _budgets = Query(sort: [sortDescriptor])
+    }
+    
+    var body: some View {
+        List(budgets) { budget in
+            Text(budget.name)
+        }
+    }
+}
+```
+
+
+The `BudgetListView` encapsulates the logic for displaying sorted budgets. The `@Query` is constructed within the initializer based on the value passed in—such as `sortOrder` in this case. This approach demonstrates how you can implement **dynamic queries** in SwiftData by generating the query at runtime through subview initialization. This technique does require you to break your views based on the dynamic parameter. Depending on the scenario, that can actually be a good thing. Since SwiftUI’s dependency graph is view-based, it will only re-evaluate the views whose input parameters—or dependencies—have changed. This can lead to more efficient UI updates and better performance, especially in complex view hierarchies.
 
 ## Testing 
 
