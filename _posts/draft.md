@@ -165,11 +165,15 @@ class Budget {
 @Model
 class Expense {
     var name: String
-    var amount: String
+    var amount: Double
     var quantity: Int
     var budget: Budget?
     
-    init(name: String, amount: String, quantity: Int = 1) {
+    var total: Double {
+        amount * Double(quantity)
+    }
+    
+    init(name: String, amount: Double, quantity: Int = 1) {
         self.name = name
         self.amount = amount
         self.quantity = quantity
@@ -203,13 +207,169 @@ class Budget {
 }
 ```
 
+Properties like total in the Expense model, as well as spent and remaining in the Budget model, represent business logic. As such, it’s important to take the time to write unit tests for them to ensure they behave as expected under various scenarios.
 
-## Debugging 
+## Should we create separate layer for business logic? 
+
+I tend to avoid introducing extra layers into my application unless they’re absolutely necessary. At this stage, I don’t see a strong need for a separate business logic layer, as the Budget and Expense models are perfectly capable of handling their own logic.
+
+That said, there are certainly cases where creating services, managers, or other abstractions makes sense—particularly when importing data from a JSON API and persisting it to storage. In those scenarios, separating concerns can help keep the codebase clean and maintainable.
+
+Here’s the outline of the Importer, a component responsible for fetching expenses from a JSON API. The imported data can then be persisted into the local database using the SwiftData framework.
+
+``` swift 
+import Foundation
+
+struct Importer {
+    
+    let httpClient: HTTPClient
+    
+    func importExpenses() -> [Expense] {
+        
+        // use HTTPClient to fetch the expenses from JSON API
+        
+        // return the expenses
+        return []
+    }
+}
+```
+
+> You may have noticed that importExpenses returns the actual SwiftData model rather than a DTO. Whether to return a model or a DTO depends on the specific use case, and I’ll dive deeper into this decision in the Serialization section of the article.
+
+## What if I want to use a different persistent storage in the future? 
+
+Apple designed SwiftData to integrate seamlessly with SwiftUI—which is evident from the fact that the @Query macro can only be used inside SwiftUI views. While this tight integration offers convenience, it also introduces a major trade-off: coupling your views directly to SwiftData. 
+
+> In SwiftUI, views are the view model. 
+
+Now, imagine you've been building your application for a few months and later decide to switch to a different persistence solution like GRDB or Realm. Because your views rely on SwiftData-specific features like @Model and @Query, migrating becomes difficult. These constructs are unique to SwiftData and don’t translate cleanly to other data persistence frameworks, making your architecture harder to adapt or extend over time.
+
+A possible solution is to create a custom data access layer and define a protocol to abstract away the underlying data provider. In the implementation below, I’ve introduced a `DataAccess` protocol that includes `getBudgets` and `addBudget` functions. Currently, there's a single concrete implementation called `BudgetSwiftDataAccess`, but the architecture allows for easily adding alternative implementations in the future, such as for testing or switching to a different data source.
+
+
+``` swift 
+
+@MainActor
+protocol DataAccess {
+    func getBudgets() throws -> [BudgetPlain]
+    func addBudget(name: String, limit: Double)
+}
+
+@MainActor
+class BudgetSwiftDataAccess: DataAccess {
+    
+    var container: ModelContainer
+    var context: ModelContext
+    
+    @MainActor
+    init(container: ModelContainer = ModelContainer.default()) {
+        self.container = container
+        self.context = container.mainContext
+    }
+    
+    func getBudgets() throws -> [BudgetPlain] {
+        let budgets = try context.fetch(FetchDescriptor<Budget>())
+        return budgets.map(BudgetPlain.init)
+    }
+    
+    func addBudget(name: String, limit: Double) {
+        let budget = Budget(name: name, limit: limit)
+        context.insert(budget)
+    }
+    
+}
+```
+
+One important thing to note is that the `getBudgets` and `addBudget` functions in the `DataAccess` protocol operate on plain types. They are not tied to any specific persistence framework like SwiftData, Core Data, or Realm. The `BudgetPlain` type is a simple `struct` containing just `name` and `limit` properties.
+
+Each data layer is responsible for converting its specific model into a `BudgetPlain` instance. This ensures that the view layer interacts only with simple, framework-agnostic types, rather than being coupled to specialized models from SwiftData, Core Data, or Realm.
+
+Next, you can access your data access layer in your view through the use of Environment values. This is shown below: 
+
+``` swift 
+struct BudgetListScreen: View {
+    
+    @State private var name: String = ""
+    @State private var limit: Double?
+    @State private var budgets: [BudgetPlain] = []
+    
+    @Environment(\.dataAccess) private var dataAccess
+
+    // other code ...
+}
+```
+
+So, the million dollar question is that should you use APIs provided by SwiftData or should you always create data access layers. There is no right answer to this what-if question—it all comes down to trade-offs. If you choose to use SwiftData’s APIs such as @Query, @Model, #Predicate, and others, you gain tight integration with SwiftUI and a faster development experience. However, you also introduce coupling that makes it harder to switch to another persistence layer down the road.
+
+On the other hand, if you build a more abstract architecture—using plain Swift models, protocol-based repositories, and custom query layers—you’ll gain flexibility and testability, but at the cost of added complexity and boilerplate.
+
+In the end, it’s about choosing the right balance for your project’s scope, longevity, and team preferences.
+
+## Queries 
+
+SwiftData provides the `@Query` macro, which allows you to fetch records directly from persistent storage. Beyond just fetching, `@Query` also automatically triggers a view update whenever a record is added, updated, or deleted—*as long as* a property from that record is used within the view’s body.
+
+This behavior is similar to how `NSFetchedResultsController` works in Core Data, and I wouldn’t be surprised if SwiftData uses it behind the scenes to achieve this reactivity.
+
+The `@Query` macro is only available within SwiftUI views. In our implementation, we've used it inside the `BudgetListScreen`, as shown below:
+
+
+``` swift 
+@Query private var budgets: [Budget] = []
+```
+
+When developers see this code, their immediate reaction often centers around *separation of concerns*. The instinct is to push back—arguing that placing data access logic directly in the view is unacceptable.
+
+However, as I mentioned earlier, in SwiftUI, the **view also acts as the view model**. Of course, that doesn’t mean you should start dumping all of your business logic into the view. But it *is* an appropriate place for presentation logic, data transformation, and mapping.
+
+Additionally, separation of concerns still exists—it’s just structured differently. Instead of being divided across layers (like in MVC or MVVM), responsibilities are now **organized by feature or view**. For example, all logic related to listing budgets lives inside `BudgetListScreen`, while everything related to adding a new expense resides in `AddExpenseScreen`.
+
+So, the principle of separation of concerns hasn’t been lost—it has simply **shifted in alignment with SwiftUI’s component-driven architecture**.
+
+Now, you might be thinking about the *massive views* problem. If a view starts getting too large, there’s nothing stopping you from breaking it down into smaller, reusable views. SwiftUI makes it easy to extract and compose views, helping you keep your codebase clean, modular, and maintainable.
+
+Let’s get back to the `@Query` macro. In most cases, it’s recommended to use `@Query` directly inside the view for clarity and simplicity. However, if you prefer, you can also move the query definition into the model itself. This approach helps centralize query logic and can make your views cleaner. Here's an example demonstrating how to implement this:
+
+``` swift 
+@Model
+class Budget {
+    var name: String
+    var limit: Double
+
+    static var all: FetchDescriptor<Budget> {
+        FetchDescriptor<Budget>()
+    }
+
+    // other code ...
+}
+```
+
+And now, you can use it in the view as shown below: 
+
+``` swift 
+struct BudgetListScreen: View {
+    
+    @State private var name: String = ""
+    @State private var limit: Double?
+    
+    @Environment(\.modelContext) private var context
+    
+    @Query(Budget.all) private var budgets: [Budget] = []
+
+    // other code 
+}
+```
+
+This approach also makes it easier to write unit tests for your queries and promotes reusability. If you find yourself needing the same query in multiple places, extracting it into a shared model function is helpful. That said, if you're reusing the **exact same query and presentation**, it may be even better to make the **view itself reusable** so it can be embedded in different parts of your application with minimal duplication.
+
+But what about dynamic queries? How will you implement queries in SwiftData that depends on a value.
 
 ## Testing 
 
 ## Previews 
 
 ## Serialization 
+
+## CloudKit 
 
 ## Conclusion 
