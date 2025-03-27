@@ -393,9 +393,188 @@ The `BudgetListView` encapsulates the logic for displaying sorted budgets. The `
 
 ## Testing 
 
+
+
 ## Previews 
 
-## Serialization 
+## Handling JSON Responses 
+
+When building SwiftData applications, there are times when you need to fetch data from a remote source and insert it into your local database. In my course, [**Build Gardening App Using SwiftUI & SwiftData**](https://azamsharp.teachable.com/p/build-gardening-app-using-swiftui-swiftdata), I demonstrate this by downloading a list of vegetables from an API and allowing the user to add them to their garden based on their interaction.
+
+In scenarios like this, most developers instinctively create DTO (Data Transfer Object) types to represent the server's response. While this is often a good approach, the need for DTOs really depends on a few important factors.
+
+For instance—what if you control the server and the response format? Or what if the server response is already flat and closely resembles your SwiftData model? In such cases, introducing a separate DTO layer may be unnecessary.
+
+In this section, we’ll explore different use cases to determine when a DTO is beneficial and when it’s reasonable to skip it and map the response directly to your SwiftData model.
+
+Consider a scenario where you're building a vegetable gardening application, and you receive the following response from your own server—one that you have complete control over:
+
+``` swift 
+[
+  {
+    "vegetableId": 1,
+    "name": "Carrot",
+    "body": "A root vegetable, usually orange in color, rich in beta-carotene."
+  },
+  {
+    "vegetableId": 2,
+    "name": "Spinach",
+    "body": "A leafy green vegetable high in iron and vitamins."
+  },
+  {
+    "vegetableId": 3,
+    "name": "Tomato",
+    "body": "A red, juicy fruit often used as a vegetable in cooking."
+  }
+]
+```
+
+The response is quite straightforward and closely aligns with our data model. In this case, we can map the response directly to a SwiftData model without introducing a separate DTO layer. This keeps the code simple and reduces unnecessary abstraction. The implementation of the SwiftData model is shown below:
+
+``` swift 
+@Model
+class Vegetable: Decodable {
+
+    var vegetableId: Int
+    var name: String
+    var body: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case vegetableId, name, body
+    }
+    
+    required init(from decoder: any Decoder) throws {
+        
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.vegetableId = try container.decode(Int.self, forKey: .vegetableId)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.body = try container.decode(String.self, forKey: .body)
+    }
+}
+```
+
+But what about if response is not controlled by you and it is nested, complicated or all of the above. In those cases, it is a good idea to implement a DTO and let DTO handle all the mapping etc. Here is one example: 
+
+Below you can find the response from [JSONPlaceHolder /users endpoint](https://jsonplaceholder.typicode.com/users). 
+
+``` json 
+[{
+    "id": 1,
+    "name": "Leanne Graham",
+    "username": "Bret",
+    "email": "Sincere@april.biz",
+    "address": {
+      "street": "Kulas Light",
+      "suite": "Apt. 556",
+      "city": "Gwenborough",
+      "zipcode": "92998-3874",
+      "geo": {
+        "lat": "-37.3159",
+        "lng": "81.1496"
+      }
+    },
+    "phone": "1-770-736-8031 x56442",
+    "website": "hildegard.org",
+    "company": {
+      "name": "Romaguera-Crona",
+      "catchPhrase": "Multi-layered client-server neural-net",
+      "bs": "harness real-time e-markets"
+    }
+  }]
+```
+
+As you can see, the response is nested across multiple levels. While it's technically possible to map this response directly to our SwiftData `User` model, doing so would introduce a significant amount of boilerplate code into the model itself. Additionally, the structure of our model may differ from the structure of the actual API response.  
+
+A better approach is to use dedicated DTO (Data Transfer Object) types to handle the JSON decoding. These lightweight structures allow us to cleanly map the API response and then convert the data into our SwiftData model as needed.
+
+The implementation of the DTO objects is shown below:
+
+``` swift 
+import Foundation
+
+struct GeoDTO: Codable {
+    let lat: String
+    let lng: String
+}
+
+struct AddressDTO: Codable {
+    let street: String
+    let suite: String
+    let city: String
+    let zipcode: String
+    let geo: GeoDTO
+}
+
+struct CompanyDTO: Codable {
+    let name: String
+    let catchPhrase: String
+    let bs: String
+}
+
+struct UserDTO: Codable {
+    let id: Int
+    let name: String
+    let username: String
+    let email: String
+    let address: AddressDTO
+    let phone: String
+    let website: String
+    let company: CompanyDTO
+}
+
+```
+
+And the implementation of SwiftData model `User` is shown below: 
+
+``` swift 
+import Foundation
+import SwiftData
+
+@Model
+class User {
+    @Attribute(.unique) var id: Int
+    var name: String
+    var username: String
+    var email: String
+    var phone: String
+    var website: String
+    var address: String
+    var company: String
+
+    init(id: Int, name: String, username: String, email: String, phone: String, website: String, address: String, company: String) {
+        self.id = id
+        self.name = name
+        self.username = username
+        self.email = email
+        self.phone = phone
+        self.website = website
+        self.address = address
+        self.company = company
+    }
+
+    static func fromDTO(_ dto: UserDTO) -> User {
+        let addressString = "\(dto.address.street), \(dto.address.suite), \(dto.address.city), \(dto.address.zipcode)"
+        let companyString = dto.company.name
+        return User(
+            id: dto.id,
+            name: dto.name,
+            username: dto.username,
+            email: dto.email,
+            phone: dto.phone,
+            website: dto.website,
+            address: addressString,
+            company: companyString
+        )
+    }
+}
+
+```
+
+As you can see, the decision to use a DTO depends heavily on the complexity and ownership of the data source. When the server response is flat and predictable—as in the case of our gardening app—you can safely map the data directly to your SwiftData model and avoid unnecessary layers.
+
+However, when working with more complex or nested responses—especially from third-party APIs—it’s often best to introduce DTOs. They help isolate the decoding logic, keep your models clean, and make your application more maintainable and testable.
+
+Ultimately, there's no one-size-fits-all answer. The key is to evaluate each situation carefully and choose the approach that keeps your codebase simple, scalable, and easy to reason about.
 
 ## CloudKit 
 
