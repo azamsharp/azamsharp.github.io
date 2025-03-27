@@ -128,6 +128,81 @@ We’ve added our business logic directly inside the Budget model. At the moment
 
 The exists function is marked as private, making it inaccessible from outside the Budget class. However, you can still unit test this logic indirectly by using the publicly available save function, which internally relies on exists to enforce the uniqueness rule.
 
+This approach of embedding business rules directly within your model class keeps things clean and straightforward, without the need to wrap your objects in additional design patterns.
+
+We can also validate the budget limit by ensuring it is greater than zero. The save function has been updated to enforce this rule.
+
+``` swift 
+  func save(context: ModelContext) throws {
+        
+        guard limit > 0 else {
+            throw BudgetError.invalidLimit
+        }
+        
+        if try exists(context: context, name: name) {
+            throw BudgetError.duplicateName
+        }
+        
+        context.insert(self)
+    }
+```
+
+Business rules aren’t limited to the Budget class alone—they can also apply to relationships defined within the model. In the example below, we've added a one-to-many relationship between Budget and Expense, meaning a single budget can be associated with multiple expenses.
+
+``` swift 
+
+@Model
+class Budget {
+    var name: String
+    var limit: Double
+    
+    @Relationship(deleteRule: .cascade)
+    var expenses: [Expense] = []
+
+    // other code 
+}
+
+@Model
+class Expense {
+    var name: String
+    var amount: String
+    var quantity: Int
+    var budget: Budget?
+    
+    init(name: String, amount: String, quantity: Int = 1) {
+        self.name = name
+        self.amount = amount
+        self.quantity = quantity
+    }
+}
+
+```
+
+Now, we can enhance our Budget class by adding computed properties spent and remaining, which dynamically calculate the total amount spent and the remaining budget based on associated expenses.
+
+``` swift 
+@Model
+class Budget {
+    var name: String
+    var limit: Double
+    
+    @Relationship(deleteRule: .cascade)
+    var expenses: [Expense] = []
+    
+    var spent: Double {
+        expenses.reduce(0) { result, expense in
+            result + expense.total
+        }
+    }
+    
+    var remaining: Double {
+        limit - spent
+    }
+
+    // other code 
+}
+```
+
 
 ## Debugging 
 
