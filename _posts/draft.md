@@ -395,7 +395,140 @@ The `BudgetListView` encapsulates the logic for displaying sorted budgets. The `
 
 In the last section, we talked about architecture and business logic and how placing the rules right in the SwiftData model class allows us to easily write unit tests. In this section, we are going to implement couple of unit tests for our model classes. 
 
+When writing unit tests, it's important to focus on tests that provide real value and a return on investment. After all, tests are code too—and poorly written or unnecessary tests can add to the complexity of your codebase rather than reduce it.
 
+Take a look at the following unit test. 
+
+``` swift 
+  @Test func user_save_budget_successfully() throws {
+        
+        let budget = Budget(name: "Groceries", limit: 500)
+        context.insert(budget)
+        
+        // fetch the newly saved budget
+        
+        let fetchDescriptor = FetchDescriptor<Budget>()
+        let budgets = try context.fetch(fetchDescriptor)
+        
+        let savedBudget = budgets[0]
+        #expect(savedBudget.name == "Groceries")
+        #expect(savedBudget.limit == 500)
+    }
+```
+
+The test creates an instance of the `Budget` model and uses the SwiftData model context to insert it into the in-memory database. It then verifies the save operation by fetching the model from storage.
+
+While this test may pass, it doesn't provide meaningful value—because it ends up testing the SwiftData framework itself, rather than our custom business logic.
+
+Now, let's take a look at a test that provides much better return on our investment. 
+
+``` swift 
+  @Test func throw_exception_when_inserting_budgets_with_duplicate_name() throws {
+        
+        let budget = Budget(name: "Vacation", limit: 100)
+        try budget.save(context: context)
+        
+        #expect(throws: BudgetError.duplicateName, "Duplicate name exception was not thrown.", performing: {
+            
+            let anotherBudget = Budget(name: "Vacation", limit: 500)
+            try anotherBudget.save(context: context)
+            
+            // also check that in the database there is only one instance
+            let budgets = try context.fetch(Budget.all)
+            #expect(budgets.count == 1)
+        })
+        
+    }
+```
+
+The test above ensures that an exception is thrown when a user attempts to save a budget with a duplicate name. It also verifies that the storage contains only a single budget record, confirming that duplicates are not persisted.
+
+In similar fashion you can write high quality tests that provide value to your codebase and protect your against regression. 
+
+``` swift 
+ @Test func calculate_spent_amount_for_budget() {
+        
+        let budget = Budget(name: "Vacation", limit: 500)
+        
+        budget.expenses.append(Expense(name: "Rental car", amount: 200))
+        budget.expenses.append(Expense(name: "Airfare", amount: 120))
+        
+        #expect(budget.spent == 320)
+    }
+```
+
+In the last section, we talked about architecture and business logic and how placing the rules right in the SwiftData model class allows us to easily write unit tests. In this section, we are going to implement couple of unit tests for our model classes. 
+
+When writing unit tests, it's important to focus on tests that provide real value and a return on investment. After all, tests are code too—and poorly written or unnecessary tests can add to the complexity of your codebase rather than reduce it.
+
+Take a look at the following unit test. 
+
+``` swift 
+  @Test func user_save_budget_successfully() throws {
+        
+        let budget = Budget(name: "Groceries", limit: 500)
+        context.insert(budget)
+        
+        // fetch the newly saved budget
+        
+        let fetchDescriptor = FetchDescriptor<Budget>()
+        let budgets = try context.fetch(fetchDescriptor)
+        
+        let savedBudget = budgets[0]
+        #expect(savedBudget.name == "Groceries")
+        #expect(savedBudget.limit == 500)
+    }
+```
+
+The test creates an instance of the `Budget` model and uses the SwiftData model context to insert it into the in-memory database. It then verifies the save operation by fetching the model from storage.
+
+While this test may pass, it doesn't provide meaningful value—because it ends up testing the SwiftData framework itself, rather than our custom business logic.
+
+Now, let's take a look at a test that provides much better return on our investment. 
+
+``` swift 
+  @Test func throw_exception_when_inserting_budgets_with_duplicate_name() throws {
+        
+        let budget = Budget(name: "Vacation", limit: 100)
+        try budget.save(context: context)
+        
+        #expect(throws: BudgetError.duplicateName, "Duplicate name exception was not thrown.", performing: {
+            
+            let anotherBudget = Budget(name: "Vacation", limit: 500)
+            try anotherBudget.save(context: context)
+            
+            // also check that in the database there is only one instance
+            let budgets = try context.fetch(Budget.all)
+            #expect(budgets.count == 1)
+        })
+        
+    }
+```
+
+The test above ensures that an exception is thrown when a user attempts to save a budget with a duplicate name. It also verifies that the storage contains only a single budget record, confirming that duplicates are not persisted.
+
+In similar fashion you can write high quality tests that provide value to your codebase and protect your against regression. 
+
+``` swift 
+ @Test func calculate_spent_amount_for_budget() {
+        
+        let budget = Budget(name: "Vacation", limit: 500)
+        
+        budget.expenses.append(Expense(name: "Rental car", amount: 200))
+        budget.expenses.append(Expense(name: "Airfare", amount: 120))
+        
+        #expect(budget.spent == 320)
+    }
+```
+
+
+In the above test, we validated that the `spent` property on the `Budget` instance works as expected. You can apply the same approach to test the `remaining` property and ensure it returns the correct value based on the budget's limit and associated expenses.
+
+By focusing on tests that validate your business logic—like enforcing unique budget names or correctly calculating totals—you’re not just testing code, you’re safeguarding the behavior of your application. These kinds of tests are resilient, easy to understand, and provide long-term value as your app evolves.
+
+Rather than testing what frameworks already guarantee, invest your time in writing unit tests that cover **what your app is responsible for**. This ensures your business rules remain intact, your logic remains sound, and your codebase remains trustworthy.
+
+As you continue building with SwiftData, remember: it's not about testing everything—it's about testing the **right** things.
 
 ## Previews 
 
@@ -579,5 +712,119 @@ However, when working with more complex or nested responses—especially from th
 Ultimately, there's no one-size-fits-all answer. The key is to evaluate each situation carefully and choose the approach that keeps your codebase simple, scalable, and easy to reason about.
 
 ## CloudKit 
+
+One of the key benefits of using **SwiftData** with **SwiftUI** is its seamless integration with **CloudKit**. In most cases, no additional configuration is needed—your local SQLite database will automatically sync with the user’s **private CloudKit database**.
+
+> Note: At the time of this writing, SwiftData only supports syncing with the user's **private** CloudKit database.
+
+Most CloudKit-related issues are surfaced in the **Xcode output window**, which can help guide you in resolving them. The most common problems typically include not being signed into iCloud on the device or simulator, or failing to provide **default or optional values** for properties in your SwiftData models.
+
+As shown in the example below, I’ve provided default values for all model properties and marked relationships as optional to ensure smooth syncing with CloudKit:
+
+
+``` swift 
+@Model
+class Budget {
+    
+    var name: String = ""
+    var limit: Double = 0.0
+    @Relationship(deleteRule: .cascade)
+    var expenses: [Expense]? = []
+```
+
+
+Additionally, if you're integrating with CloudKit, **you cannot use unique constraints** (e.g., `#Unique<Budget>([\.name])`) on your model’s properties. CloudKit does not support enforcing uniqueness at the schema level, and including such constraints in your SwiftData model will result in sync failures.
+
+One other interesting thing to note about ...
+
+The following code works perfectly fine on a single device with CloudKit integration. Unfortunately, when tested on multiple devices for CloudKit sync then it becomes clear that the changes are not being propagated and the view is not getting refreshed. 
+
+``` swift 
+
+import SwiftUI
+import SwiftData
+
+struct BudgetDetailScreen: View {
+    
+    @Bindable var budget: Budget
+    @Environment(\.modelContext) private var context
+    
+    var body: some View {
+        
+        VStack {
+
+           // other code
+            
+            Form {
+                Section("Budget") {
+                     TextField("Budget name", text: $budget.name)
+                     TextField("Budget limit", value: $budget.limit, format: .currency(code: Locale.currencyCode))
+                }
+                
+                Section("Expenses") {
+                    List {
+                        
+                        ForEach(budget.expenses) { expense in
+                            ExpenseCellView(expense: expense)
+                        }.onDelete(perform: deleteExpense)
+                    }
+                }
+                
+            }.navigationTitle(budget.name)
+        }
+    }
+}
+
+```
+
+CloudKit sends **silent push notifications** to notify the app of changes, but these do not automatically trigger view updates. That’s because the tracked entity—in this case, `budget`—hasn’t technically changed. Since `Budget` is a reference type and still points to the same memory location, SwiftUI doesn’t see it as modified, and therefore the view isn’t re-rendered. As a result, properties like `budget.expenses` are not re-evaluated when new data is synced from CloudKit.
+
+One effective way to solve this issue is by tracking **expenses directly** using the `@Query` macro. Instead of accessing expenses through the `budget` model, you can construct and execute a dynamic `@Query` to fetch all relevant expenses. This allows SwiftUI to re-render when the underlying expense data changes, ensuring that your UI stays in sync with the latest CloudKit updates.
+
+The implementation is shown below: 
+
+``` swift 
+struct BudgetDetailScreen: View {
+    
+    @Bindable var budget: Budget
+    @Environment(\.modelContext) private var context
+    @Query private var expenses: [Expense] = []
+    
+    init(budget: Budget) {
+        self.budget = budget
+        let budgetId = self.budget.persistentModelID
+        
+        let predicate = #Predicate<Expense> {
+            if let budget = $0.budget {
+                return budget.persistentModelID == budgetId
+            } else {
+                return false
+            }
+        }
+        
+        _expenses = Query(filter: predicate)
+    }
+```
+
+A custom initializer has been added to `BudgetDetailScreen`, which is responsible for constructing a dynamic `@Query`. This query fetches all expenses associated with the provided budget. By using `@Query`, SwiftUI is able to **track changes** to the underlying expense data, allowing the view to re-render correctly when updates—such as CloudKit syncs—occur. The updated implementation is shown below:
+
+``` swift 
+Section("Expenses") {
+                    List {
+                        
+                        // use expenses instead of budget.expenses 
+                        ForEach(expenses) { expense in
+                            ExpenseCellView(expense: expense)
+                        }.onDelete(perform: deleteExpense)
+                    }
+                }
+```
+
+
+By shifting from `budget.expenses` to a dynamic `@Query`, we ensure that SwiftUI is properly notified when new data arrives—whether it's created locally or synced silently from CloudKit. This approach not only solves the view refresh issue but also aligns well with SwiftData’s design, where `@Query` plays a central role in tracking changes and driving UI updates.
+
+While CloudKit integration with SwiftData feels seamless on the surface, subtle nuances—like view re-rendering and data observation—require careful handling. Leveraging tools like dynamic `@Query` helps you build more robust, reactive interfaces that stay in sync across devices and platforms.
+
+As SwiftData continues to evolve, we can expect improvements and more predictable syncing behavior. Until then, strategies like these can help you bridge the gap and deliver a smooth user experience with real-time data updates.
 
 ## Conclusion 
