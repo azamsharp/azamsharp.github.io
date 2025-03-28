@@ -393,6 +393,70 @@ The `BudgetListView` encapsulates the logic for displaying sorted budgets. The `
 
 ## Testing 
 
+// add the introduction here. 
+
+When writing unit tests, it's important to focus on tests that provide real value and a return on investment. After all, tests are code too—and poorly written or unnecessary tests can add to the complexity of your codebase rather than reduce it.
+
+Take a look at the following unit test. 
+
+``` swift 
+  @Test func user_save_budget_successfully() throws {
+        
+        let budget = Budget(name: "Groceries", limit: 500)
+        context.insert(budget)
+        
+        // fetch the newly saved budget
+        
+        let fetchDescriptor = FetchDescriptor<Budget>()
+        let budgets = try context.fetch(fetchDescriptor)
+        
+        let savedBudget = budgets[0]
+        #expect(savedBudget.name == "Groceries")
+        #expect(savedBudget.limit == 500)
+    }
+```
+
+The test creates an instance of the `Budget` model and uses the SwiftData model context to insert it into the in-memory database. It then verifies the save operation by fetching the model from storage.
+
+While this test may pass, it doesn't provide meaningful value—because it ends up testing the SwiftData framework itself, rather than our custom business logic.
+
+Now, let's take a look at a test that provides much better return on our investment. 
+
+``` swift 
+  @Test func throw_exception_when_inserting_budgets_with_duplicate_name() throws {
+        
+        let budget = Budget(name: "Vacation", limit: 100)
+        try budget.save(context: context)
+        
+        #expect(throws: BudgetError.duplicateName, "Duplicate name exception was not thrown.", performing: {
+            
+            let anotherBudget = Budget(name: "Vacation", limit: 500)
+            try anotherBudget.save(context: context)
+            
+            // also check that in the database there is only one instance
+            let budgets = try context.fetch(Budget.all)
+            #expect(budgets.count == 1)
+        })
+        
+    }
+```
+
+The test above ensures that an exception is thrown when a user attempts to save a budget with a duplicate name. It also verifies that the storage contains only a single budget record, confirming that duplicates are not persisted.
+
+In similar fashion you can write high quality tests that provide value to your codebase and protect your against regression. 
+
+``` swift 
+ @Test func calculate_spent_amount_for_budget() {
+        
+        let budget = Budget(name: "Vacation", limit: 500)
+        
+        budget.expenses.append(Expense(name: "Rental car", amount: 200))
+        budget.expenses.append(Expense(name: "Airfare", amount: 120))
+        
+        #expect(budget.spent == 320)
+    }
+```
+
 
 
 ## Previews 
