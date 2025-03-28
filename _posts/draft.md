@@ -393,6 +393,8 @@ The `BudgetListView` encapsulates the logic for displaying sorted budgets. The `
 
 ## Testing 
 
+In the last section, we talked about architecture and business logic and how placing the rules right in the SwiftData model class allows us to easily write unit tests. In this section, we are going to implement couple of unit tests for our model classes. 
+
 
 
 ## Previews 
