@@ -1068,20 +1068,26 @@ In the end, a well-architected SwiftData app is one that balances simplicity wit
 
 Thanks for reading. I hope this article helps you build better, cleaner, and more enjoyable SwiftUI applications using SwiftData.
 
-<div style="
-    background: linear-gradient(to right, #e6f2ff, #f9fbff);
-    border-left: 6px solid #0073e6;
-    padding: 24px 28px;
-    border-radius: 8px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    font-size: 1.1rem;
-    color: #2c3e50;
-    margin: 24px 0;
-    box-shadow: 0 4px 10px rgba(0, 115, 230, 0.08);
-">
-    <strong style="font-size: 1.2rem;">🚀 Want to become a highly valued iOS developer?</strong><br><br>
-    Explore expert-led courses and hands-on learning at 
-    <a href="https://azamsharp.school" style="color: #0073e6; text-decoration: none; font-weight: 600;">
-        AzamSharp School
-    </a>.
+<div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+  <h2 style="color: #2c3e50; text-align: center;">🚀 Interested in Learning SwiftData?</h2>
+  <p style="font-size: 16px; color: #333; text-align: center;">Check out my top-rated courses below:</p>
+
+  <ul style="list-style-type: none; padding-left: 0;">
+    <li style="margin: 10px 0;">
+      <a href="https://azamsharp.teachable.com/p/swiftdata-build-apple-reminders-clone" target="_blank" style="text-decoration: none; color: #2980b9; font-weight: bold;">
+        📌 Build Reminders App Clone Using SwiftData
+      </a>
+    </li>
+    <li style="margin: 10px 0;">
+      <a href="https://azamsharp.teachable.com/p/swiftdata-bootcamp" target="_blank" style="text-decoration: none; color: #2980b9; font-weight: bold;">
+        🧠 SwiftData Bootcamp - A Comprehensive Guide to Building Data Driven Applications
+      </a>
+    </li>
+    <li style="margin: 10px 0;">
+      <a href="https://azamsharp.teachable.com/p/build-gardening-app-using-swiftui-swiftdata" target="_blank" style="text-decoration: none; color: #2980b9; font-weight: bold;">
+        🌿 Build Gardening App Using SwiftUI & SwiftData
+      </a>
+    </li>
+  </ul>
 </div>
+
