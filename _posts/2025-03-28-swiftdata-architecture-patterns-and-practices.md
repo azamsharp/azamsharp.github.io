@@ -1,4 +1,51 @@
+<style>
+    .share-container {
+      display: flex;
+      gap: 10px; /* Spacing between buttons */
+      margin-bottom: 20px; 
+    }
+    .share-button {
+      background-color: #0077b5; /* Default LinkedIn blue */
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    .twitter { background-color: #1da1f2; }
+    .linkedin { background-color: #0077b5; }
+    .bluesky { background-color: #353c63; }
+    .share-button:hover {
+      opacity: 0.8;
+    }
+  </style>
+
 # SwiftData Architecture – Patterns and Practices 
+
+ <div class="share-container">
+    <div>
+      <!-- Twitter -->
+      <a href="https://twitter.com/intent/tweet?url=https://azamsharp.com/2025/03/28/swiftdata-architecture-patterns-and-practices.html&text=SwiftData Architecture - Patterns and Practices by @azamsharp"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button twitter">
+        Share on Twitter
+      </a>
+    </div>
+    <div>
+      <!-- LinkedIn -->
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://azamsharp.com/2025/03/28/swiftdata-architecture-patterns-and-practices.html"
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="share-button linkedin">
+        Share on LinkedIn
+      </a>
+    </div>
+    
+  </div>
 
 SwiftData, announced at WWDC 2023, marks a significant evolution in data persistence for SwiftUI applications. Built from the ground up with Swift-native syntax and a declarative approach, SwiftData aims to replace Core Data with something that feels more intuitive, modern, and better integrated into the SwiftUI ecosystem.
 
@@ -114,7 +161,7 @@ Currently, our application doesn't implement any business rules. So far, we've f
 
 ### Business Rules 
 
-To ensure that each budget has a unique name—meaning no two budgets can share the same name—we need to introduce a validation step. While SwiftData provides the #Unique macro for enforcing uniqueness, it doesn't throw an error or offer a clean way to handle violations when the rule is broken.
+To ensure that each budget has a unique name—meaning no two budgets can share the same name—we need to introduce a validation step. While SwiftData provides the `#Unique` macro for enforcing uniqueness, it doesn't throw an error or offer a clean way to handle violations when the rule is broken.
 
 As a workaround, we can implement an exists function in the Budget model that checks whether a budget with the given name already exists in the database.
 
@@ -265,7 +312,7 @@ struct Importer {
 }
 ```
 
-> You may have noticed that importExpenses returns the actual SwiftData model rather than a DTO. Whether to return a model or a DTO depends on the specific use case, and I’ll dive deeper into this decision in the Serialization section of the article.
+> You may have noticed that `importExpenses` returns the actual SwiftData model rather than a DTO. Whether to return a model or a DTO depends on the specific use case, and I’ll dive deeper into this decision in the **Handling JSON Responses** section of the article.
 
 ## What if I want to use a different persistent storage in the future? 
 
@@ -1020,3 +1067,21 @@ SwiftData works best when you embrace its strengths, but it's also important to 
 In the end, a well-architected SwiftData app is one that balances simplicity with structure, leverages previews and unit tests to catch issues early, and keeps the business logic close to where it matters most—your models.
 
 Thanks for reading. I hope this article helps you build better, cleaner, and more enjoyable SwiftUI applications using SwiftData.
+
+<div style="
+    background: linear-gradient(to right, #e6f2ff, #f9fbff);
+    border-left: 6px solid #0073e6;
+    padding: 24px 28px;
+    border-radius: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    margin: 24px 0;
+    box-shadow: 0 4px 10px rgba(0, 115, 230, 0.08);
+">
+    <strong style="font-size: 1.2rem;">🚀 Want to become a highly valued iOS developer?</strong><br><br>
+    Explore expert-led courses and hands-on learning at 
+    <a href="https://azamsharp.school" style="color: #0073e6; text-decoration: none; font-weight: 600;">
+        AzamSharp School
+    </a>.
+</div>

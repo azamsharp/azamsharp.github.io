@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [SwiftData Architecture - Patterns and Practices](_posts/2025-03-28-swiftdata-architecture-patterns-and-practices.md) 
+
+SwiftData, introduced at WWDC 2023, is Apple’s modern, Swift-native framework for data persistence in SwiftUI applications. Designed to replace Core Data, it offers a declarative API that aligns closely with SwiftUI’s architecture. This article explores practical architectural patterns and best practices for building real-world SwiftData applications. Using a budget tracking app as a case study, it covers topics such as model structuring, embedding business logic, working with DTOs, writing unit tests, creating effective Xcode previews, integrating with CloudKit, and designing flexible data access layers. The goal is to help developers adopt SwiftData in a scalable, maintainable, and testable way.
+
 ### [Filtering SwiftData Models Using Enum](_posts/2025-01-23-filtering-swiftdata-models-using-enum.md)
 
 SwiftData, Apple’s modern persistence framework, provides a streamlined approach to managing on-device data. However, it introduces challenges when working with enums, particularly when filtering data using their `rawValue`. This article explores the limitations of querying `SwiftData` models with enums and offers a practical solution. By replacing the enum property with its `rawValue` in the model and retaining the enum as a computed property, we achieve compatibility with SwiftData while preserving the advantages of enums, such as type safety and clarity. Through a step-by-step implementation, including dynamic queries and a SwiftUI interface, this article provides a comprehensive guide to effectively handling enum-based filtering in SwiftData applications.
