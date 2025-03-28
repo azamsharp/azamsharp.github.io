@@ -1070,7 +1070,7 @@ Thanks for reading. I hope this article helps you build better, cleaner, and mor
 
 <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
   <h2 style="color: #2c3e50; text-align: center;">🚀 Interested in Learning SwiftData?</h2>
-  <p style="font-size: 16px; color: #333; text-align: center;">Check out my top-rated courses below:</p>
+  <p style="font-size: 16px; color: #333; text-align: center;">Check out my top-rated courses and live workshop below:</p>
 
   <ul style="list-style-type: none; padding-left: 0;">
     <li style="margin: 10px 0;">
@@ -1088,6 +1088,12 @@ Thanks for reading. I hope this article helps you build better, cleaner, and mor
         🌿 Build Gardening App Using SwiftUI & SwiftData
       </a>
     </li>
+    <li style="margin: 10px 0;">
+      <a href="https://azamsharp.teachable.com/p/swiftdata-fundamentals-workshop" target="_blank" style="text-decoration: none; color: #2980b9; font-weight: bold;">
+        🎓 SwiftData Fundamentals Live Workshop
+      </a>
+    </li>
   </ul>
 </div>
+
 
