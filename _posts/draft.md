@@ -42,7 +42,23 @@ We then call the respond function on the session object and pass in a prompt. A 
 
 Finally, we print the string response using the response.content property. The result is shown below:
 
-![Listing all states in USA](/images/all-50-states.png)
+```
+Certainly! Here is a list of all 50 states in the United States:
+
+1. Alabama  
+2. Alaska  
+3. Arizona  
+4. Arkansas  
+5. California  
+6. Colorado  
+7. Connecticut  
+8. Delaware  
+9. Florida  
+10. Georgia
+
+// and so on...
+
+```
 
 It’s truly impressive how simple the Foundation Models API is to work with. With just a few lines of code, we were able to send a request and receive a complete response.
 
@@ -119,3 +135,98 @@ struct Recipe {
 ```
 
 The constraint ```.range``` makes sure that the generated value is between 0 and 20. Now, when the model generates the ```Recipe``` struct, it will assign a random value within range to ```prepTimeMinutes``` property. 
+
+One of the interesting things about guided generation is how seamlessly it works with hierarchical structures. Let's say that apart from generating the recipe we are also interested in knowing, which ingredients were used in that recipe and the unit measurement of each ingredient. 
+
+We can come up with the following structure. 
+
+``` swift 
+@Generable()
+struct Recipe {
+    @Guide(description: "The name of the recipe.")
+    let name: String
+    @Guide(description: "The description of the recipe.")
+    let description: String
+    @Guide(description: "The prep time in minutes.", .range(0...20))
+    let prepTimeMinutes: Int
+    @Guide(description: "List of ingredients for the recipe.")
+    let ingredients: [Ingredient]
+}
+
+@Generable()
+struct Ingredient {
+    @Guide(description: "The name of the ingredient.")
+    let name: String
+
+    @Guide(description: "The quantity of the ingredient.")
+    let quantity: Double
+
+    @Guide(description: "The unit of measurement for the quantity (e.g., grams, tablespoons, cups).")
+    let unit: Unit
+}
+
+@Generable()
+enum Unit: String, Codable {
+    case grams
+    case kilograms
+    case milliliters
+    case liters
+    case teaspoons
+    case tablespoons
+    case cups
+    case pieces
+    case cloves
+    case slices
+    case pinch
+}
+```
+
+As you can see the recipe contains an array of ingredients and each ingredient contains a unit property of type enum ```Unit```.
+
+You can generate the model response using the following implementation: 
+
+``` swift 
+#Playground {
+    
+    let session = LanguageModelSession()
+    let response = try await session.respond(to: "Suggest a tradional Pakistani recipe", generating: Recipe.self)
+    
+    // response.content is of type Recipe
+    print(response.content)
+    print(response.content.name) // name of the recipe
+    print(response.content.description) // description of the recipe
+    print(response.content.prepTimeMinutes)
+    
+    for ingredient in response.content.ingredients {
+        print(ingredient.name)
+        print(ingredient.quantity)
+        print(ingredient.unit)
+    }
+```
+
+The output is shown below: 
+
+``` swift 
+Recipe(
+    name: "Chicken Biryani",
+    description: "Chicken Biryani is a fragrant and flavorful rice dish, originating from the Indian subcontinent, especially popular in Pakistan. It's a perfect blend of spices, tender chicken pieces, and aromatic basmati rice.",
+    prepTimeMinutes: 6,
+    ingredients: [
+        HelloFoundations.Ingredient(
+            name: "Chicken",
+            quantity: 500.0,
+            unit: HelloFoundations.Unit.grams
+        ),
+        HelloFoundations.Ingredient(
+            name: "Basmati Rice",
+            quantity: 200.0,
+            unit: HelloFoundations.Unit.grams
+        ),
+        HelloFoundations.Ingredient(
+            name: "Onion",
+            quantity: 2.0,
+            unit: // (Missing in screenshot)
+        )
+    ]
+)
+```
