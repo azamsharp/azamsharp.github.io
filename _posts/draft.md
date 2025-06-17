@@ -230,3 +230,38 @@ Recipe(
     ]
 )
 ```
+
+As you can see in the output above, guided generation even works nicely with hierarchical/nested relationships. This allows you to create model relationships based on the complexiy of your application. 
+
+The structure provided by guided generation also allows you to easily display data in SwiftUI views. For example to display nested data you can run a loop through ingredients and display them in a designated ```IngredientView```. 
+
+> We will cover how to integrate Foundation Models with your SwiftUI app later in this article. 
+
+The above example works for a small demo, but it is not suitable for the real world. The reason is that the entire response had to be generated first, before anything is displayed to the user. We can solve this issue by streaming the response. 
+
+``` swift 
+struct ContentView: View {
+    
+    let session: LanguageModelSession = LanguageModelSession()
+    
+    var body: some View {
+        VStack {
+            Button("Show Recipe") {
+                Task {
+                    let stream = session.streamResponse(to: "Suggest a tradional Pakistani recipes.", generating: Recipe.self)
+                    
+                    for try await partialResponse in stream {
+                        print(partialResponse.name ?? "")
+                        print(partialResponse.description ?? "")
+                    }
+                }
+            }
+        }
+        
+    }
+}
+```
+
+> SwiftUI app is used in the above example instead of Playground because of some issues in Playground. 
+
+One of the things you will notice is that partialResponse is of type ```Recipe.PartiallyGenerated```. ```PartiallyGenerated``` represents the partially generated content. As the stream will return more content, it will be added to the type. Once, the stream will end you will have a complete ```Recipe``` type with ingredients and units. 
