@@ -8,6 +8,17 @@ In this article, we will walk through how to get started with Apple’s Foundati
 
 NOTE: This article is a work in progress and new sections will be added in the future. 
 
+The outline of this article is shown below: 
+
+- [Requirements](#requirements)
+- [Getting Started](#getting-started)
+- [Guided Generation](#guided-generation)
+- [Integrating Foundation Models with SwiftUI App ](#integrating-foundation-models-with-swiftui-app)
+- [Tools](#tools)
+- [Persisting Model Responses](#persisting-model-responses)
+- [Performance](#performance)
+- [Conclusion](#conclusion)
+
 ## Requirements
 
 Let's first start with the requirements. In order to use Foundation Models framework you need to satisfy number of requirements. 
@@ -506,10 +517,87 @@ In many cases, generating and displaying responses from the model is only half t
 
 In this section, we’ll explore how to store model responses locally using **SwiftData**, Apple’s on-device SQLite-powered persistence framework.
 
+We’ll begin by creating a persistence model to store our data locally. Since `@Generable` models are value types (structs), and SwiftData requires models to be reference types (classes), we can’t reuse them directly. Instead, we’ll define a separate model class called `RecipeModel` that’s compatible with SwiftData. Here's the implementation:
+
+
+``` swift 
+import Foundation
+import SwiftData
+
+@Model
+class RecipeModel {
+    var name: String
+    var desc: String
+    
+    init(name: String, desc: String) {
+        self.name = name
+        self.desc = desc
+    }
+}
+```
+
+Next, we need to inject the model container into our app. While this can technically be done at any view level, it’s best practice to inject it at the **root level**. This ensures that the model context is available throughout the entire app, making it easier to read from and write to the database wherever needed.
+
+
+``` swift 
+@main
+struct YummyApp: App {
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                ContentView()
+            }
+            .modelContainer(for: RecipeModel.self)
+        }
+    }
+}
+
+``` 
+
+With the model container in place, you're now ready to use SwiftData in your app. To persist data, simply access the `modelContext` using `@Environment(\.modelContext)` and call the `insert` function to save your model to the store. It’s that straightforward—no boilerplate, no fuss.
+
+Finally, you can display your favorite recipes by just querying the SQLite database using SwiftData ```@Query``` macro.  
+
+``` swift 
+struct FavoriteRecipeListScreen: View {
+    
+    @Query private var recipeModels: [RecipeModel]
+    
+    var body: some View {
+        
+        if recipeModels.isEmpty {
+            ContentUnavailableView("No Favorite Recipes",
+                                       systemImage: "heart.slash",
+                                       description: Text("You haven't added any recipes to your favorites yet."))
+        } else {
+            List(recipeModels) { recipeModel in
+                VStack(alignment: .leading) {
+                    Text(recipeModel.name)
+                        .font(.headline)
+                    Text(recipeModel.desc)
+                }
+            }.navigationTitle("Favorite Recipes")
+        }
+    }
+}
+```
+
+> If you are interested in reading more about SwiftData architecture then check out my article [SwiftData Architecture - Patterns and Practices](https://azamsharp.com/2025/03/28/swiftdata-architecture-patterns-and-practices.html). 
+
+
 ## Performance 
 
-- prewarm 
-- RecipePlanner initialization 
-- Model and UI 
+- During guided generation, the model populates **all** properties of a `@Generable` type—regardless of whether they’re used in the UI. In our recipe example, if you add a `steps` property to represent cooking instructions, the model will still generate those steps—even if they’re not displayed on screen. This can lead to noticeable delays, as the model spends time generating unused content. To avoid this, be intentional when designing `@Generable` types: include only the properties you actually plan to display. Otherwise, your UI may feel slow or unresponsive, even though the delay is happening behind the scenes.
+
+- Just like preheating an oven ensures even baking and optimal texture, warming up your model can improve performance. The `LanguageModelSession` provides a `prewarm` function that eagerly loads the resources needed for the session into memory. You should call `prewarm` when you're confident the user will engage with LLM features. The right time to do this depends on your app’s flow. In our case, since the app relies entirely on the Foundation Models framework, we call `prewarm` at launch to ensure everything is ready when the user starts interacting.
 
 ## Conclusion 
+
+The Foundation Models framework opens up a new era of on-device intelligence for Apple developers. With features like natural language prompts, guided generation, custom tools, and seamless SwiftUI integration, you now have the power to build smart, privacy-respecting apps that feel truly conversational—without relying on the cloud.
+
+In this guide, we walked through how to get started, stream responses, structure output with `@Generable`, extend capabilities using tools, persist data with SwiftData, and optimize performance for real-world use. Whether you're building recipe apps, productivity tools, or AI-powered assistants, the Foundation Models framework gives you a powerful, flexible foundation to build on.
+
+This article is a living resource and will continue to evolve as Apple adds more capabilities to the framework. If you want a deeper, hands-on experience, check out my course [Getting Started with Foundation Models Framework](https://azamsharp.teachable.com/p/getting-started-with-the-foundation-models-framework) and start building smarter iOS apps today.
+
+The future of on-device AI is here—and it's running on your Mac.
