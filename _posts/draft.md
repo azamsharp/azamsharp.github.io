@@ -4,6 +4,9 @@ At WWDC 2025, Apple unveiled the Foundation Models framework, an on-device LLM (
 
 In this article, we will walk through how to get started with Apple’s Foundation Models framework and explain the core concepts you need to understand in order to take full advantage of its powerful on-device AI capabilities.
 
+> If you are interested in watching a video course then check out [Getting Started with Foundation Models Framework](https://azamsharp.teachable.com/p/getting-started-with-the-foundation-models-framework)
+
+NOTE: This article is a work in progress and new sections will be added in the future. 
 
 ## Requirements
 
@@ -409,3 +412,104 @@ For example, consider a `Recipe` model that includes an additional property call
 
 To optimize performance, consider tailoring your `@Generable` models to only include the fields necessary for the current context or screen.
  
+## Tools
+
+While prompts and guided generation are essential for working with Foundation Models, tools take things even further by allowing your app to **extend** what the model can do. Tools are custom Swift types and logic that the model can invoke dynamically during a conversation. 
+
+You define a tool, describe what it does, and the Foundation Models framework enables the model to call it when appropriate—almost like giving the model new abilities. This opens the door to rich, interactive apps where the model can trigger real actions, fetch external data, or interact with your UI based on natural language input. In this section, we’ll explore how to define, register, and handle tools to unlock the full potential of intelligent user experiences.
+
+In our example, we’ll implement a custom `RecipeTool` that fetches delicious Pakistani rice dishes from a JSON API. To keep the interaction meaningful and relevant, we’ll configure the model to invoke this tool **only when the user selects rice** as one of the ingredients. This ensures that the tool is used contextually—enhancing both performance and the quality of the responses.
+
+Creating a custom tool with the Foundation Models framework is straightforward. You simply need to conform to the `Tool` protocol and implement its required properties and methods. Below is the implementation of our `RecipeTool`, which will serve as an example of how to define and integrate a custom tool into your app.
+
+``` swift 
+struct RecipeTool: Tool {
+    
+    let httpClient: HTTPClient
+    
+    var name = "recipeTool"
+    var description = "Fetches Pakistani rice recipes based on provided ingredients by calling a recipe API."
+    
+    @Generable
+    struct Arguments {
+        @Guide(description: "A list of ingredients to base the Pakistani rice recipe recommendations on.")
+        let ingredients: [String]
+    }
+    
+    nonisolated func call(arguments: Arguments) async throws -> ToolOutput {
+        
+        let recipes = try await httpClient.loadRecipes().prefix(3)
+        let recipeDescriptions = recipes.map { recipe in
+            "- \(recipe.name): \(recipe.description)"
+        }.joined(separator: "\n\n")
+        
+        return ToolOutput(recipeDescriptions)
+    }
+}
+```
+
+One of the first things you’ll notice in the tool implementation is the dependency on `HTTPClient`. Since the tool needs to make a network request to fetch recipe data, we use `HTTPClient` to handle that operation.
+
+> To support testing or mocking, it’s a good idea to have `HTTPClient` conform to a protocol like `HTTPClientProtocol`.
+
+The `Arguments` struct represents the input passed from the model to the tool. It’s annotated with the `@Generable` macro, which enables the Foundation Model to generate and pass structured data into the tool. In this case, we expect a list of ingredients. To provide better guidance for the model, we also use the `@Guide` macro to describe the expected input.
+
+The heart of the tool is the `call` function. This is where the logic resides to make the HTTP request and retrieve the results. The data returned here becomes part of the model’s response and is ultimately shown to the user. The return type of `call` is `ToolOutput`, which can wrap either a simple string or a structured `GeneratedContent`—giving you full control over how results are presented.
+
+In order to use this tool with your model, you first need to register the tool with ```LanguageModelSession```. This is shown below: 
+
+``` swift 
+@MainActor
+@Observable
+class RecipeRecommender {
+    
+    var recipes: [Recipe.PartiallyGenerated] = []
+    private(set) var session: LanguageModelSession
+    let httpClient: HTTPClient
+    
+    init(httpClient: HTTPClient) {
+        self.httpClient = httpClient
+        
+        let recipeTool = RecipeTool(httpClient: httpClient)  
+        self.session = LanguageModelSession(tools: [recipeTool]) {
+                """
+                You are a helpful recipe assistant that creates delicious and easy-to-follow recipes based on the provided ingredients.
+                """
+                """
+                When the ingredients include rice, you must always use recipeTool to fetch rice recipes. Here is an example of ingredients with rice:
+                """
+                [Ingredient(name: "Rice")]
+                [Ingredient(name: "Rice"), Ingredient(name: "Onion")]
+                [Ingredient(name: "Rice"), Ingredient(name: "Chicken")]
+                
+                """
+                If rice is not one of the ingredients, you should generate the recipes yourself.
+                """
+                
+        }
+    }
+```
+
+We pass the `recipeTool` as an argument in the `tools` array when initializing the `LanguageModelSession`. Since this is an array, you can register multiple tools depending on your app’s needs.
+
+> Some useful tool ideas include a **grocery finder** to locate nearby stores that carry the ingredients, or a **restaurant finder** that maps local spots serving the recommended dishes. These tools can work together to create a seamless, intelligent user experience.
+
+In addition to registering the tool, you’ll notice that we’ve also updated the session’s instructions. These instructions explicitly tell the model that **if the ingredient list includes rice**, it must use the `recipeTool` to fetch relevant rice-based recipes. To make the guidance even clearer, the instructions also include sample ingredient arrays containing rice—helping the model better understand when the tool should be invoked. Clear and specific instructions like these are key to getting reliable, context-aware behavior from the model.
+
+> While it’s possible to make your `@Generable` models conform to `Codable`, we’ve chosen to create separate DTO (Data Transfer Object) types to represent the server’s response. This approach keeps the generable models focused on model interaction, while allowing the JSON structure from the API to remain flexible—without requiring changes to the generable types.
+
+Now, when you run the app and select rice as one of the ingredients, there’s a high chance you’ll be served a Pakistani rice recipe—fetched dynamically using the `recipeTool`.
+
+## Persisting Model Responses 
+
+In many cases, generating and displaying responses from the model is only half the story. Just as important is the ability to **persist those responses** for later use. For example, in our recipe app, a user might want to save a favorite dish so they can revisit it later without generating it again.
+
+In this section, we’ll explore how to store model responses locally using **SwiftData**, Apple’s on-device SQLite-powered persistence framework.
+
+## Performance 
+
+- prewarm 
+- RecipePlanner initialization 
+- Model and UI 
+
+## Conclusion 
