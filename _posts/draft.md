@@ -60,36 +60,35 @@ Certainly! Here is a list of all 50 states in the United States:
 
 ```
 
-It’s truly impressive how simple the Foundation Models API is to work with. With just a few lines of code, we were able to send a request and receive a complete response.
+It’s truly impressive how straightforward the Foundation Models API is to use. With just a few lines of code, we were able to send a prompt and receive a fully structured response—no complex setup required.
 
--- make it better from here and fix spelling and grammer 
+One limitation you may have noticed is that the user has to wait for the *entire* response to be generated before anything appears on screen. This adds noticeable latency and can make the interface feel slow or unresponsive. A much better approach is to **stream the response**, allowing content to appear incrementally as it’s generated.
 
-One thing you may have noticed is that the user had to wait for the entire response to be available. This added latency and delay from the user's perspective. A better approach would be to stream the response so it is available as soon as possible.
+In the example below, we use the streaming API to display each part of the response as soon as it becomes available:
 
-In the implementation below, we are streaming the response as soon as it is available. 
-
-``` swift 
+```swift
 #Playground {
     let session = LanguageModelSession()
     let stream = session.streamResponse(to: "Write a short story on a cat lost in the big city.")
-    
+
     for try await partialResponse in stream {
         print(partialResponse)
     }
 }
 ```
 
-As soon as the partial response is available it is displayed on the screen. This is an excellent way to keep user engaged, without waiting for the complete response to be available. If you had used a non-stream approach to execute the above prompt, it would have taken at least 20-30 seconds.
+With streaming, the output begins to appear almost immediately, keeping the user engaged and reducing perceived wait time. Had we used a non-streaming approach, the user might have waited 20–30 seconds before seeing any content at all — a significant delay in modern UI expectations.
+
 
 ### Guided Generation 
 
-In the previous section you learn how to get a response from the Foundation Model. The responses we received were plain string. But what if we wanted more structured response. 
+In the previous section, you learned how to get a response from the Foundation Model. Those responses were returned as plain strings. But what if we wanted something more structured—something we could work with programmatically?
 
-We can try to play smart and specify in our prompt that we are looking for a JSON response. Unfortunately, this can get really complicated. The main reason is that the model will mostly never return the same exact structure. You will always have to parse the response and remove the unwanted text. And for nested and more complicated responses, it becomes extremely hard to maintain. 
+A common workaround is to ask the model to return JSON by including that instruction in the prompt. While this might work in simple cases, it quickly becomes unreliable. The model may not always return the exact same structure, and you'll often need to clean up the response manually. For more complex or nested data, this approach becomes fragile and hard to maintain.
 
-Fortunately, Foundation Models framework solves this problem by a concept known as **Guided Generation**. Guided generation allows the model to return structured responses. This means you will always get the same exact structure no matter what. 
+Thankfully, the Foundation Models framework solves this problem with a powerful feature called **Guided Generation**. Guided generation enables the model to return **strongly typed, structured data**, aligned with Swift types you define. This means you’ll consistently get predictable, well-formed responses—without messy string parsing.
 
-You start by implementing a struct to represent the response. This is shown below: 
+To use guided generation, you begin by defining a Swift struct that represents the desired output. Here’s an example:
 
 ``` swift 
 @Generable()
@@ -101,9 +100,10 @@ struct Recipe {
 }
 ```
 
-The struct is decorated with ```@Generable``` macro, indicating that this struct is part of the guided generation. You can also decorate individual properties of the struct with ```@Guide``` macro. This influences the allowed values for the properties of a generable type. 
+The struct is annotated with the `@Generable` macro, which tells the Foundation Models framework that this type should be used for guided generation. You can also annotate individual properties with the `@Guide` macro to provide additional context or constraints. These guides help the model generate more accurate and relevant values for each property.
 
-Now, we can use our guided generation type to receive a structured output. 
+With this setup in place, we can now use our custom type to receive structured, type-safe output directly from the model.
+
 
 ``` swift 
 #Playground {
@@ -118,9 +118,10 @@ Now, we can use our guided generation type to receive a structured output.
 }
 ```
 
-In the above code when the model generate a recipe and it uses out ```@Generable``` type to populate the result. Instead of getting a string response, we receive a ```Recipe``` object. 
+In the code above, when the model generates a recipe, it uses our `@Generable` type to populate the result. Instead of receiving a plain string, we get a fully structured `Recipe` object that we can work with directly in Swift.
 
-You can also add constraints to your ```@Generable``` models. In the code below, we are adding a constraint on a newly added property ```prepTimeMinutes```. 
+You can also add **constraints** to your `@Generable` models to guide how values are generated. In the example below, we've added a constraint to the new `prepTimeMinutes` property to limit its value to a specific range:
+
 
 ``` swift 
 @Generable()
@@ -134,11 +135,12 @@ struct Recipe {
 }
 ```
 
-The constraint ```.range``` makes sure that the generated value is between 0 and 20. Now, when the model generates the ```Recipe``` struct, it will assign a random value within range to ```prepTimeMinutes``` property. 
+The `.range` constraint ensures that the generated value for `prepTimeMinutes` falls between 0 and 20. When the model generates the `Recipe` struct, it automatically assigns a random value within that range to the `prepTimeMinutes` property.
 
-One of the interesting things about guided generation is how seamlessly it works with hierarchical structures. Let's say that apart from generating the recipe we are also interested in knowing, which ingredients were used in that recipe and the unit measurement of each ingredient. 
+One of the most powerful aspects of guided generation is how seamlessly it supports **hierarchical structures**. For instance, suppose we not only want the recipe itself, but also a list of ingredients along with their quantities and units of measurement.
 
-We can come up with the following structure. 
+To represent this, we can define the following structure:
+
 
 ``` swift 
 @Generable()
@@ -181,9 +183,9 @@ enum Unit: String, Codable {
 }
 ```
 
-As you can see the recipe contains an array of ingredients and each ingredient contains a unit property of type enum ```Unit```.
+As you can see, the `Recipe` struct includes an array of `Ingredient` objects, and each `Ingredient` has a `unit` property of type `Unit`, which is defined as an enum. This structure allows for clear, type-safe modeling of nested data.
 
-You can generate the model response using the following implementation: 
+You can generate a model response using the following implementation:
 
 ``` swift 
 #Playground {
@@ -231,13 +233,15 @@ Recipe(
 )
 ```
 
-As you can see in the output above, guided generation even works nicely with hierarchical/nested relationships. This allows you to create model relationships based on the complexiy of your application. 
 
-The structure provided by guided generation also allows you to easily display data in SwiftUI views. For example to display nested data you can run a loop through ingredients and display them in a designated ```IngredientView```. 
+As shown in the output above, guided generation handles hierarchical or nested data structures exceptionally well. This makes it easy to model complex relationships based on the needs of your application.
 
-> We will cover how to integrate Foundation Models with your SwiftUI app later in this article. 
+The structured nature of guided generation also simplifies integration with SwiftUI. For instance, to display a list of ingredients, you can iterate through the array and render each item using a dedicated `IngredientView`.
 
-The above example works for a small demo, but it is not suitable for the real world. The reason is that the entire response had to be generated first, before anything is displayed to the user. We can solve this issue by streaming the response. 
+> We'll explore how to integrate Foundation Models with your SwiftUI app later in this article.
+
+While the example above works well for small demos, it's not ideal for real-world use. The reason is that the entire response must be generated before anything can be displayed to the user, which introduces unnecessary latency. Fortunately, we can solve this by **streaming the response**, allowing content to appear incrementally as it's generated.
+
 
 ``` swift 
 struct ContentView: View {
@@ -262,6 +266,146 @@ struct ContentView: View {
 }
 ```
 
-> SwiftUI app is used in the above example instead of Playground because of some issues in Playground. 
+> In the example above, we used a SwiftUI app instead of a Playground due to some limitations with streaming in Playgrounds.
 
-One of the things you will notice is that partialResponse is of type ```Recipe.PartiallyGenerated```. ```PartiallyGenerated``` represents the partially generated content. As the stream will return more content, it will be added to the type. Once, the stream will end you will have a complete ```Recipe``` type with ingredients and units. 
+One important detail to note is that `partialResponse` is of type `Recipe.PartiallyGenerated`. This type represents content that is still being built by the model. As the stream progresses, more data is incrementally added until the full `Recipe`—complete with ingredients and units—is fully constructed.
+
+**Guided Generation** is one of the most powerful features of the Foundation Models framework. It brings structure, predictability, and type safety to AI-driven development. Instead of dealing with unpredictable strings or brittle JSON parsing, you work directly with native Swift types that the model can populate reliably—even for deeply nested or complex data.
+
+Whether you're building a recipe app, a form generator, or an AI assistant that requires structured responses, guided generation streamlines your development process and keeps your code clean, safe, and maintainable.
+
+
+## Integrating Foundation Models with SwiftUI App 
+
+Now that you have a basic understanding of the Foundation Models framework, let’s apply it to solve a real-world problem. Many households struggle with meal planning—often, you might have a selection of ingredients in your refrigerator or pantry but no idea what to cook. Imagine an app that suggests recipes based on the ingredients you have on hand.
+
+> This app uses slightly modified versions of the `Recipe` and `Ingredient` models from earlier examples. Check out the complete source code on the [Foundation Models Framework Examples](https://github.com/azamsharpschool/FoundationModels-Examples) repository.
+
+The app begins with a `ContentView` that displays a list of ingredients for the user to choose from. In this example, the ingredients are hardcoded, but they could easily be fetched dynamically from a server. Below is the implementation of `ContentView`:
+
+
+``` swift 
+struct ContentView: View {
+    
+    @State private var selectedIngredients: Set<Ingredient> = []
+    @State private var showPresentRecipe: Bool = false
+    @State private var navigateToIngredients: Set<Ingredient>? = nil
+    
+    var body: some View {
+        VStack {
+            IngredientSelectorView(selectedIngredients: $selectedIngredients)
+            
+            HStack {
+                Button("Clear") {
+                    selectedIngredients = []
+                }.buttonStyle(.bordered)
+                Button("Suggest Recipes") {
+                    navigateToIngredients = selectedIngredients
+                }.buttonStyle(.borderedProminent)
+            }
+        }
+        .navigationDestination(item: $navigateToIngredients) { ingredients in
+            RecipeListScreen(ingredients: ingredients)
+        }
+```
+
+The `IngredientSelectView` is responsible for allowing users to choose ingredients. It uses `@Binding` to pass the selected ingredients back to the calling `ContentView`.
+
+Once the ingredients are selected and the **Suggest Recipes** button is tapped, the app navigates to `RecipeListScreen`, passing along the selected ingredients. This screen is responsible for preparing and displaying the recommended recipes.
+
+The core recipe generation happens inside the `RecipeRecommender` service. This service maintains an instance of `LanguageModelSession` and manages an array of generated `Recipe` objects. It uses the Foundation Models framework to generate recipes based on the provided ingredients, leveraging guided generation to return structured, Swift-native results.
+
+
+``` swift 
+
+@MainActor
+@Observable
+class RecipeRecommender {
+    
+    var recipes: [Recipe.PartiallyGenerated] = []
+    let session: LanguageModelSession
+    
+    init() {
+        
+        self.session = LanguageModelSession {
+                """
+                You are a helpful recipe assistant that creates delicious and easy-to-follow recipes based on the provided ingredients.
+                """
+        }
+    }
+    
+}
+```
+
+Notice that the `recipes` array is defined as an array of `Recipe.PartiallyGenerated`. This is intentional, as we are using response streaming— and when guided generation is used with streaming, it returns content incrementally in a partially generated form. As the stream progresses, more fields are filled in until the entire structure is complete.
+
+We also pass **instructions** when initializing the `LanguageModelSession`. These instructions play a crucial role in defining the model’s behavior—they establish the model’s role, expectations, and response format. Unlike prompts, which are dynamic and user-provided, instructions are defined by the developer and sent to the model **before** the prompt.
+
+It's essential to guard against **prompt injection attacks**, where a user might try to override the system instructions via crafted input. One way to mitigate this is by clearly separating instructions from user input and not exposing instruction fields through user-editable interfaces. Instructions can be detailed and even include examples of expected input/output formats to improve consistency and quality of the generated results.
+
+Next we implement the ```suggestRecipes``` function. 
+
+``` swift 
+func suggestRecipes(ingredients: Set<Ingredient>) async throws {
+        
+        let prompt = "Suggest 3-5 recipes based on the following ingredient(s): \n \(ingredients.map(\.name).joined(separator: ", "))"
+        
+        let stream = session.streamResponse(to: prompt, generating: [Recipe].self)
+        for try await partialResponse in stream {
+            recipes = partialResponse
+        }
+        
+    }
+```
+
+We pass the selected ingredients to the `suggestRecipes` function, where each ingredient’s name is used to construct a natural language prompt. In this case, we also specify that we’re looking for **3–5 recipes** based on the provided ingredients to keep the results concise and relevant.
+
+Next, we call the `streamResponse` function, which allows us to handle the model's output incrementally as it streams in. This approach not only improves perceived performance but also enables us to display content as soon as it's available—creating a more responsive and engaging user experience.
+
+The `RecipeListScreen` relies on the `RecipeRecommender` service to generate recipe suggestions based on the selected ingredients. Below is the implementation of `RecipeListScreen`:
+
+
+``` swift 
+struct RecipeListScreen: View {
+    
+    let ingredients: Set<Ingredient>
+    @State private var recipeRecommender: RecipeRecommender?
+    
+    var body: some View {
+        
+        Group {
+            
+            if let recipes = recipeRecommender?.recipes, !recipes.isEmpty {
+                RecipeListView(recipes: recipes)
+            } else {
+                ProgressView("Preparing delicious recipes...")
+            }
+           
+        }.task {
+            do {
+                recipeRecommender = RecipeRecommender()
+                try await recipeRecommender?.suggestRecipes(ingredients: ingredients)
+            } catch {
+                print(error)
+            }
+        }
+    }
+}
+```
+
+
+The `suggestRecipes` function of `RecipeRecommender` is called as soon as the `task` closure is triggered. This ensures that recipe generation begins immediately when the user lands on the `RecipeListScreen`. Once the recipes are generated, they are displayed using the `RecipeListView`.
+
+You can see the demo in action below:
+
+![Demo Yummy App](/images/demo-yummy.gif)
+
+> The demo also showcases additional features such as saving recipes to favorites and invoking a custom tool. Don’t worry—we’ll cover those later in this article. You can explore the full source code in the [Foundation Models Framework Examples](https://github.com/azamsharpschool/FoundationModels-Examples) repository.
+
+
+One important thing to keep in mind when using guided generation is that **all properties defined in your model will be generated**, regardless of whether they are displayed in the user interface.
+
+For example, consider a `Recipe` model that includes an additional property called `steps`, which contains detailed instructions on how to prepare the dish. Even if you're not showing `steps` on the `RecipeListScreen`, the model will still generate that content in the background. This can increase response time and make the UI feel slower—especially for properties that require longer or more detailed output.
+
+To optimize performance, consider tailoring your `@Generable` models to only include the fields necessary for the current context or screen.
+ 
