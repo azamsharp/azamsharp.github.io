@@ -23,7 +23,7 @@ The outline of this article is shown below:
 
 Let's first start with the requirements. In order to use Foundation Models framework you need to satisfy number of requirements. 
 
-1. macOS Tahoe 
+1. macOS Tahoe for development purposes 
 2. Xcode 26
 3. Apple Silicon 
 
