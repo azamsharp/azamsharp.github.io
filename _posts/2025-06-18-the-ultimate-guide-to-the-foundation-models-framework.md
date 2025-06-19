@@ -594,6 +594,14 @@ Performance plays a critical role in delivering a smooth and responsive user exp
 
 - Just like preheating an oven ensures even baking and optimal texture, warming up your model can improve performance. The `LanguageModelSession` provides a `prewarm` function that eagerly loads the resources needed for the session into memory. You should call `prewarm` when you're confident the user will engage with LLM features. The right time to do this depends on your app’s flow. In our case, since the app relies entirely on the Foundation Models framework, we call `prewarm` at launch to ensure everything is ready when the user starts interacting.
 
+The following tips are submitted by Klayton Bailey: 
+
+- The current combined input and output token limit is 4096
+- Tip:  The order of generable properties matters. Put properties last when they depend on other properties (e.g., summaries).
+- Tip:  The models likely work best in English.  Instructions may produce the best results when written in English. Write prompts in the user’s preferred language.
+- Various patterns for composing calls to and from other frameworks
+- Patterns for pre-prompting LanguageModelSession to infuse memory, such as for attempting to restore session state
+
 ## GitHub Repository 
 
 You can download the complete code using the repository. 
