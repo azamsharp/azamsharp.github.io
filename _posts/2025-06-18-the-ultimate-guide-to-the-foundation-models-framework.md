@@ -609,6 +609,3 @@ This article is a living resource and will continue to evolve as Apple adds more
 
 The future of on-device AI is here—and it's running on your Mac.
 
-
-
-

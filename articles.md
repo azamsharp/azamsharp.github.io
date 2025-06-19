@@ -9,6 +9,11 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [The Ultimate Guide to the Foundation Models Framework](_posts/2025-06-18-the-ultimate-guide-to-the-foundation-models-framework.md) 
+
+Apple’s Foundation Models framework, unveiled at WWDC 2025, brings powerful on-device generative AI to Apple platforms—enabling private, fast, and capable language-based features like summarization, content generation, and structured data output. This guide introduces key components such as `LanguageModelSession`, real-time streaming, and `@Generable`-powered guided generation. Through a practical SwiftUI recipe app example, it also covers tool integration, response persistence with SwiftData, and performance best practices. Ideal for developers building intelligent, privacy-focused iOS apps, this article serves as a hands-on introduction to Apple’s new on-device AI capabilities.
+
+
 ### [SwiftData Architecture - Patterns and Practices](_posts/2025-03-28-swiftdata-architecture-patterns-and-practices.md) 
 
 SwiftData, introduced at WWDC 2023, is Apple’s modern, Swift-native framework for data persistence in SwiftUI applications. Designed to replace Core Data, it offers a declarative API that aligns closely with SwiftUI’s architecture. This article explores practical architectural patterns and best practices for building real-world SwiftData applications. Using a budget tracking app as a case study, it covers topics such as model structuring, embedding business logic, working with DTOs, writing unit tests, creating effective Xcode previews, integrating with CloudKit, and designing flexible data access layers. The goal is to help developers adopt SwiftData in a scalable, maintainable, and testable way.
