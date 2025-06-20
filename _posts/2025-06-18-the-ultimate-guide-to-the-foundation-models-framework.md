@@ -14,6 +14,7 @@ The outline of this article is shown below:
 - [Getting Started](#getting-started)
 - [Guided Generation](#guided-generation)
 - [Integrating Foundation Models with SwiftUI App ](#integrating-foundation-models-with-swiftui-app)
+- [Availability](#availability)
 - [Tools](#tools)
 - [Persisting Model Responses](#persisting-model-responses)
 - [Performance](#performance)
@@ -422,7 +423,61 @@ One important thing to keep in mind when using guided generation is that **all p
 For example, consider a `Recipe` model that includes an additional property called `steps`, which contains detailed instructions on how to prepare the dish. Even if you're not showing `steps` on the `RecipeListScreen`, the model will still generate that content in the background. This can increase response time and make the UI feel slower—especially for properties that require longer or more detailed output.
 
 To optimize performance, consider tailoring your `@Generable` models to only include the fields necessary for the current context or screen.
- 
+
+## Availability
+
+Foundation Models are available on specific operating systems and devices. It is safe to assume that some of your users will not be able to utilize the power of on-device LLMs.
+
+To run and develop apps using the Foundation Models framework, the following requirements must be met:
+
+### Supported Operating Systems
+
+* **macOS 26 (Tahoe)** or later (required for development)
+* **iOS 26** or later (for iPhone deployment)
+* **iPadOS 26** or later (for iPad deployment)
+* **Xcode 26** or later is required to build and run apps that use the Foundation Models framework
+
+
+Foundation Models provides the `SystemLanguageModel` API to help determine whether the current device is capable of running on-device language models. The availability can depend on several factors, such as:
+
+* Incompatible hardware (e.g., unsupported device)
+* Outdated operating system
+* Apple Intelligence not being enabled by the user
+
+You can use the `.availability` property to check for these conditions and update your UI accordingly. Here's an example:
+
+```swift
+struct ParkDetailScreen: View {
+    
+    let park: Park
+    private let model = SystemLanguageModel.default
+    
+    var body: some View {
+        ScrollView {
+            switch model.availability {
+            case .available:
+                TripPlanningView(park: park)
+            case .unavailable(.appleIntelligenceNotEnabled):
+                Text("This feature requires Apple Intelligence to be enabled in Settings.")
+            case .unavailable(.modelNotReady):
+                Text("The on-device model isn't ready yet. Please try again later.")
+            case .unavailable(.deviceNotEligible):
+                Text("Your device doesn’t support this feature.")
+            default:
+                Text(park.description)
+            }
+        }
+        .padding()
+        .navigationTitle(park.name)
+    }
+}
+```
+
+This approach ensures your app behaves gracefully on unsupported devices or configurations, while guiding the user with clear messaging.
+
+By checking the model’s availability at runtime, you can provide a tailored user experience that gracefully handles unsupported scenarios. This not only avoids crashes or degraded functionality but also helps set the right expectations for users. As Apple continues to expand the reach of Foundation Models across devices and OS versions, implementing these availability checks ensures your app remains robust, future-ready, and user-friendly.
+
+
 ## Tools
 
 While prompts and guided generation are essential for working with Foundation Models, tools take things even further by allowing your app to **extend** what the model can do. Tools are custom Swift types and logic that the model can invoke dynamically during a conversation. 
