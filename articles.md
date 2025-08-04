@@ -9,7 +9,7 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [How Vibe Coding is Hurting Your Critical Thinking](/_posts/2025-08-08-how-vibe-coding-is-hurting-your-critical-thinking.md)
+### [How Vibe Coding is Hurting Your Critical Thinking](/_posts/2025-08-03-how-vibe-coding-is-hurting-your-critical-thinking.md)
 
 Back when I used to commute home from a client’s office, I would call a friend almost every day to keep me company during the long drive. For the entire hour, we would chat about nothing in particular, just aimless conversation, until I reached my destination.
 
