@@ -9,6 +9,14 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [How Vibe Coding is Hurting Your Critical Thinking](/_posts/2025-08-08-how-vibe-coding-is-hurting-your-critical-thinking.md)
+
+Back when I used to commute home from a client’s office, I would call a friend almost every day to keep me company during the long drive. For the entire hour, we would chat about nothing in particular, just aimless conversation, until I reached my destination.
+
+If you asked me what I saw during that drive, I wouldn’t be able to tell you. Not the road. Not the traffic. Not even the turns I took.
+
+That is exactly how vibe coding feels.
+
 ### [The Ultimate Guide to the Foundation Models Framework](_posts/2025-06-18-the-ultimate-guide-to-the-foundation-models-framework.md) 
 
 Apple’s Foundation Models framework, unveiled at WWDC 2025, brings powerful on-device generative AI to Apple platforms—enabling private, fast, and capable language-based features like summarization, content generation, and structured data output. This guide introduces key components such as `LanguageModelSession`, real-time streaming, and `@Generable`-powered guided generation. Through a practical SwiftUI recipe app example, it also covers tool integration, response persistence with SwiftData, and performance best practices. Ideal for developers building intelligent, privacy-focused iOS apps, this article serves as a hands-on introduction to Apple’s new on-device AI capabilities.
