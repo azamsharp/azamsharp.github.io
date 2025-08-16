@@ -83,5 +83,13 @@ The following implementation demonstrates this approach:
 
 ```
 
+
+A single store may be sufficient for small to medium-sized applications, but as your app grows larger, it becomes important to split responsibilities across multiple stores.
+
 ## Multiple Stores 
+
+The purpose of having multiple stores is to let each store manage a distinct slice of the application’s state. For example, in an e-commerce app you might have a `ProductStore`, `CatalogStore`, `InventoryStore`, and `FulfillmentStore`. It’s important to note that stores are not defined by the number of screens in your app, but by the data and responsibilities they encapsulate.
+
+## Communication between Stores 
+
 
