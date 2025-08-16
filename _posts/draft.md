@@ -1,48 +1,86 @@
 
-# How Vibe Coding Is Hurting Your Critical Thinking
+# Understanding Communication Patterns Between Observable Stores in SwiftUI 
 
-Back when I used to commute home from a client’s office, I would call a friend almost every day to keep me company during the long drive. For the entire hour, we would chat about nothing in particular, just aimless conversation, until I reached my destination.
+// TODO 
 
-If you asked me what I saw during that drive, I wouldn’t be able to tell you. Not the road. Not the traffic. Not even the turns I took.
+## What is a Store? 
 
-That is exactly how vibe coding feels.
+A **Store** is a reference type that either conforms to the `ObservableObject` protocol or uses the `@Observable` macro. Unlike view models, you don’t create a separate store for each screen. Instead, stores are organized around the **bounded contexts** of your application. In other words, a store represents a logical slice of your app’s data and business rules, not just a single view.
 
-## What Is Vibe Coding?
+For example, a `ProductStore` could power multiple views such as `ProductListScreen`, `AddProductScreen`, and `ProductDetailScreen`. The same store instance ensures consistency across these screens.
 
-Vibe coding pulls you into a flow where you are chasing momentum instead of clarity. You type quickly, bounce between tabs, paste code, see it compile, and feel productive. But you are not really understanding what is happening. You might get something working, but you are left unable to explain how it works or why it works. Just like that commute, it is all a blur.
+Stores primarily manage **business logic**, not presentation logic. Any presentation-specific behavior can live inside SwiftUI views themselves or, if complex, be extracted into dedicated value types (structs).
 
-## A Personal Example
+Stores can also have **dependencies**, such as a networking layer. They use these dependencies to fetch or persist data, while holding only the minimal state required by the view.
 
-Last year during my Christmas break, I traveled with my family to one of my favorite places in the world, Estes Park, Colorado. My plan was simple: wake up early, go for short hikes, and enjoy the beauty of the mountains.
+> For instance, even if the server holds 100,000 records, your store might fetch only 50 at a time using pagination and expose that slice to the view.
 
-But my family had other plans. They stayed up late and slept in, often not waking until well into the afternoon. I did not want to hike alone, so I passed the time with some light coding. I had no real goal, just vibe coding.
+Over the years, I’ve come across many different implementations of what we now call *stores*. Depending on the team or the codebase, they’ve been labeled as *services*, *controllers*, or even *view models*.
 
-In under an hour, I finished three apps. They were basic, but I used ChatGPT to write most of the code. I pasted it into my editor, made sure it ran, and moved on.
+## A Single Store
 
-One app involved a fairly complex distance calculation algorithm. It worked perfectly, but I had not written a single line of it. ChatGPT did. And while I had a general sense of what the code was doing, I could not explain the details.
+Depending on your app and its requirements, you may start with a **single store** that manages the entire application state. This approach works well for small to medium-sized apps. Personally, I prefer beginning with a single store and introducing additional stores only when the complexity of the app demands it.
 
-It felt like progress, but it also felt empty.
+Here’s a snippet from my `PlatziStore` implementation:
 
-## The Real Risk
 
-These were just simple apps. But in an enterprise setting with a complex domain, relying on surface-level understanding is risky. If you do not take the time to learn the business logic, the domain constraints, and the reasoning behind key decisions, you are doing yourself and your team a disservice.
+``` swift 
+@MainActor
+@Observable
+class PlatziStore {
+    
+    let httpClient: HTTPClient
+    var categories: [Category] = []
+    var locations: [Location] = []
+    
+    init(httpClient: HTTPClient) {
+        self.httpClient = httpClient
+    }
+    
+    func loadCategories() async throws {
+        let resource = Resource(url: Constants.Urls.categories, modelType: [Category].self)
+        categories = try await httpClient.load(resource)
+    }
+    
+    func createCategory(name: String) async throws {
+       // code ...
+    }
+    
+    func fetchProductsBy(_ categoryId: Int) async throws -> [Product] {
+       // code ...
+    }
+    
+    func createProduct(title: String, price: Double, description: String, categoryId: Int, images: [URL]) async throws -> Product {
+        // code ...
+    }
+    
+    func deleteProduct(_ productId: Int) async throws -> Bool {
+       // code ...
+    }
+    
+    func loadLocations() async throws {
+       // code ...
+    }
+    
+}
+```
 
-After nearly 20 years as a software developer, I have come to realize something important: domain knowledge often matters more than technical skill. You can always find someone who can animate a screen, wire up a form, or build a splash screen. But developers who understand the business deeply, including the edge cases, the workflows, and the reasoning behind the system, are rare.
+Stores can be injected either at the root of your application or at any specific node in the SwiftUI view hierarchy. Once injected, they become accessible through the `@Environment` property wrapper.
 
-When technical skill is combined with domain expertise, that is when real value is created. That is when you become a developer who cannot easily be replaced. That is when you become a unicorn.
+A good practice is to limit direct store access to **container views**. Child views should instead receive only the data they need via their initializers. This keeps child views lightweight, reusable, and free from unnecessary dependencies.
 
-## Growth Requires Engagement
+The following implementation demonstrates this approach:
 
-There is nothing wrong with using tools like ChatGPT. They are great for boosting productivity, learning new techniques, and solving problems. But when they replace your thinking, your curiosity, and your willingness to dig deep, you stop growing.
+``` swift 
 
-Real progress comes from getting stuck. From debugging confusing errors. From understanding how and why something works. It is slower. It is frustrating. But it lasts.
+    @Environment(PlatziStore.self) private var store 
 
-## Conclusion
+    var body: some View {
+        ProductListView(products: store.products)
+        LocationsView(locations: store.locations)
+    }
 
-ChatGPT and other AI tools are powerful assistants. But if you rely on them for every answer without engaging your own mind, you are missing the point.
+```
 
-If you do not understand the code you write, you cannot trust it. And if you cannot trust it, you cannot own it.
+## Multiple Stores 
 
-Momentum without mastery is not progress. It is just motion.
-
-Do not confuse the two.
