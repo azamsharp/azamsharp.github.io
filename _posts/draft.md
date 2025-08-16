@@ -88,8 +88,20 @@ A single store may be sufficient for small to medium-sized applications, but as 
 
 ## Multiple Stores 
 
-The purpose of having multiple stores is to let each store manage a distinct slice of the application’s state. For example, in an e-commerce app you might have a `ProductStore`, `CatalogStore`, `InventoryStore`, and `FulfillmentStore`. It’s important to note that stores are not defined by the number of screens in your app, but by the data and responsibilities they encapsulate.
+I prefer to design and divide stores based on the bounded context of the application. A bounded context defines a clear boundary around a specific domain or responsibility, ensuring each store manages only the data and logic relevant to that area. For example, in an e-commerce app:
 
-## Communication between Stores 
+* **`InsuranceStore`** manages insurance rates, insurance plans etc. 
+* **`CatalogStore`** handles categories, filters, and sorting options.
+* **`InventoryStore`** tracks stock levels and availability.
+* **`UserStore`** manages user profiles, and order history.
+* **`FulfillmentStore`** oversees shipping, delivery, and returns.
+
+By aligning stores with bounded contexts rather than screens, the codebase remains modular, scalable, and easier to reason about.
+
+A store does not operate in isolation—it often needs to communicate with other stores to retrieve or share information. This becomes especially important when an action in one store triggers a sequence of events that other stores must handle. In the next section, we’ll explore different strategies for propagating and handling domain events across stores.
+
+## Handling Store Events in the View 
+
+## 
 
 
