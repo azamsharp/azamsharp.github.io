@@ -67,7 +67,8 @@ class PlatziStore {
 
 Stores can be injected either at the root of your application or at any specific node in the SwiftUI view hierarchy. Once injected, they become accessible through the `@Environment` property wrapper.
 
-A good practice is to limit direct store access to **container views**. Child views should instead receive only the data they need via their initializers. This keeps child views lightweight, reusable, and free from unnecessary dependencies.
+A good practice is to limit direct store access to **container views**. Child views should instead receive only the data they need via their initializers. This keeps child views lightweight, reusable, and free from unnecessary dependencies. 
+This also improves SwiftUI’s performance, since views are only re-evaluated and re-rendered when their dependencies actually change.
 
 The following implementation demonstrates this approach:
 
