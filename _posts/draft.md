@@ -1,7 +1,15 @@
 
-# Understanding Communication Patterns Between Observable Stores in SwiftUI 
+# Effective Communication Between Observable Stores in SwiftUI**  
 
-// TODO 
+Modern SwiftUI applications often rely on observable stores to manage state and business logic. As apps grow in complexity, these stores need to communicate efficiently—whether reacting to user actions, synchronizing data, or triggering side effects. This article explores practical patterns for inter-store communication, from direct method calls to event-driven approaches like Combine publishers and Swift Concurrency’s `AsyncStream`.  
+
+We’ll examine the trade-offs of each technique, including:  
+- **Direct View Coordination**: Simple but tightly couples UI to business logic.  
+- **Delegate Pattern**: Works for one-to-one communication but lacks scalability.  
+- **Combine Publishers**: Decouples producers and consumers, ideal for reactive workflows.  
+- **AsyncStream**: A lightweight, concurrency-native alternative to Combine.  
+
+By aligning stores with **bounded contexts** (e.g., `UserStore`, `InsuranceStore`) and adopting the right communication strategy, you can keep your codebase modular, testable, and free from spaghetti dependencies. Whether you’re building a small app with a single store or a large-scale system with many interconnected domains, this guide provides actionable insights to streamline store interactions while keeping SwiftUI views lean and focused.  
 
 ## What is a Store? 
 
@@ -311,4 +319,119 @@ By moving side effects out of the view and into subscribers, we keep `UserDetail
 With this pattern, your UI stays predictable, tests get easier, and adding a new reaction (analytics, audit logs, notifications) is as simple as adding another subscriber—no changes to the view or the producer.
 
 ## Handling Store Events Using AsyncStream 
+
+Swift Concurrency gives you a lightweight, Combine-free way to broadcast store events with `AsyncStream`. It fits naturally with `async/await`, keeps views thin, and scales to multiple listeners without wiring delegates.
+
+We’ll begin by defining a typed `UserEvent` enum that represents all events the `UserStore` can emit. This gives us a clear, extensible, and type-safe way to model store events.
+
+``` swift 
+enum UserEvent {
+        case dependentAdded(dependent: Dependent, userId: UUID)
+        case dependentRemoved(dependent: Dependent, userId: UUID)
+    }
+```
+
+Next, declare a `continuations` dictionary that holds one `AsyncStream<UserEvent>.Continuation` per active subscriber. A continuation is the write end of the stream—you use it to `yield` new events to listeners.
+
+``` swift 
+ // one continuation per subscriber
+    private var continuations: [UUID: AsyncStream<UserEvent>.Continuation] = [:]
+```
+
+Next, when a consumer calls `events()`, we create and return a fresh `AsyncStream` and **register its continuation**. We also set `continuation.onTermination` to remove that entry when the subscriber stops listening—preventing leaks. The registration runs inside `Task { @MainActor in … }` because the `AsyncStream` builder isn’t main-actor–isolated, while the store’s state (the `continuations` dictionary) is.
+
+Finally, the `emit(_:)` function fan-outs an event to every active subscriber. It iterates over the registered continuations and calls `yield(event)` on each, delivering the same event to all listeners.
+
+``` swift 
+private func emit(_ event: UserEvent) {
+        for c in continuations.values { c.yield(event) }
+    }
+```
+
+`UserStore.addDependent` is now wired to `AsyncStream`: after updating state, it **emits** a typed `UserEvent` on the stream, so all subscribers are notified immediately.
+
+``` swift 
+ func addDependent(_ dependent: Dependent, to userId: UUID) async throws {
+        guard let index = users.firstIndex(where: { $0.id == userId }) else { return }
+        users[index].dependents.append(dependent)
+        emit(.dependentAdded(dependent: dependent, userId: userId))
+    }
+
+``` 
+
+The `startListening(_:)` method in `InsuranceStore` subscribes to the `AsyncStream<UserEvent>` and reacts to events. The store keeps a cancellable `Task` so you can safely start/stop listening (and avoid multiple concurrent loops). When it receives `.dependentAdded`, it recalculates the user’s insurance rate.
+
+```swift
+@MainActor
+@Observable
+final class InsuranceStore {
+    var insuranceRate: InsuranceRate?
+    private var listener: Task<Void, Never>?
+
+    func startListening(to events: AsyncStream<UserEvent>) {
+        // Cancel any previous subscription
+        listener?.cancel()
+
+        listener = Task { [weak self] in
+            guard let self else { return }
+            for await event in events {
+                switch event {
+                case let .dependentAdded(userId, _):
+                    do { try await self.calculateInsurance(for: userId) }
+                    catch { /* log or emit error event */ }
+                }
+            }
+        }
+    }
+
+    func calculateInsurance(for userId: UUID) async throws {
+        // fetch & update insuranceRate
+    }
+
+    deinit { listener?.cancel() }
+}
+```
+
+You can call `startListening(to: userStore.events())` in your composition root (e.g., `App.init()`), not from a view. This keeps the view simple, ensures a single subscription per store, and makes teardown deterministic. The implementation is shown below: 
+
+``` swift 
+@main
+struct LearnApp: App {
+    @State private var userStore: UserStore
+    @State private var insuranceStore: InsuranceStore
+    @State private var documentStore: DocumentStore
+
+    init() {
+        let user = UserStore()
+        let insurance = InsuranceStore()
+        let docs = DocumentStore()
+
+        // Wire listeners once at startup
+        insurance.startListening(to: user.events())
+        docs.startListening(to: user.events())
+
+        _userStore = State(initialValue: user)
+        _insuranceStore = State(initialValue: insurance)
+        _documentStore = State(initialValue: docs)
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environment(userStore)
+                .environment(insuranceStore)
+                .environment(documentStore)
+        }
+    }
+}
+
+```
+
+## Conclusion
+
+At the end of the day, observable stores work best when each one owns a clear slice of your app’s world and keeps the business logic where it belongs—inside the store—so your SwiftUI views can stay light and focused. When stores need to react to each other, choose the simplest communication style that fits: calling directly from the view is quick but doesn’t age well; a **delegate** is great when there’s exactly one listener; and for multiple, independent reactions, reach for **Combine** or **AsyncStream** to broadcast events without coupling your UI to side effects.
+
+Keep the wiring tidy by composing everything at the app root (e.g., `App.init()` or a small coordinator), not inside views. Let producers emit events without knowing who’s listening, annotate UI-facing stores with `@MainActor`, avoid retain cycles, cancel listeners on teardown, and handle errors locally (log them or emit short-lived error events instead of a global “last error”). Type your events as an enum so changes stay compiler-checked.
+
+In practice, start simple, evolve when the architecture asks for it, and favor patterns that make adding new reactions—like analytics, audit logs, or notifications—as easy as adding one more subscriber. That way, your UI stays predictable, your tests stay focused, and your codebase stays flexible as your app grows.
 
