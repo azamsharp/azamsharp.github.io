@@ -230,5 +230,85 @@ However, a key limitation of this approach is that the delegate pattern only sup
 
 In the following sections, we’ll explore alternative techniques that make it possible to notify **multiple listeners** when such events occur.
 
+## Handling Store Events Using Combine Publishers 
 
+Stores can also broadcast events using the publisher–subscriber pattern. `UserStore` exposes a publisher that any interested consumer can subscribe to. In the example below, `dependentAddedPublisher` emits an event whenever a new dependent is successfully added, allowing multiple listeners to react without coupling the view to those side effects.
+
+``` swift 
+@MainActor
+@Observable
+class UserStore {
+    
+    var users: [User] = []
+    
+    private let dependentAddedSubject = PassthroughSubject<(Dependent, UUID), Never>()
+    
+    var dependentAddedPublisher: AnyPublisher<(Dependent, UUID), Never> {
+        dependentAddedSubject.eraseToAnyPublisher()
+    }
+    
+    func addDependent(_ dependent: Dependent, to userId: UUID) async throws {
+        guard let index = users.firstIndex(where: { $0.id == userId }) else { return }
+        users[index].dependents.append(dependent)
+        
+        dependentAddedSubject.send((dependent, userId))
+    }
+
+}
+``` 
+
+`InsuranceStore` subscribes to `UserStore`’s events **in its initializer**. During setup, it listens to `dependentAddedPublisher` and, whenever a new dependent is added, it asynchronously recalculates the user’s insurance rate. Errors from that recalculation are caught and stored (e.g., in `lastError`) without blocking the UI.
+
+Because the store is annotated with `@MainActor`, updates to observable state like `insuranceRate` are safely performed on the main thread. The subscription closure captures `self` with `[weak self]`, preventing retain cycles—so there’s no need to keep a separate (weak) property reference to `UserStore`. This wiring keeps **views** free of orchestration logic and allows **multiple consumers** to react to the same event stream independently. If you expect bursts of events, you can layer in operators like `removeDuplicates`, `debounce`, or `throttle` to control recalculation frequency.
+
+
+``` swift 
+@MainActor
+@Observable
+class InsuranceStore: Store {
+    
+    var insuranceRate: InsuranceRate?
+    
+    private var cancellables = Set<AnyCancellable>()
+    private weak var userStore: UserStore?
+    
+    init(userStore: UserStore) {
+        super.init()
+        self.userStore = userStore
+        self.userStore?.dependentAddedPublisher
+            .sink { [weak self] dependent, userId in
+                Task {
+                    do {
+                        try await self?.calculateInsurance(for: userId)
+                        self?.lastError = nil
+                    } catch {
+                        self?.lastError = error
+                    }
+                }
+            }.store(in: &cancellables)
+    }
+}
+```
+
+With this wiring, `UserDetailScreen` stays lean—it just adds the dependent. After that, `UserStore` emits a `dependentAdded` event, and every subscriber (e.g., `InsuranceStore`, `DocumentStore`) receives it and runs its own handler (recalculate rates, regenerate docs, etc.). No imperative calls from the view, no tight coupling, and side effects remain fully decoupled from UI code.
+
+``` swift 
+ Button("Add Dependent") {
+                    Task {
+                        let dependent = Dependent(id: UUID(), name: String.randomPersonName())
+                        do {
+                            try await userStore.addDependent(dependent, to: user.id)
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                }
+```
+
+
+By moving side effects out of the view and into subscribers, we keep `UserDetailScreen` simple and let each store own its domain logic. `UserStore` emits a single, typed event; `InsuranceStore`, `DocumentStore`, and any future consumers react independently—no tight coupling, no chains of imperative calls.
+
+With this pattern, your UI stays predictable, tests get easier, and adding a new reaction (analytics, audit logs, notifications) is as simple as adding another subscriber—no changes to the view or the producer.
+
+## Handling Store Events Using AsyncStream 
 
