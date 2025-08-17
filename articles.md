@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Effective Communication Between Observable Stores in SwiftUI](/_posts/2025-08-17-effective-communication-between-observable-stores.md)
+
+Modern SwiftUI applications often rely on observable stores to manage state and business logic. As apps grow in complexity, these stores need to communicate efficiently—whether reacting to user actions, synchronizing data, or triggering side effects. This article explores practical patterns for inter-store communication, from direct method calls to event-driven approaches like Combine publishers and Swift Concurrency’s `AsyncStream`. 
+
 ### [How Vibe Coding is Hurting Your Critical Thinking](/_posts/2025-08-03-how-vibe-coding-is-hurting-your-critical-thinking.md)
 
 Back when I used to commute home from a client’s office, I would call a friend almost every day to keep me company during the long drive. For the entire hour, we would chat about nothing in particular, just aimless conversation, until I reached my destination.

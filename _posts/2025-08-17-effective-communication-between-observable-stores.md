@@ -1,5 +1,5 @@
 
-# Effective Communication Between Observable Stores in SwiftUI**  
+# Effective Communication Between Observable Stores in SwiftUI
 
 Modern SwiftUI applications often rely on observable stores to manage state and business logic. As apps grow in complexity, these stores need to communicate efficiently—whether reacting to user actions, synchronizing data, or triggering side effects. This article explores practical patterns for inter-store communication, from direct method calls to event-driven approaches like Combine publishers and Swift Concurrency’s `AsyncStream`.  
 
@@ -9,7 +9,70 @@ We’ll examine the trade-offs of each technique, including:
 - **Combine Publishers**: Decouples producers and consumers, ideal for reactive workflows.  
 - **AsyncStream**: A lightweight, concurrency-native alternative to Combine.  
 
-By aligning stores with **bounded contexts** (e.g., `UserStore`, `InsuranceStore`) and adopting the right communication strategy, you can keep your codebase modular, testable, and free from spaghetti dependencies. Whether you’re building a small app with a single store or a large-scale system with many interconnected domains, this guide provides actionable insights to streamline store interactions while keeping SwiftUI views lean and focused.  
+By aligning stores with **bounded contexts** (e.g., `UserStore`, `InsuranceStore`) and adopting the right communication strategy, you can keep your codebase modular, testable, and free from spaghetti dependencies. Whether you’re building a small app with a single store or a large-scale system with many interconnected domains, this guide provides actionable insights to streamline store interactions while keeping SwiftUI views lean and focused.
+
+ <!-- AzamSharp School promo (drop anywhere in your article) -->
+<section class="azamsharp-promo" role="complementary" aria-label="AzamSharp School">
+  <div class="azamsharp-card">
+    <div class="azamsharp-icon" aria-hidden="true">
+      <!-- simple inline Swift-like swirl -->
+      <svg viewBox="0 0 64 64" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+        <path d="M48 14c2 10-5 26-18 30 4-6 3-12 1-16-5-9-14-14-17-16 6 11 12 17 12 17-7-4-12-9-15-12 3 7 8 13 13 17-5-1-10-3-14-6 6 9 15 15 25 16 16 2 25-10 25-22 0-3-1-6-2-8z" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="azamsharp-content">
+      <div class="azamsharp-kicker">AzamSharp School</div>
+      <h3 class="azamsharp-title">Level up your Swift &amp; SwiftUI skills</h3>
+      <p class="azamsharp-copy">
+        Hands-on courses, live workshops, and personalized 1-on-1 coaching.
+      </p>
+      <div class="azamsharp-actions">
+        <a class="azamsharp-button" href="https://azamsharp.school/" target="_blank" rel="noopener noreferrer">
+          Explore courses
+        </a>
+        <span class="azamsharp-note"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .azamsharp-promo { margin: 1.25rem 0; }
+  .azamsharp-card {
+    --bg: #ffffff; --fg: #0f172a; --muted:#475569; --ring1:#7c3aed; --ring2:#06b6d4;
+    display:flex; gap:1rem; align-items:flex-start; padding:1rem 1.125rem;
+    border-radius:16px; border:1px solid transparent;
+    background:
+      linear-gradient(var(--bg),var(--bg)) padding-box,
+      linear-gradient(135deg,var(--ring1),var(--ring2)) border-box;
+    box-shadow: 0 6px 18px rgba(2,6,23,.06);
+  }
+  .azamsharp-icon { display:grid; place-items:center; width:44px; height:44px;
+    border-radius:12px; background:linear-gradient(135deg,var(--ring1),var(--ring2)); color:#fff; flex:0 0 auto; }
+  .azamsharp-content { color:var(--fg); }
+  .azamsharp-kicker { font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  .azamsharp-title { margin:.1rem 0 .4rem; font-size:1.05rem; line-height:1.35; }
+  .azamsharp-copy { margin:0 0 .75rem; color:var(--muted); }
+  .azamsharp-actions { display:flex; flex-wrap:wrap; gap:.6rem .9rem; align-items:center; }
+  .azamsharp-button {
+    display:inline-block; padding:.55rem .85rem; border-radius:10px; font-weight:600; text-decoration:none;
+    background:var(--fg); color:#fff; transition:transform .06s ease, opacity .2s ease;
+  }
+  .azamsharp-button:hover { transform:translateY(-1px); opacity:.95; }
+  .azamsharp-note { font-size:.9rem; color:var(--muted); }
+
+  @media (prefers-color-scheme: dark) {
+    .azamsharp-card { --bg:#0b1220; --fg:#e5e7eb; --muted:#94a3b8; box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+    .azamsharp-button { background:#e5e7eb; color:#0b1220; }
+  }
+
+  @media (max-width: 520px) {
+    .azamsharp-card { align-items: center; }
+    .azamsharp-title { font-size:1rem; }
+    .azamsharp-copy { font-size:.95rem; }
+  }
+</style>
+
 
 ## What is a Store? 
 
