@@ -1,5 +1,5 @@
 
-# Dependency Management in SwiftUI   
+# Why 90% of SwiftUI Apps Get Dependency Injection Wrong   
 
 Managing dependencies is an essential part of building scalable and testable SwiftUI applications. Dependencies such as API clients, stores, and services form the backbone of your app’s data flow. If handled carelessly, they can lead to tightly coupled code that is difficult to test, reuse, or extend.
 
