@@ -302,6 +302,27 @@ Ultimately, the right choice depends on the design of your app and its specific 
 
 Dependency management in SwiftUI is about choosing the right tool for the right job. Constructor injection works best when passing data or explicit dependencies into individual views, keeping them clear and testable. Environment values are a great fit for stateless services that need to be shared across many parts of the app without repetitive boilerplate, while Environment objects provide a powerful way to share and observe state across multiple screens. Rather than competing, these approaches complement each other, and by applying them thoughtfully you can build SwiftUI applications that remain scalable, maintainable, and easy to extend as they grow in complexity.
 
-
-
-
+<!-- AzamSharp School promo (drop anywhere in your article) -->
+<section class="azamsharp-promo" role="complementary" aria-label="AzamSharp School">
+  <div class="azamsharp-card">
+    <div class="azamsharp-icon" aria-hidden="true">
+      <!-- simple inline Swift-like swirl -->
+      <svg viewBox="0 0 64 64" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+        <path d="M48 14c2 10-5 26-18 30 4-6 3-12 1-16-5-9-14-14-17-16 6 11 12 17 12 17-7-4-12-9-15-12 3 7 8 13 13 17-5-1-10-3-14-6 6 9 15 15 25 16 16 2 25-10 25-22 0-3-1-6-2-8z" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="azamsharp-content">
+      <div class="azamsharp-kicker">AzamSharp School</div>
+      <h3 class="azamsharp-title">Master Swift &amp; SwiftUI — faster</h3>
+      <p class="azamsharp-copy">
+        Learn by building: concise lessons, live workshops, and 1-on-1 coaching.
+        <span class="azamsharp-note">150+ hours of practical iOS training.</span>
+      </p>
+      <div class="azamsharp-actions">
+        <a class="azamsharp-button" href="https://azamsharp.school/" target="_blank" rel="noopener noreferrer">
+          Start learning
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

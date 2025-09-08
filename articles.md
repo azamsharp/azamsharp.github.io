@@ -9,6 +9,12 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Dependency Management in SwiftUI](/_posts/2025-09-08-dependency-management-in-swiftui.md)
+
+Managing dependencies is an essential part of building scalable and testable SwiftUI applications. Dependencies such as API clients, stores, and services form the backbone of your app’s data flow. If handled carelessly, they can lead to tightly coupled code that is difficult to test, reuse, or extend.
+
+SwiftUI, being a declarative framework, provides multiple strategies for injecting and managing dependencies. The most common approaches include constructor injection, where dependencies are passed directly into views or services, and environment values/objects, which allow dependencies to be shared across the view hierarchy without explicitly threading them through every initializer.
+
 ### [Effective Communication Between Observable Stores in SwiftUI](/_posts/2025-08-17-effective-communication-between-observable-stores.md)
 
 Modern SwiftUI applications often rely on observable stores to manage state and business logic. As apps grow in complexity, these stores need to communicate efficiently—whether reacting to user actions, synchronizing data, or triggering side effects. This article explores practical patterns for inter-store communication, from direct method calls to event-driven approaches like Combine publishers and Swift Concurrency’s `AsyncStream`. 
