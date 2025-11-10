@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Veggie Garden – Grow smarter, harvest happier</title>
+  <meta name="description" content="My Veggie Garden is a delightful gardening app with harvest countdowns, smart reminders, photo notes, iCloud sync, and a beautiful plant catalog." />
+  <meta name="theme-color" content="#0b7c45" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0f0d;
+      --surface: #0f1512;
+      --text: #e8f6ee;
+      --muted: #b8d2c4;
+      --accent: #22c55e; /* green-500 */
+      --accent-2:#16a34a; /* green-600 */
+      --ring: rgba(34,197,94,.35);
+      --grad-1:#0ea5e9; /* sky-500 */
+      --grad-2:#22c55e; /* green-500 */
+      --grad-3:#a3e635; /* lime-400 */
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #f7fbf8;
+        --surface:#ffffff;
+        --text:#0d1b12;
+        --muted:#496356;
+        --accent:#16a34a;
+        --accent-2:#15803d;
+        --ring: rgba(16,185,129,.25);
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji"; color:var(--text); background:radial-gradient(1200px 600px at 75% -10%, rgba(34,197,94,.10), transparent),
+      radial-gradient(900px 600px at 0% 0%, rgba(14,165,233,.07), transparent),
+      var(--bg);
+      line-height:1.6;
+    }
+    a{color:inherit; text-decoration:none}
+    .container{max-width:1200px; margin-inline:auto; padding:0 24px}
+    .btn{display:inline-flex; align-items:center; gap:10px; background:linear-gradient(135deg, var(--grad-1), var(--grad-2) 55%, var(--grad-3)); color:#0b0f0d; font-weight:700; padding:14px 20px; border-radius:14px; border:1px solid rgba(255,255,255,.15); box-shadow:0 10px 30px rgba(34,197,94,.25), inset 0 0 0 1px rgba(255,255,255,.15); transition:transform .15s ease, box-shadow .2s ease}
+    .btn:hover{transform:translateY(-1px); box-shadow:0 14px 36px rgba(34,197,94,.35)}
+    .btn-ghost{background:transparent; color:var(--text); border:1px solid rgba(255,255,255,.15); font-weight:700; padding:12px 18px; border-radius:12px}
+    .chip{display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:#0b0f0d; padding:6px 10px; border-radius:999px; background:linear-gradient(135deg, #a7f3d0, #86efac 60%, #bbf7d0); box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+    header{position:sticky; top:0; z-index:40; backdrop-filter:saturate(140%) blur(8px); background:linear-gradient(to bottom, rgba(15,21,18,.8), rgba(15,21,18,.55)); border-bottom:1px solid rgba(255,255,255,.08)}
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand .logo{width:34px; height:34px; border-radius:9px; background:conic-gradient(from 220deg, var(--grad-2), var(--grad-3), var(--grad-1)); box-shadow: inset 0 0 0 1px rgba(255,255,255,.25)}
+    .brand h1{font-size:16px; letter-spacing:.2px; margin:0; font-weight:800}
+    .nav a{font-weight:600; color:var(--text); opacity:.9}
+    .nav .links{display:flex; gap:22px}
+
+    /* Hero */
+    .hero{padding:84px 0 40px}
+    .hero-inner{display:grid; grid-template-columns:1.1fr .9fr; gap:36px; align-items:center}
+    .eyebrow{display:flex; gap:10px; align-items:center; margin-bottom:12px}
+    .eyebrow .sprout{width:22px; height:22px}
+    .hero h2{font-family:"Playfair Display", serif; font-weight:700; font-size:52px; line-height:1.1; margin:8px 0 14px}
+    .hero p{max-width:52ch; color:var(--muted); font-size:18px}
+    .cta{display:flex; gap:14px; margin-top:24px; flex-wrap:wrap}
+    .badges{display:flex; gap:14px; margin-top:18px; align-items:center; color:var(--muted)}
+    .phone{position:relative; width:min(420px, 90%); aspect-ratio:9/19.5; border-radius:34px; background:linear-gradient(165deg, #0f1512, #0b0f0d); border:1px solid rgba(255,255,255,.08); box-shadow:0 20px 60px rgba(0,0,0,.35), inset 0 -60px 120px rgba(34,197,94,.12); justify-self:center}
+    .phone:before{content:""; position:absolute; inset:12px; border-radius:28px; background:radial-gradient(120% 80% at 50% 0%, rgba(34,197,94,.18), transparent 60%), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 1000"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%2316a34a"/><stop offset="1" stop-color="%230ea5e9"/></linearGradient></defs><g fill="none" stroke="url(%23g)" stroke-width="3" opacity="0.45">'+ Array.from({length:22},(_,i)=>`<path d="M-50 ${i*48} Q 300 ${i*48+30} 650 ${i*48}"/>`).join('') +'</g></svg>') center/cover no-repeat; border:1px solid rgba(255,255,255,.04)}
+    .phone .status{position:absolute; top:18px; left:22px; right:22px; height:6px; border-radius:999px; background:linear-gradient(90deg, rgba(255,255,255,.18), transparent)}
+    .phone .pill{position:absolute; bottom:16px; left:50%; transform:translateX(-50%); width:36%; height:5px; border-radius:999px; background:rgba(255,255,255,.25)}
+    .glow{position:absolute; inset:-40px -60px auto auto; width:220px; height:220px; background:radial-gradient(closest-side, rgba(34,197,94,.35), transparent 70%); filter:blur(12px)}
+
+    /* Feature grid */
+    .section{padding:70px 0}
+    .section h3{font-family:"Playfair Display", serif; font-size:36px; line-height:1.2; margin:0 0 14px}
+    .muted{color:var(--muted)}
+    .grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:20px; box-shadow:0 12px 30px rgba(0,0,0,.18); transition:transform .15s ease, box-shadow .2s ease}
+    .card:hover{transform:translateY(-2px); box-shadow:0 16px 40px rgba(0,0,0,.24)}
+    .icon{width:38px; height:38px; border-radius:12px; background:linear-gradient(135deg, rgba(34,197,94,.25), rgba(14,165,233,.2)); display:grid; place-items:center; color:#0b0f0d; margin-bottom:10px}
+    .card h4{margin:4px 0 6px; font-size:18px}
+
+    /* Showcase */
+    .mock{position:relative; border-radius:20px; background:
+      linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)),
+      radial-gradient(120% 120% at 10% -10%, rgba(14,165,233,.10), transparent),
+      radial-gradient(120% 120% at 110% 50%, rgba(34,197,94,.12), transparent);
+      border:1px solid rgba(255,255,255,.08); min-height:260px; box-shadow:0 16px 44px rgba(0,0,0,.22); overflow:hidden}
+    .mock .ribbon{position:absolute; top:18px; left:-44px; transform:rotate(-12deg); background:linear-gradient(135deg, #22c55e, #a3e635); color:#0b0f0d; font-weight:800; padding:8px 60px; box-shadow:0 10px 24px rgba(34,197,94,.25)}
+
+    /* Pricing */
+    .pricing{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+    .plan{padding:26px; border-radius:18px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02))}
+    .plan h4{margin:0 0 6px}
+    .price{font-size:34px; font-weight:800}
+    .check{display:flex; align-items:center; gap:10px; margin:8px 0; color:var(--muted)}
+    .cta-note{font-size:12px; color:var(--muted)}
+
+    /* Testimonials */
+    .quotes{display:grid; grid-template-columns:repeat(3, 1fr); gap:18px}
+    blockquote{margin:0; padding:20px; border-radius:16px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02))}
+    blockquote footer{margin-top:10px; font-weight:700; color:var(--muted)}
+
+    /* FAQ */
+    details{border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:14px 16px; background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02))}
+    summary{cursor:pointer; font-weight:700}
+    details+details{margin-top:10px}
+
+    footer{padding:30px 0 50px; color:var(--muted)}
+    .foot{display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:20px}
+    .small{font-size:12px}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-inner{grid-template-columns:1fr; text-align:center}
+      .cta{justify-content:center}
+      .grid{grid-template-columns:1fr 1fr}
+      .pricing{grid-template-columns:1fr}
+      .quotes{grid-template-columns:1fr 1fr}
+      .foot{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 640px){
+      .grid{grid-template-columns:1fr}
+      .quotes{grid-template-columns:1fr}
+      .foot{grid-template-columns:1fr}
+      .hero h2{font-size:38px}
+    }
+    /* Focus outlines */
+    .btn:focus-visible, a:focus-visible, summary:focus-visible, button:focus-visible{outline:3px solid var(--ring); outline-offset:3px; border-radius:12px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav" role="navigation" aria-label="primary">
+      <a href="#top" class="brand">
+        <span aria-hidden class="logo"></span>
+        <h1>My Veggie Garden</h1>
+      </a>
+      <nav class="links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="#download" class="btn-ghost">Download</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero container" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div>
+          <div class="eyebrow">
+            <img class="sprout" alt="Sprouting seed" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'><path d='M12 21v-8' stroke='%2322c55e' stroke-width='2' stroke-linecap='round'/><path d='M12 13c0-6 3-10 9-10-1 6-5 9-9 10Z' fill='%2322c55e'/><path d='M12 13c0-6-3-10-9-10 1 6 5 9 9 10Z' fill='%230ea5e9' opacity='.85'/></svg>"/>
+            <span class="chip" aria-label="App status">NEW • Version 1.0</span>
+          </div>
+          <h2 id="hero-title">Grow smarter, harvest happier.</h2>
+          <p>Meet My Veggie Garden — your beautifully simple garden companion. Track plantings, see a live harvest countdown, add photo notes, and get gentle reminders right when your veggies are ready. iCloud sync keeps everything safe across devices.</p>
+          <div class="cta">
+            <a href="#download" class="btn" aria-label="Get My Veggie Garden">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M12 5v14m-7-7h14" stroke="#052e1b" stroke-width="2.4" stroke-linecap="round"/></svg>
+              Get the App
+            </a>
+            <a href="#features" class="btn-ghost">Explore features</a>
+          </div>
+          <div class="badges" aria-label="platforms">
+            <span class="small">Available for iPhone • iPad</span>
+            <span aria-hidden>•</span>
+            <span class="small">iCloud Sync</span>
+          </div>
+        </div>
+      <div class="phone" aria-hidden="true" style="position:relative; width:min(420px,90%); aspect-ratio:9/19.5; border-radius:34px; background:linear-gradient(165deg,#0f1512,#0b0f0d); border:1px solid rgba(255,255,255,.08); box-shadow:0 20px 60px rgba(0,0,0,.35), inset 0 -60px 120px rgba(34,197,94,.12);">
+  <div class="status" style="position:absolute; top:18px; left:22px; right:22px; height:6px; border-radius:999px; background:linear-gradient(90deg,rgba(255,255,255,.18),transparent);"></div>
+  <div class="glow" style="position:absolute; inset:-40px -60px auto auto; width:220px; height:220px; background:radial-gradient(closest-side,rgba(34,197,94,.35),transparent 70%); filter:blur(12px);"></div>
+  <div class="pill" style="position:absolute; bottom:16px; left:50%; transform:translateX(-50%); width:36%; height:5px; border-radius:999px; background:rgba(255,255,255,.25);"></div>
+  <img src="/images/my-veggie-garden.png"
+       style="position:absolute; inset:12px; width:calc(100% - 24px); height:calc(100% - 24px); object-fit:cover; border-radius:28px; z-index:1;" />
+</div>
+
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section container">
+      <h3>What makes My Veggie Garden different?</h3>
+      <p class="muted">Thoughtful details, delightful design, and tools that actually help you grow.</p>
+      <div class="grid" role="list">
+        <article class="card" role="listitem">
+          <div class="icon" aria-hidden>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h10M4 18h8" stroke="#0b0f0d" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h4>Unlimited gardens</h4>
+          <p class="muted">Front yard, backyard, or balcony — organize plantings across as many spaces as you like.</p>
+        </article>
+        <article class="card" role="listitem">
+          <div class="icon" aria-hidden>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#0b0f0d" stroke-width="2"/><path d="M12 7v6l4 2" stroke="#0b0f0d" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h4>Harvest countdown</h4>
+          <p class="muted">A live progress ring shows days remaining from seed to harvest, for seeds or seedlings.</p>
+        </article>
+        <article class="card" role="listitem">
+          <div class="icon" aria-hidden>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="14" rx="2" stroke="#0b0f0d" stroke-width="2"/><path d="M15 5v3a3 3 0 1 1-6 0V5" stroke="#0b0f0d" stroke-width="2"/></svg>
+          </div>
+          <h4>Photo notes</h4>
+          <p class="muted">Track growth with quick snapshots and time‑stamped notes for every plant.</p>
+        </article>
+        <article class="card" role="listitem">
+          <div class="icon" aria-hidden>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#0b0f0d" stroke-width="2"/></svg>
+          </div>
+          <h4>Smart reminders</h4>
+          <p class="muted">Choose when to be nudged — a week before, three days before, or on harvest day.</p>
+        </article>
+        <article class="card" role="listitem">
+          <div class="icon" aria-hidden>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M8 3v4m8-4v4M5 10h14v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-8Z" stroke="#0b0f0d" stroke-width="2"/></svg>
+          </div>
+          <h4>Seasonal planning</h4>
+          <p class="muted">Know the best time to sow and transplant for your climate and garden plan.</p>
+        </article>
+        <article class="card" role="listitem">
+          <div class="icon" aria-hidden>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2a6 6 0 0 0-6 6v1H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-2V8a6 6 0 0 0-6-6Z" stroke="#0b0f0d" stroke-width="2"/></svg>
+          </div>
+          <h4>iCloud sync</h4>
+          <p class="muted">Your gardens, everywhere. Seamless sync across iPhone and iPad with privacy in mind.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Showcase -->
+    <section class="section container" aria-labelledby="showcase-title">
+      <h3 id="showcase-title">Designed to be delightful</h3>
+      <p class="muted">Pixel‑perfect UI, accessible contrast, and buttery‑smooth interactions.</p>
+      <div class="mock" role="img" aria-label="App screens arranged in a collage">
+        <span class="ribbon">PRO FEATURES</span>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section container" aria-labelledby="price-title">
+      <h3 id="price-title">Simple pricing</h3>
+      <p class="muted">Start free. Unlock Pro when you’re ready to grow more.</p>
+      <div class="pricing" role="list">
+        <article class="plan" role="listitem" aria-label="Free plan">
+          <h4>Free</h4>
+          <div class="price">$0</div>
+          <p class="muted">Get started with essentials.</p>
+          <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Up to 5 vegetables</div>
+          <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Harvest countdown</div>
+          <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Photo notes</div>
+          <p class="cta-note">No credit card required</p>
+        </article>
+        <article class="plan" role="listitem" aria-label="Pro plan">
+          <h4>Pro</h4>
+          <div class="price">$2.99/mo or $24/yr</div>
+          <p class="muted">Everything in Free, plus:</p>
+          <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Unlimited vegetables</div>
+          <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Pest & disease tracking</div>
+          <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Advanced reminders</div>
+          <div class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Priority support</div>
+          <div style="margin-top:14px">
+            <a href="#download" class="btn" aria-label="Go Pro">Go Pro</a>
+          </div>
+          <p class="cta-note">Cancel anytime. Family Sharing supported.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section container" aria-labelledby="love-title">
+      <h3 id="love-title">Gardeners ❤️ My Veggie Garden</h3>
+      <div class="quotes">
+        <blockquote>
+          “The harvest countdown is brilliant. I actually pick on time now.”
+          <footer>— Leah, Balcony Grower</footer>
+        </blockquote>
+        <blockquote>
+          “Beautiful design. Photo notes make it easy to spot issues early.”
+          <footer>— Marcus, Weekend Gardener</footer>
+        </blockquote>
+        <blockquote>
+          “iCloud sync means I can update beds on my iPad and check on my phone.”
+          <footer>— Priya, Urban Plotter</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section container" aria-labelledby="faq-title">
+      <h3 id="faq-title">Frequently asked questions</h3>
+      <details>
+        <summary>What platforms are supported?</summary>
+        <p>My Veggie Garden is built for iPhone and iPad with iCloud sync. Mac support is on the roadmap.</p>
+      </details>
+      <details>
+        <summary>How do reminders work?</summary>
+        <p>Set a preferred nudge timing per plant — a week before harvest, three days before, or on the harvest day. You’re in control.</p>
+      </details>
+      <details>
+        <summary>What’s included in the free version?</summary>
+        <p>Track up to 5 vegetables with harvest countdown and photo notes. Upgrade to Pro for unlimited plants and advanced tools.</p>
+      </details>
+    </section>
+
+    <!-- Download / CTA -->
+    <section id="download" class="section container" aria-labelledby="cta-title">
+      <h3 id="cta-title">Ready to grow?</h3>
+      <p class="muted">Join thousands of happy home gardeners using My Veggie Garden every season.</p>
+      <div class="cta">
+        <a href="#" class="btn" aria-label="Download on the App Store">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M17 3c-1.5.1-3.2 1-4.2 2.2-1 1.1-1.9 2.7-1.7 4.3 1.7.1 3.4-1 4.4-2.2.9-1 1.6-2.6 1.5-4.3ZM20.8 17.6c-.4.9-.9 1.7-1.5 2.4-.8 1-1.8 2.1-3.1 2.1-1.3 0-1.7-.7-3.2-.7-1.5 0-2 .7-3.3.7-1.4 0-2.4-1.1-3.2-2.1-2.1-2.8-3.7-7.9-1.6-11.3C5.8 7 7.4 6.2 9.1 6.2c1.3 0 2.5.7 3.3.7.8 0 2-.8 3.5-.7 1.2 0 2.4.6 3.2 1.5-2.8 1.6-2.4 5.7.5 6.7-.5 1.3-.7 1.7-1 2.5Z" fill="#052e1b"/></svg>
+          App Store
+        </a>
+        <a href="#features" class="btn-ghost">See features</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot">
+      <div>
+        <a href="#top" class="brand">
+          <span class="logo" aria-hidden></span>
+          <h1>My Veggie Garden</h1>
+        </a>
+        <p class="small" style="margin-top:8px">Grow smarter with harvest countdowns, photo notes, and iCloud sync.</p>
+      </div>
+      <div>
+        <strong>Product</strong>
+        <div class="small" style="margin-top:10px"><a href="#features">Features</a></div>
+        <div class="small"><a href="#pricing">Pricing</a></div>
+        <div class="small"><a href="#download">Download</a></div>
+      </div>
+      <div>
+        <strong>Company</strong>
+        <div class="small" style="margin-top:10px"><a href="#">About</a></div>
+        <div class="small"><a href="#">Contact</a></div>
+      </div>
+      <div>
+        <strong>Legal</strong>
+        <div class="small" style="margin-top:10px"><a href="#">Privacy</a></div>
+        <div class="small"><a href="#">Terms</a></div>
+      </div>
+    </div>
+    <div class="container" style="margin-top:18px">
+      <p class="small">© <span id="y"></span> My Veggie Garden. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Set year
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

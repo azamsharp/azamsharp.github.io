@@ -6,6 +6,7 @@
 
 [Home](https://azamsharp.github.io)
 [Courses](https://azamsharp.school/)
+[Apps]()
 [Books](books)
 [Articles](articles)
 [Newsletter](https://azamsharp.teachable.com/p/newsletter)
