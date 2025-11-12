@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Apps – AzamSharp</title>
+  <meta name="description" content="Explore Mohammad Azam’s beautifully crafted iOS apps. Download PayRate Converter and more." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0f0d;
+      --surface: #0f1512;
+      --text: #e8f6ee;
+      --muted: #b8d2c4;
+      --accent: #22c55e; /* green-500 */
+      --accent-2:#16a34a; /* green-600 */
+      --ring: rgba(34,197,94,.35);
+      --grad-1:#0ea5e9; /* sky-500 */
+      --grad-2:#22c55e; /* green-500 */
+      --grad-3:#a3e635; /* lime-400 */
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #f7fbf8;
+        --surface:#ffffff;
+        --text:#0d1b12;
+        --muted:#496356;
+        --accent:#16a34a;
+        --accent-2:#15803d;
+        --ring: rgba(16,185,129,.25);
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; color:var(--text); background:radial-gradient(1200px 600px at 75% -10%, rgba(34,197,94,.10), transparent),
+      radial-gradient(900px 600px at 0% 0%, rgba(14,165,233,.07), transparent), var(--bg);
+      line-height:1.6;
+    }
+    a{color:inherit; text-decoration:none}
+    .container{max-width:1200px; margin-inline:auto; padding:0 24px}
+
+    /* Header */
+    header{position:sticky; top:0; z-index:40; backdrop-filter:saturate(140%) blur(8px); background:linear-gradient(to bottom, rgba(15,21,18,.8), rgba(15,21,18,.55)); border-bottom:1px solid rgba(255,255,255,.08)}
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand .logo{width:34px; height:34px; border-radius:9px; background:conic-gradient(from 220deg, var(--grad-2), var(--grad-3), var(--grad-1)); box-shadow: inset 0 0 0 1px rgba(255,255,255,.25)}
+    .brand h1{font-size:16px; letter-spacing:.2px; margin:0; font-weight:800}
+
+    /* Hero */
+    .hero{padding:84px 0 40px}
+    .hero-inner{display:grid; grid-template-columns:1.1fr .9fr; gap:36px; align-items:center}
+    .hero h2{font-family:"Playfair Display", serif; font-weight:700; font-size:52px; line-height:1.1; margin:8px 0 14px}
+    .hero p{max-width:58ch; color:var(--muted); font-size:18px}
+    .chip{display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:#0b0f0d; padding:6px 10px; border-radius:999px; background:linear-gradient(135deg, #a7f3d0, #86efac 60%, #bbf7d0); box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+    .cta{display:flex; gap:14px; margin-top:20px; flex-wrap:wrap}
+    .btn{display:inline-flex; align-items:center; gap:10px; background:linear-gradient(135deg, var(--grad-1), var(--grad-2) 55%, var(--grad-3)); color:#0b0f0d; font-weight:800; padding:14px 20px; border-radius:14px; border:1px solid rgba(255,255,255,.15); box-shadow:0 10px 30px rgba(34,197,94,.25), inset 0 0 0 1px rgba(255,255,255,.15); transition:transform .15s ease, box-shadow .2s ease}
+    .btn:hover{transform:translateY(-1px); box-shadow:0 14px 36px rgba(34,197,94,.35)}
+
+    /* App grid */
+    .section{padding:60px 0}
+    .apps{display:grid; grid-template-columns:repeat(2, 1fr); gap:22px}
+    .card{display:grid; grid-template-columns: 140px 1fr; gap:18px; background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:20px; box-shadow:0 12px 30px rgba(0,0,0,.18); align-items:center}
+    .app-icon{width:120px; height:120px; border-radius:26%; background:radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,.18), transparent), linear-gradient(135deg, #16a34a, #22c55e 60%, #a3e635); box-shadow: inset 0 0 0 1px rgba(255,255,255,.25), 0 10px 24px rgba(0,0,0,.25)}
+    .card h3{margin:0; font-size:22px}
+    .muted{color:var(--muted)}
+    .badges{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:10px 0}
+    .badge{font-size:12px; font-weight:700; color:#0b0f0d; padding:6px 10px; border-radius:999px; background:linear-gradient(135deg, #bae6fd, #a7f3d0)}
+    .list{margin:10px 0 0 0; padding-left:18px}
+    .list li{margin:.2rem 0}
+    .cta-row{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:14px}
+    .btn-ghost{background:transparent; color:var(--text); border:1px solid rgba(255,255,255,.15); font-weight:700; padding:12px 18px; border-radius:12px}
+
+    /* Footer */
+    footer{padding:30px 0 50px; color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width: 1024px){
+      .hero-inner{grid-template-columns:1fr}
+      .apps{grid-template-columns:1fr}
+      .card{grid-template-columns: 110px 1fr}
+      .app-icon{width:100px; height:100px}
+      .hero h2{font-size:42px}
+    }
+
+    /* Focus outlines */
+    .btn:focus-visible, a:focus-visible, button:focus-visible{outline:3px solid var(--ring); outline-offset:3px; border-radius:12px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="#top" class="brand">
+        <span aria-hidden class="logo"></span>
+        <h1>AzamSharp • My Apps</h1>
+      </a>
+      <nav class="links">
+        <!-- optional links -->
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero container" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div>
+          <span class="chip">Hand‑crafted iOS apps</span>
+          <h2 id="hero-title">Beautifully built. Delightfully useful.</h2>
+          <p>Explore a growing collection of thoughtfully designed apps by Mohammad Azam — crafted with SwiftUI, tuned for performance, and polished for everyday use.</p>
+          <div class="cta">
+            <a class="btn" href="#apps" aria-label="See the apps">Browse the apps</a>
+          </div>
+        </div>
+        <div aria-hidden="true" style="justify-self:center; width:min(440px,95%); aspect-ratio:1.6/1; border-radius:22px; border:1px solid rgba(255,255,255,.08); background:radial-gradient(120% 120% at 10% -10%, rgba(14,165,233,.10), transparent), radial-gradient(120% 120% at 110% 50%, rgba(34,197,94,.12), transparent); box-shadow:0 16px 44px rgba(0,0,0,.22);"></div>
+      </div>
+    </section>
+
+    <!-- Apps -->
+    <section id="apps" class="section container" aria-labelledby="apps-title">
+      <h2 id="apps-title" style="font-family:'Playfair Display', serif; font-size:36px; margin:0 0 14px">Featured apps</h2>
+      <p class="muted" style="margin-top:0">Modern design, crisp typography, and just the right features.</p>
+
+      <!-- PayRate Converter card -->
+      <article class="card" aria-label="PayRate Converter app">
+        <div class="app-icon" role="img" aria-label="PayRate Converter icon"></div>
+        <div>
+          <h3><a href="https://apps.apple.com/us/app/payrate-converter/id6740090591" target="_blank" rel="noopener">PayRate – Converter</a></h3>
+          <div class="badges">
+            <span class="badge">Finance</span>
+            <span class="badge">SwiftUI</span>
+            <span class="badge">iPhone</span>
+          </div>
+          <p class="muted">Convert between <strong>hourly</strong>, <strong>weekly</strong>, <strong>monthly</strong>, and <strong>yearly</strong> pay with precision. Customize work hours and vacation days, get instant results, and enjoy a clean, intuitive UI.</p>
+          <ul class="list">
+            <li><strong>Instant conversions</strong> for common pay periods</li>
+            <li><strong>Customizable settings</strong> for hours/week & vacation</li>
+            <li><strong>Clean interface</strong> focused on clarity and speed</li>
+          </ul>
+          <div class="cta-row">
+            <a class="btn" href="https://apps.apple.com/us/app/payrate-converter/id6740090591" target="_blank" rel="noopener" aria-label="Download PayRate Converter on the App Store">Download on the App Store</a>
+            <a class="btn-ghost" href="https://apps.apple.com/us/app/payrate-converter/id6740090591" target="_blank" rel="noopener">Learn more</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Add more app cards below by duplicating the block above -->
+
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap">
+      <p style="margin:0" class="muted">© <span id="y"></span> Mohammad Azam. All rights reserved.</p>
+      <div style="display:flex; gap:12px; align-items:center">
+        <a class="btn-ghost" href="#top">Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
