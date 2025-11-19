@@ -24,7 +24,7 @@ From there I created a handful of services: Location Manager, Veggie Store, Stor
 
 ## Know your audience, not your wishlist
 
-I love experimenting with new things, so I considered adding VR support, widgets, and even Watch features. I thought it would be cool. My users did not think so. When I looked at my earlier gardening app and listened to the feedback, people wanted one thing: a simple tool that helps them grow food.
+I love experimenting with new things, so I considered adding AR support, widgets, and even Watch features. I thought it would be cool. My users did not think so. When I looked at my earlier gardening app and listened to the feedback, people wanted one thing: a simple tool that helps them grow food.
 
 They wanted clear planting instructions. They wanted reminders. They wanted a way to organize their gardens. Not flashy features. Not clever icons that needed a legend. If an icon confused people, I replaced it with a text label.
 

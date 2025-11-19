@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [What I Learned While Building My Veggie Garden](_posts/2025-11-19-lessons-learned-veggie-garden.md)
+
+I recently released a new Vegetable Gardening app called **My Veggie Garden**. It is built with SwiftUI, SwiftData, and Foundation Models, and it has been one of the most rewarding projects I have worked on. Along the way I made mistakes, rewrote things, simplified things, and discovered a few lessons that I wish I had known earlier.
+
 ### [Why 90% of SwiftUI Apps Get Dependency Injection Wrong](_posts/2025-09-08-why-90-percent-swiftui-apps-gets-dependency-injection-wrong.md)
 
 Managing dependencies is an essential part of building scalable and testable SwiftUI applications. Dependencies such as API clients, stores, and services form the backbone of your app’s data flow. If handled carelessly, they can lead to tightly coupled code that is difficult to test, reuse, or extend.
