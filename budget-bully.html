@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Budget Bully – Expense Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Budget Bully is the expense tracker that roasts your bad spending so you finally stick to a budget."
+  />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-elevated: #020817;
+      --accent: #ff5a5f; /* spicy red */
+      --accent-soft: rgba(255, 90, 95, 0.12);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(148, 163, 184, 0.45);
+      --radius-lg: 18px;
+      --shadow-soft: 0 22px 45px rgba(15, 23, 42, 0.9);
+      --max-width: 1080px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, #111827 0, #020617 40%, #000 100%);
+      color: var(--text-main);
+    }
+
+    .page {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 24px 16px 42px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 11px;
+      background: radial-gradient(circle at 25% 0, #fecaca 0, #b91c1c 40%, #000 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #fee2e2;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.55);
+      font-size: 18px;
+    }
+
+    .logo-text {
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      font-size: 17px;
+    }
+
+    nav {
+      display: flex;
+      gap: 14px;
+      font-size: 13px;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      color: var(--text-main);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 26px;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav {
+        align-self: flex-end;
+      }
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--accent);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 14px;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(255, 90, 95, 0.9);
+    }
+
+    .hero-title {
+      font-size: clamp(30px, 4vw, 38px);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin: 0 0 12px;
+    }
+
+    .hero-subtitle {
+      margin: 0 0 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+      max-width: 420px;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(248, 113, 113, 0.7);
+      background: linear-gradient(145deg, #ef4444, #b91c1c);
+      color: #fee2e2;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 18px 35px rgba(239, 68, 68, 0.5);
+    }
+
+    .btn-primary small {
+      font-size: 11px;
+      font-weight: 500;
+      opacity: 0.9;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .hero-note {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .hero-note span {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .hero-right {
+      position: relative;
+    }
+
+    .phone-frame {
+      position: relative;
+      max-width: 290px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 36px;
+      padding: 10px;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%, #000 100%);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.9);
+    }
+
+    .phone-inner {
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(160deg, #0f172a, #020617);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 14px 12px 18px;
+    }
+
+    .phone-status-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .screenshot-card {
+      border-radius: 18px;
+      padding: 12px;
+      background: radial-gradient(circle at top left, rgba(248, 113, 113, 0.18), #020617 55%);
+      border: 1px solid rgba(248, 113, 113, 0.7);
+      margin-bottom: 10px;
+    }
+
+    .screenshot-title {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .screenshot-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin: 0 0 6px;
+    }
+
+    .progress-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .grandpa-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .grandpa-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 25% 0, #fecaca 0, #b91c1c 45%, #111827 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #fee2e2;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7);
+    }
+
+    .floating-tag {
+      position: absolute;
+      right: -4px;
+      top: 26%;
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 999px;
+      padding: 6px 10px;
+      border: 1px solid rgba(248, 113, 113, 0.6);
+      font-size: 11px;
+      color: var(--text-main);
+      box-shadow: 0 18px 35px rgba(0, 0, 0, 0.9);
+    }
+
+    @media (max-width: 860px) {
+      .floating-tag {
+        display: none;
+      }
+    }
+
+    .section {
+      margin-top: 42px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin: 0 0 4px;
+      letter-spacing: -0.03em;
+    }
+
+    .section-subtitle {
+      margin: 0 0 18px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .features-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .features-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .feature-card {
+      background: radial-gradient(circle at top, #111827 0, #020617 60%);
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 12px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(248, 113, 113, 0.15), transparent 60%);
+      opacity: 0.9;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .feature-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-label {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .feature-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 3px 9px;
+      border: 1px solid var(--accent-soft);
+      margin-bottom: 6px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 22px;
+    }
+
+    @media (max-width: 860px) {
+      .two-col {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top, #111827 0, #020617 60%);
+      border-radius: var(--radius-lg);
+      padding: 16px 16px 14px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(248, 113, 113, 0.12), transparent 70%);
+      opacity: 0.9;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .list li {
+      position: relative;
+      padding-left: 16px;
+      margin-bottom: 6px;
+    }
+
+    .list li::before {
+      content: "•";
+      position: absolute;
+      left: 4px;
+      top: 0;
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .small-note {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .pricing-pill {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 6px 0 2px;
+    }
+
+    .pricing-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 860px) {
+      .faq-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .faq-item h4 {
+      margin: 0 0 4px;
+      font-size: 13px;
+    }
+
+    .faq-item p {
+      margin: 0;
+      color: var(--text-muted);
+    }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(31, 41, 55, 0.8);
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="logo">
+        <div class="logo-icon">B</div>
+        <div class="logo-text">Budget Bully</div>
+      </div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-left">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          Budgeting with tough love
+        </div>
+        <h1 class="hero-title">
+          The expense tracker that bullies your bad spending.
+        </h1>
+        <p class="hero-subtitle">
+          Budget Bully – Expense Tracker uses grumpy grandpa style roasts and
+          tough love to keep you honest with your money so you finally stick to your budget.
+        </p>
+
+        <div class="hero-cta">
+          <!-- Replace href with real App Store link -->
+          <a href="https://apps.apple.com/us/app/budget-bully-expense-tracker/id6755752657" class="btn-primary">
+            <span>Download on the App Store</span>
+          </a>
+          <a href="#how-it-works" class="btn-ghost">
+            See how it works ↓
+          </a>
+        </div>
+
+        <p class="hero-note">
+          No accounts. No data selling. Just you, your money, and one very disappointed <span>Grandpa Bully</span>.
+        </p>
+      </div>
+
+      <div class="hero-right">
+        <div class="phone-frame">
+          <div class="phone-inner">
+            <div class="phone-status-bar">
+              <span>9:41</span>
+              <span>••• 100%</span>
+            </div>
+
+            <div class="screenshot-card">
+              <div class="screenshot-title">“Overspent Again? Of Course.”</div>
+              <p class="screenshot-text">
+                Grandpa sees your budget. Grandpa is not impressed.
+              </p>
+              <div class="progress-pill">
+                <span>🔥 Overspent this month</span>
+              </div>
+
+              <div class="grandpa-chip">
+                <div class="grandpa-avatar">G</div>
+                <span>“You bought coffee again, didn’t you?”</span>
+              </div>
+            </div>
+
+            <div class="screenshot-card" style="margin-top: 12px; border-style: dashed; border-color: rgba(148,163,184,0.6);">
+              <div class="screenshot-title">Budgets that actually sting</div>
+              <p class="screenshot-text">
+                Track every expense. Watch your remaining balance. Hear Grandpa sigh.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="floating-tag">
+          “This app judges me<br />but my savings are finally up.”
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <h2 class="section-title">Why Budget Bully?</h2>
+      <p class="section-subtitle">
+        Normal budget apps give you charts. Budget Bully gives you charts and judgment.
+      </p>
+
+      <div class="features-grid">
+        <article class="feature-card">
+          <div class="feature-inner">
+            <div class="pill">Roasted, not sugar coated</div>
+            <div class="feature-label">Grandpa powered messages</div>
+            <p class="feature-text">
+              Get mean, sarcastic messages when you overspend, delete budgets,
+              or pretend everything is “fine”.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-inner">
+            <div class="pill">Real numbers</div>
+            <div class="feature-label">Simple budget + expense tracking</div>
+            <p class="feature-text">
+              Create budgets, log expenses, tag spending, and see exactly where your money disappears each month.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-inner">
+            <div class="pill">Built for honesty</div>
+            <div class="feature-label">Harsh but helpful insights</div>
+            <p class="feature-text">
+              See how much you have left, how far you went over, and which categories are causing the damage.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-inner">
+            <div class="pill">Your data, your mess</div>
+            <div class="feature-label">Local first, private by design</div>
+            <p class="feature-text">
+              Your budgets and expenses live on your device. No creepy tracking, no selling your data.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-inner">
+            <div class="pill">Chaos, but fun</div>
+            <div class="feature-label">Chaotic loading & reactions</div>
+            <p class="feature-text">
+              Even loading screens come with Grandpa’s chaos. Furious Frank is always “on his way”.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-inner">
+            <div class="pill">Stay accountable</div>
+            <div class="feature-label">Grandpa remembers everything</div>
+            <p class="feature-text">
+              Delete a budget? He’ll comment. Overspend? He’ll yell. Do better? He might almost be proud.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="how-it-works">
+      <h2 class="section-title">How it works</h2>
+      <p class="section-subtitle">
+        Underneath the jokes, Budget Bully is a serious tool to help you actually follow a plan.
+      </p>
+
+      <div class="two-col">
+        <article class="card">
+          <div class="card-inner">
+            <div class="pill">3 simple steps</div>
+            <h3 class="feature-label">Set it up once. Get roasted forever.</h3>
+            <ol class="list" style="margin-top: 8px;">
+              <li><strong>Create your budgets.</strong> Monthly, weekly, or custom – name them however you want.</li>
+              <li><strong>Add your expenses.</strong> Log spending as you go, assign tags, and watch the totals shrink.</li>
+              <li><strong>Let Grandpa respond.</strong> When things go off the rails, Grandpa has something to say.</li>
+            </ol>
+            <p class="small-note">
+              The more honestly you track, the more accurate (and brutal) the feedback becomes.
+            </p>
+          </div>
+        </article>
+
+        <article class="card" id="pricing">
+          <div class="card-inner">
+            <div class="pill">Pricing</div>
+            <h3 class="feature-label">Small price. Big attitude.</h3>
+
+            <div style="margin-top: 10px;">
+              <!-- Monthly -->
+              <div style="margin-bottom: 18px;">
+                <p class="pricing-pill">$4.99<span style="font-size: 13px;"> / month</span></p>
+                <p class="pricing-note">
+                  Includes a <strong>3-day free trial</strong> for new users.
+                </p>
+              </div>
+
+              <!-- Yearly -->
+              <div>
+                <p class="pricing-pill">$29.99<span style="font-size: 13px;"> / year</span></p>
+                <p class="pricing-note">
+                  Save 2 months — best value for long-term budgeting battles.
+                </p>
+              </div>
+            </div>
+
+            <ul class="list" style="margin-top: 14px;">
+              <li>Unlimited budgets and expenses</li>
+              <li>Full access to Grandpa’s entire roast catalog</li>
+              <li>Future updates and improvements included</li>
+            </ul>
+
+            <p class="small-note" style="margin-top: 12px;">
+              All purchases are securely handled by Apple. You can manage or cancel your
+              subscription anytime in your App Store account settings.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <p class="section-subtitle">
+        A few things Grandpa keeps getting asked.
+      </p>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4>Does the app use AI?</h4>
+          <p>
+            No. All messages are hand-crafted and curated. No AI, no algorithms pretending
+            to be Grandpa. Just carefully written tough love.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Will you sell my data?</h4>
+          <p>
+            No. Your budgets and expenses are stored on your device. We do not sell or share your financial data.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>What platforms are supported?</h4>
+          <p>
+            Budget Bully – Expense Tracker is built for iPhone. Future support for other Apple platforms may come later.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I turn off the mean messages?</h4>
+          <p>
+            You can tone them down in settings, but the whole point is to have a little pressure.
+            Grandpa can be strict but he is on your side.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>© <span id="year"></span> Budget Bully – Expense Tracker · AzamSharp LLC</span>
+      <span>
+        <a href="/privacy.html">Privacy Policy</a> ·
+        <a href="/terms.html">Terms of Use</a> ·
+        Contact: <a href="mailto:azamsharp@gmail.com">azamsharp@gmail.com</a>
+      </span>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
