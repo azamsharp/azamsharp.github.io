@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Privacy Policy – Budget Bully – Expense Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --accent: #FF5A5F; /* your spicy red */
+      --accent-soft: rgba(255, 90, 95, 0.08);
+      --bg: #0f172a;
+      --card-bg: #020617;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(148, 163, 184, 0.3);
+      --radius-lg: 18px;
+      --shadow-soft: 0 22px 45px rgba(15, 23, 42, 0.9);
+      --max-width: 900px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 32px 16px 48px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 40%, #000 100%);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+    }
+
+    .page {
+      width: 100%;
+      max-width: var(--max-width);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--accent);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 16px;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(255, 90, 95, 0.8);
+    }
+
+    header {
+      text-align: left;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-size: clamp(28px, 4vw, 36px);
+      line-height: 1.2;
+      margin: 0 0 10px;
+      letter-spacing: -0.03em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--text-muted);
+      max-width: 520px;
+      font-size: 14px;
+    }
+
+    .updated {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.2fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 800px) {
+      .cards-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #111827 0, #020617 48%, #000 100%);
+      border-radius: var(--radius-lg);
+      padding: 20px 20px 18px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(255, 90, 95, 0.08), transparent 60%);
+      opacity: 0.85;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin: 0 0 6px;
+      letter-spacing: -0.01em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card h2 span.icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(255, 90, 95, 0.15);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--accent);
+      box-shadow: 0 0 10px rgba(255, 90, 95, 0.5);
+    }
+
+    .card small {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .card p {
+      color: var(--text-main);
+      font-size: 14px;
+      line-height: 1.55;
+      margin: 10px 0 0;
+    }
+
+    .card p + p {
+      margin-top: 8px;
+    }
+
+    .section-list {
+      margin-top: 14px;
+    }
+
+    .section-list h3 {
+      font-size: 14px;
+      margin: 16px 0 6px;
+      color: var(--text-main);
+    }
+
+    .section-list ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .section-list li {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 4px;
+    }
+
+    .section-list li::before {
+      content: "•";
+      position: absolute;
+      left: 4px;
+      top: 0;
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .side-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    .side-note strong {
+      color: var(--text-main);
+    }
+
+    .tagline {
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border-top: 1px dashed rgba(148, 163, 184, 0.5);
+      padding-top: 10px;
+    }
+
+    .tagline span {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(255, 90, 95, 0.7);
+    }
+
+    a:hover {
+      border-bottom-style: solid;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Privacy First • Budget Bully – Expense Tracker
+    </div>
+
+    <header>
+      <h1>Privacy Policy</h1>
+      <p>
+        Budget Bully – Expense Tracker is built with tough love for your spending,
+        but soft hands for your privacy. This page explains what we collect,
+        what we do not, and how your data stays under your control.
+      </p>
+      <div class="updated">Last Updated: December 2025</div>
+    </header>
+
+    <section class="cards-grid">
+      <!-- Card 1 – Information We Collect -->
+      <article class="card">
+        <div class="card-inner">
+          <h2>
+            <span class="icon">1</span>
+            Information We Collect
+          </h2>
+          <small>What lives on your device & what you share with us</small>
+
+          <div class="section-list">
+            <h3>1.1 Data you enter in the app</h3>
+            <p>
+              The app stores the following information <strong>only on your device</strong>:
+            </p>
+            <ul>
+              <li>Budgets and budget details</li>
+              <li>Expenses</li>
+              <li>Tags and categories</li>
+              <li>App preferences and settings</li>
+              <li>Subscription entitlement status (local only)</li>
+            </ul>
+            <p>
+              We do not upload or transmit this data to any server.
+            </p>
+
+            <h3>1.2 Support emails or feedback you voluntarily send</h3>
+            <p>
+              If you contact us at
+              <a href="mailto:azamsharp@gmail.com">azamsharp@gmail.com</a>, we may receive:
+            </p>
+            <ul>
+              <li>Your email address</li>
+              <li>The content of your message</li>
+              <li>Any attachments you choose to send (e.g. screenshots)</li>
+            </ul>
+            <p>
+              This information is used only to respond to your inquiry and provide support.
+              We do <strong>not</strong> sell, share, or use it for marketing.
+            </p>
+
+            <h3>1.3 No automatic personal data collection</h3>
+            <p>
+              The app does <strong>not</strong> automatically collect:
+            </p>
+            <ul>
+              <li>Names</li>
+              <li>Email addresses (except when you email us yourself)</li>
+              <li>Phone numbers</li>
+              <li>Location data</li>
+              <li>Contacts</li>
+              <li>Payment information</li>
+              <li>Device identifiers or analytics data</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 – Storage & Sync -->
+      <article class="card">
+        <div class="card-inner">
+          <h2>
+            <span class="icon">2</span>
+            How Your Data Is Stored
+          </h2>
+          <small>Local-first by design</small>
+
+          <p>
+            All your budgeting and expense information is stored
+            <strong>locally on your device</strong> using Apple’s secure frameworks
+            (for example, SwiftData).
+          </p>
+
+           <p>
+            Budget Bully – Expense Tracker connects to our secure content servers
+            only to download new “mean messages”, roasts, and related artwork
+            shown inside the app. Your budgets, expenses, tags, and other financial
+            data are <strong>not</strong> sent to these servers.
+          </p>
+
+          <h3>Optional iCloud sync</h3>
+          <p>
+            If you enable iCloud on your device, Apple may sync your data across
+            your devices using your Apple ID. This sync:
+          </p>
+          <ul>
+            <li>Is encrypted</li>
+            <li>Is managed entirely by Apple</li>
+            <li>Cannot be accessed by the developer</li>
+          </ul>
+
+          <p class="side-note">
+            <strong>Note:</strong> You can disable iCloud for the app at any time in your iOS
+            settings if you prefer to keep everything strictly local.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <section class="cards-grid" style="margin-top: 18px;">
+      <!-- Card 3 – In-App Purchases -->
+      <article class="card">
+        <div class="card-inner">
+          <h2>
+            <span class="icon">3</span>
+            In-App Purchases
+          </h2>
+          <small>Handled by Apple’s StoreKit</small>
+
+          <p>
+            Budget Bully – Expense Tracker uses Apple’s StoreKit for managing
+            in-app purchases and subscriptions. Apple may process:
+          </p>
+          <ul>
+            <li>Billing and payment information</li>
+            <li>Transaction identifiers</li>
+            <li>Subscription renewal status</li>
+            <li>Region and currency information</li>
+          </ul>
+
+          <p>
+            This information is handled solely by Apple. We never receive or store your
+            full payment details such as credit card numbers.
+          </p>
+        </div>
+      </article>
+
+      <!-- Card 4 – Third Parties & Children -->
+      <article class="card">
+        <div class="card-inner">
+          <h2>
+            <span class="icon">4</span>
+            Third Parties & Children’s Privacy
+          </h2>
+          <small>No ads. No trackers.</small>
+
+          <h3>Third-party services</h3>
+          <p>
+            The app does <strong>not</strong> use:
+          </p>
+          <ul>
+            <li>Analytics SDKs</li>
+            <li>Advertising networks</li>
+            <li>Third-party trackers</li>
+            <li>External databases or APIs for your personal data</li>
+          </ul>
+          <p>
+            No third party has access to your budgeting or expense data.
+          </p>
+
+          <h3>Children’s privacy</h3>
+          <p>
+            Budget Bully – Expense Tracker is not intended for children under 13.
+            We do not knowingly collect personal information from children.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <section class="cards-grid" style="margin-top: 18px;">
+      <!-- Card 5 – Your Rights & Data Deletion -->
+      <article class="card">
+        <div class="card-inner">
+          <h2>
+            <span class="icon">5</span>
+            Your Rights & Data Deletion
+          </h2>
+          <small>You stay in control</small>
+
+          <p>
+            Because your data lives on your device, you are in full control:
+          </p>
+          <ul>
+            <li>You may delete individual budgets or expenses within the app.</li>
+            <li>
+              You may delete the app at any time, which removes all locally stored data
+              from your device.
+            </li>
+            <li>
+              You may disable iCloud sync if you do not want your data stored in the cloud.
+            </li>
+          </ul>
+
+          <p>
+            The developer cannot access your information and cannot restore your data once
+            it has been deleted from your device or iCloud.
+          </p>
+        </div>
+      </article>
+
+      <!-- Card 6 – Contact -->
+      <article class="card">
+        <div class="card-inner">
+          <h2>
+            <span class="icon">6</span>
+            Contact Us
+          </h2>
+          <small>Questions, concerns, or feedback</small>
+
+          <p>
+            If you have any questions about this Privacy Policy, or if you need support,
+            you can contact us:
+          </p>
+
+          <ul>
+            <li><strong>Developer:</strong> AzamSharp LLC</li>
+            <li>
+              <strong>Email:</strong>
+              <a href="mailto:azamsharp@gmail.com">azamsharp@gmail.com</a>
+            </li>
+          </ul>
+
+          <p class="side-note">
+            When you email us, we will only use your email address and message to
+            respond to you. We do not add you to marketing lists or share your
+            message with third parties.
+          </p>
+
+          <p class="tagline">
+            Budget Bully might roast your spending,
+            but it treats your <span>privacy</span> with respect.
+          </p>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
