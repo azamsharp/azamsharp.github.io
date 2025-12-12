@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Instant Contracts — Create, Sign, Export</title>
+  <meta name="description" content="Instant Contracts helps you create professional contract templates fast, sign on-device, and export a clean PDF. iCloud sync keeps your saved contracts available across your Apple devices." />
+
+  <style>
+    :root{
+      --bg0:#0b1220;
+      --bg1:#0f1a2f;
+      --card:rgba(255,255,255,.08);
+      --card2:rgba(255,255,255,.06);
+      --stroke:rgba(255,255,255,.14);
+      --text:#eaf2ff;
+      --muted:rgba(234,242,255,.72);
+      --teal:#12a8b5;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius:20px;
+      --max:1100px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 20% -10%, rgba(18,168,181,.45), transparent 60%),
+        radial-gradient(900px 600px at 110% 15%, rgba(37,99,235,.35), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max); margin:0 auto; padding:0 20px}
+    .nav{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(180deg, rgba(11,18,32,.82), rgba(11,18,32,.55));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+    }
+    .brand{display:flex; gap:10px; align-items:center; font-weight:700; letter-spacing:.2px;}
+    .logo{
+      width:34px; height:34px; border-radius:12px;
+      background: radial-gradient(12px 12px at 30% 30%, rgba(255,255,255,.6), rgba(255,255,255,0) 60%),
+                  linear-gradient(135deg, var(--teal), #5eead4);
+      box-shadow: 0 10px 30px rgba(18,168,181,.35);
+      border:1px solid rgba(255,255,255,.25);
+    }
+    .nav-links{display:flex; gap:16px; align-items:center}
+    .nav-links a{
+      color:var(--muted);
+      padding:10px 12px;
+      border-radius:12px;
+      transition: all .18s ease;
+    }
+    .nav-links a:hover{color:var(--text); background:rgba(255,255,255,.06)}
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      box-shadow: 0 10px 26px rgba(0,0,0,.25);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.22)}
+    .btn.primary{
+      background: linear-gradient(135deg, var(--teal), #22c55e);
+      border-color: rgba(255,255,255,.18);
+    }
+    .btn.primary:hover{background: linear-gradient(135deg, #18b7c5, #2bd06b)}
+    .btn .kbd{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:3px 7px;
+      border-radius:9px;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.16);
+      color: rgba(255,255,255,.85);
+    }
+
+    /* HERO */
+    .hero{padding:64px 0 26px}
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:26px;
+      align-items:center;
+    }
+    .tag{
+      display:inline-flex;
+      gap:10px; align-items:center;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,242,255,.86);
+      font-size:13px;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:99px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34,197,94,.18);
+    }
+    h1{
+      margin:14px 0 10px;
+      font-size: clamp(34px, 4vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -1.2px;
+    }
+    .lead{
+      margin:0 0 18px;
+      font-size: 16.5px;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 56ch;
+    }
+    .hero-actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+    .fineprint{
+      margin-top:14px;
+      font-size:13px;
+      color: rgba(234,242,255,.58);
+      line-height:1.55;
+    }
+
+    /* MOCK CARD */
+    .mock{
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .mock::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(600px 260px at 30% 0%, rgba(18,168,181,.35), transparent 60%),
+                  radial-gradient(420px 260px at 90% 30%, rgba(34,197,94,.25), transparent 60%);
+      pointer-events:none;
+    }
+    .mock-inner{position:relative; padding:18px}
+    .mock-top{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; margin-bottom:14px;
+    }
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(0,0,0,.20);
+      border:1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.86);
+      font-size:12px;
+      font-family:var(--mono);
+    }
+    .stack{display:grid; gap:10px; margin-top:12px}
+    .row{
+      display:flex; align-items:flex-start; gap:10px;
+      padding:12px;
+      border-radius:16px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .bar{
+      width:5px; border-radius:999px;
+      background: linear-gradient(180deg, var(--teal), #a7f3d0);
+      margin-top:2px;
+      height:44px;
+      flex:0 0 auto;
+    }
+    .row h4{margin:0; font-size:13.5px}
+    .row p{margin:4px 0 0; font-size:12.5px; color: rgba(234,242,255,.65); line-height:1.4}
+    .mock-footer{
+      margin-top:14px;
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+
+    /* SECTIONS */
+    section{padding:44px 0}
+    .section-title{display:flex; align-items:flex-end; justify-content:space-between; gap:14px; margin-bottom:16px;}
+    .section-title h2{margin:0; font-size: 22px; letter-spacing:-.3px;}
+    .section-title p{margin:0; color:var(--muted); font-size:14px}
+
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    .card{
+      padding:16px;
+      border-radius: var(--radius);
+      background: var(--card2);
+      border:1px solid var(--stroke);
+      box-shadow: 0 14px 34px rgba(0,0,0,.22);
+    }
+    .card h3{margin:8px 0 6px; font-size:15.5px}
+    .card p{margin:0; color:var(--muted); font-size:13.8px; line-height:1.55}
+    .icon{
+      width:40px; height:40px; border-radius:14px;
+      display:grid; place-items:center;
+      background: rgba(18,168,181,.18);
+      border:1px solid rgba(18,168,181,.25);
+    }
+    .icon svg{opacity:.95}
+
+    /* PRICING */
+    .pricing{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    .price-card{
+      padding:18px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      box-shadow: var(--shadow);
+    }
+    .price{
+      font-size:34px; font-weight:800; letter-spacing:-.8px;
+      margin:8px 0 4px;
+    }
+    .sub{color:var(--muted); font-size:14px; margin:0 0 14px; line-height:1.55}
+    .list{margin:0; padding:0; list-style:none; display:grid; gap:10px}
+    .list li{
+      display:flex; gap:10px; align-items:flex-start;
+      color: rgba(234,242,255,.78);
+      font-size:14px;
+      line-height:1.45;
+    }
+    .check{
+      width:18px; height:18px; border-radius:6px;
+      background: rgba(34,197,94,.18);
+      border:1px solid rgba(34,197,94,.30);
+      flex:0 0 auto;
+      margin-top:1px;
+      display:grid; place-items:center;
+    }
+    .mini{
+      padding:18px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+    }
+    .mini h3{margin:0 0 8px}
+    .mini p{margin:0 0 14px; color:var(--muted); font-size:14px; line-height:1.55}
+
+    .pricing-table{
+      margin-top:14px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .pricing-row{
+      display:flex; justify-content:space-between; gap:12px;
+      padding:12px 14px;
+      background: rgba(255,255,255,.05);
+      border-top:1px solid rgba(255,255,255,.10);
+      font-size:14px;
+    }
+    .pricing-row:first-child{border-top:none}
+    .pricing-row span:last-child{font-family:var(--mono); color: rgba(234,242,255,.9)}
+
+    /* FOOTER */
+    footer{
+      padding:30px 0 44px;
+      border-top:1px solid rgba(255,255,255,.08);
+      color: rgba(234,242,255,.62);
+      font-size:13px;
+    }
+    .footer-grid{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+      align-items:flex-start;
+    }
+    .footer-grid a{color: rgba(234,242,255,.78)}
+    .footer-grid a:hover{color: var(--text)}
+    .muted{color: rgba(234,242,255,.58)}
+
+    @media (max-width: 920px){
+      .hero-grid{grid-template-columns: 1fr;}
+      .grid-3{grid-template-columns: 1fr}
+      .pricing{grid-template-columns: 1fr}
+      .nav-links{display:none}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a class="brand" href="#top">
+          <span class="logo" aria-hidden="true"></span>
+          <span>Instant Contracts</span>
+        </a>
+
+        <div class="nav-links" aria-label="Primary">
+          <a href="#features">Features</a>
+          <a href="#icloud">iCloud</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact">Contact</a>
+        </div>
+
+        <a class="btn primary" href="https://apps.apple.com/us/app/instant-contracts/id6756391187" target="_blank" rel="noopener">
+          View on App Store <span class="kbd">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <main id="top" class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="tag">
+            <span class="dot" aria-hidden="true"></span>
+            Create • Sign • Export PDF • Share
+          </div>
+
+          <h1>Create contracts in minutes. Send with confidence.</h1>
+          <p class="lead">
+            Instant Contracts helps you create professional contract templates quickly, sign on-device,
+            and export a clean PDF you can share by email or message. Your saved contracts stay available
+            across devices with iCloud sync.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn primary" href="https://apps.apple.com/us/app/instant-contracts/id6756391187" target="_blank" rel="noopener">
+              Download on the App Store
+            </a>
+            <a class="btn" href="#pricing">See Pricing</a>
+            <a class="btn" href="#contact">Email Support</a>
+          </div>
+
+          <p class="fineprint">
+            Instant Contracts provides templates and tools to help you create documents. It does not provide legal advice.
+          </p>
+        </div>
+
+        <!-- Right mock preview -->
+        <div class="mock" aria-label="App preview">
+          <div class="mock-inner">
+            <div class="mock-top">
+              <span class="pill">Saved Contracts</span>
+              <span class="pill">iCloud Sync</span>
+            </div>
+
+            <div class="stack">
+              <div class="row">
+                <span class="bar" aria-hidden="true"></span>
+                <div>
+                  <h4>Non-Disclosure Agreement (NDA)</h4>
+                  <p>Ready to customize • Export PDF</p>
+                </div>
+              </div>
+              <div class="row">
+                <span class="bar" aria-hidden="true" style="filter:hue-rotate(80deg)"></span>
+                <div>
+                  <h4>Loan Agreement</h4>
+                  <p>Fill details • Sign on device</p>
+                </div>
+              </div>
+              <div class="row">
+                <span class="bar" aria-hidden="true" style="filter:hue-rotate(150deg)"></span>
+                <div>
+                  <h4>Bill of Sale</h4>
+                  <p>Share instantly • Keep a record</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mock-footer">
+              <span class="pill">Templates</span>
+              <span class="pill">Sign</span>
+              <span class="pill">Export</span>
+              <span class="pill">Search</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <div class="section-title">
+        <div>
+          <h2>Everything you need to go from idea → signed PDF</h2>
+          <p>Fast workflow. Clean results.</p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M7 3h7l3 3v15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="white" opacity=".9" stroke-width="1.6"/>
+              <path d="M14 3v4a1 1 0 0 0 1 1h4" stroke="white" opacity=".7" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <h3>Free templates to start</h3>
+          <p>Browse a few free templates, fill in details, and generate a professional document in minutes.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M4 7h16M7 4v6m10-6v6M6 12h12a2 2 0 0 1 2 2v6H4v-6a2 2 0 0 1 2-2Z" stroke="white" opacity=".9" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <h3>Sign on-device</h3>
+          <p>Add your signature and keep a clear record of what was signed and when.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M12 16V3m0 13 4-4m-4 4-4-4" stroke="white" opacity=".9" stroke-width="1.6"/>
+              <path d="M4 20h16" stroke="white" opacity=".7" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <h3>Export & share</h3>
+          <p>Generate a polished PDF and share it instantly via email or Messages.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ICLOUD -->
+  <section id="icloud">
+    <div class="container">
+      <div class="section-title">
+        <div>
+          <h2>Your contracts. Everywhere.</h2>
+          <p>iCloud sync keeps saved contracts available across devices.</p>
+        </div>
+      </div>
+
+      <div class="pricing">
+        <div class="price-card">
+          <h3 style="margin:0">Pick up where you left off</h3>
+          <p class="sub">
+            Create a contract on one device and revisit it on another. iCloud helps keep your saved contracts backed up and in sync.
+          </p>
+
+          <ul class="list">
+            <li><span class="check" aria-hidden="true">✓</span> Keep your saved contracts organized in one place</li>
+            <li><span class="check" aria-hidden="true">✓</span> Search and revisit past contracts anytime</li>
+            <li><span class="check" aria-hidden="true">✓</span> Great for freelancers, rentals, and quick sales</li>
+          </ul>
+        </div>
+
+        <div class="mini">
+          <h3>Fast, focused, simple</h3>
+          <p>
+            Instant Contracts is built for speed: choose a template, fill in details, sign, export, and send.
+          </p>
+          <a class="btn" href="https://apps.apple.com/us/app/instant-contracts/id6756391187" target="_blank" rel="noopener">Open App Store</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="container">
+      <div class="section-title">
+        <div>
+          <h2>Pricing</h2>
+          <p>Start free. Upgrade when you need more.</p>
+        </div>
+      </div>
+
+      <div class="pricing">
+        <div class="price-card">
+          <h3 style="margin:0">Instant Contracts</h3>
+          <div class="price">Free to start</div>
+          <p class="sub">
+            Includes a few free templates. Unlock exporting and premium access with simple upgrades.
+          </p>
+
+          <div class="pricing-table" role="table" aria-label="Pricing options">
+            <div class="pricing-row" role="row">
+              <span role="cell">One-time Export Unlock</span>
+              <span role="cell">$3.99</span>
+            </div>
+            <div class="pricing-row" role="row">
+              <span role="cell">Monthly Subscription</span>
+              <span role="cell">$6.99</span>
+            </div>
+            <div class="pricing-row" role="row">
+              <span role="cell">Yearly Subscription</span>
+              <span role="cell">$49.99</span>
+            </div>
+          </div>
+
+          <div class="hero-actions" style="margin-top:16px">
+            <a class="btn primary" href="https://apps.apple.com/us/app/instant-contracts/id6756391187" target="_blank" rel="noopener">
+              Download on the App Store
+            </a>
+            <a class="btn" href="#contact">Questions?</a>
+          </div>
+
+          <p class="fineprint" style="margin-top:14px">
+            Prices shown are in USD and may vary by region. Subscriptions renew automatically unless canceled.
+          </p>
+        </div>
+
+        <div class="mini">
+          <h3>Best for</h3>
+          <p class="muted" style="margin-top:0">Everyday agreements where speed matters.</p>
+          <ul class="list" style="margin-top:12px">
+            <li><span class="check" aria-hidden="true">✓</span> Freelance work & services</li>
+            <li><span class="check" aria-hidden="true">✓</span> Rentals and room agreements</li>
+            <li><span class="check" aria-hidden="true">✓</span> Bills of sale</li>
+            <li><span class="check" aria-hidden="true">✓</span> NDAs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-title">
+        <div>
+          <h2>Contact</h2>
+          <p>Need help or have a feature request?</p>
+        </div>
+      </div>
+
+      <div class="price-card">
+        <h3 style="margin:0 0 8px">Email support</h3>
+        <p class="sub" style="margin-bottom:14px">
+          Please include your device model + iOS version if you’re reporting a bug.
+        </p>
+
+        <a class="btn primary" href="mailto:azamsharp@gmail.com?subject=Instant%20Contracts%20Support">
+          azamsharp@gmail.com
+        </a>
+
+        <div style="height:12px"></div>
+        <p class="muted" style="margin:0; font-size:13px">
+          Tip: Add “Instant Contracts” in the subject line so it’s easier to find.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px">
+            <span class="logo" aria-hidden="true"></span>
+            <strong>Instant Contracts</strong>
+          </div>
+          <div class="muted">Create • Sign • Export • Share</div>
+        </div>
+
+        <div style="display:flex; gap:14px; flex-wrap:wrap">
+          <a href="#features">Features</a>
+          <a href="#icloud">iCloud</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact">Contact</a>
+          <a href="https://apps.apple.com/us/app/instant-contracts/id6756391187" target="_blank" rel="noopener">App Store</a>
+        </div>
+      </div>
+
+      <div style="height:14px"></div>
+      <div class="muted">
+        © <span id="y"></span> Instant Contracts. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
