@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bullet Invoices — Support</title>
+  <style>
+    :root{
+      --bg: #0b1220;
+      --card: rgba(255,255,255,0.08);
+      --card2: rgba(255,255,255,0.06);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.70);
+      --line: rgba(255,255,255,0.12);
+      --accent: #41c6ff;
+      --accent2: #7c3aed;
+      --good: #22c55e;
+      --warn: #f59e0b;
+      --shadow: 0 18px 60px rgba(0,0,0,0.35);
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(65,198,255,0.25), transparent 55%),
+        radial-gradient(900px 600px at 90% 20%, rgba(124,58,237,0.22), transparent 55%),
+        radial-gradient(1000px 700px at 50% 100%, rgba(16,185,129,0.12), transparent 60%),
+        linear-gradient(180deg, #060b16, var(--bg));
+      line-height: 1.55;
+    }
+
+    a{ color: var(--accent); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+    code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+    .wrap{
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 36px 18px 72px;
+    }
+
+    header{
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .brand{
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 260px;
+    }
+
+    .logo{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(65,198,255,0.95), rgba(124,58,237,0.95));
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.65), transparent 55%);
+      transform: rotate(12deg);
+      opacity: 0.6;
+    }
+
+    .brand h1{
+      font-size: 20px;
+      margin: 0;
+      letter-spacing: 0.2px;
+    }
+    .brand p{
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .meta{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .dot{
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(65,198,255,0.95);
+      box-shadow: 0 0 0 4px rgba(65,198,255,0.12);
+    }
+
+    .hero{
+      margin-top: 12px;
+      padding: 22px 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+    .hero h2{
+      margin: 0 0 6px;
+      font-size: 28px;
+      letter-spacing: 0.2px;
+    }
+    .hero p{
+      margin: 0;
+      color: var(--muted);
+      max-width: 82ch;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .btn:hover{ background: rgba(255,255,255,0.09); }
+    .btn.primary{
+      border-color: rgba(65,198,255,0.35);
+      background: linear-gradient(180deg, rgba(65,198,255,0.18), rgba(65,198,255,0.08));
+    }
+    .btn svg{ width: 18px; height: 18px; opacity: 0.95; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .card{
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      padding: 18px 18px;
+    }
+    .card h3{
+      margin: 0 0 10px;
+      font-size: 16px;
+      letter-spacing: 0.2px;
+    }
+
+    .card p{
+      margin: 0 0 10px;
+      color: var(--muted);
+    }
+    .card p:last-child{ margin-bottom: 0; }
+
+    .list{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .list li{ margin: 6px 0; }
+
+    details{
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      padding: 12px 14px;
+    }
+    details + details{ margin-top: 10px; }
+    summary{
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 0.15px;
+      list-style: none;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .chev{
+      width: 18px;
+      height: 18px;
+      opacity: 0.7;
+      transform: rotate(0deg);
+      transition: transform 140ms ease;
+      flex: 0 0 auto;
+    }
+    details[open] .chev{ transform: rotate(180deg); }
+
+    .faq-body{ margin-top: 10px; color: var(--muted); }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.86);
+    }
+    .tag.good{ border-color: rgba(34,197,94,0.28); background: rgba(34,197,94,0.10); }
+    .tag.warn{ border-color: rgba(245,158,11,0.28); background: rgba(245,158,11,0.10); }
+
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: rgba(255,255,255,0.86);
+    }
+
+    footer{
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media (min-width: 920px){
+      .grid{
+        grid-template-columns: 1.1fr 0.9fr;
+      }
+      .span-2{ grid-column: span 2; }
+    }
+
+    @media print{
+      body{ background: #fff; color: #000; }
+      .hero, .card, details, .pill{ box-shadow: none; background: #fff; }
+      .hero, .card, details{ border: 1px solid #ddd; }
+      a{ color: #000; text-decoration: underline; }
+      .meta .pill{ border-color: #ddd; }
+      .tag{ border-color:#ddd; }
+      .btn{ border-color:#ddd; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Bullet Invoices</h1>
+          <p>Support</p>
+        </div>
+      </div>
+
+      <div class="meta">
+        <div class="pill" title="Support email">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Email: <a href="mailto:azamsharp@gmail.com">azamsharp@gmail.com</a></span>
+        </div>
+        <div class="pill" title="Typical response time">
+          <span>Response time: <strong>1–2 business days</strong></span>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h2>Need help? We’ve got you.</h2>
+      <p>
+        Get quick answers for exporting PDFs, subscriptions, iCloud sync, and invoice management.
+        If you still need help, email us and we’ll respond as soon as possible.
+      </p>
+
+      <div class="actions">
+        <a class="btn primary" href="mailto:azamsharp@gmail.com?subject=Bullet%20Invoices%20Support&body=Hi%20Azam%2C%0A%0AI%20need%20help%20with%3A%0A%0ADevice%3A%20(iPhone%2FiPad)%0AiOS%20version%3A%20%0AApp%20version%3A%20%0AWhat%20happened%3A%20%0AWhat%20I%20expected%3A%20%0AInvoice%20number%20(if%20relevant)%3A%20%0A%0AThanks!"
+           aria-label="Email Support">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 4h16v16H4z"></path>
+            <path d="m22 6-10 7L2 6"></path>
+          </svg>
+          Email Support
+        </a>
+
+        <!-- Replace the href below with your App Store URL if you want a direct review link -->
+        <a class="btn" href="https://apps.apple.com/us/app/bullet-invoices/id6756518951" aria-label="Rate the App">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 17.3 18.2 21l-1.6-7L22 9.2l-7.2-.6L12 2 9.2 8.6 2 9.2l5.4 4.8L5.8 21z"></path>
+          </svg>
+          Rate the App
+        </a>
+
+        <button class="btn" type="button" onclick="window.print()" aria-label="Print this page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 9V2h12v7"></path>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <path d="M6 14h12v8H6z"></path>
+          </svg>
+          Print
+        </button>
+      </div>
+
+      <p class="small" style="margin-top:12px;color:var(--muted);">
+        Tip: When emailing support, include your device model, iOS version, and the invoice number (if applicable).
+      </p>
+    </section>
+
+    <section class="grid" aria-label="Support content">
+      <!-- LEFT: FAQ -->
+      <article class="card">
+        <h3>Frequently Asked Questions</h3>
+
+        <details>
+          <summary>
+            How do I export an invoice to PDF?
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </summary>
+          <div class="faq-body">
+            Open an invoice, tap <strong>Export as PDF</strong>, then share or save the PDF using the iOS share sheet.
+            You can preview invoices for free; PDF export requires an export purchase plan.
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            Can I preview invoices for free?
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </summary>
+          <div class="faq-body">
+            Yes. You can preview invoices anytime for free. Exporting to PDF requires a purchase plan:
+            <strong>One-Time Export</strong>, <strong>Monthly</strong>, or <strong>Annual</strong>.
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            What’s included in One-Time Export, Monthly, and Annual?
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </summary>
+          <div class="faq-body">
+            <ul class="list">
+              <li><strong>One-Time Export</strong>: Export a single invoice as a PDF.</li>
+              <li><strong>Monthly Subscription</strong>: Export unlimited invoices for the month.</li>
+              <li><strong>Annual Subscription</strong>: Export unlimited invoices for the year (best value for frequent use).</li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            How do I restore purchases?
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </summary>
+          <div class="faq-body">
+            Go to <strong>Settings</strong> → <strong>Restore Purchases</strong>. Make sure you're signed into the same Apple ID used for the purchase.
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            Why aren’t my invoices syncing across devices?
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </summary>
+          <div class="faq-body">
+            Check these items:
+            <ul class="list">
+              <li>iCloud is enabled on both devices.</li>
+              <li>Both devices are signed into the same Apple ID.</li>
+              <li>iCloud Drive is turned on in iOS settings.</li>
+              <li>Give sync a few minutes, especially after first enable.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            How do I mark an invoice as paid or unpaid?
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </summary>
+          <div class="faq-body">
+            Open the saved invoice and tap <strong>Mark as Paid</strong> or <strong>Mark as Unpaid</strong>. The Saved Invoices list also supports filtering by status.
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            I found a bug — what should I include in my email?
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </summary>
+          <div class="faq-body">
+            Please include:
+            <ul class="list">
+              <li>Device model and iOS version</li>
+              <li>App version</li>
+              <li>What happened vs what you expected</li>
+              <li>Steps to reproduce</li>
+              <li>Screenshot/video if possible</li>
+            </ul>
+          </div>
+        </details>
+      </article>
+
+      <!-- RIGHT: Quick Help / Troubleshooting -->
+      <aside class="card">
+        <h3>Quick Help</h3>
+        <p class="small" style="margin:0 0 12px;color:var(--muted);">
+          Common fixes that solve most issues quickly.
+        </p>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+          <span class="tag good">Export</span>
+          <span class="tag warn">Sync</span>
+          <span class="tag">Purchases</span>
+          <span class="tag">Invoices</span>
+        </div>
+
+        <h3 style="margin-top:14px;">Troubleshooting</h3>
+        <ul class="list">
+          <li><strong>Export stuck?</strong> Close and reopen the invoice, then try export again.</li>
+          <li><strong>PDF looks wrong?</strong> Ensure invoice fields (especially items and totals) are filled in.</li>
+          <li><strong>Restore not working?</strong> Confirm the same Apple ID is signed in.</li>
+          <li><strong>Sync delay?</strong> Keep the app open for a minute on both devices.</li>
+        </ul>
+
+        <div style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px;">
+          <h3>What this app does</h3>
+          <ul class="list">
+            <li>Create invoices with templates and Bullet Mode</li>
+            <li>Preview invoices for free</li>
+            <li>Export PDF invoices with One-Time, Monthly, or Annual plans</li>
+            <li>Manage clients and track paid/unpaid invoices</li>
+            <li>Optional iCloud sync across devices</li>
+          </ul>
+        </div>
+
+        <div style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px;">
+          <h3>Support Email</h3>
+          <p style="margin:0;color:var(--muted);">
+            <a href="mailto:azamsharp@gmail.com">azamsharp@gmail.com</a>
+          </p>
+          <p class="small" style="margin-top:8px;color:var(--muted);">
+            Include: device, iOS version, app version, and invoice number if relevant.
+          </p>
+        </div>
+      </aside>
+
+      <!-- Bottom wide: Contact + Privacy links -->
+      <article class="card span-2">
+        <h3>Contact & Policies</h3>
+        <p>
+          If you need help, email us at <a href="mailto:azamsharp@gmail.com">azamsharp@gmail.com</a>.
+          We typically respond within <strong>1–2 business days</strong>.
+        </p>
+        <p class="small">
+          Privacy Policy: <a href="privacy.html">View Privacy Policy</a> (update the link to match your site)
+        </p>
+      </article>
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Bullet Invoices. All rights reserved.</div>
+      <div class="small">Preview for free • Export to PDF with One-Time, Monthly, or Annual plans</div>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

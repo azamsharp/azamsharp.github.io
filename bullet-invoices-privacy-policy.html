@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bullet Invoices — Privacy Policy</title>
+  <style>
+    :root{
+      --bg: #0b1220;
+      --card: rgba(255,255,255,0.08);
+      --card2: rgba(255,255,255,0.06);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.70);
+      --line: rgba(255,255,255,0.12);
+      --accent: #41c6ff;
+      --accent2: #7c3aed;
+      --shadow: 0 18px 60px rgba(0,0,0,0.35);
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(65,198,255,0.25), transparent 55%),
+        radial-gradient(900px 600px at 90% 20%, rgba(124,58,237,0.22), transparent 55%),
+        radial-gradient(1000px 700px at 50% 100%, rgba(16,185,129,0.12), transparent 60%),
+        linear-gradient(180deg, #060b16, var(--bg));
+      line-height: 1.55;
+    }
+
+    a{ color: var(--accent); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+    code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 36px 18px 64px;
+    }
+
+    header{
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .brand{
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 260px;
+    }
+
+    .logo{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(65,198,255,0.95), rgba(124,58,237,0.95));
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.65), transparent 55%);
+      transform: rotate(12deg);
+      opacity: 0.6;
+    }
+
+    .brand h1{
+      font-size: 20px;
+      margin: 0;
+      letter-spacing: 0.2px;
+    }
+    .brand p{
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .meta{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .dot{
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(65,198,255,0.95);
+      box-shadow: 0 0 0 4px rgba(65,198,255,0.12);
+    }
+
+    .hero{
+      margin-top: 12px;
+      padding: 22px 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+    .hero h2{
+      margin: 0 0 6px;
+      font-size: 28px;
+      letter-spacing: 0.2px;
+    }
+    .hero p{
+      margin: 0;
+      color: var(--muted);
+      max-width: 75ch;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .card{
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      padding: 18px 18px;
+    }
+    .card h3{
+      margin: 0 0 10px;
+      font-size: 16px;
+      letter-spacing: 0.2px;
+    }
+
+    .card p{
+      margin: 0 0 10px;
+      color: var(--muted);
+    }
+    .card p:last-child{ margin-bottom: 0; }
+
+    .list{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .list li{ margin: 6px 0; }
+
+    .callout{
+      margin-top: 14px;
+      border-radius: 18px;
+      padding: 14px 16px;
+      border: 1px solid rgba(65,198,255,0.22);
+      background: linear-gradient(180deg, rgba(65,198,255,0.10), rgba(65,198,255,0.04));
+      color: rgba(255,255,255,0.86);
+    }
+    .callout strong{ color: #ffffff; }
+
+    footer{
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .small{
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    @media (min-width: 880px){
+      .grid{
+        grid-template-columns: 1fr 1fr;
+      }
+      .span-2{ grid-column: span 2; }
+    }
+
+    @media print{
+      body{ background: #fff; color: #000; }
+      .hero, .card, .pill{ box-shadow: none; background: #fff; }
+      .hero, .card{ border: 1px solid #ddd; }
+      a{ color: #000; text-decoration: underline; }
+      .meta .pill{ border-color: #ddd; }
+      .dot{ box-shadow:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Bullet Invoices</h1>
+          <p>Privacy Policy</p>
+        </div>
+      </div>
+
+      <div class="meta">
+        <div class="pill" title="Last updated">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Last updated: <strong>December 15, 2025</strong></span>
+        </div>
+        <div class="pill" title="Contact">
+          <span>Contact: <a href="mailto:azamsharp@gmail.com">azamsharp@gmail.com</a></span>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h2>Your data stays yours.</h2>
+      <p>
+        Bullet Invoices respects your privacy. This policy explains what information the app stores, how iCloud sync works,
+        and what we do (and do not) collect when you use the app.
+      </p>
+
+      <div class="callout">
+        <strong>Summary:</strong> Bullet Invoices does not run a backend server for your invoice data. Your invoices are stored
+        on your device and can be synced via Apple iCloud if you enable it.
+      </div>
+    </section>
+
+    <section class="grid" aria-label="Privacy policy sections">
+      <article class="card">
+        <h3>1) Information We Collect</h3>
+        <p>Bullet Invoices does <strong>not</strong> collect personal data on our servers.</p>
+        <p>The app stores invoice data locally on your device and, if enabled, in your iCloud account.</p>
+        <ul class="list">
+          <li>Invoice details (invoice number, dates, totals)</li>
+          <li>Line items, quantities, and prices</li>
+          <li>Client information (name, email, address)</li>
+          <li>Business information (name, contact details, logo)</li>
+          <li>Invoice payment status (paid/unpaid)</li>
+          <li>Export history (PDF export timestamps)</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>2) How We Use Your Information</h3>
+        <p>Your information is used only to provide core invoicing features, including:</p>
+        <ul class="list">
+          <li>Creating and managing invoices</li>
+          <li>Managing clients and business settings</li>
+          <li>Tracking paid/unpaid status</li>
+          <li>Generating and exporting PDFs</li>
+          <li>Syncing data across devices (optional via iCloud)</li>
+        </ul>
+      </article>
+
+      <article class="card span-2">
+        <h3>3) iCloud Sync</h3>
+        <p>
+          Bullet Invoices uses Apple iCloud services to keep your invoices and related data in sync across your devices.
+        </p>
+        <ul class="list">
+          <li>iCloud sync is optional and controlled by your device settings.</li>
+          <li>Synced data is stored in your iCloud account and managed by Apple.</li>
+          <li>Bullet Invoices does not have access to your Apple ID or iCloud account.</li>
+        </ul>
+        <p class="small">
+          For more details about iCloud, please review Apple’s iCloud privacy information in Apple’s official documentation.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>4) Data Sharing</h3>
+        <p>Bullet Invoices does <strong>not</strong> sell, rent, or share your personal information with third parties.</p>
+        <ul class="list">
+          <li>No third-party advertising</li>
+          <li>No third-party analytics</li>
+          <li>No tracking across apps or websites</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>5) Payments & Purchases</h3>
+        <p>
+          All in-app purchases (One-Time Export, Monthly Subscription, Annual Subscription) are processed through Apple’s App Store.
+        </p>
+        <ul class="list">
+          <li>We do not collect or store payment card details.</li>
+          <li>We do not receive your billing information.</li>
+          <li>Purchase handling is managed by Apple according to Apple’s policies.</li>
+        </ul>
+      </article>
+
+      <article class="card span-2">
+        <h3>6) PDF Export</h3>
+        <p>
+          When you export an invoice as a PDF, the PDF is generated locally on your device. The app only shares the PDF
+          when you choose to share it using the system share sheet.
+        </p>
+        <ul class="list">
+          <li>No invoice data is uploaded to external servers for PDF generation.</li>
+          <li>Exported files are shared only via actions you initiate.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>7) Data Retention</h3>
+        <p>
+          Your data remains available as long as it exists on your device and/or in your iCloud account.
+          You can delete invoices, clients, or app data at any time within the app.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>8) Children’s Privacy</h3>
+        <p>
+          Bullet Invoices is not intended for use by children under 13. The app does not knowingly collect
+          personal information from children.
+        </p>
+      </article>
+
+      <article class="card span-2">
+        <h3>9) Changes to This Policy</h3>
+        <p>
+          We may update this Privacy Policy from time to time. Any changes will be reflected on this page with
+          an updated “Last updated” date.
+        </p>
+      </article>
+
+      <article class="card span-2">
+        <h3>10) Contact</h3>
+        <p>If you have questions or concerns about this Privacy Policy, contact us:</p>
+        <p><strong>Email:</strong> <a href="mailto:azamsharp@gmail.com">azamsharp@gmail.com</a></p>
+      </article>
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Bullet Invoices. All rights reserved.</div>
+      <div class="small">Privacy-first invoicing. Preview for free. Export when you’re ready.</div>
+    </footer>
+  </div>
+
+  <script>
+    // Tiny helper to keep the footer year current (optional)
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
