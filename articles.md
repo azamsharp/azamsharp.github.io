@@ -9,6 +9,15 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [StoreKit Subscriptions: A Practical Guide Part 1: Understanding Different Monetization Models](_posts/2025-12-26-storekit-subscriptions-understanding-monetization-models.md) 
+
+I started iOS development back in 2010. My first app was a kids game called ABC Pop, which I built with my wife. She recorded all the audio for it. After that, I went on to release dozens of apps on the App Store, most notably Vegetable Tree Gardening Guide.
+
+Vegetable Tree was featured by Apple multiple times and was also mentioned in several online magazines. Looking back, all of my apps used a one time purchase model. You paid once and got access to the app for life.
+
+In this article, we are going to go over different monetization models available with Apple. 
+
+
 ### [What I Learned While Building My Veggie Garden](_posts/2025-11-19-lessons-learned-veggie-garden.md)
 
 I recently released a new Vegetable Gardening app called **My Veggie Garden**. It is built with SwiftUI, SwiftData, and Foundation Models, and it has been one of the most rewarding projects I have worked on. Along the way I made mistakes, rewrote things, simplified things, and discovered a few lessons that I wish I had known earlier.

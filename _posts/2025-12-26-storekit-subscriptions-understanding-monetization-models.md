@@ -8,6 +8,40 @@ Vegetable Tree was featured by Apple multiple times and was also mentioned in se
 
 In this article, we are going to go over different monetization models available with Apple. 
 
+<!-- AzamSharp School Mini Ad -->
+<div class="az-ad">
+  <strong>AzamSharp School</strong><br>
+  Learn SwiftUI, SwiftData, StoreKit, testing, and more with practical videos and live workshops.<br>
+  <a href="https://azamsharp.school" target="_blank" rel="noopener">Join AzamSharp School →</a>
+</div>
+
+<style>
+  .az-ad {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    margin: 20px 0;
+    color: #111827;
+  }
+
+  .az-ad a {
+    display: inline-block;
+    margin-top: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #0f766e;
+  }
+
+  .az-ad a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+
 ### One Time Purchase 
 
 One time purchase are exactly as they sound like. User pay for the app one time and they get lifetime access to the app. This is great deal for the user but in most cases not for the developer. The main reason is that the app needs OS updates, maintenance, features and more and a one time payment cannot justify the cost behind all the work a developer needs to perform. 
@@ -24,7 +58,7 @@ It is also important to remember that apps require constant updates, feature enh
 
 Consumables are purchases that a user can use at one time or at a later interval. I have seen consumables primarily used in games, where you can buy hints, level ups etc to make it easy for you to clear the stage. One common example of consumables is that you allow users to buy currency in your game. User can then use that currency to purchase items like rocket ship, faster car, different skins etc. 
 
-Although consumables are primarily used in games, you can still utilize them in your non-game applications. In my apps Instant Contracts and Bullet Invoices, along with providing monthly and yearly subscription I also allow the user to create a single one-time invoice or contract. This option is perfect for people who are not creating invoices or contracts on regular basis but only want it   
+Although consumables are primarily used in games, you can still utilize them in your non-game applications. In my apps [Instant Contracts](https://apps.apple.com/us/app/instant-contracts/id6756391187) and [Bullet Invoices](https://apps.apple.com/us/app/bullet-invoices/id6756518951), along with providing monthly and yearly subscription I also allow the user to create a single one-time invoice or contract. This option is perfect for people who are not creating invoices or contracts on regular basis but only want it   
 
 You already have the **big three** covered. What you are missing are a few important Apple specific and real world variants that developers often overlook or misunderstand. I will list them in a way that fits naturally into your article and teaching style.
 
