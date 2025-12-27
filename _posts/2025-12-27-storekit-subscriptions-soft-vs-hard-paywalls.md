@@ -4,11 +4,44 @@
 
 Choosing the right paywall strategy is one of the most important decisions you will make when monetizing an iOS app. It affects not only revenue, but also user trust, retention, and long term sustainability. Let’s break down the most common approaches and how they fit together.
 
+<!-- AzamSharp School Mini Ad -->
+<div class="az-ad">
+  <strong>AzamSharp School</strong><br>
+  Learn SwiftUI, SwiftData, StoreKit, testing, and more with practical videos and live workshops.<br>
+  <a href="https://azamsharp.school" target="_blank" rel="noopener">Join AzamSharp School →</a>
+</div>
+
+<style>
+  .az-ad {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    margin: 20px 0;
+    color: #111827;
+  }
+
+  .az-ad a {
+    display: inline-block;
+    margin-top: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #0f766e;
+  }
+
+  .az-ad a:hover {
+    text-decoration: underline;
+  }
+</style>
+
 ---
 
 ## Soft Paywall
 
-When I launched my iOS app **My Veggie Garden**, I chose a soft paywall. This allowed users to experience the full app without paying upfront. They could create multiple gardens, enable iCloud sync, receive notifications, and use all of the core functionality.
+When I launched my iOS app [**My Veggie Garden**](https://apps.apple.com/us/app/my-veggie-garden/id6754995753), I chose a soft paywall. This allowed users to experience the full app without paying upfront. They could create multiple gardens, enable iCloud sync, receive notifications, and use all of the core functionality.
 
 The only limitation was the vegetable catalog. Free users could add up to five vegetables, while Pro users unlocked the complete catalog.
 

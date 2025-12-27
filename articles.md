@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+# [StoreKit Subscriptions: A Practical Guide Part 2: Soft vs Hard Paywalls](_posts/2025-12-27-storekit-subscriptions-soft-vs-hard-paywalls.md) 
+
+Choosing the right paywall strategy is one of the most important decisions you will make when monetizing an iOS app. It affects not only revenue, but also user trust, retention, and long term sustainability. Let’s break down the most common approaches and how they fit together.
+
 ### [StoreKit Subscriptions: A Practical Guide Part 1: Understanding Different Monetization Models](_posts/2025-12-26-storekit-subscriptions-understanding-monetization-models.md) 
 
 I started iOS development back in 2010. My first app was a kids game called ABC Pop, which I built with my wife. She recorded all the audio for it. After that, I went on to release dozens of apps on the App Store, most notably Vegetable Tree Gardening Guide.
