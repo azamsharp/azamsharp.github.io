@@ -9,6 +9,16 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [StoreKit Subscriptions A Practical Guide Part 3: Creating a Great Onboarding Experience](_posts/2025-12-28-storekit-subscriptions-onboarding-experience.md)
+
+When developers think about subscriptions, the first thing that usually comes to mind is pricing, trials, and paywalls. But long before a user ever decides to pay, they make a more important decision first.
+
+Do I trust this app enough to spend my time here
+
+That decision is shaped almost entirely by onboarding.
+
+In this article, I want to share what I learned while evolving the onboarding experience for my app, My Veggie Garden, and how moving from no onboarding at all to a fully interactive onboarding flow completely changed how users engaged with the app and understood its value.
+
 ### [StoreKit Subscriptions: A Practical Guide Part 2: Soft vs Hard Paywalls](_posts/2025-12-27-storekit-subscriptions-soft-vs-hard-paywalls.md) 
 
 Choosing the right paywall strategy is one of the most important decisions you will make when monetizing an iOS app. It affects not only revenue, but also user trust, retention, and long term sustainability. Let’s break down the most common approaches and how they fit together.

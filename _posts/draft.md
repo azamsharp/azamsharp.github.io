@@ -1,64 +1,48 @@
 
-# StoreKit Subscriptions: A Practical Guide  
-## Part 2: Soft vs Hard Paywalls 
+# StoreKit Subscriptions A Practical Guide
+## Part 4 Setting Up and Displaying Subscription Products
 
-Choosing the right paywall strategy is one of the most important decisions you will make when monetizing an iOS app. It affects not only revenue, but also user trust, retention, and long term sustainability. Let’s break down the most common approaches and how they fit together.
+### Introduction
 
----
+In previous articles, I covered how different subscription models work, why onboarding plays a critical role in conversion, and how timing a paywall correctly can make a huge difference in whether users subscribe or walk away.
 
-## Soft Paywall
+Now it is time to move from concepts to real implementation.
 
-When I launched my iOS app **My Veggie Garden**, I chose a soft paywall. This allowed users to experience the full app without paying upfront. They could create multiple gardens, enable iCloud sync, receive notifications, and use all of the core functionality.
-
-The only limitation was the vegetable catalog. Free users could add up to five vegetables, while Pro users unlocked the complete catalog.
-
-This approach works well because users get real value before being asked to pay. They can understand how the app fits into their life and decide if it is worth upgrading based on actual usage rather than promises.
+In this article, we will focus on how to properly set up subscription products in App Store Connect and how to display those products inside your iOS app using StoreKit. This is the foundation of any subscription based app. If this part is not done correctly, everything built on top of it becomes harder to reason about and harder to maintain.
 
 ---
 
-## Hard Paywall
+### Setting Up Subscriptions on App Store Connect
 
-A hard paywall takes the opposite approach. Users cannot access any part of the app unless they pay first. There are no free features to explore and no trial period to ease them in.
+Before writing any StoreKit code, subscriptions must be fully configured in App Store Connect. This step is easy to rush through, but taking the time to set it up correctly will save you from confusion and bugs later. Think of App Store Connect as the source of truth for everything related to pricing, duration, trials, and eligibility.
 
-This model can work for niche or professional apps where users already know exactly what they are looking for. However, for most consumer apps, it creates a lot of friction. Users are being asked to commit before they understand the value.
+Start by going to App Store Connect and creating a new app. For this example, I named my app **My Green Place**, a gardening app, but you can name your app anything you want. Once the app is created, the next step is to set up subscriptions.
 
----
+From the left menu, select **Subscriptions**. The first thing you need to create is a subscription group. I named mine **My Green Place Group**. This group will contain all subscription options that unlock the same level of access in the app.
 
-## Subscription With a Free Trial
+A subscription group is how Apple organizes related auto renewing subscriptions that unlock the same level of access but differ in duration or price. A user can only be subscribed to one product in a group at a time, but they can freely switch between subscriptions in the same group, such as moving from a monthly plan to a yearly plan, without losing access. Apple treats these changes as upgrades or downgrades and manages billing automatically. Importantly, switching within the same group does not reset the subscription tenure, so after the first year you continue to receive 85 percent of the proceeds, after tax if applicable.
 
-Between these two approaches is a third option that often works best. In this model, users are required to start a subscription, but they receive full access to the app for a limited time, such as three or seven days.
+Once the subscription group is created, you can begin adding individual subscriptions to it. Click **Add Subscription** and provide a reference name. This name is internal and only visible to you in App Store Connect. Next, define the product identifier, subscription duration, pricing, and any optional free trial or introductory offer. These values will later be fetched directly by StoreKit and displayed inside your app, so accuracy here is important.
 
-After the trial period ends, the subscription automatically renews unless the user cancels.
+After saving the subscription, repeat this process for each plan you want to offer, such as monthly and yearly. When finished, your subscription products will be ready to be loaded and displayed inside your iOS app using StoreKit.
 
-This approach gives users complete freedom to explore the app without feature limits, while still setting clear expectations from the start. There is no confusion about what is free and what is paid. Users know they are evaluating a paid product during the trial.
+![Subscription Pricing](/images/subscriptions-pricing.png)
 
-After experimenting with different models, I eventually updated My Veggie Garden to use a subscription with a free trial. This change simplified the experience and made the value of the app much clearer. Instead of managing feature limits, users could focus entirely on whether the app helped them plan and manage their gardens.
+### Displaying Product Names and Prices 
 
-For most apps, this strikes the best balance. Users can decide during the trial whether the app truly adds value to their lives. If it does, continuing feels natural. If it does not, canceling is easy and transparent. Once the trial ends, the paywall becomes permanent, which helps keep the app sustainable in the long term.
-
----
-
-## Best Practices for Presenting a Paywall
-
-How you present a paywall matters just as much as the model you choose. A good paywall is clear, honest, and respectful of the user. It explains the value of the app in simple language and focuses on benefits rather than features.
-
-Users should immediately understand what they get by subscribing, when they will be charged, and how they can cancel. Avoid surprises. Always show the billing date and clearly state that the subscription can be canceled at any time.
-
-Timing is equally important. A paywall shown too early can feel aggressive, while one shown too late can feel confusing. When done right, the paywall feels less like a barrier and more like a natural step forward.
+Here is a cleaner, more polished, and more natural version that fits well with the rest of your article and keeps the tone practical and friendly.
 
 ---
 
-## Showing the Paywall After Onboarding
+After setting up your products in App Store Connect, the next step is displaying the product names and prices on your paywall screen. Fortunately, Apple provides a straightforward and well designed StoreKit API that makes this process simple and reliable.
 
-One of the most effective strategies is showing the paywall after onboarding. Onboarding should introduce the core problem the app solves, set expectations, and help the user achieve a small but meaningful win.
+Before writing any code, make sure your app is properly configured. Select your app target in Xcode, open **Signing and Capabilities**, and click **Add Capability**. From the list, choose **In App Purchase**. This adds the required entitlements so your app can interact with StoreKit.
 
-By the time onboarding is complete, the user understands what the app does and why it matters. When the paywall appears at that moment, it feels earned rather than intrusive.
+In addition to this, you should add a **StoreKit configuration file** to your project. This file allows you to test subscriptions, prices, renewals, and edge cases directly in Xcode without relying on the real App Store. It is one of the most valuable tools for developing and debugging StoreKit flows and should be part of every subscription based project.
 
-The transition should be smooth and intentional. The paywall should reinforce what the user just learned, remind them of the benefits they are about to unlock, and clearly explain pricing, trials, and cancellation. When users understand the value first, they are far more confident in subscribing and far less likely to abandon the app.
+![StoreKit Configuration](/images/storekit-configuration.png)
 
-## Conclusion
+After setting up StoreKit configuration file also make sure to select it under schemes. 
 
-There is no single paywall strategy that works for every app, but the best decisions are always made with the user in mind. Soft paywalls lower the barrier to entry, hard paywalls favor high intent users, and subscriptions with a free trial often strike the best balance between the two. What matters most is clarity, timing, and trust. Users should understand the value of the app before being asked to pay, know exactly what they are signing up for, and feel confident that they can cancel if the app is not right for them. When a paywall is thoughtfully designed and placed after onboarding, it stops feeling like an obstacle and starts feeling like a natural step forward. That is when subscriptions work best for both users and developers.
-
-In the next article, we will take a closer look at onboarding and how to design an experience that prepares users for the paywall while building trust and setting clear expectations from the very beginning.
+![StoreKit Configuration Scheme](/images/storekit-configuration-scheme.png)
 

@@ -162,3 +162,5 @@ A great onboarding experience does more than explain features. It builds trust, 
 Screenshots and feature lists can work, but letting users experience the product for themselves is far more powerful. When users feel ownership over what they have created, subscribing feels like a continuation rather than a decision.
 
 In the next article in this series, we will move from concepts to code and start implementing an iOS app that uses subscriptions step by step using StoreKit.
+
+
