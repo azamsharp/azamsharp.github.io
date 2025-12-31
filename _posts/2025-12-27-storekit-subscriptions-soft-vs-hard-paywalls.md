@@ -155,6 +155,13 @@ At this point, the user is invested. They have created a garden, added vegetable
 
 ---
 
+### Resources 
+
+1. [Part 1 - Understanding Different Monetization Models](https://azamsharp.com/2025/12/26/storekit-subscriptions-understanding-monetization-models.html)
+2. [Part 2 - Understanding Soft and Hard Paywalls](https://azamsharp.com/2025/12/27/storekit-subscriptions-soft-vs-hard-paywalls.html)
+3. [Part 3 - Creating a Great Onboarding Experience](https://azamsharp.com/2025/12/28/storekit-subscriptions-onboarding-experience.html)
+4. [Setting Up and Displaying Products](https://azamsharp.com/2025/12/30/storekit-subscriptions-setting-up-and-displaying-products.html)
+
 ### Conclusion
 
 A great onboarding experience does more than explain features. It builds trust, creates emotional investment, and helps users understand the value of your app before you ever ask them to pay.

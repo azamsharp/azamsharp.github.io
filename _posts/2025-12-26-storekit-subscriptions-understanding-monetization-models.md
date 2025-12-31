@@ -130,6 +130,13 @@ Hybrid models allow users to choose what works best for them while maximizing re
 
 ---
 
+### Resources 
+
+1. [Part 1 - Understanding Different Monetization Models](https://azamsharp.com/2025/12/26/storekit-subscriptions-understanding-monetization-models.html)
+2. [Part 2 - Understanding Soft and Hard Paywalls](https://azamsharp.com/2025/12/27/storekit-subscriptions-soft-vs-hard-paywalls.html)
+3. [Part 3 - Creating a Great Onboarding Experience](https://azamsharp.com/2025/12/28/storekit-subscriptions-onboarding-experience.html)
+4. [Setting Up and Displaying Products](https://azamsharp.com/2025/12/30/storekit-subscriptions-setting-up-and-displaying-products.html)
+
 ### Conclusion 
 
 Choosing the right monetization model is not about copying what other apps are doing. It is about understanding your users, the value your app provides, and the long term effort required to maintain and improve it. What works for a small utility app may not work for a content heavy or frequently updated product.
