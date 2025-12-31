@@ -9,6 +9,16 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [StoreKit Subscriptions: A Practical Guide Part 4: Setting Up and Displaying Subscription Products](_posts/2025-12-30-storekit-subscriptions-setting-up-and-displaying-products.md)
+
+In the previous parts of this series, we explored different monetization models, discussed why onboarding plays such a critical role in conversions, and looked at how paywall timing can influence whether users subscribe or walk away. All of that context matters, but none of it works without a solid technical foundation.
+
+This is where implementation really begins.
+
+In this article, we will focus on how to correctly set up subscription products in App Store Connect and how to display those products inside your iOS app using StoreKit. This step is the backbone of any subscription based app. If your products are misconfigured, loaded incorrectly, or presented inconsistently, everything built on top of them becomes harder to reason about, harder to debug, and harder to maintain.
+
+By the end of this article, you will have a clean and reliable setup for loading subscription products, presenting accurate pricing to users, and initiating purchases using modern StoreKit APIs.
+
 ### [StoreKit Subscriptions A Practical Guide Part 3: Creating a Great Onboarding Experience](_posts/2025-12-28-storekit-subscriptions-onboarding-experience.md)
 
 When developers think about subscriptions, the first thing that usually comes to mind is pricing, trials, and paywalls. But long before a user ever decides to pay, they make a more important decision first.
