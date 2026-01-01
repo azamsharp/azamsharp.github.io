@@ -1,171 +1,69 @@
 
-# StoreKit Subscriptions A Practical Guide
-## Part 3 Creating a Great Onboarding Experience
+# StoreKit Subscriptions: A Practical Guide
+## Part 2: Soft vs Hard Paywalls
 
-### Introduction
+Choosing the right paywall strategy is one of the most important decisions you will make when monetizing an iOS app. It influences not just revenue, but also user trust, retention, and the long-term sustainability of your product. A poorly chosen paywall can push users away before they ever see value, while a thoughtful one can feel like a natural part of the experience.
 
-When developers think about subscriptions, the first thing that usually comes to mind is pricing, trials, and paywalls. But long before a user ever decides to pay, they make a more important decision first.
-
-Do I trust this app enough to spend my time here
-
-That decision is shaped almost entirely by onboarding.
-
-In this article, I want to share what I learned while evolving the onboarding experience for my app, My Veggie Garden, and how moving from no onboarding at all to a fully interactive onboarding flow completely changed how users engaged with the app and understood its value.
-
-<!-- AzamSharp School Mini Ad -->
-<div class="az-ad">
-  <strong>AzamSharp School</strong><br>
-  Learn SwiftUI, SwiftData, StoreKit, testing, and more with practical videos and live workshops.<br>
-  <a href="https://azamsharp.school" target="_blank" rel="noopener">Join AzamSharp School →</a>
-</div>
-
-<style>
-  .az-ad {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    padding: 14px 16px;
-    border-radius: 12px;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-    margin: 20px 0;
-    color: #111827;
-  }
-
-  .az-ad a {
-    display: inline-block;
-    margin-top: 6px;
-    font-weight: 600;
-    text-decoration: none;
-    color: #0f766e;
-  }
-
-  .az-ad a:hover {
-    text-decoration: underline;
-  }
-</style>
+In this article, we will walk through the most common paywall approaches and how they fit together in real apps.
 
 ---
 
-### The First Version No Onboarding at All
+## Soft Paywall
 
-When I first released My Veggie Garden, there was no onboarding experience. The app launched directly into a list of vegetables.
+When I launched my iOS app **My Veggie Garden**, I chose a soft paywall. This allowed users to use the entire app without paying upfront. They could create multiple gardens, enable iCloud sync, receive notifications, and use all of the core functionality.
 
-Non subscribers could see the full list but were limited to accessing only five vegetables. My assumption was simple. Users would explore the app, hit the limit, and naturally understand why upgrading made sense.
+The only limitation was the vegetable catalog. Free users could add up to five vegetables, while Pro users unlocked the complete catalog.
 
-In reality, this approach left users with very little context. They did not know why the app existed, who built it, or what problem it was trying to solve. It felt more like a utility than a product with a story.
-
----
-
-### The Second Version Screenshots and an Early Paywall
-
-After doing more research and listening to feedback, I realized the app needed onboarding screens. I added a short sequence of feature screenshots with short, enticing titles explaining what the app could do.
-
-Right after the onboarding screens, I showed a paywall. At the same time, I allowed users to skip it and continue using the app with the five vegetable limit.
-
-This version was better, but it still relied on screenshots and promises. Users were being told what the app could do, not actually experiencing it. There was still an emotional gap.
+This approach works well because users get real value before being asked to pay. They can see how the app fits into their daily life and decide whether upgrading makes sense based on actual usage rather than marketing promises.
 
 ---
 
-### The Real Shift Interactive Onboarding
+## Hard Paywall
 
-The biggest breakthrough came when I started thinking about onboarding as an app within the app.
+A hard paywall takes the opposite approach. Users cannot access any part of the app unless they pay first. There are no free features to explore and no trial period to ease them in.
 
-Instead of showing static screenshots, I let users actively use the core features during onboarding. They could create something meaningful right away. This changes everything.
-
-When users interact with the app during onboarding, they begin to emotionally invest in it. They are no longer imagining the value. They are creating it themselves.
-
-I also read about apps with fifty or even sixty onboarding screens. Personally, that feels excessive to me. But interestingly, many of those apps are generating tens of thousands of dollars per month. The lesson is not that everyone needs dozens of screens, but that thoughtful onboarding works when it is done with intention.
+This model can work well for niche or professional apps where users already know exactly what they need and are actively searching for a solution. However, for most consumer apps, it creates significant friction. Users are being asked to commit before they understand the value, which often leads to early drop off.
 
 ---
 
-### The My Veggie Garden Onboarding Flow
+## Subscription With a Free Trial
 
-Here is how the current onboarding flow in My Veggie Garden looks today.
+Between these two approaches is a third option that often works best. In this model, users are required to start a subscription, but they receive full access to the app for a limited time, such as three or seven days.
 
----
+After the trial period ends, the subscription automatically renews unless the user cancels.
 
-### Screen 1 Meet the Team
+This approach gives users complete freedom to explore the app without feature limits, while still setting clear expectations from the beginning. There is no confusion about what is free and what is paid. Users understand they are evaluating a paid product during the trial.
 
-This was a very intentional choice. As indie developers, we do not have a big brand name behind us. Making a personal connection matters.
+After experimenting with different models, I eventually updated **My Veggie Garden** to use a subscription with a free trial. This change simplified the experience and made the value of the app much clearer. Instead of managing feature limits, users could focus entirely on whether the app helped them plan and manage their gardens.
 
-This screen introduces me as the person behind the app. It tells users there is a real human who built it and cares about it.
-
-![Meet the Team](/images/onboarding-1.png)
+For most apps, this strikes the best balance. Users can decide during the trial whether the app truly adds value to their lives. If it does, continuing feels natural. If it does not, canceling is easy and transparent. Once the trial ends, the paywall becomes permanent, which helps keep the app sustainable in the long term.
 
 ---
 
-### Screen 2 Create Your First Garden
+## Best Practices for Presenting a Paywall
 
-This is where interactive onboarding really begins. Users create their first garden by entering a name. Once they sign up, the garden already exists for them.
+How you present a paywall matters just as much as the model you choose. A good paywall is clear, honest, and respectful of the user. It explains the value of the app in simple language and focuses on benefits rather than features.
 
-They are no longer browsing. They are participating.
+Users should immediately understand what they get by subscribing, when they will be charged, and how they can cancel. Avoid surprises. Always show the billing date and clearly state that the subscription can be canceled at any time.
 
-![Create your first garden](/images/onboarding-2.png)
-
----
-
-### Screen 3 Choose Your Vegetables
-
-This screen allows users to add vegetables to their garden. They start making real decisions that affect their experience inside the app.
-
-![Add Vegetables to Garden](/images/onboarding-3.png)
+Timing is just as important. A paywall shown too early can feel aggressive, while one shown too late can feel confusing. When done well, the paywall feels less like a barrier and more like a natural step forward.
 
 ---
 
-### Screen 4 Square Foot Gardening
+## Showing the Paywall After Onboarding
 
-This screen allows users to design their square foot garden using the vegetables they just added. At this point, users are fully engaged and already using one of the core features.
+One of the most effective strategies is showing the paywall after onboarding. Onboarding should introduce the core problem the app solves, set expectations, and help the user achieve a small but meaningful win.
 
-![Square Foot Gardening](/images/onboarding-4.png)
+By the time onboarding is complete, the user understands what the app does and why it matters. When the paywall appears at that moment, it feels earned rather than intrusive.
 
----
-
-### Screen 5 Harvest
-
-This screen shows an animated and celebratory preview of what their harvest can look like. It gives users a positive emotional payoff and reinforces why the app exists.
-
-![Harvesting](/images/onboarding-5.png)
+The transition should be smooth and intentional. The paywall should reinforce what the user just learned, remind them of the benefits they are about to unlock, and clearly explain pricing, trials, and cancellation. When users understand the value first, they are far more confident in subscribing and far less likely to abandon the app.
 
 ---
 
-### Screen 6 Other Pro Features
+## Conclusion
 
-This screen highlights additional pro features available in the app. By now, users understand the context and these features feel relevant.
+There is no single paywall strategy that works for every app, but the best decisions are always made with the user in mind. Soft paywalls lower the barrier to entry, hard paywalls favor high intent users, and subscriptions with a free trial often strike the best balance between the two.
 
-![Other Pro Features](/images/onboarding-6.png)
+What matters most is clarity, timing, and trust. Users should understand the value of the app before being asked to pay, know exactly what they are signing up for, and feel confident that they can cancel if the app is not right for them. When a paywall is thoughtfully designed and placed after onboarding, it stops feeling like an obstacle and starts feeling like a natural step forward.
 
----
-
-### Screen 7 Customer Reviews
-
-The second to last screen shows testimonials from existing users. This builds trust and reinforces that other people are finding value in the app.
-
-![Customer Reviews](/images/onboarding-7.png)
-
----
-
-### Screen 8 Paywall
-
-Finally, the paywall appears.
-
-At this point, the user is invested. They have created a garden, added vegetables, and explored key features. The paywall no longer feels like an interruption. It feels like a natural next step.
-
-![Paywall](/images/onboarding-8.png)
-
----
-
-### Resources 
-
-1. [Part 1 - Understanding Different Monetization Models](https://azamsharp.com/2025/12/26/storekit-subscriptions-understanding-monetization-models.html)
-2. [Part 2 - Understanding Soft and Hard Paywalls](https://azamsharp.com/2025/12/27/storekit-subscriptions-soft-vs-hard-paywalls.html)
-3. [Part 3 - Creating a Great Onboarding Experience](https://azamsharp.com/2025/12/28/storekit-subscriptions-onboarding-experience.html)
-4. [Setting Up and Displaying Products](https://azamsharp.com/2025/12/30/storekit-subscriptions-setting-up-and-displaying-products.html)
-
-### Conclusion
-
-A great onboarding experience does more than explain features. It builds trust, creates emotional investment, and helps users understand the value of your app before you ever ask them to pay.
-
-Screenshots and feature lists can work, but letting users experience the product for themselves is far more powerful. When users feel ownership over what they have created, subscribing feels like a continuation rather than a decision.
-
-In the next article in this series, we will move from concepts to code and start implementing an iOS app that uses subscriptions step by step using StoreKit.
+In the next article, we will take a closer look at onboarding and how to design an experience that prepares users for the paywall while building trust and setting clear expectations from the very beginning.
