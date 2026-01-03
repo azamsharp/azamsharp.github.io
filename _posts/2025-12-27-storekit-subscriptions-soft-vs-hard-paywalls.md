@@ -6,131 +6,125 @@ Choosing the right paywall strategy is one of the most important decisions you w
 
 In this article, we will walk through the most common paywall approaches and how they fit together in real apps.
 
-<!-- AzamSharp Ad: StoreKit 2 Course -->
+<!-- AzamSharp Course Ad -->
 <div class="az-ad">
-  
-  <div class="az-ad__content">
-    <div class="az-ad__title">StoreKit 2 for In-App Purchases & Subscriptions
+  <div class="az-ad__body">
+    <div class="az-ad__content">
+      <div class="az-ad__kicker">AzamSharp Course</div>
+      <div class="az-ad__title">StoreKit 2 for In-App Purchases & Subscriptions</div>
+      <div class="az-ad__text">
+        Learn products, paywalls, purchase flow, entitlements, and restore access. Practical and production-focused.
+      </div>
     </div>
-    <div class="az-ad__text">
-      Learn how to ship purchases the right way: products, paywalls, purchase flow, entitlements, and restoring access.
-      Practical, real-world, and focused on clean Swift code.
+    <div class="az-ad__actions">
+      <a
+        class="az-ad__button"
+        href="https://azamsharp.teachable.com/p/storekit-2-for-in-app-purchases-and-subscriptions"
+        target="_blank"
+        rel="noopener"
+      >
+        Enroll Now →
+      </a>
     </div>
-<a
-    class="az-ad__button"
-    href="https://azamsharp.teachable.com/p/storekit-2-for-in-app-purchases-and-subscriptions"
-    target="_blank"
-    rel="noopener"
-  >
-    Enroll Now →
-  </a>
   </div>
 </div>
 
-
 <style>
-  .az-ad {
-    --bg: #0b1220;
-    --card: rgba(255, 255, 255, 0.06);
-    --border: rgba(255, 255, 255, 0.14);
-    --text: rgba(255, 255, 255, 0.86);
-    --muted: rgba(255, 255, 255, 0.70);
-    --accent: #34d399;
-
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
-      "Segoe UI Emoji";
-    background: radial-gradient(1200px 500px at 20% -10%, rgba(52, 211, 153, 0.22), transparent 60%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 16px;
-    color: var(--text);
-    max-width: 720px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-    position: relative;
+  .az-ad{
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    max-width: 820px;
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,.08);
+    background:
+      radial-gradient(900px 300px at 15% 20%, rgba(52,211,153,.22), transparent 60%),
+      radial-gradient(800px 260px at 85% 10%, rgba(96,165,250,.20), transparent 55%),
+      #ffffff;
+    box-shadow: 0 14px 30px rgba(0,0,0,.10);
     overflow: hidden;
   }
 
-  .az-ad__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  .az-ad__body{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 18px;
+    padding: 18px 18px;
+  }
+
+  .az-ad__content{
+    min-width: 0;
+  }
+
+  .az-ad__kicker{
     font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    color: rgba(0, 0, 0, 0.78);
-    background: linear-gradient(90deg, var(--accent), #60a5fa);
-    padding: 6px 10px;
-    border-radius: 999px;
-    margin-bottom: 10px;
+    color: rgba(0,0,0,.55);
+    margin-bottom: 6px;
   }
 
-  .az-ad__title {
+  .az-ad__title{
     font-size: 18px;
-    font-weight: 800;
+    font-weight: 850;
+    letter-spacing: -0.2px;
+    color: rgba(0,0,0,.88);
+    margin-bottom: 6px;
     line-height: 1.2;
-    margin: 0 0 8px 0;
   }
 
-  .az-ad__text {
+  .az-ad__text{
     font-size: 14px;
+    color: rgba(0,0,0,.65);
     line-height: 1.45;
-    color: var(--muted);
-    margin: 0 0 14px 0;
+    max-width: 56ch;
   }
 
-  .az-ad__cta {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+  .az-ad__actions{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap: 8px;
+    flex: 0 0 auto;
   }
 
-  .az-ad__button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 14px;
+  .az-ad__button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding: 11px 16px;
     border-radius: 12px;
-    font-weight: 800;
-    text-decoration: none;
-    color: rgba(0, 0, 0, 0.85);
-    background: linear-gradient(90deg, var(--accent), #60a5fa);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    font-weight: 850;
+    font-size: 14px;
+    text-decoration:none;
+    color: rgba(0,0,0,.88);
+    background: linear-gradient(90deg, #34d399, #60a5fa);
+    border: 1px solid rgba(0,0,0,.08);
+    box-shadow: 0 8px 18px rgba(0,0,0,.10);
     transition: transform 160ms ease, filter 160ms ease;
-    will-change: transform;
+    white-space: nowrap;
   }
 
-  .az-ad__button:hover {
-    transform: translateY(-1px);
-    filter: brightness(1.03);
-  }
+  .az-ad__button:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+  .az-ad__button:active{ transform: translateY(0); }
 
-  .az-ad__button:active {
-    transform: translateY(0px);
-  }
-
-  .az-ad__note {
+  .az-ad__note{
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.62);
+    color: rgba(0,0,0,.50);
   }
 
-  @media (prefers-color-scheme: light) {
-    .az-ad {
-      --text: rgba(0, 0, 0, 0.86);
-      --muted: rgba(0, 0, 0, 0.66);
-      background: radial-gradient(900px 400px at 20% -10%, rgba(52, 211, 153, 0.25), transparent 60%),
-        linear-gradient(180deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.01));
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  /* Mobile */
+  @media (max-width: 640px){
+    .az-ad__body{
+      flex-direction: column;
+      align-items: flex-start;
     }
-    .az-ad__note {
-      color: rgba(0, 0, 0, 0.55);
+    .az-ad__actions{
+      align-items:flex-start;
+    }
+    .az-ad__text{
+      max-width: 100%;
     }
   }
 </style>
-
----
 
 ## Soft Paywall
 
