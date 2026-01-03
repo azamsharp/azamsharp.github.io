@@ -1,4 +1,3 @@
-
 # StoreKit Subscriptions: A Practical Guide
 ## Part 5: Handling Purchases
 

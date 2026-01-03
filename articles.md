@@ -9,6 +9,13 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [StoreKit Subscriptions: A Practical Guide Part 5: Handling Purchases](_posts/2026-01-03-storekit-handling-purchases.md)
+
+In the previous article, we focused on displaying StoreKit products inside the app and allowing users to select a subscription option such as monthly or annual. At that point, everything was visually in place, but nothing was actually being purchased yet.
+
+In this article, we will take the next logical step and walk through how to perform purchases using StoreKit. This is where the real transaction flow begins and where many developers start to feel overwhelmed. The good news is that initiating a purchase is surprisingly simple. The complexity comes from handling all the possible outcomes correctly and keeping your app’s state in sync with the App Store.
+
+
 ### [StoreKit Subscriptions: A Practical Guide Part 4: Setting Up and Displaying Subscription Products](_posts/2025-12-30-storekit-subscriptions-setting-up-and-displaying-products.md)
 
 In the previous parts of this series, we explored different monetization models, discussed why onboarding plays such a critical role in conversions, and looked at how paywall timing can influence whether users subscribe or walk away. All of that context matters, but none of it works without a solid technical foundation.
