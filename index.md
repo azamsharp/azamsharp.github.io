@@ -7,7 +7,7 @@
 [Home](https://azamsharp.github.io)
 [Courses](https://azamsharp.school/)
 [Apps](veggie-garden.html)
-[Books](books)
+[Books](https://azamsharp.school/swiftui-architecture-book.html)
 [Articles](articles)
 [Newsletter](https://azamsharp.teachable.com/p/newsletter)
 [YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
