@@ -9,6 +9,15 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [The SwiftUI Architecture Book Is Finally Here](_posts/2026-01-14-swiftui-architecture-book.md)
+
+SwiftUI changed how we build user interfaces, but it also changed how architecture should be approached. Patterns that worked well in older UI frameworks often introduce unnecessary complexity when applied directly to SwiftUI.
+
+This book is the result of several years of real world experience building and teaching SwiftUI applications. Instead of promoting a single pattern, it focuses on understanding how SwiftUI manages state, data flow, and responsibility. The goal is to help developers make clearer architectural decisions, reduce accidental complexity, and build applications that scale naturally over time.
+
+Written for developers who already know SwiftUI basics, this book offers a practical and opinionated guide to building maintainable SwiftUI applications without over engineering.
+
+
 ### [StoreKit Subscriptions: A Practical Guide Part 5: Handling Purchases](_posts/2026-01-03-storekit-handling-purchases.md)
 
 In the previous article, we focused on displaying StoreKit products inside the app and allowing users to select a subscription option such as monthly or annual. At that point, everything was visually in place, but nothing was actually being purchased yet.
