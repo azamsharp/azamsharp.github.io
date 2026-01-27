@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Redacted • Redact PDF text on iPhone and iPad</title>
+  <meta name="description" content="Redacted is a simple PDF redaction app. Permanently black out sensitive text, choose blackout colors, keep originals and redacted copies, sync with private iCloud, and share anytime." />
+
+  <style>
+    :root{
+      --bg: #06121a;
+      --bg2:#071b24;
+      --card: rgba(255,255,255,0.06);
+      --card2: rgba(255,255,255,0.04);
+      --line: rgba(255,255,255,0.12);
+      --ink: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.68);
+      --muted2: rgba(255,255,255,0.52);
+      --brand: #19d3c5; /* teal */
+      --brand2:#22c1ff; /* blue accent */
+      --shadow: 0 18px 60px rgba(0,0,0,0.45);
+      --radius: 22px;
+      --max: 1080px;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--ink);
+      background:
+        radial-gradient(1000px 520px at 20% 0%, rgba(25,211,197,0.22), transparent 60%),
+        radial-gradient(900px 480px at 80% 10%, rgba(34,193,255,0.15), transparent 60%),
+        radial-gradient(900px 520px at 45% 120%, rgba(25,211,197,0.10), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      line-height: 1.55;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    /* Top bar */
+    .topbar{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .logo{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background:
+        radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,0.22), transparent 60%),
+        linear-gradient(135deg, rgba(25,211,197,0.9), rgba(34,193,255,0.65));
+      box-shadow: 0 10px 28px rgba(25,211,197,0.18);
+      position: relative;
+      overflow: hidden;
+    }
+    .logo:before{
+      content:"";
+      position: absolute;
+      inset: 9px 10px 10px 10px;
+      border: 2px solid rgba(255,255,255,0.82);
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      opacity: 0.95;
+    }
+    .logo:after{
+      content:"";
+      position:absolute;
+      left: 12px;
+      top: 17px;
+      width: 16px;
+      height: 2px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 2px;
+      transform: rotate(-18deg);
+      opacity: 0.9;
+    }
+
+    .nav{
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .nav a{ color: var(--muted); }
+    .nav a:hover{ color: var(--ink); text-decoration: none; }
+
+    .cta{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(25,211,197,0.35);
+      background: linear-gradient(135deg, rgba(25,211,197,0.22), rgba(34,193,255,0.12));
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.30);
+    }
+    .cta:hover{ text-decoration: none; }
+    .cta small{ color: var(--muted2); font-weight: 600; }
+
+    /* Hero */
+    .hero{
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin-top: 18px;
+      align-items: stretch;
+    }
+
+    .heroCard{
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .heroCardInner{
+      padding: 26px 24px 22px;
+    }
+
+    .pill{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.18);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--brand);
+      box-shadow: 0 0 0 4px rgba(25,211,197,0.18);
+    }
+
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(32px, 4.2vw, 54px);
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+    }
+
+    .lead{
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 52ch;
+    }
+
+    .heroActions{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .btnPrimary{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(25,211,197,0.35);
+      background: linear-gradient(135deg, rgba(25,211,197,0.26), rgba(34,193,255,0.12));
+      color: var(--ink);
+      font-weight: 800;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.34);
+    }
+    .btnPrimary:hover{ text-decoration: none; }
+
+    .btnGhost{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      color: var(--ink);
+      font-weight: 700;
+    }
+    .btnGhost:hover{ text-decoration: none; background: rgba(255,255,255,0.06); }
+
+    .finePrint{
+      margin-top: 12px;
+      color: var(--muted2);
+      font-size: 13px;
+    }
+
+    /* Side preview */
+    .preview{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .previewTop{
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .previewTitle{
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.2px;
+    }
+    .previewSub{
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .previewBody{
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .miniDoc{
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      background: rgba(0,0,0,0.18);
+      padding: 12px;
+    }
+
+    .docRow{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .chip{
+      font-size: 12px;
+      color: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .page{
+      border-radius: 14px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 12px;
+    }
+
+    .lines{
+      display: grid;
+      gap: 7px;
+    }
+    .line{
+      height: 8px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.10);
+      position: relative;
+      overflow: hidden;
+    }
+    .line.w70{ width: 70%; }
+    .line.w85{ width: 85%; }
+    .line.w55{ width: 55%; }
+    .line.w92{ width: 92%; }
+
+    .redaction{
+      position: absolute;
+      inset: 0;
+      left: 0;
+      width: 42%;
+      background: rgba(0,0,0,0.75);
+      border-radius: 99px;
+    }
+    .redaction.c2{ width: 62%; background: rgba(0,0,0,0.85); }
+    .redaction.c3{ width: 28%; background: rgba(0,0,0,0.65); }
+
+    .palette{
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .swatch{
+      width: 16px;
+      height: 16px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: #000;
+    }
+    .swatch.gray{ background: #2b2b2b; }
+    .swatch.navy{ background: #0b1220; }
+    .swatch.red{ background: #8b1b1b; }
+    .swatch.green{ background: #0f3d2e; }
+
+    /* Sections */
+    .section{
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.04);
+      box-shadow: 0 18px 55px rgba(0,0,0,0.26);
+      overflow: hidden;
+    }
+
+    .sectionHeader{
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .sectionHeader h2{
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+    }
+    .sectionHeader p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid{
+      padding: 18px 18px 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .feature{
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.16);
+      border-radius: 18px;
+      padding: 14px 14px 12px;
+      min-height: 140px;
+    }
+
+    .feature .icon{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      border: 1px solid rgba(25,211,197,0.35);
+      background: linear-gradient(135deg, rgba(25,211,197,0.26), rgba(34,193,255,0.12));
+      display: grid;
+      place-items: center;
+      margin-bottom: 10px;
+      box-shadow: 0 12px 34px rgba(0,0,0,0.25);
+      font-weight: 900;
+    }
+
+    .feature h3{
+      margin: 0 0 6px;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+    }
+
+    .feature p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .twoCol{
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .infoCard{
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.16);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .infoCard h3{
+      margin: 0 0 6px;
+      font-size: 15px;
+    }
+
+    .infoCard p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .pricing{
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .priceCard{
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.16);
+      border-radius: 18px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .priceCard:before{
+      content:"";
+      position: absolute;
+      inset: -120px -120px auto auto;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle at 30% 30%, rgba(25,211,197,0.26), transparent 65%);
+      transform: rotate(12deg);
+    }
+
+    .priceTop{
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .priceTitle{
+      font-weight: 900;
+      letter-spacing: -0.01em;
+    }
+
+    .priceTag{
+      font-size: 13px;
+      color: rgba(255,255,255,0.80);
+      border: 1px solid rgba(25,211,197,0.30);
+      background: rgba(25,211,197,0.10);
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .priceValue{
+      margin: 12px 0 6px;
+      font-size: 34px;
+      font-weight: 950;
+      letter-spacing: -0.03em;
+      position: relative;
+      z-index: 1;
+    }
+    .priceValue span{
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-left: 8px;
+    }
+
+    .priceList{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer{
+      margin-top: 18px;
+      padding: 18px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.04);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footerLinks{
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 1fr; }
+      .twoCol{ grid-template-columns: 1fr; }
+      .pricing{ grid-template-columns: 1fr; }
+      .nav{ display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <!-- Top bar -->
+    <div class="topbar">
+      <div class="brand" aria-label="Redacted">
+        <span class="logo" aria-hidden="true"></span>
+        <span>Redacted</span>
+      </div>
+
+      <nav class="nav" aria-label="Navigation">
+        <a href="#features">Features</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#icloud">iCloud</a>
+        <a href="#pricing">Pricing</a>
+      </nav>
+
+      <!-- Replace # with your App Store link -->
+      <a class="cta" href="#" aria-label="Download Redacted on the App Store">
+        Download
+        <small>App Store</small>
+      </a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero" aria-label="Hero">
+      <div class="heroCard">
+        <div class="heroCardInner">
+          <div class="pill"><span class="dot" aria-hidden="true"></span> Permanently redact PDFs on iPhone and iPad</div>
+
+          <h1>Black out sensitive text in PDF files, fast.</h1>
+
+          <p class="lead">
+            Redacted is a simple PDF redaction app built for clarity and control.
+            Choose blackout colors, keep both original and redacted copies, sync with your private iCloud, and share anytime.
+          </p>
+
+          <div class="heroActions">
+            <!-- Replace # with your App Store link -->
+            <a class="btnPrimary" href="https://apps.apple.com/us/app/redacted-blackout-pdfs/id6757371329">
+              Get Redacted
+              <span aria-hidden="true">→</span>
+            </a>
+            <a class="btnGhost" href="#features">See features</a>
+          </div>
+
+          <div class="finePrint">
+            On device by default. Optional private CloudKit sync. No subscriptions required.
+          </div>
+        </div>
+      </div>
+
+      <aside class="preview" aria-label="Preview">
+        <div class="previewTop">
+          <div>
+            <div class="previewTitle">Redaction preview</div>
+            <div class="previewSub">Multiple blackout colors</div>
+          </div>
+          <div class="chip">On device</div>
+        </div>
+
+        <div class="previewBody">
+          <div class="miniDoc">
+            <div class="docRow">
+              <div style="display:flex; gap:8px; align-items:center;">
+                <div class="chip">Original</div>
+                <div class="chip">Redacted</div>
+              </div>
+              <div class="chip">Share</div>
+            </div>
+
+            <div class="page">
+              <div class="lines">
+                <div class="line w92"><span class="redaction"></span></div>
+                <div class="line w70"></div>
+                <div class="line w85"><span class="redaction c2"></span></div>
+                <div class="line w55"></div>
+                <div class="line w92"><span class="redaction c3"></span></div>
+              </div>
+
+              <div class="palette" aria-label="Color palette">
+                <div class="swatch" title="Black"></div>
+                <div class="swatch gray" title="Dark gray"></div>
+                <div class="swatch navy" title="Navy"></div>
+                <div class="swatch red" title="Red"></div>
+                <div class="swatch green" title="Green"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="miniDoc">
+            <div class="docRow">
+              <div class="chip">Private iCloud</div>
+              <div class="chip">CloudKit</div>
+            </div>
+            <p style="margin:0; color: var(--muted); font-size: 13.5px;">
+              Sync your documents across your devices using your private iCloud database.
+            </p>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section" aria-label="Features">
+      <div class="sectionHeader">
+        <div>
+          <h2>Everything you need for clean PDF redaction</h2>
+          <p>Built for speed, privacy, and easy sharing.</p>
+        </div>
+        <div class="chip">iPhone and iPad</div>
+      </div>
+
+      <div class="grid">
+        <div class="feature">
+          <div class="icon">R</div>
+          <h3>Permanently redact text</h3>
+          <p>Black out sensitive content so it stays hidden when you export or share.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon">C</div>
+          <h3>Multiple blackout colors</h3>
+          <p>Pick the color that fits your workflow. Black, gray, navy, and more.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon">S</div>
+          <h3>Share in seconds</h3>
+          <p>Share original or redacted PDFs using the system share sheet.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon">O</div>
+          <h3>Keep both versions</h3>
+          <p>Access the original and the redacted copy anytime, right inside the app.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon">D</div>
+          <h3>On device by default</h3>
+          <p>Your documents stay on your device unless you choose to enable iCloud sync.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon">I</div>
+          <h3>Private iCloud sync</h3>
+          <p>Sync across your devices using your private CloudKit database.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy and iCloud -->
+    <section class="section" aria-label="Privacy and Storage">
+      <div class="sectionHeader">
+        <div>
+          <h2>Privacy first, always</h2>
+          <p>Simple by design, with clear choices.</p>
+        </div>
+        <div class="chip">No tracking</div>
+      </div>
+
+      <div class="twoCol">
+        <div id="privacy" class="infoCard">
+          <h3>On device storage</h3>
+          <p>
+            Redaction runs on your device. Your PDFs and redactions stay local unless you enable iCloud.
+          </p>
+        </div>
+
+        <div id="icloud" class="infoCard">
+          <h3>Private CloudKit sync</h3>
+          <p>
+            If you enable iCloud, Redacted syncs with Apple CloudKit using your private database.
+            Your data is accessible only to you across your devices.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  
+
+    <!-- Footer -->
+    <div class="footer" aria-label="Footer">
+      <div>
+        © <span id="year"></span> Mohammad Azam • Redacted
+      </div>
+      <div class="footerLinks">
+        <!-- Replace these with your real links -->
+        <a href="#" aria-label="Privacy Policy">Privacy Policy</a>
+        <a href="#" aria-label="Support">Support</a>
+        <a href="mailto:azamsharp@gmail.com" aria-label="Contact">Contact</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
