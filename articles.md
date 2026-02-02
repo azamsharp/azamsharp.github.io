@@ -9,7 +9,7 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [Do You Really Need DTOs or Are You Just Copying JSON](_posts/2026-02-02-do-you-really-need-dtos.md)
+### [Do You Really Need DTOs or Are You Just Copying JSON](_posts/2026-02-01-do-you-really-need-dtos.md)
 
 One of the most common tasks in iOS applications is consuming a JSON API. An app receives a JSON response, maps it into client side models, and then uses those models to drive the UI.
 
