@@ -9,6 +9,14 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Do You Really Need DTOs or Are You Just Copying JSON](_posts/2026-02-02-do-you-really-need-dtos.md)
+
+One of the most common tasks in iOS applications is consuming a JSON API. An app receives a JSON response, maps it into client side models, and then uses those models to drive the UI.
+
+The question that often comes up is whether we need a separate layer of DTOs (Data Transfer Objects) between the JSON response and our client side models, or if we can decode the response directly into the models we use throughout the app.
+
+As with most things in software development, the answer is it depends. In this article, we will look at different ways to map JSON responses to client side models and explore the trade offs involved in each approach.
+
 ### [The SwiftUI Architecture Book Is Finally Here](_posts/2026-01-14-swiftui-architecture-book.md)
 
 SwiftUI changed how we build user interfaces, but it also changed how architecture should be approached. Patterns that worked well in older UI frameworks often introduce unnecessary complexity when applied directly to SwiftUI.
