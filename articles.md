@@ -9,6 +9,12 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [If You’re Not Versioning Your SwiftData Schema, You’re Gambling](_posts/2026-02-16-if-you-are-not-versioning-your-swiftdata-schema.md)
+
+Persisting data in a SwiftData application creates a long term contract between your code and the information stored on user devices. While early development often hides structural weaknesses behind empty databases and easy reinstalls, production environments expose the real cost of unmanaged schema changes. Even small modifications such as adding a property or enforcing a uniqueness constraint can break that contract and cause application failures if not handled properly.
+
+This article explores why schema versioning is a foundational responsibility from day one of building a SwiftData app. It examines how evolving requirements impact persisted data, why automatic migration is not always sufficient, and how to use tools such as VersionedSchema, SchemaMigrationPlan, and custom migration stages to manage change safely. By treating schema evolution as an architectural concern rather than a reactive fix, developers can ensure their applications grow without compromising data integrity or user trust.
+
 ### [Do You Really Need DTOs or Are You Just Copying JSON](_posts/2026-02-01-do-you-really-need-dtos.md)
 
 One of the most common tasks in iOS applications is consuming a JSON API. An app receives a JSON response, maps it into client side models, and then uses those models to drive the UI.
