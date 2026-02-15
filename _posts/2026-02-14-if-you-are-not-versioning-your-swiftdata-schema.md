@@ -1,5 +1,3 @@
-
-
 # If You’re Not Versioning Your SwiftData Schema, You’re Gambling 
 
 Let me say this clearly. If you are building a SwiftData app and you are not versioning your schema, you are gambling. It may not hurt you today. It may not hurt you next week. But eventually it will. Everything works when the database is empty. You add a model, you run the app, you insert some data, and when something breaks you just delete the app and reinstall. That is development mode. That is not production reality.

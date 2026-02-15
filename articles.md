@@ -9,7 +9,7 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [If You’re Not Versioning Your SwiftData Schema, You’re Gambling](_posts/2026-02-16-if-you-are-not-versioning-your-swiftdata-schema.md)
+### [If You’re Not Versioning Your SwiftData Schema, You’re Gambling](_posts/2026-02-14-if-you-are-not-versioning-your-swiftdata-schema.md)
 
 Persisting data in a SwiftData application creates a long term contract between your code and the information stored on user devices. While early development often hides structural weaknesses behind empty databases and easy reinstalls, production environments expose the real cost of unmanaged schema changes. Even small modifications such as adding a property or enforcing a uniqueness constraint can break that contract and cause application failures if not handled properly.
 
