@@ -410,7 +410,7 @@ enum BudgetMigrationPlan: SchemaMigrationPlan {
     
     static var schemas: [any VersionedSchema.Type] { [BudgetAppSchemaV1.self, BudgetAppSchemaV2.self] }
     
-    static var stages: [MigrationStage] { [migrateV1toV2] }
+    static var stages: [MigrationStage] { [migrateV1toV2, migrateV2toV3] }
     
     static let migrateV1toV2 = MigrationStage.custom(fromVersion: BudgetAppSchemaV1.self, toVersion: BudgetAppSchemaV2.self) { context in
         
