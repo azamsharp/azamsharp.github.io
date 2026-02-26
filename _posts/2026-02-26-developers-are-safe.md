@@ -181,7 +181,7 @@ I suggested that they log into the Enterprise account and sit with me so I could
 
 ### Agile Development Is Not for Us
 
-At another very large finance company, I was consulting in the retirement department to work on a greenfield iOS project. The company was not familiar with Agile principles, so we conducted an introduction session explaining sprints, scrum, velocity, and iterative development. We walked them through how Agile could improve feedback cycles and delivery speed.
+At another very large finance company, I was consulting on a greenfield iOS project. The company was not familiar with Agile principles, so we conducted an introduction session explaining sprints, scrum, velocity, and iterative development. We walked them through how Agile could improve feedback cycles and delivery speed.
 
 After the session, they told us that Agile seemed too complicated and that they would rather stick with their existing process, which was waterfall. This was for a brand new mobile project, yet they preferred the comfort of a rigid, document heavy approach over adaptive development. Change, even when beneficial, was seen as risk.
 
