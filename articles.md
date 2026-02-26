@@ -9,6 +9,13 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+
+### [Developers Are Safe… Thanks to Corporate Red Tape](_posts/2026-02-26-developers-are-safe.md)
+
+By the end of 2026, AI will write most of the code and software developers will be obsolete. There is no need to learn programming because you will be replaced by an AI agent. We have all heard these kinds of crazy headlines. I am here to tell you that the reality is quite different.
+
+This post is a result of my [tweet](https://x.com/azamsharp/status/2026853270526816687?s=20) that got 80K+ views and 258 plus comments. The responses were passionate, but they also confirmed something I have seen over and over again in real enterprise environments. The world of corporate software development does not move at the speed of Twitter headlines.
+
 ### [If You’re Not Versioning Your SwiftData Schema, You’re Gambling](_posts/2026-02-14-if-you-are-not-versioning-your-swiftdata-schema.md)
 
 Persisting data in a SwiftData application creates a long term contract between your code and the information stored on user devices. While early development often hides structural weaknesses behind empty databases and easy reinstalls, production environments expose the real cost of unmanaged schema changes. Even small modifications such as adding a property or enforcing a uniqueness constraint can break that contract and cause application failures if not handled properly.
