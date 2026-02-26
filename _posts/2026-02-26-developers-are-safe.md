@@ -5,6 +5,158 @@ By the end of 2026, AI will write most of the code and software developers will 
 
 This post is a result of my [tweet](https://x.com/azamsharp/status/2026853270526816687?s=20) that got 80K+ views and 258 plus comments. The responses were passionate, but they also confirmed something I have seen over and over again in real enterprise environments. The world of corporate software development does not move at the speed of Twitter headlines.
 
+<!-- Book Banner: SwiftUI Architecture Book -->
+<div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
+  <div class="azam-book-banner__inner">
+    <div class="azam-book-banner__cover">
+      <!-- Replace the src with your real book cover image -->
+      <img
+        src="https://azamsharp.school/images/swiftui-architecture-book-cover.png"
+        alt="SwiftUI Architecture book cover"
+        loading="lazy"
+      />
+    </div>
+    <div class="azam-book-banner__content">
+      <p class="azam-book-banner__eyebrow">SwiftUI Architecture Book</p>
+      <h3 class="azam-book-banner__title">Patterns and Practices for Building Scalable Applications</h3>
+      <p class="azam-book-banner__subtitle">
+        A practical guide to building SwiftUI apps that stay clean as they grow.
+      </p>
+      <div class="azam-book-banner__actions">
+        <a class="azam-book-banner__button" href="https://azamsharp.school/swiftui-architecture-book.html" target="_blank" rel="noopener">
+          Get the book
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .azam-book-banner {
+    --bg1: #0b1220;
+    --bg2: #111a2d;
+    --text: rgba(255, 255, 255, 0.92);
+    --muted: rgba(255, 255, 255, 0.74);
+    --border: rgba(255, 255, 255, 0.12);
+    --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+    --accent: #6ee7b7; /* tweak to match your brand */
+    --accent2: #60a5fa;
+
+    margin: 22px 0;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: radial-gradient(1200px 600px at 10% 0%, rgba(96, 165, 250, 0.22), transparent 60%),
+                radial-gradient(900px 500px at 90% 30%, rgba(110, 231, 183, 0.18), transparent 60%),
+                linear-gradient(135deg, var(--bg1), var(--bg2));
+    box-shadow: var(--shadow);
+  }
+
+  .azam-book-banner__inner {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 18px;
+    padding: 18px;
+    align-items: center;
+  }
+
+  .azam-book-banner__cover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .azam-book-banner__cover img {
+    width: 132px;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.35);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .azam-book-banner__eyebrow {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .azam-book-banner__title {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    line-height: 1.25;
+  }
+
+  .azam-book-banner__subtitle {
+    margin: 0 0 14px 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 62ch;
+  }
+
+  .azam-book-banner__actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .azam-book-banner__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #071018;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: 0;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.28);
+    transition: transform 140ms ease, filter 140ms ease;
+  }
+
+  .azam-book-banner__button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.02);
+  }
+
+  .azam-book-banner__link {
+    font-size: 14px;
+    color: rgba(255,255,255,0.86);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.22);
+    padding-bottom: 2px;
+    transition: border-color 140ms ease, color 140ms ease;
+  }
+
+  .azam-book-banner__link:hover {
+    color: rgba(255,255,255,0.95);
+    border-color: rgba(255,255,255,0.45);
+  }
+
+  /* Mobile */
+  @media (max-width: 520px) {
+    .azam-book-banner__inner {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+
+    .azam-book-banner__cover {
+      justify-content: flex-start;
+    }
+
+    .azam-book-banner__cover img {
+      width: 120px;
+    }
+  }
+</style>
+
 ---
 
 ### jQuery Exception Paper Work
