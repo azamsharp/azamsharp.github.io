@@ -19,7 +19,7 @@
     .linkedin { background-color: #0077b5; }
     .bluesky { background-color: #353c63; }
     .share-button:hover {
-      opacity: 0.8;
+      opacity: 0.8;  
     }
   </style>
 
