@@ -4,7 +4,7 @@
 
 This chapter is part of my book *SwiftUI Architecture: Patterns and Practices for Building Scalable Applications*.
 
-More details: https://azamsharp.school/swiftui-architecture-book.html
+More details: [https://azamsharp.school/swiftui-architecture-book.html](https://azamsharp.school/swiftui-architecture-book.html)
 
 I first came across the MVVM pattern around 2008 or 2009 while working for a very large oil and gas company. At the time, we were building a WPF application used by oil workers on offshore rigs to order parts and equipment. Our team had six to eight developers, and the application was deployed across most of the rigs owned by the company. This was not a small internal tool. It was a real production system that people depended on every single day, often in harsh and unpredictable environments where reliability was not optional.
 
@@ -413,4 +413,5 @@ However, if creating separate view models for each screen, moving presentation l
 In the next chapter, we will cover the container and presenter pattern, which is the default pattern used when building React applications.
 
 This chapter is part of my book *SwiftUI Architecture: Patterns and Practices for Building Scalable Applications*.  
-Learn more about the book here: https://azamsharp.school/swiftui-architecture-book.html
+
+Learn more about the book here: [https://azamsharp.school/swiftui-architecture-book.html](https://azamsharp.school/swiftui-architecture-book.html)
