@@ -9,6 +9,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [MVVM and the Cost of Carrying Old Patterns Forward](_posts/2026-03-04-mvvm-and-cost-of-old-patterns.md)
+
+Many developers adopt the MVVM pattern in SwiftUI because it is familiar and widely recommended. However, SwiftUI was designed with different architectural expectations. This article explores the origins of MVVM, why it worked well in frameworks like WPF, and why applying it directly to SwiftUI can sometimes introduce unnecessary complexity. Through practical examples and real-world experience, we examine how carrying forward old patterns can create friction and how understanding SwiftUI’s design philosophy can lead to simpler, more maintainable applications.
 
 ### [Developers Are Safe… Thanks to Corporate Red Tape](_posts/2026-02-26-developers-are-safe.md)
 
