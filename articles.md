@@ -9,6 +9,16 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+
+### [SwiftRide – Building a Ride Sharing App (Part 1 – Setting Up the Stack)](_posts/2026-03-11-swiftride-setting-up-the-stack.md)
+
+This article introduces SwiftRide, a hands-on multi-part series where we build a ride sharing application from scratch using PostgreSQL, Node.js with Express, Sequelize, and a SwiftUI client. Instead of relying on AI to generate the application, the focus of this project is on writing the code ourselves so we can better understand the architecture, the design decisions, and how the different layers of a real application fit together.
+
+In this first part of the series, we set up the complete development foundation. We install PostgreSQL, initialize the Node backend, configure the essential packages, and create the starting point for the SwiftUI client. The goal is not just to build another demo app, but to walk through the process of constructing a real system step by step while understanding the reasoning behind each decision.
+
+By the end of the series, you will have a working ride sharing application along with a much deeper understanding of how modern full stack applications are designed and built.
+
+
 ### [MVVM and the Cost of Carrying Old Patterns Forward](_posts/2026-03-04-mvvm-and-cost-of-old-patterns.md)
 
 Many developers adopt the MVVM pattern in SwiftUI because it is familiar and widely recommended. However, SwiftUI was designed with different architectural expectations. This article explores the origins of MVVM, why it worked well in frameworks like WPF, and why applying it directly to SwiftUI can sometimes introduce unnecessary complexity. Through practical examples and real-world experience, we examine how carrying forward old patterns can create friction and how understanding SwiftUI’s design philosophy can lead to simpler, more maintainable applications.

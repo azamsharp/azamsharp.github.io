@@ -1,6 +1,6 @@
 
 
-# SwiftRide – Building a Ride Sharing App the Old School Way (Part 1 – Setting Up the Stack)
+# SwiftRide – Building a Ride Sharing App (Part 1 – Setting Up the Stack)
 
 These days it feels like the software industry is rapidly moving toward one thing: letting AI write most of our code. You give the tool a prompt, it generates a solution, and within seconds you have something that looks like a working application. These tools are incredibly powerful and I use them myself, but I have also noticed something interesting happening along the way. The more developers rely on AI to generate their code, the less time they spend thinking through problems, architecture, and design decisions.
 
