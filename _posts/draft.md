@@ -73,7 +73,16 @@ If you run this migration then it will create the `Users` table in the `swiftrid
 
 ![BeeKeeper](../images/bee-keeper.png)
 
+Each migration has two different methods. The up method is executed when you run the migration and the down method is executed when you undo a migration. Whatever you do in the up method, just remember to do the opposite in the down method. 
+
 > I have on purpose made the role attribute as a string instead of a roldId. In the next section we will add a `Roles` table and also update our `Users` table schema through migration to support roleId, instead of the role name. 
 
 ### Creating Roles Table and Adding Relationship Between Users and Roles 
 
+Our next step is to add `Roles` table and also update the `Users` table to have a relationship with the `Roles` table through roleId. This can be done in multiple steps. First we can use the Sequelize command to create the Role model and the associated migration file. This is shown below: 
+
+``` javascript 
+npx sequelize-cli model:generate --name Role --attributes name:string
+```
+
+Next, we can write a custom migration which will remove the role column from `Users` table and add a new `roleId` column. The `roleId` column will serve as a foreign key in `Users` table and will be linked to the `id` column in the `Roles` table. 
