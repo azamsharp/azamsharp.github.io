@@ -9,6 +9,11 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [SwiftRide – Building a Ride Sharing App (Part 2 – Creating the Models)](_posts/2026-03-13-swift-ride-part-2-creating-the-models.md)
+
+In this part of the SwiftRide series, we move from setting up the development environment to defining the actual structure of the backend data layer. Using Sequelize migrations, we create the core database tables for the application and introduce models that allow our Node.js backend to interact with PostgreSQL in a structured way. The article walks through generating models and migrations using the Sequelize CLI, explains how migrations manage database schema changes over time, and demonstrates how to evolve a simple schema into a more scalable design by introducing a dedicated Roles table.
+
+You will learn how to create tables through migrations, update an existing schema by replacing a string-based role with a foreign key relationship, and configure model associations so Sequelize understands how the Users and Roles tables connect. By the end of this step, the database structure for SwiftRide is fully defined and the backend has a clean relational foundation. This prepares the project for the next stage of development, where we begin implementing authentication and building the core API for the ride sharing system.
 
 ### [SwiftRide – Building a Ride Sharing App (Part 1 – Setting Up the Stack)](_posts/2026-03-11-swiftride-setting-up-the-stack.md)
 
