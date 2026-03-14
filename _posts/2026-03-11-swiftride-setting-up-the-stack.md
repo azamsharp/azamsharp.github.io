@@ -282,6 +282,11 @@ SwiftRide
 
 Keeping both projects together makes development easier, especially when you are switching between the backend and the SwiftUI client while building new features.
 
+### Source 
+
+You can download source code using the GitHub repository: 
+https://github.com/azamsharpschool/SwiftRide
+
 ### Conclusion
 
 At this point we have the basic development environment ready. PostgreSQL is installed and running, our Node project has been initialized, and we have installed the core packages that will power the backend of the SwiftRide application. While we have not written any backend code yet, we now have the foundation needed to start building the server.

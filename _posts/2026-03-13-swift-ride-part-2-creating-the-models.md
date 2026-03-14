@@ -390,6 +390,11 @@ So at this stage, we have done three important things. We created the tables thr
 
 In the next part, we can finally start using these models to build actual features for SwiftRide.
 
+### Source 
+
+You can download source code using the GitHub repository: 
+https://github.com/azamsharpschool/SwiftRide
+
 ### Conclusion
 
 At this point our database foundation is in place. We created the `Users` and `Roles` tables using Sequelize migrations, established a proper foreign key relationship between them, and configured the model associations so Sequelize understands how these tables relate to each other.
