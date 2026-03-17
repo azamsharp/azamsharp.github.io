@@ -15,6 +15,8 @@ Fortunately, the story does not end there. SwiftData is built on top of Core Dat
 
 Let's build one.
 
+> You can watch this [small video](https://x.com/azamsharp/status/2033654042023354622?s=20) of the end result. 
+
 <!-- Book Banner: SwiftUI Architecture Book -->
 <div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
   <div class="azam-book-banner__inner">
@@ -278,7 +280,7 @@ Once we have these states, the next step is to start listening for CloudKit even
 
 ### Implementing the start Function 
 
-The start function begins monitoring CloudKit synchronization.
+The `start` function begins monitoring CloudKit synchronization.
 
 SwiftData does not provide any API that tells us when syncing begins or ends. However, the underlying Core Data stack sends notifications whenever a CloudKit sync event changes.
 
@@ -335,55 +337,6 @@ The `start` function is responsible for **starting the sync monitor**. In other 
 
 SwiftData itself does not provide an API that tells us when syncing begins or ends. However, under the hood SwiftData relies on **Core Data with CloudKit integration**, and Core Data exposes notifications whenever a sync event changes. The `start` function simply registers a listener for those notifications.
 
-Here is the implementation again for reference:
-
-```swift
-func start() {
-    observer = NotificationCenter.default.addObserver(
-        forName: NSPersistentCloudKitContainer.eventChangedNotification,
-        object: nil,
-        queue: .main
-    ) { [weak self] notification in
-        
-        guard
-            let event = notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey]
-                as? NSPersistentCloudKitContainer.Event
-        else { return }
-        
-        let label: String
-        switch event.type {
-        case .setup:
-            label = "Setting up iCloud sync"
-        case .import:
-            label = "Downloading from iCloud"
-        case .export:
-            label = "Uploading to iCloud"
-        @unknown default:
-            label = "Syncing"
-        }
-        
-        // Event started
-        if event.endDate == nil {
-            self?.status = .syncing(label)
-            return
-        }
-        
-        // Event finished with error
-        if let error = event.error {
-            self?.status = .failed(error.localizedDescription)
-            return
-        }
-        
-        // Event finished successfully
-        if event.succeeded {
-            self?.status = .success
-        } else {
-            self?.status = .idle
-        }
-    }
-}
-```
-
 #### Registering the Listener
 
 The first part of the function registers an observer with `NotificationCenter`.
@@ -409,7 +362,6 @@ NSPersistentCloudKitContainer.eventChangedNotification
 This notification is triggered whenever CloudKit begins a sync operation, progresses through it, or completes it.
 
 The `queue: .main` parameter ensures that the closure runs on the **main thread**, which is important because the monitor updates UI state.
-
 
 #### Extracting the CloudKit Event
 
@@ -646,6 +598,72 @@ syncMonitor.start()
 ```
 
 This activates the sync monitor, and the UI will automatically update whenever CloudKit begins or finishes a sync operation.
+
+### Limitations of This Approach
+
+The technique we used works well for exposing basic sync activity, but it is important to understand that it is **not a perfect solution**. The APIs we are relying on come from the underlying Core Data CloudKit integration, and they were never designed to be a polished, user facing sync status API.
+
+In other words, we are tapping into internal signals that the sync engine emits. That gives us useful visibility, but there are a few limitations worth keeping in mind.
+
+#### No Progress Information
+
+One of the biggest limitations is that we cannot determine **how much of the sync operation has completed**.
+
+The events we receive only tell us when a sync operation **starts** and when it **finishes**. They do not provide incremental progress updates.
+
+This means we cannot build something like a progress bar showing:
+
+```
+Uploading 20%
+Uploading 60%
+Uploading 90%
+```
+
+Instead, we can only display high level states such as:
+
+* Uploading to iCloud
+* Downloading from iCloud
+* Sync completed
+* Sync failed
+
+For most applications this is still helpful, but it is not a precise representation of sync progress.
+
+#### Sync Events Do Not Always Match User Actions
+
+Another thing you might notice is that sync events do not always occur immediately after a user performs an action.
+
+When a user inserts or updates a record, SwiftData first writes the change to the **local store**. The upload to iCloud may happen a few seconds later because the sync engine often batches operations together.
+
+Because of this, you might see the syncing indicator appear slightly after the user performs an action.
+
+#### Multiple Events Can Fire Quickly
+
+CloudKit synchronization often consists of several operations happening in sequence. During a single sync cycle you might observe something like this:
+
+```
+Uploading to iCloud
+Sync completed
+Downloading from iCloud
+Sync completed
+```
+
+This happens because CloudKit may perform both **export and import operations** during the same cycle. For example, it may upload your local changes and then immediately pull down updates from other devices.
+
+For this reason, the status displayed by our monitor should be treated as **informational rather than perfectly precise**.
+
+#### Some Sync Activity Is Invisible
+
+CloudKit also performs internal operations that do not always surface as clear events.
+
+Examples include background scheduling, database maintenance, and conflict resolution. These activities may happen without producing a clean status message that we can display to the user.
+
+#### iCloud and Network Conditions
+
+Finally, this monitor assumes that the device is signed into iCloud and that CloudKit syncing is enabled for the app.
+
+If the user is not logged into iCloud, or if iCloud is disabled for the app, the monitor will not provide much useful information. Similarly, network interruptions can delay synchronization events, which may make the UI appear idle even though the system intends to sync later.
+
+Despite these limitations, this approach still provides **valuable visibility into the SwiftData sync process**. SwiftData makes syncing incredibly easy, but it also hides most of what is happening behind the scenes. By listening to the underlying CloudKit events, we can at least surface some meaningful signals to the user and gain better insight into what the sync engine is doing.
 
 ### Demo 
 

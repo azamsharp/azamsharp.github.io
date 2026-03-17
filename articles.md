@@ -9,6 +9,20 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Apple Doesn't Show SwiftData iCloud Sync Status — So Let's Build One](_posts/2026-03-16-swiftdata-icloud-sync-status.md) 
+
+This post was inspired by a question I came across on Reddit. The question was simple but interesting:
+
+Is there a way to show the sync status between SwiftData and iCloud in a SwiftUI app?
+
+At first glance this seems like something Apple would provide out of the box. After all, SwiftData makes enabling iCloud sync incredibly easy. But once you start looking for an API that tells you when syncing starts, finishes, or fails, you quickly realize something surprising.
+
+There is no such API.
+
+SwiftData does a great job syncing data with iCloud behind the scenes, but it does not expose any direct way to observe the sync progress.
+
+Fortunately, the story does not end there. SwiftData is built on top of Core Data with CloudKit integration, and Core Data exposes a set of notifications that tell us when sync events occur. By listening to those notifications we can build a simple but useful sync monitor view.
+
 ### [SwiftRide – Building a Ride Sharing App (Part 2 – Creating the Models)](_posts/2026-03-13-swift-ride-part-2-creating-the-models.md)
 
 In this part of the SwiftRide series, we move from setting up the development environment to defining the actual structure of the backend data layer. Using Sequelize migrations, we create the core database tables for the application and introduce models that allow our Node.js backend to interact with PostgreSQL in a structured way. The article walks through generating models and migrations using the Sequelize CLI, explains how migrations manage database schema changes over time, and demonstrates how to evolve a simple schema into a more scalable design by introducing a dedicated Roles table.
