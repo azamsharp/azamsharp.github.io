@@ -601,15 +601,15 @@ This activates the sync monitor, and the UI will automatically update whenever C
 
 ### Limitations of This Approach
 
-The technique we used works well for exposing basic sync activity, but it is important to understand that it is **not a perfect solution**. The APIs we are relying on come from the underlying Core Data CloudKit integration, and they were never designed to be a polished, user facing sync status API.
+The technique we used works well for exposing basic sync activity, but it is important to understand that it is not a perfect solution. The APIs we are relying on come from the underlying Core Data CloudKit integration, and they were never designed to be a polished, user facing sync status API.
 
 In other words, we are tapping into internal signals that the sync engine emits. That gives us useful visibility, but there are a few limitations worth keeping in mind.
 
 #### No Progress Information
 
-One of the biggest limitations is that we cannot determine **how much of the sync operation has completed**.
+One of the biggest limitations is that we cannot determine how much of the sync operation has completed.
 
-The events we receive only tell us when a sync operation **starts** and when it **finishes**. They do not provide incremental progress updates.
+The events we receive only tell us when a sync operation starts and when it finishes. They do not provide incremental progress updates.
 
 This means we cannot build something like a progress bar showing:
 
@@ -632,7 +632,7 @@ For most applications this is still helpful, but it is not a precise representat
 
 Another thing you might notice is that sync events do not always occur immediately after a user performs an action.
 
-When a user inserts or updates a record, SwiftData first writes the change to the **local store**. The upload to iCloud may happen a few seconds later because the sync engine often batches operations together.
+When a user inserts or updates a record, SwiftData first writes the change to the local store. The upload to iCloud may happen a few seconds later because the sync engine often batches operations together.
 
 Because of this, you might see the syncing indicator appear slightly after the user performs an action.
 
@@ -647,9 +647,9 @@ Downloading from iCloud
 Sync completed
 ```
 
-This happens because CloudKit may perform both **export and import operations** during the same cycle. For example, it may upload your local changes and then immediately pull down updates from other devices.
+This happens because CloudKit may perform both export and import operations during the same cycle. For example, it may upload your local changes and then immediately pull down updates from other devices.
 
-For this reason, the status displayed by our monitor should be treated as **informational rather than perfectly precise**.
+For this reason, the status displayed by our monitor should be treated as informational rather than perfectly precise.
 
 #### Some Sync Activity Is Invisible
 
@@ -663,7 +663,7 @@ Finally, this monitor assumes that the device is signed into iCloud and that Clo
 
 If the user is not logged into iCloud, or if iCloud is disabled for the app, the monitor will not provide much useful information. Similarly, network interruptions can delay synchronization events, which may make the UI appear idle even though the system intends to sync later.
 
-Despite these limitations, this approach still provides **valuable visibility into the SwiftData sync process**. SwiftData makes syncing incredibly easy, but it also hides most of what is happening behind the scenes. By listening to the underlying CloudKit events, we can at least surface some meaningful signals to the user and gain better insight into what the sync engine is doing.
+Despite these limitations, this approach still provides valuable visibility into the SwiftData sync process. SwiftData makes syncing incredibly easy, but it also hides most of what is happening behind the scenes. By listening to the underlying CloudKit events, we can at least surface some meaningful signals to the user and gain better insight into what the sync engine is doing.
 
 ### Demo 
 
