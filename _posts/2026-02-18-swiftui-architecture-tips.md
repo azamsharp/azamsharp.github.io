@@ -1,21 +1,19 @@
 
-# SwiftUI Architecture Tips I Wish I Knew Earlier
+# SwiftUI Architecture Lessons I Wish I Knew Earlier
 
 SwiftUI makes it very easy to build user interfaces.
 
 You can put together a screen in minutes and everything feels simple at first. But as your app grows, that simplicity starts to fade. More screens, more state, more logic. Now you are asking different questions.
 
-Where should this logic go
-How do I share data across screens
-Why is this view updating when it should not
+Where should this logic go.
+How do I share data across screens,
+Why is this view updating when it should not.
 
 At this point, the problem is no longer SwiftUI. The problem is architecture.
 
-After building real world apps and teaching SwiftUI to thousands of developers, one thing becomes very clear. Most issues come from unclear boundaries and mixing responsibilities. Views start doing too much. Stores become too big. Data flow becomes hard to follow.
+After building real world apps and teaching SwiftUI to thousands of developers, one thing becomes very clear. Most issues come from unclear boundaries and mixing responsibilities.
 
 This article is a collection of practical tips that I use in production apps. Nothing theoretical. Just patterns that work.
-
-The goal is simple. Keep your code easy to understand, easy to test, and easy to change.
 
 <!-- Book Banner: SwiftUI Architecture Book -->
 <div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
@@ -193,7 +191,6 @@ Trying to push them into view models or other layers usually leads to problems. 
 
 Keep UI state in the view. Move business logic somewhere else.
 
-
 ## Use composition aggressively
 
 SwiftUI is built for composition.
@@ -245,8 +242,6 @@ For more complex scenarios, you can use observation, streams, or Combine. But do
 
 Start simple and scale when needed.
 
-
-
 ## Use the environment for more than just data
 
 The environment is not just for passing values. It can also be used to expose actions.
@@ -257,8 +252,6 @@ This allows any view to trigger these actions without knowing how they are imple
 
 It keeps your views clean and your architecture flexible.
 
-
-
 ## Manage sheets and navigation cleanly
 
 If you find yourself creating multiple boolean flags to control sheets, stop.
@@ -266,8 +259,6 @@ If you find yourself creating multiple boolean flags to control sheets, stop.
 Use a single enum to represent all possible sheets and drive your UI from that. It scales much better and is easier to maintain.
 
 Also, avoid stacking multiple sheets on top of each other. It makes the user experience confusing and the code harder to manage.
-
-
 
 ## Stateless services 
 
@@ -279,7 +270,6 @@ This makes them easy to reuse and easy to test.
 
 In smaller apps, it is perfectly fine to call these services directly from a view. Just inject them through the environment.
 
-
 ## Use Swift concurrency correctly
 
 Async work should follow the lifecycle of your views.
@@ -287,7 +277,6 @@ Async work should follow the lifecycle of your views.
 Use `.task` for loading data and async functions for background work. Update your state when results arrive.
 
 This keeps things predictable and avoids issues with outdated data updating your UI.
-
 
 ## Handle validation without overengineering
 
@@ -299,27 +288,19 @@ When validation becomes more complex or reusable, extract it into a separate typ
 
 Keep it simple until it is not.
 
-
-
 ## Be mindful of performance details
 
-SwiftUI re evaluates views often. That is normal.
+SwiftUI re-evaluates views often. That is normal.
 
-The important part is that it only re renders what actually changes. You help this process by passing minimal data and keeping your views small.
+The important part is that it only re-renders what actually changes. You help this process by passing minimal data and keeping your views small.
 
 Also, remember that `AsyncImage` does not cache images. For real apps, you will need a proper caching solution.
 
-
-
 ## Test what matters
-
-Do not spend time testing views.
 
 Focus on testing your business logic. Stores and services are where bugs matter most.
 
 For critical user flows, add end to end tests. That is where testing gives you real value.
-
-
 
 ## Final thought
 
@@ -337,7 +318,7 @@ SwiftUI does not fail you. Your architecture does.
 
 Most problems developers face are not because SwiftUI is hard. They come from unclear boundaries, too much responsibility in views, and trying to force patterns that do not fit.
 
-The tips in this article are not rules. They are guardrails.
+The lessons in this article are not rules. They are guardrails.
 
 Start with simple decisions. Keep responsibilities clear. Let SwiftUI do what it is good at. As your app grows, evolve your architecture instead of overengineering it from day one.
 
@@ -346,3 +327,155 @@ You do not need the perfect setup. You need a setup that your future self can un
 If your code is easy to read, easy to change, and easy to debug, you are on the right track.
 
 That is what good SwiftUI architecture looks like.
+
+<!-- Book Banner: SwiftUI Architecture Book -->
+<div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
+  <div class="azam-book-banner__inner">
+    <div class="azam-book-banner__cover">
+      <!-- Replace the src with your real book cover image -->
+      <img
+        src="https://azamsharp.school/images/swiftui-architecture-book-cover.png"
+        alt="SwiftUI Architecture book cover"
+        loading="lazy"
+      />
+    </div>
+    <div class="azam-book-banner__content">
+      <p class="azam-book-banner__eyebrow">SwiftUI Architecture Book</p>
+      <h3 class="azam-book-banner__title">Patterns and Practices for Building Scalable Applications</h3>
+      <p class="azam-book-banner__subtitle">
+        A practical guide to building SwiftUI apps that stay clean as they grow.
+      </p>
+      <div class="azam-book-banner__actions">
+        <a class="azam-book-banner__button" href="https://azamsharp.school/swiftui-architecture-book.html" target="_blank" rel="noopener">
+          Get the book
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .azam-book-banner {
+    --bg1: #0b1220;
+    --bg2: #111a2d;
+    --text: rgba(255, 255, 255, 0.92);
+    --muted: rgba(255, 255, 255, 0.74);
+    --border: rgba(255, 255, 255, 0.12);
+    --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+    --accent: #6ee7b7; /* tweak to match your brand */
+    --accent2: #60a5fa;
+
+    margin: 22px 0;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: radial-gradient(1200px 600px at 10% 0%, rgba(96, 165, 250, 0.22), transparent 60%),
+                radial-gradient(900px 500px at 90% 30%, rgba(110, 231, 183, 0.18), transparent 60%),
+                linear-gradient(135deg, var(--bg1), var(--bg2));
+    box-shadow: var(--shadow);
+  }
+
+  .azam-book-banner__inner {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 18px;
+    padding: 18px;
+    align-items: center;
+  }
+
+  .azam-book-banner__cover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .azam-book-banner__cover img {
+    width: 132px;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.35);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .azam-book-banner__eyebrow {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .azam-book-banner__title {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    line-height: 1.25;
+  }
+
+  .azam-book-banner__subtitle {
+    margin: 0 0 14px 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 62ch;
+  }
+
+  .azam-book-banner__actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .azam-book-banner__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #071018;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: 0;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.28);
+    transition: transform 140ms ease, filter 140ms ease;
+  }
+
+  .azam-book-banner__button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.02);
+  }
+
+  .azam-book-banner__link {
+    font-size: 14px;
+    color: rgba(255,255,255,0.86);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.22);
+    padding-bottom: 2px;
+    transition: border-color 140ms ease, color 140ms ease;
+  }
+
+  .azam-book-banner__link:hover {
+    color: rgba(255,255,255,0.95);
+    border-color: rgba(255,255,255,0.45);
+  }
+
+  /* Mobile */
+  @media (max-width: 520px) {
+    .azam-book-banner__inner {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+
+    .azam-book-banner__cover {
+      justify-content: flex-start;
+    }
+
+    .azam-book-banner__cover img {
+      width: 120px;
+    }
+  }
+</style>

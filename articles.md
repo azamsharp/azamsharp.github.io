@@ -9,6 +9,23 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [SwiftUI Architecture Lessons I Wish I Knew Earlier](_posts/2026-02-18-swiftui-architecture-tips.md) 
+
+SwiftUI makes it very easy to build user interfaces.
+
+You can put together a screen in minutes and everything feels simple at first. But as your app grows, that simplicity starts to fade. More screens, more state, more logic. Now you are asking different questions.
+
+Where should this logic go.
+How do I share data across screens,
+Why is this view updating when it should not.
+
+At this point, the problem is no longer SwiftUI. The problem is architecture.
+
+After building real world apps and teaching SwiftUI to thousands of developers, one thing becomes very clear. Most issues come from unclear boundaries and mixing responsibilities.
+
+This article is a collection of practical tips that I use in production apps. Nothing theoretical. Just patterns that work.
+
+
 ### [Apple Doesn't Show SwiftData iCloud Sync Status — So Let's Build One](_posts/2026-03-16-swiftdata-icloud-sync-status.md) 
 
 This post was inspired by a question I came across on Reddit. The question was simple but interesting:
