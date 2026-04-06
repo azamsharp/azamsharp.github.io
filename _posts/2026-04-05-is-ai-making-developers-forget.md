@@ -12,6 +12,8 @@ When I was consistent, I could comfortably climb V5 routes. After taking a few m
 
 Programming works the same way.
 
+> Programming is not like learning how to ride a bike. It requires constant practice, or you will forget how to think.
+
 If you don't practice thinking, you lose it. Not immediately, but gradually. The part of your brain that solves problems, connects ideas, and reasons through challenges starts getting weaker.
 
 And this is where AI becomes dangerous.
