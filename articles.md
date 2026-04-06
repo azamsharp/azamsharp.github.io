@@ -9,6 +9,14 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Is AI Making Developers Forget How to Think?](_posts/2026-04-05-is-ai-making-developers-forget.md)
+
+This article explores how over-reliance on AI tools can weaken a developer’s ability to think and solve problems independently. Using real-world analogies from fitness and bouldering, it highlights how skills deteriorate when they are not actively practiced.
+
+While AI can significantly improve productivity, using it without understanding leads to shallow learning and dependency. The article argues for a more intentional approach where AI is treated as a tool for learning and exploration rather than a replacement for thinking.
+
+The goal is not to discourage the use of AI, but to encourage developers to stay engaged in the problem-solving process so they can continue to grow their skills over time.
+
 ### [SwiftUI Architecture Lessons I Wish I Knew Earlier](_posts/2026-02-18-swiftui-architecture-tips.md) 
 
 SwiftUI makes it very easy to build user interfaces.
