@@ -2,7 +2,7 @@
 
 After spending months writing, rewriting, formatting, and obsessing over details that most readers will never consciously notice, I finally have something I can hold in my hands. The paperback version of my SwiftUI Architecture book is now available, and seeing it in physical form feels very different from shipping a digital product.
 
-You can learn more about the book and grab the eBook here:  
+You can learn more about the book and grab it here: 
 [https://azamsharp.school/swiftui-architecture-book.html](https://azamsharp.school/swiftui-architecture-book.html)
 
 When you publish an eBook, you hit upload and move on. With a paperback, you slow down. You start thinking about things like how the text feels on the page, whether the code blocks are readable, how long someone can sit with the book without getting tired, and whether the whole thing actually looks like something worth studying. That process forced me to revisit the content multiple times, not because the ideas changed, but because the experience of consuming those ideas matters more in print.
@@ -19,7 +19,7 @@ Working on the paperback also made me appreciate how much presentation affects l
 
 This book is not for someone who just installed Xcode last week. It is for developers who have already built a few apps and are starting to feel the pain of scaling those apps. If you have ever looked at your project and thought, “this worked at the beginning, but now it feels messy,” then this book will resonate with you.
 
-You can learn more about the book and grab the eBook here:  
+You can learn more about the book and grab it here:  
 [https://azamsharp.school/swiftui-architecture-book.html](https://azamsharp.school/swiftui-architecture-book.html)
 
 The paperback version is available on Amazon, so you can choose whichever format works best for you. Some people prefer digital. Others want something they can keep on their desk and revisit.

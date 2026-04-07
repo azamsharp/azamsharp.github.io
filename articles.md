@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [SwiftUI Architecture Book Is Now Available in Paperback](_posts/2026-04-07-swiftui-book-paperback.md)
+
+After months of refining both content and presentation, the SwiftUI Architecture book is now available in paperback. This post reflects on the process and outlines how the book helps developers build scalable SwiftUI apps using pragmatic, experience-driven patterns.
+
 ### [Is AI Making Developers Forget How to Think?](_posts/2026-04-05-is-ai-making-developers-forget.md)
 
 This article explores how over-reliance on AI tools can weaken a developer’s ability to think and solve problems independently. Using real-world analogies from fitness and bouldering, it highlights how skills deteriorate when they are not actively practiced.
