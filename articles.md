@@ -9,6 +9,16 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Getting Started with Hummingbird](_posts/2026-04-15-getting-started-with-humming-bird.md) 
+
+I still remember the late 90s when I installed Internet Information Services on my machine. It allowed me to run Classic ASP pages connected to a Microsoft SQL Server database. That was my first real introduction to backend development.
+
+Fast forward a few decades, and I still enjoy backend development just as much. It gives you a level of control that is hard to achieve when relying entirely on backend-as-a-service platforms.
+
+Over the years, I have worked with a variety of backend technologies, including ASP.NET Web Forms, ASP.NET MVC, ExpressJS, Flask, Vapor, and now Hummingbird.
+
+What I have learned is that once you understand the fundamentals, moving between frameworks becomes much easier. Recently, I have been spending time exploring [Hummingbird](https://hummingbird.codes/), and in this article, I will walk you through a simple introduction to get started.
+
 ### [SwiftUI Architecture Book Is Now Available in Paperback](_posts/2026-04-07-swiftui-book-paperback.md)
 
 After months of refining both content and presentation, the SwiftUI Architecture book is now available in paperback. This post reflects on the process and outlines how the book helps developers build scalable SwiftUI apps using pragmatic, experience-driven patterns.
