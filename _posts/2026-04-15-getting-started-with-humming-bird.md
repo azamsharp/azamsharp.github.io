@@ -308,13 +308,13 @@ You can achieve the same behavior in your Hummingbird projects using a tool call
 
 To install watchexec, run:
 
-```swift id="g0c0g6"
+```swift
 brew install watchexec
 ```
 
 Once installed, navigate to your Hummingbird project folder and run:
 
-```swift id="m3v7rc"
+```swift
 watchexec -e swift --restart swift run
 ```
 
