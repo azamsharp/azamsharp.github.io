@@ -353,9 +353,11 @@ movies.get(":id") { request, _ -> Movie? in
     return movieStore.movieById(id ?? 0)
 }
 
-movies.post { request, _ -> HTTPResponseStatus in
+movies.post { request, context -> Movie in
     // create movie
-    return .created
+
+    // return new movie 
+    return movie 
 }
 ```
 
