@@ -9,6 +9,18 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+
+### [The Most Important Concept in Hummingbird (Routing Explained)](_posts/2026-04-19-hummingbird-routing.md)
+
+In the [previous article](https://azamsharp.com/2026/04/15/getting-started-with-humming-bird.html), you got Hummingbird up and running and saw how simple it is to spin up a Swift server. But a running server by itself is not very useful. It needs to respond to requests.
+
+That is where routing comes in.
+
+Routing is what turns your server into something useful. It decides how your application responds when a request hits a specific URL. Whether you are returning a list of movies, fetching details for a single item, or creating new data, everything starts with a route.
+
+In this article, you will learn how routing works in Hummingbird and how to define your own routes using parameters, query strings, and route groups.
+
+
 ### [Getting Started with Hummingbird](_posts/2026-04-15-getting-started-with-humming-bird.md) 
 
 I still remember the late 90s when I installed Internet Information Services on my machine. It allowed me to run Classic ASP pages connected to a Microsoft SQL Server database. That was my first real introduction to backend development.
