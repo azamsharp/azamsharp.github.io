@@ -1,3 +1,12 @@
+[Home](https://azamsharp.github.io)
+[Courses](https://azamsharp.school/)
+[Books](/books)
+[Articles](/articles)
+[Newsletter](https://azamsharp.teachable.com/p/newsletter)
+[YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
+[Speaking](/speaking)
+[Contact](/contact)
+
 # Developers Who Knew Nothing
 
 Last year, I released five different apps on the App Store. Four of them were vibe coded, meaning I wrote very little code myself and let AI generate most of the implementation.
