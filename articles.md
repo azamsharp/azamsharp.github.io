@@ -9,6 +9,8 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Developers Who Knew Nothing](_posts/2026-05-06-developers-who-knew-nothing.md)
+AI can generate entire applications in minutes, but what happens when developers no longer understand the code they ship? In this article, I reflect on vibe coding, responsibility, long term maintenance, and why programming still requires deep thinking even in the age of AI.
 
 ### [The Most Important Concept in Hummingbird (Routing Explained)](_posts/2026-04-19-hummingbird-routing.md)
 
