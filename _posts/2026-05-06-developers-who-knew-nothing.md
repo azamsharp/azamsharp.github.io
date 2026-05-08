@@ -1,11 +1,11 @@
 [Home](https://azamsharp.github.io)
 [Courses](https://azamsharp.school/)
-[Books](/books)
-[Articles](/articles)
+[Apps](https://apps.apple.com/us/developer/mohammad-azam/id392527683)
+[Books](https://azamsharp.school/swiftui-architecture-book.html)
+[Consulting](https://azamsharp.teachable.com/p/1-on-1-coaching)
+[Articles](articles)
 [Newsletter](https://azamsharp.teachable.com/p/newsletter)
-[YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
-[Speaking](/speaking)
-[Contact](/contact)
+[Contact](contact)
 
 # Developers Who Knew Nothing
 
