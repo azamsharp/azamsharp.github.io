@@ -9,6 +9,20 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Swift Is Great for Apps, Not for Training ML Models](_posts/2026-05-15-swift-not-good-for-training-machine-learning-models.md) 
+A few years back, I conducted a couple of workshops on building machine learning models using Create ML. One workshop was hosted at SwiftCraft and another at try! Swift NYC. The sessions went great, and people were excited to see machine learning workflows built entirely with Swift and Apple’s tooling.
+
+But after spending more time with Create ML, I started noticing something frustrating.
+
+Simple machine learning tasks that felt effortless in Python suddenly became awkward and verbose in Swift. Data cleanup, preprocessing, feature engineering, encoding, normalization, and experimentation all required significantly more effort than I was used to with tools like pandas, scikit-learn, and TensorFlow.
+
+To be clear, I like Swift. Swift is one of my favorite languages for building applications. But after working with Create ML workflows for a while, I came to a realization.
+
+Swift is great for deploying machine learning models.
+It is not great for training them.
+
+Over time, I found myself spending more energy fighting the tooling than actually solving machine learning problems.
+
 ### [Developers Who Knew Nothing](_posts/2026-05-06-developers-who-knew-nothing.md)
 AI can generate entire applications in minutes, but what happens when developers no longer understand the code they ship? In this article, I reflect on vibe coding, responsibility, long term maintenance, and why programming still requires deep thinking even in the age of AI.
 

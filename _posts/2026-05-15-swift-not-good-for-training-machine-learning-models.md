@@ -4,14 +4,16 @@ A few years back, I conducted a couple of workshops on building machine learning
 
 But after spending more time with Create ML, I started noticing something frustrating.
 
-Simple machine learning tasks that felt effortless in Python suddenly became awkward and verbose in Swift. Data cleanup, preprocessing, feature engineering, encoding, normalization, and experimentation all required significantly more work than I was used to with tools like pandas, scikit-learn, and TensorFlow.
+Simple machine learning tasks that felt effortless in Python suddenly became awkward and verbose in Swift. Data cleanup, preprocessing, feature engineering, encoding, normalization, and experimentation all required significantly more effort than I was used to with tools like pandas, scikit-learn, and TensorFlow.
 
-To be clear, I like Swift. Swift is one of my favorite languages for building applications. But after working with Create ML workflows for a while, I came to a realization:
+To be clear, I like Swift. Swift is one of my favorite languages for building applications. But after working with Create ML workflows for a while, I came to a realization.
 
 Swift is great for deploying machine learning models.
 It is not great for training them.
 
 Over time, I found myself spending more energy fighting the tooling than actually solving machine learning problems.
+
+In this article, we will look at some of the challenges I encountered while training machine learning models using Swift and Create ML, why I eventually switched back to Python for training workflows, and how to convert Python trained models into Core ML models that can be deployed in iOS apps or even hosted on the server using Swift frameworks like Vapor and Hummingbird.
 
 <!-- Book Banner: SwiftUI Architecture Book -->
 <div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
@@ -165,9 +167,9 @@ Over time, I found myself spending more energy fighting the tooling than actuall
   }
 </style>
 
-### A Simple Example 
+### Where Things Started Breaking Down
 
-Suppose the Year column in a dataset has dirty values. Instead of clean values like 2017, you may sometimes see values like 20173. A simple fix is to take the first four characters from the year value.
+Let's say that we are working on the [Carvana dataset](https://www.kaggle.com/datasets/ravishah1/carvana-predict-car-prices) for car pricing and the "Year" column in the dataset has dirty values. Instead of values like 2017, you may sometimes see values like 20173. A simple fix is to take the first four characters from the year value.
 
 In Swift, using TabularData, you may write something like this:
 
@@ -206,6 +208,18 @@ Failed to find "libcups.dylib" in paths:
 > The recommendation was to stop using Playgrounds and move the code to a macOS Command Line Tool project.
 
 As your machine learning workflows become more complex, you start spending more time fighting the tooling instead of actually training models. You deal with linker issues, Playground instability, missing APIs, awkward preprocessing workflows, and limited ecosystem support. Eventually, it starts slowing down experimentation, which is the exact opposite of what you want in machine learning.
+
+Python also provides excellent support for building custom machine learning pipelines. The pipeline allows you to create machine learning workflow that can be composed of preprocessing, model training etc. 
+
+For example, you can create preprocessing stages for standardization, one hot encoding, scaling, feature selection, and then pass the transformed data directly into the model.
+
+The really nice part is that everything becomes part of one consistent pipeline.
+
+The caller does not need to manually standardize values or build large arrays representing one hot encoded categories. The pipeline takes care of those transformations automatically before the data reaches the model. This makes the code cleaner, easier to maintain, and much easier to evolve as your preprocessing logic grows over time.
+
+The overall workflow is also very straightforward, especially when using tools like scikit-learn.
+
+If you want to build similar workflows in Swift, you usually end up working with Create ML Components. Unfortunately, the experience is nowhere near as smooth. The APIs are much harder to use, require significantly more code, and the documentation is still pretty limited compared to the Python machine learning ecosystem.
 
 At that point, I decided to go a different route.
 
