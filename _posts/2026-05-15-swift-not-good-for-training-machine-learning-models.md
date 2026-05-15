@@ -333,9 +333,3 @@ After spending time with Create ML, I realized that I was fighting the tooling m
 That does not mean Swift has no place in machine learning. Quite the opposite. Swift is excellent for deploying and consuming models using Core ML. In fact, using Swift on the server with frameworks like Vapor or Hummingbird opens interesting opportunities for hosting Core ML powered APIs.
 
 But for training models, preprocessing data, and experimenting with machine learning pipelines, Python remains the better tool for the job.
-
-My preferred workflow today looks like this:
-
-Python → Train Model → Convert with CoreMLTools → Deploy with Swift/Core ML
-
-And honestly, that combination gives you the best of both worlds.
