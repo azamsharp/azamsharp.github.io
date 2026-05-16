@@ -1,4 +1,4 @@
-# StoreKit 2 Handles Purchases. This Handles Everything Else
+# Tracking App Store Purchases with Server Notifications
 
 Last year I released several apps to the App Store and all of them used In-App Purchases. Some of them were simple one-time purchases while others used recurring subscriptions.
 
