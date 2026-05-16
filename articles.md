@@ -9,6 +9,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [StoreKit 2 Handles Purchases. This Handles Everything Else](_posts/2026-05-16.storekit2-app-store-server-notifications.md)
+StoreKit 2 handles purchases inside your app, but subscriptions do not stop there. In this article, you will learn how to build an App Store Server Notifications endpoint using ExpressJS that can track renewals, expirations, refunds, billing issues, and other subscription events directly from Apple. We will decode the signed payloads, extract transaction details, and build a lightweight backend workflow for handling App Store subscription events in real time.
+
 ### [Swift Is Great for Apps, Not for Training ML Models](_posts/2026-05-15-swift-not-good-for-training-machine-learning-models.md) 
 A few years back, I conducted a couple of workshops on building machine learning models using Create ML. One workshop was hosted at SwiftCraft and another at try! Swift NYC. The sessions went great, and people were excited to see machine learning workflows built entirely with Swift and Apple’s tooling.
 
