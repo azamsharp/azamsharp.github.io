@@ -7,7 +7,8 @@ At first, creating a custom store can feel intimidating because SwiftData hides 
 In this chapter, we are going to build a custom JSON based store for SwiftData. Our store will persist records to a JSON file while still allowing us to use all the familiar SwiftData APIs in our SwiftUI views. This means we will continue using @Query, ModelContext, insert, delete, and save, but instead of SQLite, the data will now be backed by a JSON document.
 
 Along the way, you will learn how SwiftData internally communicates with a custom store, how snapshots work, how identifiers are managed, and how records are fetched and persisted. Once you understand these concepts, building other custom stores becomes much easier. A JSON store is only the beginning. The same architecture can be extended to text files, remote APIs, Firebase, or even your own database engine. 
-Several concepts and APIs demonstrated in this chapter are inspired by Apple’s WWDC 2024 session “Create a custom data store in SwiftData.” This chapter expands on those ideas by explaining the underlying architecture, snapshots, identifiers, and the flow between SwiftData and a custom persistence layer. 
+
+> Several concepts and APIs demonstrated in this chapter are inspired by Apple’s WWDC 2024 session [Create a custom data store in SwiftData](https://developer.apple.com/videos/play/wwdc2024/10138/). This chapter expands on those ideas by explaining the underlying architecture, snapshots, identifiers, and the flow between SwiftData and a custom persistence layer. 
 
 <!-- Book Banner: SwiftUI Architecture Book -->
 <div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
@@ -767,6 +768,14 @@ This is one of the tradeoffs of building a custom store. You get a lot of flexib
 
 - [JSON Store](https://gist.github.com/azamsharpschool/d66674a274e9a80825e5189c263ef235)
 - [Text Store](https://gist.github.com/azamsharpschool/c50a0a6e2b4870102fef62c234a91b42)
+
+### Support 
+
+If you enjoyed this chapter and would like to continue learning more about SwiftUI, SwiftData, architecture, and full stack Swift development, make sure to check out the resources available on [AzamSharp School](https://azamsharp.school).
+
+AzamSharp School includes books, video courses, workshops, and practical tutorials focused on building real world applications using SwiftUI and modern Apple frameworks. Topics include SwiftUI architecture, SwiftData, testing, server side Swift, machine learning, and much more.
+
+You can also find additional articles, videos, and source code examples at [AzamSharp School](https://azamsharp.school).
 
 ### Conclusion 
 Building a custom SwiftData store may seem complicated at first, but once you understand the role of snapshots, identifiers, and the DataStore protocol, the overall architecture becomes much easier to reason about. SwiftData handles the difficult parts like observation, change tracking, relationships, and rebuilding live model objects, while your custom store focuses only on persistence.

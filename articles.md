@@ -9,6 +9,13 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Building a Custom Data Store in SwiftData](_posts/2026-05-26-building-a-custom-data-store-in-swiftdata.md) 
+SwiftData provides a powerful persistence framework built on top of SQLite, allowing developers to work with modern APIs such as @Query, ModelContext, and @Model. While the default SQLite backed store is suitable for most applications, SwiftData also introduces support for custom data stores, enabling developers to persist data using alternative storage mechanisms such as JSON, text files, REST APIs, Firebase, or cloud services.
+
+This article explores the architecture behind SwiftData custom stores by implementing a JSON based persistence layer. The chapter demonstrates how SwiftData converts live model objects into lightweight snapshots and communicates those snapshots to a custom store for persistence. Readers will learn how snapshots, identifiers, fetch requests, and save operations work together to bridge SwiftData’s object graph system with a custom storage engine.
+
+Through the implementation of a JSON backed store, the chapter provides a deeper understanding of SwiftData internals while continuing to use familiar SwiftData APIs inside SwiftUI views. Concepts covered include snapshot management, custom store configuration, reading and writing snapshots, identifier remapping, and the overall flow of data between SwiftData and the persistence layer. The techniques presented in this chapter can serve as a foundation for building more advanced custom stores backed by alternative databases, cloud systems, or remote APIs.
+
 ### [Tracking App Store Purchases with Server Notifications](_posts/2026-05-16-storekit2-app-store-server-notifications.md)
 StoreKit 2 handles purchases inside your app, but subscriptions do not stop there. In this article, you will learn how to build an App Store Server Notifications endpoint using ExpressJS that can track renewals, expirations, refunds, billing issues, and other subscription events directly from Apple. We will decode the signed payloads, extract transaction details, and build a lightweight backend workflow for handling App Store subscription events in real time.
 
