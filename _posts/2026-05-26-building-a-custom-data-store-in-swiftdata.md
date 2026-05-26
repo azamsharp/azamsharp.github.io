@@ -287,14 +287,7 @@ For this example, we will store records of type Book. A book will have two prope
 ```swift
 @Model
 class Book {
-```
-
-```swift
     var name: String
-    var author: String
-```
-
-```swift
     init(name: String, author: String) {
         self.name = name
         self.author = author
@@ -321,45 +314,32 @@ In our case, the schema will contain the Book model, and the fileURL will point 
 The implementation of JSONStoreConfiguration is shown below:
 ```swift
 final class JSONStoreConfiguration: DataStoreConfiguration {
-```
 
-```swift
     typealias Store = JSONStore
-```
 
-```swift
     var name: String
     var schema: Schema?
     var fileURL: URL
-```
 
-```swift
     init(name: String, schema: Schema? = nil, fileURL: URL) {
         self.name = name
         self.schema = schema
         self.fileURL = fileURL
     }
-```
 
     static func == (
         lhs: JSONStoreConfiguration,
         rhs: JSONStoreConfiguration
     ) -> Bool {
         lhs.name == rhs.name
-```swift
     }
-```
 
-```swift
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
-```
 
-```swift
 }
 ```
-
 The Equatable and Hashable implementations are required because SwiftData needs a way to uniquely identify and compare configurations internally. In our implementation, we simply use the store name for equality and hashing.
 
 #### Creating the JSON Store
@@ -370,32 +350,24 @@ In our case, the persistence layer is a JSON file. SwiftData does not really car
 Here is the initial implementation of our custom JSONStore:
 ```swift
 final class JSONStore: DataStore {
-```
 
-```swift
+
     typealias Configuration = JSONStoreConfiguration
     typealias Snapshot = DefaultSnapshot
-```
 
-```swift
     var configuration: JSONStoreConfiguration
     var name: String
     var schema: Schema
     var identifier: String
-```
-
-```swift
     init(
         _ configuration: JSONStoreConfiguration,
         migrationPlan: (any SchemaMigrationPlan.Type)?
     ) throws {
-```
 
         self.configuration = configuration
         self.name = configuration.name
         self.schema = configuration.schema!
         self.identifier = configuration.fileURL.lastPathComponent
-```swift
     }
 }
 ```
@@ -418,19 +390,10 @@ Let’s look at the implementation of the fetch function.
 func fetch<T>(
     _ request: DataStoreFetchRequest<T>
 ) throws -> DataStoreFetchResult<T, DefaultSnapshot> where T: PersistentModel {
-```
-
-```swift
     let snapshots = try getSnapshots()
-```
-
-```swift
     let fetchedSnapshots = snapshots.values.filter {
         $0.persistentIdentifier.entityName == "\(T.self)"
     }
-```
-
-```swift
     return DataStoreFetchResult(
         descriptor: request.descriptor,
         fetchedSnapshots: fetchedSnapshots
@@ -460,42 +423,22 @@ At this point, our job as the custom store is done. We do not manually convert s
 Now let’s look at the implementation of getSnapshots.
 ```swift
 private func getSnapshots() throws -> [PersistentIdentifier: DefaultSnapshot] {
-```
 
-```swift
     let fileURL = configuration.fileURL
-```
-
-```swift
     guard FileManager.default.fileExists(
         atPath: fileURL.path(percentEncoded: false)
     ) else {
         return [:]
     }
-```
-
-```swift
     let data = try Data(contentsOf: fileURL)
-```
-
-```swift
     let snapshots = try JSONDecoder().decode(
         [DefaultSnapshot].self,
         from: data
     )
-```
-
-```swift
     var result: [PersistentIdentifier: DefaultSnapshot] = [:]
-```
-
-```swift
     for snapshot in snapshots {
         result[snapshot.persistentIdentifier] = snapshot
     }
-```
-
-```swift
     return result
 }
 ```
@@ -515,9 +458,7 @@ After decoding the snapshots, we convert the array into a dictionary keyed by Pe
 
 ```swift
 var result: [PersistentIdentifier: DefaultSnapshot] = [:]
-```
 
-```swift
 for snapshot in snapshots {
     result[snapshot.persistentIdentifier] = snapshot
 }
