@@ -424,8 +424,11 @@ class User {
         let longitude: Double
     }
 }
+```
 
 Saving a user is straightforward:
+
+``` swift 
 let user = User(
     name: "John Doe",
     age: 34,
@@ -458,7 +461,8 @@ class FavoritePlace {
         self.name = name
         self.mapItemIdentifier = mapItemIdentifier
     }
-}```
+}
+```
 
 
 The code compiles without any issues.
