@@ -2,12 +2,20 @@
 
 [Home](https://azamsharp.github.io)
 [Courses](https://azamsharp.school/)
-[Books](/books)
+[Books](https://azamsharp.school/books.html)
 [Articles](/articles)
 [Newsletter](https://azamsharp.teachable.com/p/newsletter)
 [YouTube](https://www.youtube.com/channel/UCKvDySsrOVgUgRLhWHeyHJA?view_as=subscriber)
 [Speaking](/speaking)
 [Contact](/contact)
+
+### [What's New in SwiftData for iOS 27](_posts/2026-06-12-whats-new-in-swiftdata.md)
+
+iOS 27 introduces several important enhancements to SwiftData that make it more capable for real-world application development. While none of these features fundamentally change how SwiftData works, they remove many of the limitations developers encountered when building production applications.
+
+In this article, you will learn about some of the most significant SwiftData additions in iOS 27, including filtering directly on enum values, grouping query results into sections, building compound predicates, persisting complex types using the new .codable attribute, and observing store changes outside SwiftUI views using ResultsObserver.
+
+Through practical examples, we will explore how these features can simplify application architecture, reduce boilerplate code, and improve the overall developer experience. Whether you are building a personal finance application, a business application, or a CloudKit-powered solution, these improvements make SwiftData more flexible, expressive, and easier to use in production environments.
 
 ### [Building a Custom Data Store in SwiftData](_posts/2026-05-26-building-a-custom-data-store-in-swiftdata.md) 
 SwiftData provides a powerful persistence framework built on top of SQLite, allowing developers to work with modern APIs such as @Query, ModelContext, and @Model. While the default SQLite backed store is suitable for most applications, SwiftData also introduces support for custom data stores, enabling developers to persist data using alternative storage mechanisms such as JSON, text files, REST APIs, Firebase, or cloud services.
