@@ -7,7 +7,7 @@
 [Home](https://azamsharp.github.io)
 [Courses](https://azamsharp.school/)
 [Apps](https://apps.apple.com/us/developer/mohammad-azam/id392527683)
-[Books](https://azamsharp.school/swiftui-architecture-book.html)
+[Books](https://azamsharp.school/books.html)
 [Consulting](https://azamsharp.teachable.com/p/1-on-1-coaching)
 [Articles](articles)
 [Newsletter](https://azamsharp.teachable.com/p/newsletter)
