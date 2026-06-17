@@ -560,7 +560,6 @@ final class BudgetSummaryStore {
             self?.updateSummary()
         }
 
-        updateSummary()
     }
 
     private func updateSummary() {
