@@ -155,6 +155,7 @@ In this article, we will explore some of the most important SwiftData improvemen
 * [Compound Queries](#compound-queries)
 * [The .codable Attribute](#the-codable-attribute)
 * [ResultsObserver - Observing Data Outside Views](#resultsobserver---observing-data-outside-views)
+* [HistoryObserver - Syncing Data with Custom Backend](#historyobserver---synchronizing-swiftdata-with-a-custom-backend)
 
 
 ### Predicate with Enums 
@@ -664,6 +665,277 @@ struct ResultsObserverInSwiftDataApp: App {
 
 Views can then access the summary store directly from the environment and display the calculated values without needing to know how those values were produced.
 ResultsObserver does not replace @Query. In most situations, @Query remains the simplest and most natural way to display data in SwiftUI. But when you need to react to store changes outside of a view and maintain derived state, ResultsObserver provides a clean and powerful solution.
+
+### HistoryObserver - Synchronizing SwiftData with a Custom Backend
+
+Introduced in iOS 27, HistoryObserver makes it easier to synchronize a SwiftData store with a custom backend.
+One of the challenges of building applications backed by a server is figuring out what has changed since the last synchronization. You could fetch all of the records and send them to the server every time a sync runs, but that approach does not scale very well as your data grows.
+
+In most cases, you only want to synchronize the records that have changed.
+
+This is where HistoryObserver comes in. It allows your application to monitor changes occurring in the SwiftData store and inspect the transactions that were committed. Instead of only giving you the current state of your models, it provides access to the inserts, updates, and deletes that occurred over time.
+
+This information is extremely valuable when building a synchronization pipeline. When a user creates, updates, or deletes data locally, you can inspect the changes and queue only those records for synchronization. This results in a much more efficient solution compared to repeatedly scanning the entire database.
+
+Consider a home inventory application that stores information about rooms in a house. Whenever a new room is added, we would like to automatically queue that room for synchronization with a remote server.
+
+``` swift 
+@Model
+class Room {
+    
+    var name: String
+    var area: Double
+    
+    init(name: String, area: Double) {
+        self.name = name
+        self.area = area
+    }
+    
+}
+```
+
+The Room model is intentionally simple. It represents a room in the house and stores the name of the room along with its area.
+Next, we can create a sync manager that observes changes to the SwiftData store.
+
+``` swift 
+@Observable
+class RoomSyncManager {
+    
+    private var observer: HistoryObserver?
+    private var lastToken: DefaultHistoryToken?
+    
+    @ObservationIgnored
+    private var token: ObservationTracking.Token?
+    
+    func start(container: ModelContainer) throws {
+        observer = try HistoryObserver(
+            observedModels: [Room.self],
+            modelContainer: container
+        )
+        
+        token = withContinuousObservation(options: .didSet) { [weak self] event in
+            _ = self?.observer?.eventCounter
+            self?.processChanges(container: container)
+        }
+    }
+    
+    private func processChanges(container: ModelContainer) {
+        let modelContext = container.mainContext
+        
+        let descriptor: HistoryDescriptor<DefaultHistoryTransaction>
+        
+        if let lastToken {
+            descriptor = HistoryDescriptor<DefaultHistoryTransaction>(
+                predicate: #Predicate { transaction in
+                    transaction.token > lastToken
+                }
+            )
+        } else {
+            descriptor = HistoryDescriptor<DefaultHistoryTransaction>()
+        }
+        
+        do {
+            let history = try modelContext.fetchHistory(descriptor)
+            
+            for transaction in history {
+                for change in transaction.changes {
+                    switch change {
+                    case .insert(let insert as DefaultHistoryInsert<Room>):
+                        if let room = modelContext.model(
+                            for: insert.changedPersistentIdentifier
+                        ) as? Room {
+                            queueRoomForSync(room)
+                        }
+                        
+                    case .update(let update as DefaultHistoryUpdate<Room>):
+                        if let room = modelContext.model(
+                            for: update.changedPersistentIdentifier
+                        ) as? Room {
+                            queueRoomForSync(room)
+                        }
+                        
+                    case .delete(let delete as DefaultHistoryDelete<Room>):
+                        queueRoomDeleteForSync(delete.changedPersistentIdentifier)
+                        
+                    default:
+                        break
+                    }
+                }
+            }
+            
+            if let latestToken = history.last?.token {
+                lastToken = latestToken
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func queueRoomForSync(_ room: Room) {
+        print("Queue room for sync")
+        print(room.name, room.area)
+        
+        // In a real application, this is where you can create
+        // a sync job and send it to your backend.
+    }
+    
+    private func queueRoomDeleteForSync(_ id: PersistentIdentifier) {
+        print("Queue room delete for sync")
+        print(id)
+        
+        // In a real application, this is where you can notify
+        // your backend that the local record was deleted.
+    }
+}
+```
+
+The first thing to notice is the HistoryObserver.
+
+``` swift 
+private var observer: HistoryObserver?
+```
+
+Inside the start function, we create the observer and tell it which models we want to observe.
+
+``` swift 
+observer = try HistoryObserver( observedModels: [Room.self], modelContainer: container)
+```
+
+In this example, we are only observing changes for the Room model. If your application needs to observe multiple models, you can pass additional model types to the observedModels array.
+
+Next, we establish continuous observation.
+
+``` swift 
+token = withContinuousObservation(options: .didSet) { [weak self] event in
+    guard let self else { return }
+    
+    // Accessing eventCounter causes the observation
+    // to be re-triggered whenever new history events occur.
+    _ = observer?.eventCounter
+    
+    processChanges(container: container)
+}
+```
+
+The important line is this one:
+``` swift 
+_ = self?.observer?.eventCounter
+```
+
+Accessing eventCounter allows the observation system to track changes reported by the HistoryObserver. When the store changes, the observation fires and processChanges is called.
+
+Just like other uses of withContinuousObservation, it is important to keep a strong reference to the returned token. If the token is released, the observation stops.
+
+Inside processChanges, we fetch the persistent history from the model context.
+
+``` swift
+let history = try modelContext.fetchHistory(descriptor)
+``` 
+
+The history contains transactions, and each transaction contains changes. Those changes can represent inserts, updates, or deletes.
+``` swift 
+for transaction in history {
+    for change in transaction.changes {
+        switch change {
+        case .insert(let insert as DefaultHistoryInsert<Room>):
+            handleInsert(insert)
+
+        case .update(let update as DefaultHistoryUpdate<Room>):
+            handleUpdate(update)
+
+        case .delete(let delete as DefaultHistoryDelete<Room>):
+            handleDelete(delete)
+
+        default:
+            break
+        }
+    }
+}
+```
+
+For inserted and updated records, we can use the changed persistent identifier to load the model from the context.
+
+```swift 
+if let room = modelContext.model(
+    for: insert.changedPersistentIdentifier
+) as? Room {
+    queueRoomForSync(room)
+}
+``` 
+
+This allows us to queue the actual room for synchronization with the backend.
+Deletes are a little different. When a record has been deleted, the model may no longer be available in the store. In that case, you usually send the persistent identifier or your own server-side identifier to the backend so it can delete the matching record remotely.
+
+Finally, we store the latest history token.
+
+```swift 
+if let latestToken = history.last?.token {
+    lastToken = latestToken
+}
+```
+
+The token is important because it allows the sync manager to continue from where it left off. Without a token, you may end up processing the same transactions again.
+
+In this example, lastToken is stored in memory only. In a real application, you would usually persist this token somewhere safe so the app can resume synchronization after it restarts.
+
+Now we can use the sync manager from the application.
+``` swift 
+@main
+struct SwiftDataHistoryObserverApp: App {
+    
+    let container: ModelContainer
+    let roomSyncManager = RoomSyncManager()
+    
+    init() {
+        container = try! ModelContainer(
+            for: Room.self,
+            configurations: ModelConfiguration(
+                isStoredInMemoryOnly: false
+            )
+        )
+        
+        try! roomSyncManager.start(container: container)
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+        .modelContainer(container)
+        .environment(roomSyncManager)
+    }
+}
+``` 
+
+And here is a simple view that inserts a new room.
+``` swift 
+struct ContentView: View {
+    
+    @Environment(\.modelContext)
+    private var modelContext
+    
+    var body: some View {
+        Button("Add Room") {
+            let room = Room(
+                name: UUID().uuidString,
+                area: 250
+            )
+            
+            modelContext.insert(room)
+        }
+    }
+}
+```
+
+When the button is tapped, a new Room is inserted into the SwiftData store. The HistoryObserver notices the change, the history is fetched, and the inserted room is queued for synchronization.
+
+This is the main difference between ResultsObserver and HistoryObserver.
+
+ResultsObserver is useful when you care about the current results. For example, calculating totals, summaries, or derived state.
+
+HistoryObserver is useful when you care about what changed. This makes it a better fit for synchronization, audit trails, background processing, analytics, and integrations with custom backends.
+
+If your application only needs to display data in a view, @Query is still the best choice. If you need derived state outside the view, ResultsObserver is a good option. But if you need to synchronize local SwiftData changes with your own backend, HistoryObserver provides the missing piece.
 
 ### Conclusion 
 
