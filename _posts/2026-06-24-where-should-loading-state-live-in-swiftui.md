@@ -13,7 +13,7 @@ There are many ways to solve this problem, and each approach comes with tradeoff
 In this article, I will walk through a simple loading state implementation and discuss why I prefer keeping loading state separate from the data maintained by my store.
 
 <div class="azam-books-callout">
-    <h3>Want to Go Deeper?</h3>
+    <h3>Ready to Dive Deeper?</h3>
     <p>
         Interested in learning more about SwiftUI Architecture or SwiftData?
     </p>
@@ -152,7 +152,7 @@ A common approach is to define the enum like this:
 
 There is nothing wrong with that approach. In many cases, it works really well. But for this example, I am intentionally keeping the products inside ProductStore.
 
-The reason is simple. I want ProductStore to remain the single source of truth for products. The loading phase should only describe the current state of the request.
+The reason is simple. I want ProductStore to remain the single source of truth for products on the client side. The loading phase should only describe the current state of the request. I will discuss more in detail of issues I faced when using `success(T)` approach. 
 
 Let's take a look at ProductListScreen, which uses our ProductStore.
 
@@ -222,6 +222,8 @@ The important detail is inside the loadProducts function.
 We only set the phase to .loading when there are no products already available. This works well for the initial load because the screen should show a progress indicator.
 
 But when the user pulls to refresh, we do not want the list to disappear and be replaced by a loading screen. The existing products should remain visible while the refresh operation is running.
+
+In the next section, let's cover what hurdles I faced when implementing the `success(T)` approach. 
 
 ### Why Not success(T)? 
 

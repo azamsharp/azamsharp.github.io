@@ -9,6 +9,20 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Where Should Loading State Live in SwiftUI?](_posts/2026-06-24-where-should-loading-state-live-in-swiftui.md)
+
+Handling loading states is something every SwiftUI application has to deal with.
+
+You fetch data from an API. While the request is running, you show a progress indicator. When the request succeeds, you display the data. If something goes wrong, you show an error message.
+
+That part is usually straightforward.
+
+The more interesting question is where the loading state should live. Should it be managed by the view? Should it be part of your store? Or should it be combined with the data itself using a generic loading state enum?
+
+There are many ways to solve this problem, and each approach comes with tradeoffs.
+
+In this article, I will walk through a simple loading state implementation and discuss why I prefer keeping loading state separate from the data maintained by my store.
+
 ### [What's New in SwiftData for iOS 27](_posts/2026-06-12-whats-new-in-swiftdata.md)
 
 iOS 27 introduces several important enhancements to SwiftData that make it more capable for real-world application development. While none of these features fundamentally change how SwiftData works, they remove many of the limitations developers encountered when building production applications.
