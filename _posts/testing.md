@@ -2,7 +2,6 @@
 
 // Introduction 
 
-
 > HistoryObserver provides a unidirectional sync support. This means the data from SwiftData store can be sycned with your custom server, but changes from your server are not automatically sycned back to the client. 
 
 ### Scenario 
@@ -257,5 +256,50 @@ Here is one of the sample outputs from the terminal:
 ]
 ```
 
-As you can see that we are receiving an array of rooms on the server, instead of individual requests. This can help greatly to minimize the load on the server and provide better overall performance. 
+At this point you might be wondering but what about delete. We have implemented insert and update but why not implement delete the same way. The main reason, delete cannot be implemented in a similar way is because we will not be able to use `context.model(for: insert.changedPersistentIdentifier)` to fetch the model after it has been deleted. And the reason is that it no longer exists. There are number of techniques you can use to fix this issue in the next section, we will cover a common technique used in these scenarios. 
+
+### Implementing Soft Deletes (IsDeleted)
+
+A common and highly effective technique to handle deletions in a synchronized database is to use a soft delete. Instead of immediately purging the record from your local database using context.delete(), you mark the record as "deleted" using a boolean flag.
+
+This flags the record as inactive, allowing your UI to instantly hide it while preserving the actual data on disk just long enough for your sync engine to read it, capture its unique identifier, and replicate the deletion to your server.
+
+To implement this, we can introduce a boolean property isDeleted to our Room model:
+
+``` swift 
+@Model
+class Room {
+    @Attribute(.unique) var syncId: UUID = UUID()
+    var name: String
+    var area: Double
+    var isDeleted: Bool = false // The soft-delete flag
+    
+    init(syncId: UUID = UUID(), name: String, area: Double) {
+        self.syncId = syncId
+        self.name = name
+        self.area = area
+    }
+}
+```
+
+Now, when a user deletes a room in your interface, you simply set isDeleted to true and save the context. Inside our RoomSyncManager, we can handle this change inside the update case. This is shown below: 
+
+``` swift 
+   case .update(let update as DefaultHistoryUpdate<Room>):
+                        if let room = context.model(for: update.changedPersistentIdentifier) as? Room {
+                            
+                            if room.isDeleted {
+                                let payload = RoomPayload(id: room.syncId, name: nil, area: nil, action: .delete)
+                                payloadsToSync.append(payload)
+                            } else {
+                                let payload = RoomPayload(id: room.syncId, name: room.name, area: room.area, action: .update)
+                                payloadsToSync.append(payload)
+                            }
+                            
+                        }
+```
+
+If the room is marked with isDeleted = true then we create a RoomPayload with delete action, we also don't need to send the name and area for deleting so we set those values to be nil.  
+
+
 
