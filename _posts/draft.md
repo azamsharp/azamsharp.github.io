@@ -1,389 +1,58 @@
-# Where Should Loading State Live in SwiftUI? 
-
-Handling loading states is something every SwiftUI application has to deal with.
-
-You fetch data from an API. While the request is running, you show a progress indicator. When the request succeeds, you display the data. If something goes wrong, you show an error message.
-
-That part is usually straightforward.
-
-The more interesting question is where the loading state should live. Should it be managed by the view? Should it be part of your store? Or should it be combined with the data itself using a generic loading state enum?
-
-There are many ways to solve this problem, and each approach comes with tradeoffs.
-
-In this article, I will walk through a simple loading state implementation and discuss why I prefer keeping loading state separate from the data maintained by my store.
-
-<div class="azam-books-callout">
-    <h3>Want to Go Deeper?</h3>
-    <p>
-        Interested in learning more about SwiftUI Architecture or SwiftData?
-    </p>
-    <p>
-        I have written comprehensive books covering both topics, including many of the
-        patterns and techniques I use in production applications.
-    </p>
-    <a
-        href="https://azamsharp.school/books.html"
-        class="azam-books-callout__button"
-        target="_blank"
-        rel="noopener"
-    >
-        Explore My Books
-    </a>
-</div>
-
-<style>
-.azam-books-callout {
-    margin: 2rem 0;
-    padding: 1.75rem;
-    border-radius: 14px;
-    border: 1px solid #dbe4f0;
-    background: linear-gradient(
-        135deg,
-        #f8fbff 0%,
-        #eef5ff 100%
-    );
-    text-align: center;
-}
-
-.azam-books-callout h3 {
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-    font-size: 1.4rem;
-    color: #1f2937;
-}
-
-.azam-books-callout p {
-    margin: 0.75rem 0;
-    color: #4b5563;
-    line-height: 1.6;
-}
-
-.azam-books-callout__button {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.75rem 1.25rem;
-    border-radius: 10px;
-    background: #2563eb;
-    color: white !important;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background 0.2s ease;
-}
-.azam-books-callout__button:hover {
-    background: #1d4ed8;
-}
-</style>
-
-### Implementation 
-
-Let's start with ProductStore.
-
-The ProductStore is responsible for maintaining the source of truth for products on the client side. In a real application, this store would probably use an HTTPClient to fetch products from an API.
-
-But for this example, I want to keep the focus on loading states. So instead of implementing a full networking layer, we will add a small delay inside ProductStore to simulate a network request.
-
-The implementation is shown below:
-
-``` swift 
-@Observable
-class ProductStore {
-    private(set) var products: [Product] = []
-    
-    func loadProducts() async throws {
-        
-        // use HTTPClient layer but I am going to skip that...
-        try await Task.sleep(for: .seconds(5.0))
-        
-        products = [
-            Product(name: "Wireless Keyboard", description: "Compact keyboard with backlit keys."),
-            Product(name: "Desk Lamp", description: "Adjustable LED lamp for focused work."),
-            Product(name: "Travel Mug", description: "Insulated mug that keeps drinks hot or cold."),
-            Product(name: "Notebook", description: "Hardcover notebook with dotted pages."),
-            Product(name: "USB-C Hub", description: "Multiport adapter with HDMI, USB, and SD card support.")
-        ]
-        
-    }
-    
-    func addProduct(_ product: Product) async throws {
-        try await Task.sleep(for: .seconds(2.0))
-        products.append(product)
-    }
-}
-```
-
-The view needs access to ProductStore.
-
-There are a few ways to pass the store to the view. You can pass it through the initializer, or you can place it in the SwiftUI environment.
-
-For this example, I am going to use the environment approach. This keeps the code cleaner and allows child views to access the store without manually passing it from screen to screen.
-
-Below you can see the code:
-
-``` swift 
-@main
-struct LoadingDemoApp: App {
-    
-    @State private var productStore = ProductStore()
-    
-    var body: some Scene {
-        WindowGroup {
-            ProductListScreen()
-                .environment(productStore)
-        }
-    }
-}
-```
-
-Now, we can focus our attention the loading phase/state. I have defined an enum to manage different loading phases. 
-
-``` swift 
-private enum LoadingPhase {
-    case loading
-    case success
-    case failure(Error)
-}
-```
-
-One thing you will notice is that the success case does not carry the loaded products.
-
-A common approach is to define the enum like this:
-
-```case success(T)```
-
-There is nothing wrong with that approach. In many cases, it works really well. But for this example, I am intentionally keeping the products inside ProductStore.
-
-The reason is simple. I want ProductStore to remain the single source of truth for products. The loading phase should only describe the current state of the request.
-
-Let's take a look at ProductListScreen, which uses our ProductStore.
-
-``` swift 
- private func loadProducts() async {
-        
-        if productStore.products.isEmpty {
-            loadingPhase = .loading
-        }
-        
-        do {
-            try await productStore.loadProducts()
-            loadingPhase = .success
-        } catch is CancellationError {
-            // don't show this error on the screen
-        }
-        catch {
-            print(error.localizedDescription)
-            loadingPhase = .failure(error)
-        }
-    }
-
-Group {
-            switch loadingPhase {
-            case .loading:
-                ProgressView("Loading products...")
-                    .task {
-                        await loadProducts()
-                    }
-            case .success:
-                if !productStore.products.isEmpty {
-                    ProductListView(products: productStore.products)
-                        .refreshable {
-                            await loadProducts()
-                        }
-                } else {
-                    
-                    ContentUnavailableView {
-                        Label("No Products", systemImage: "shippingbox")
-                    } description: {
-                        Text("Products will appear here after they are loaded.")
-                    } actions: {
-                        Button("Reload") {
-                            Task {
-                                await loadProducts()
-                            }
-                        }
-                    }
-                }
-                
-            case .failure(let error):
-                Text(error.localizedDescription)
-            }
-        }
-```
-
-Inside the body, we switch over the current loadingPhase.
-
-When the phase is .loading, we display a ProgressView and use the task modifier to start loading products.
-
-Once the products are loaded successfully, loadProducts updates the phase to .success. This causes the view to re-evaluate, and the success case displays the products using ProductListView.
-
-If something goes wrong, we update the phase to .failure and show the error message to the user.
-
-The important detail is inside the loadProducts function.
-
-We only set the phase to .loading when there are no products already available. This works well for the initial load because the screen should show a progress indicator.
-
-But when the user pulls to refresh, we do not want the list to disappear and be replaced by a loading screen. The existing products should remain visible while the refresh operation is running.
-
-### Why Not success(T)? 
-
-The main problem I have faced with passing products into the success case is that it can create another source of truth.
-
-The ProductStore already knows about the products. If the same products are also stored inside LoadingPhase.success, then now we have product state in two places.
-
-That does not mean this approach is wrong. It can work fine in many applications. But in this example, it made the code more complicated than it needed to be.
-
-Let's look at a few scenarios.
-
-First, we update LoadingPhase to the following:
-
-``` swift 
-private enum LoadingPhase<T> {
-    case loading
-    case success(T)
-    case failure(Error)
-}
-```
-
-This means ProductListScreen now needs to change to accomodate the generic type. 
-
-``` swift 
-struct ProductListScreen: View {
-    
-    @Environment(ProductStore.self) private var productStore
-    @State private var loadingPhase: LoadingPhase<[Product]> = .loading
-}
-```
-
-Inside loadProducts, we now need to pass the products to the .success case.
-
-This creates a small problem.
-
-The products are already maintained by ProductStore, but the loadProducts function on the store does not return the products. It only updates the store.
-
-So after calling loadProducts, what should we pass to .success?
-
-``` swift 
-do {
-            try await productStore.loadProducts()
-            loadingPhase = .success // ? 
-        } catch is CancellationError {
-            // don't show this error on the screen
-        }
-```
-
-We can fix this by passing the products from the store into the .success case.
-
-``` swift 
-loadingPhase = .success(productStore.products)
-```
-
-But I don't like this approach, as we are making a separate source of truth in the form of arguments passed to the .success case. 
-
-**But what if loadingPhase lives inside ProductStore?**
-
-That is also an option.
-
-Instead of keeping loadingPhase as a @State property in the view, we can move it into the store. This allows the store to manage both the products and the loading state.
-
-The implementation is shown below:
-
-``` swift 
-@Observable
-class ProductStore {
-    
-    private(set) var products: [Product] = []
-    var loadingState: LoadingPhase<[Product]> = .idle
-    
-    func loadProducts() async throws {
-        // use HTTPClient layer but I am going to skip that...
-        
-        loadingState = .loading
-        
-        try await Task.sleep(for: .seconds(5.0))
-        
-        products = [
-            Product(name: "Wireless Keyboard", description: "Compact keyboard with backlit keys."),
-            Product(name: "Desk Lamp", description: "Adjustable LED lamp for focused work."),
-            Product(name: "Travel Mug", description: "Insulated mug that keeps drinks hot or cold."),
-            Product(name: "Notebook", description: "Hardcover notebook with dotted pages."),
-            Product(name: "USB-C Hub", description: "Multiport adapter with HDMI, USB, and SD card support.")
-        ]
-        
-        loadingState = .success(products)
-    }
-}
-```
-
-Once you update ProductListScreen to use productStore.loadingPhase instead of the local loadingPhase property, everything works as expected. The view can switch over the different loading states and render the appropriate UI.
-
-The problem I have with this approach is that we are now maintaining product state in multiple places.
-
-The products property already contains the current list of products. Since ProductStore is observable, any changes to the products array will automatically trigger view updates. In other words, products is already acting as the source of truth for the data.
-
-But now we also have a loadingPhase property whose success case contains the same products. This means product state is being maintained both in the products property and inside loadingPhase. For simple examples this may not seem like a big deal, but as the application grows it can make the code harder to reason about.
-
-One option is to remove the products property altogether and use loadingPhase as the only source of truth. The implementation is shown below:
-
-``` swift 
-func loadProducts() async throws {
-        // use HTTPClient layer but I am going to skip that...
-        
-        loadingState = .loading
-        
-        try await Task.sleep(for: .seconds(5.0))
-        
-        let products = [
-            Product(name: "Wireless Keyboard", description: "Compact keyboard with backlit keys."),
-            Product(name: "Desk Lamp", description: "Adjustable LED lamp for focused work."),
-            Product(name: "Travel Mug", description: "Insulated mug that keeps drinks hot or cold."),
-            Product(name: "Notebook", description: "Hardcover notebook with dotted pages."),
-            Product(name: "USB-C Hub", description: "Multiport adapter with HDMI, USB, and SD card support.")
-        ]
-        
-        loadingState = .success(products)
-    }
-```
-
-This will work for loadProducts but what about addProduct. Our current implementation of addProduct is shown below: 
-
-``` swift 
-func addProduct(_ product: Product) async throws {
-        try await Task.sleep(for: .seconds(2.0))
-        products.append(product)
-}
-```
-
-But since now we are focusing on using loadingPhase instead of products, we have to implement a new solution. This is shown below: 
-
-``` swift 
-func addProduct(_ product: Product) async throws {
-        try await Task.sleep(for: .seconds(2.0))
-        
-        if case .success(var products) = loadingState {
-            products.append(product)
-            loadingState = .success(products)
-        }
-    }
-```
-
-This works, but it feels more complicated than it needs to be. Instead of simply appending a product to an array, we now have to inspect the current loading state, extract the products, mutate the array, and then assign a new success state.
-
-The bigger issue is that this complexity does not stay inside the store. It starts to affect the user interface code as well. The view now has to understand more about the shape of the loading state and how the products are stored inside it.
-
-To be clear, I am not saying that keeping loadingPhase inside ProductStore is wrong. In some applications, that might be a perfectly reasonable approach. But for the example discussed in this article, it introduces more complexity than our original solution.
-
-For this particular scenario, I prefer keeping the products in ProductStore and keeping the loading phase in the view. The store remains responsible for the data, and the view remains responsible for deciding which UI should be displayed.
-
-In the end, it depends on the application you are building. The important thing is to avoid duplicating state unless there is a good reason for it. If you have found a better way to manage loading states in SwiftUI, I would love to hear about it.
-### Source Code 
-
-You can download the complete source code from this [Gist](https://gist.githubusercontent.com/azamsharpschool/2327e98b2e549344a2ee03580c8a9bd3/raw/231a502b8664a0789e5c3295642f2427d3a01e53/ProductListScreen.swift). 
-
-### Conclusion 
-
-Managing loading states in SwiftUI is not difficult, but the implementation details can have a big impact on the overall complexity of your application.
-
-In this article, we explored a simple approach where the view is responsible for managing the loading phase while the store remains focused on maintaining application data. This keeps a single source of truth for products and avoids duplicating state in multiple places.
-
-Could you move the loading state into the store? Absolutely. In some applications that might even be the right choice. But as we saw, once you start adding operations like creating, updating, and deleting records, the implementation can become more complicated than expected.
-
-There is no perfect solution that works for every application. The goal is to choose an approach that keeps your code easy to understand and easy to maintain. For this particular scenario, keeping the loading phase in the view and the data in the store provides a clean separation of responsibilities without introducing unnecessary complexity.
+# Why Soft Skills Matter More Than Technical Skills in the Age of AI 
+
+Every day I read posts on social media from developers saying they barely write any code themselves. Instead, they rely on AI tools to generate 90% or even 100% of their code. I am not in that group, but I do use AI extensively as part of my development workflow.
+
+As an instructor, I have always taught my students that technical skills are only one part of becoming a successful software developer. This is not the early days of programming when you could lock yourself in a basement and emerge weeks or months later with a completed application.
+
+Software development is much more than typing code. It is understanding the business domain. It is communicating your ideas and intentions to the rest of the team. It is collaborating with product managers, designers, QA engineers, and stakeholders. It is asking the right questions before writing a single line of code. It is making tradeoffs and solving problems. Most importantly, it is making sure you are building the right solution instead of simply writing more code.
+
+As AI continues to improve, writing code becomes less of a competitive advantage because everyone has access to the same tools. The developers who will stand out are not necessarily the ones who can generate the most code. They will be the ones who can communicate clearly, think critically, understand the business, lead discussions, earn trust, and help teams make better decisions. Those are the skills that AI cannot replace, and I believe they are becoming more valuable than ever.
+
+In this article, we will explore what soft skills actually are, why they have always been important in software development, and why I believe they will become one of the biggest differentiators for developers in the age of AI.
+
+### What are Soft Skills? 
+
+When people hear the term soft skills, they usually think they are less important than technical skills. I disagree. In many cases, they are actually harder to develop.
+
+Soft skills are the skills that allow you to work effectively with other people. They have very little to do with writing code and everything to do with communicating, collaborating, solving problems, and making good decisions.
+
+Some examples of soft skills include:
+
+- Communication
+- Collaboration
+- Critical thinking
+- Problem solving
+- Leadership
+- Time management
+- Adaptability
+- Empathy
+- Decision making
+
+Think about your average day as a software developer. How much time do you actually spend writing code? Probably less than you think.
+
+You attend stand ups. You review pull requests. You discuss requirements with product managers. You explain technical concepts to other developers. You help junior engineers. You participate in design meetings. You answer questions on Slack. You estimate work. You give feedback during code reviews.
+
+All of these activities require strong soft skills.
+
+The best software developers I have worked with were not always the smartest people in the room or the strongest programmers. They were the people everyone wanted to work with. They communicated clearly. They listened. They asked good questions. They earned trust. They helped the entire team become more successful.
+
+Those are soft skills, and in today's AI driven world, I believe they are becoming even more valuable.
+
+### AI Doesn't Understand Your Business
+
+Over the course of 20+ years I have worked with many different companies, covering different domains. This includes oil/gas, energy, retail, medical, insurance etc. The most difficult part of working with all those different industories was not really the technical challenges but understaning the business. Most solutions of the technical hurdles were just one Google search away, but domain knowledge required time and effort. 
+
+Over the years, I have found that one of the best way to understand the domain is to take the domain expert out for lunch. During the lunch you can ask clarifying questions. This lunch can be the best investment you can make for a project, where you are tackling a brand new domain. 
+
+AI can explain how an insurance claim is processed or how a hospital scheduling system generally works. But it doesn't know how your company processes claims. It doesn't know why a certain approval requires three signatures or why a business rule that looks unnecessary cannot be removed because of a legal requirement or a customer contract.
+
+Those are things you learn by talking to people. You learn them by asking questions, attending meetings, and working closely with domain experts.
+
+In my experience, the developers who have the biggest impact are not always the ones who write the most code. They are the ones who understand the business problem well enough to know what should be built in the first place.
+
+AI can help you write the code faster. It cannot replace the relationships you build with stakeholders or the knowledge you gain from understanding the business.
+
+As AI continues to improve, I believe business knowledge and communication skills will become even more valuable. The developers who combine those skills with strong technical fundamentals will be the ones who stand out.
+
+### Asking Better Questions 
+
