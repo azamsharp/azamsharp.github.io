@@ -779,7 +779,7 @@ The implementation details depend on the language, framework, and database you a
 The complete source code for this project is available on GitHub:
 
 **GitHub Repository**
-https://github.com/azamsharpschool/Rooms
+[https://github.com/azamsharpschool/Rooms](https://github.com/azamsharpschool/Rooms)
 
 The repository includes:
 
