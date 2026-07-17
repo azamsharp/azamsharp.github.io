@@ -9,6 +9,12 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Syncing SwiftData with a Custom Backend Using HistoryObserver](_posts/2026-07-16-syncing-swiftdata-with-a-custom-backend-using-historyobserver.md)
+
+Many SwiftData applications need to keep their local data synchronized with a backend server, but detecting inserts, updates, and deletes efficiently can be challenging. Starting with iOS 27, HistoryObserver provides a clean way to observe changes in the SwiftData store without scattering synchronization logic throughout your application.
+
+In this article, you'll build a one way synchronization pipeline using HistoryObserver. You'll learn how to observe model changes, process persistent history, track the last processed transaction using history tokens, batch changes into network payloads, implement soft deletes, and synchronize your local SwiftData store with a custom backend. By the end of the article, you'll have a practical foundation for building offline first applications that keep local and remote data in sync.
+
 ### [Where Should Loading State Live in SwiftUI?](_posts/2026-06-24-where-should-loading-state-live-in-swiftui.md)
 
 Handling loading states is something every SwiftUI application has to deal with.

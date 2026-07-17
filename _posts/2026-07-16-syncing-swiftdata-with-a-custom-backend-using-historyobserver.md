@@ -146,7 +146,8 @@ In this article, you will learn how to use `HistoryObserver` to build a one way 
 
 For this article, we will build a simple room measurement application. The user can create rooms, assign a name, and specify the total square footage. The rooms are stored locally using SwiftData, but we also want every change to be synchronized with our own backend server.
 
-The interesting part is not storing the data locally. SwiftData already makes that easy. The challenge is detecting when the data changes and synchronizing only those changes with the server. This is exactly the problem `HistoryObserver` is designed to solve. Below you can see the pipeline we will be implementing. 
+The interesting part is not storing the data locally. SwiftData already makes that easy. The challenge is detecting when the data changes and synchronizing only those changes with the server. This is exactly the problem `HistoryObserver` is designed to solve. 
+
 
                   User
                     │
