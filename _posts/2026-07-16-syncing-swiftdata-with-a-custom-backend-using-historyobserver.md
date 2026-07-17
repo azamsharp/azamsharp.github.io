@@ -572,6 +572,10 @@ if !deletedIds.isEmpty {
 
 This approach gives us the best of both worlds. The server is notified about every deletion, and once synchronization succeeds, the room is removed from the local database. As a result, both the local SwiftData store and the backend remain in sync.
 
+However, this introduces a subtle recursive issue. When we permanently remove the room from the local database and save the context, that action itself is a new database write. This immediately re-triggers the HistoryObserver closure.
+
+While our current switch statement safely ignores the .delete history case, running this entire process again wastes processing cycles and risks creating an infinite sync loop. To prevent the sync engine from continuously reacting to its own cleanup work, we need a way to distinguish between user-driven changes and automated sync changes.
+
 <!-- Book Banner: SwiftUI Architecture Book -->
 <div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
   <div class="azam-book-banner__inner">
@@ -723,6 +727,48 @@ This approach gives us the best of both worlds. The server is notified about eve
     }
   }
 </style>
+
+### Filtering Changes Using Transaction Authors
+
+To break this potential loop, we need a way to tell the `HistoryObserver` which transactions it should care about and which ones it should ignore. Fortunately, SwiftData allows us to assign a specific name or label to a context using the `author` property.
+
+By setting `context.author = "App"` on our main UI context, every insert, update, or soft delete performed by the user is tagged as coming from the main application. When we initialize our `HistoryObserver`, we can explicitly instruct it to only listen for changes authored by `"App"`.
+
+```swift
+observer = try HistoryObserver(
+    observedModels: [Room.self], 
+    authors: ["App"], 
+    modelContainer: container
+)
+
+```
+
+Now, any transaction created by a context without the `"App"` author tag will be completely ignored by the observer.
+
+When it is time for the sync engine to perform its cleanup and hard-delete the rooms locally, we simply instantiate a separate background `ModelContext` and assign it a different author, such as `"Sync"`.
+
+```swift
+if !deletedIds.isEmpty {
+    // Create a dedicated context for background processing
+    let syncContext = ModelContext(container)
+    syncContext.author = "Sync" 
+    
+    do {
+        try syncContext.delete(
+            model: Room.self,
+            where: #Predicate { room in
+                deletedIds.contains(room.syncId)
+            }
+        )
+        try syncContext.save()
+    } catch {
+        print(error.localizedDescription)
+    }
+}
+
+```
+
+Because the hard delete is saved under the `"Sync"` author, the `HistoryObserver` safely ignores the transaction. This successfully breaks the recursive cycle, ensuring our synchronization engine only runs when the user actually modifies their data.
 
 ### The Backend Endpoint
 
