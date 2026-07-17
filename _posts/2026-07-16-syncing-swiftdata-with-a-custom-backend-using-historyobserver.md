@@ -726,8 +726,6 @@ This approach gives us the best of both worlds. The server is notified about eve
 
 ### The Backend Endpoint
 
-### The Backend Endpoint
-
 The backend for this sample is intentionally simple. It exposes a single endpoint that accepts an array of `RoomPayload` objects.
 
 ```javascript
