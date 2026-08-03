@@ -15,7 +15,7 @@ We'll also look at testing logic that lives outside of your SwiftData models and
   <div class="azam-book-banner__inner">
     <div class="azam-book-banner__cover">
       <img
-        src="../images/swiftui-book-1.png"
+        src="https://azamsharp.com/images/swiftui-book-1.png"
         alt="SwiftUI Architecture book cover"
         loading="lazy"
       />
