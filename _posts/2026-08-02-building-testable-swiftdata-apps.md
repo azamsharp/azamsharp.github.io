@@ -1,4 +1,4 @@
-# Testing SwiftData Applications
+# Building Testable SwiftData Applications
 
 > **About this chapter**
 >

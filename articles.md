@@ -9,6 +9,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Building Testable SwiftData Applications](_posts/2026-08-02-building-testable-swiftdata-apps.md)
+SwiftData makes it easy to build data driven applications, but that doesn't mean every SwiftData operation deserves a unit test. In this article, you'll learn how to write meaningful tests that protect your application's business logic instead of verifying framework behavior. We'll explore when to use an in memory store, what not to test, how architecture affects testability, and how the new ResultsObserver API in iOS 27 makes it easier to test logic that lives outside SwiftUI views. By the end of this article, you'll know how to build a test suite that provides confidence without creating unnecessary maintenance overhead.
+
 ### [Syncing SwiftData with a Custom Backend Using HistoryObserver](_posts/2026-07-16-syncing-swiftdata-with-a-custom-backend-using-historyobserver.md)
 
 Many SwiftData applications need to keep their local data synchronized with a backend server, but detecting inserts, updates, and deletes efficiently can be challenging. Starting with iOS 27, HistoryObserver provides a clean way to observe changes in the SwiftData store without scattering synchronization logic throughout your application.
