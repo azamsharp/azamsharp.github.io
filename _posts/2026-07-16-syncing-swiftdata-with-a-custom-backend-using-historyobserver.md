@@ -82,7 +82,6 @@ In this article, you will learn how to use `HistoryObserver` to build a one way 
     box-shadow: 0 14px 28px rgba(0,0,0,0.35);
     background: rgba(255,255,255,0.04);
   }
-
   .azam-book-banner__eyebrow {
     margin: 0 0 6px 0;
     font-size: 12px;
@@ -95,7 +94,6 @@ In this article, you will learn how to use `HistoryObserver` to build a one way 
     font-size: 18px;
     line-height: 1.25;
   }
-
   .azam-book-banner__subtitle {
     margin: 0 0 14px 0;
     font-size: 14px;

@@ -10,6 +10,157 @@ As AI continues to improve, writing code becomes less of a competitive advantage
 
 In this article, I want to talk about what soft skills actually are, why they have always been important in software development, and why I believe they will become even more valuable in the age of AI.
 
+<!-- Book Banner: SwiftUI Architecture Book -->
+<div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
+  <div class="azam-book-banner__inner">
+    <div class="azam-book-banner__cover">
+      <img
+        src="https://azamsharp.com/images/swiftui-book-1.png"
+        alt="SwiftUI Architecture book cover"
+        loading="lazy"
+      />
+    </div>
+    <div class="azam-book-banner__content">
+      <p class="azam-book-banner__eyebrow">SwiftUI Architecture Book</p>
+      <h3 class="azam-book-banner__title">Patterns and Practices for Building Scalable Applications</h3>
+      <p class="azam-book-banner__subtitle">
+        A practical guide to building SwiftUI apps that stay clean as they grow.
+      </p>
+      <div class="azam-book-banner__actions">
+        <a class="azam-book-banner__button" href="https://azamsharp.school/swiftui-architecture-book.html" target="_blank" rel="noopener">
+          Get the book
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .azam-book-banner {
+    --bg1: #0b1220;
+    --bg2: #111a2d;
+    --text: rgba(255, 255, 255, 0.92);
+    --muted: rgba(255, 255, 255, 0.74);
+    --border: rgba(255, 255, 255, 0.12);
+    --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+    --accent: #6ee7b7; /* tweak to match your brand */
+    --accent2: #60a5fa;
+
+    margin: 22px 0;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: radial-gradient(1200px 600px at 10% 0%, rgba(96, 165, 250, 0.22), transparent 60%),
+                radial-gradient(900px 500px at 90% 30%, rgba(110, 231, 183, 0.18), transparent 60%),
+                linear-gradient(135deg, var(--bg1), var(--bg2));
+    box-shadow: var(--shadow);
+  }
+
+  .azam-book-banner__inner {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 18px;
+    padding: 18px;
+    align-items: center;
+  }
+
+  .azam-book-banner__cover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .azam-book-banner__cover img {
+    width: 132px;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.35);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .azam-book-banner__eyebrow {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .azam-book-banner__title {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    line-height: 1.25;
+  }
+
+  .azam-book-banner__subtitle {
+    margin: 0 0 14px 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 62ch;
+  }
+
+  .azam-book-banner__actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .azam-book-banner__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #071018;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: 0;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.28);
+    transition: transform 140ms ease, filter 140ms ease;
+  }
+
+  .azam-book-banner__button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.02);
+  }
+
+  .azam-book-banner__link {
+    font-size: 14px;
+    color: rgba(255,255,255,0.86);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.22);
+    padding-bottom: 2px;
+    transition: border-color 140ms ease, color 140ms ease;
+  }
+
+  .azam-book-banner__link:hover {
+    color: rgba(255,255,255,0.95);
+    border-color: rgba(255,255,255,0.45);
+  }
+
+  /* Mobile */
+  @media (max-width: 520px) {
+    .azam-book-banner__inner {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+
+    .azam-book-banner__cover {
+      justify-content: flex-start;
+    }
+
+    .azam-book-banner__cover img {
+      width: 120px;
+    }
+  }
+</style>
+
 ## What Are Soft Skills?
 
 When people hear the term soft skills, they sometimes think these skills are less important than technical skills. I disagree. In many cases, they are actually harder to develop.
@@ -145,6 +296,138 @@ The developer still needs to understand the bigger picture.
 This is why I don't think the future belongs to developers who only have soft skills. You still need strong technical fundamentals. But technical skills alone are not enough.
 
 The combination is what matters.
+
+<!-- Book Banner: SwiftData Architecture Book -->
+<div class="azam-book-banner" role="region" aria-label="SwiftData Architecture Book Banner">
+  <div class="azam-book-banner__inner">
+    <div class="azam-book-banner__cover">
+      <img
+        src="https://azamsharp.school/images/swiftdata-3d-cover.png"
+        alt="SwiftData Architecture book cover"
+        loading="lazy"
+      />
+    </div>
+    <div class="azam-book-banner__content">
+      <h3 class="azam-book-banner__title">
+        SwiftData Architecture - Patterns and Practices for Building Scalable Applications
+      </h3>
+      <p class="azam-book-banner__subtitle">
+        Learn SwiftData architecture, ModelContext, relationships, queries,
+        migrations, CloudKit, testing, performance, custom stores, and the latest
+        iOS 27 features including ResultsObserver, Compound Queries, Sectioned Queries,
+        and the new .codable attribute.
+      </p>
+      <div class="azam-book-banner__actions">
+        <a
+          class="azam-book-banner__button"
+          href="https://azamsharp.school/swiftdata-architecture.html"
+          target="_blank"
+          rel="noopener"
+        >
+          Get the book
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .azam-book-banner {
+    --bg1: #07111f;
+    --bg2: #111827;
+    --text: rgba(255, 255, 255, 0.94);
+    --muted: rgba(255, 255, 255, 0.74);
+    --border: rgba(255, 255, 255, 0.12);
+    --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+    --accent: #8fd6ff;
+    --accent2: #9d7cff;
+    margin: 22px 0;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    background:
+      radial-gradient(1000px 520px at 10% 0%, rgba(143, 214, 255, 0.22), transparent 60%),
+      radial-gradient(900px 520px at 90% 30%, rgba(157, 124, 255, 0.22), transparent 60%),
+      linear-gradient(135deg, var(--bg1), var(--bg2));
+    box-shadow: var(--shadow);
+  }
+  .azam-book-banner__inner {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 18px;
+    padding: 18px;
+    align-items: center;
+  }
+  .azam-book-banner__cover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .azam-book-banner__cover img {
+    width: 132px;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.35);
+    background: rgba(255,255,255,0.04);
+  }
+  .azam-book-banner__eyebrow {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .azam-book-banner__title {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    line-height: 1.25;
+  }
+  .azam-book-banner__subtitle {
+    margin: 0 0 14px 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 68ch;
+  }
+  .azam-book-banner__actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .azam-book-banner__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #071018;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: 0;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.28);
+    transition: transform 140ms ease, filter 140ms ease;
+  }
+  .azam-book-banner__button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.04);
+  }
+  @media (max-width: 520px) {
+    .azam-book-banner__inner {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+    .azam-book-banner__cover {
+      justify-content: flex-start;
+    }
+    .azam-book-banner__cover img {
+      width: 120px;
+    }
+  }
+</style>
 
 ## The Developer's Role Is Changing
 
