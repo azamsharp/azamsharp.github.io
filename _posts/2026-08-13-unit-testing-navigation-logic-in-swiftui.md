@@ -254,7 +254,9 @@ class Router {
 }
 ```
 
-The navigate(to:) function simply appends the new route to the routes array. Since Router uses the Observation framework, SwiftUI can automatically respond to changes in the navigation path.
+The navigate(to:) function simply appends the new route to the routes array. Since Router uses the Observation framework, SwiftUI can automatically respond to changes in the navigation path. 
+
+In the next section, we will learn how to start using Router in our view. 
 
 ### Using the Router in the View 
 
@@ -270,7 +272,7 @@ struct AZSchoolApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
+            NavigationStack(path: $router.routes) {
                 RootScreen()
                     .navigationDestination(for: Route.self) { route in
                         route.destination
@@ -283,15 +285,21 @@ struct AZSchoolApp: App {
 
 The important part is the following line:
 
-.environment(router)
+`.environment(router)`
 
 This places the Router in the SwiftUI environment, making the same router instance available to views further down the view hierarchy.
 
 We also bind the router's routes collection to the NavigationStack:
 
-NavigationStack(path: $router.routes)
+`NavigationStack(path: $router.routes)`
 
-Now, whenever a route is added through router.navigate(to:), the navigation path changes and NavigationStack presents the corresponding destination.
+Now, whenever a route is added through `router.navigate(to:)`, the navigation path changes and NavigationStack presents the corresponding destination.
+
+Since the Router is injected at the root level, technically any view in the hierarchy can access it. However, this does not mean that every view should depend on the Router.
+
+A good practice is to access the Router from parent or container views and keep smaller child views independent of navigation whenever possible. This makes child views easier to reuse because they do not need to know how navigation is implemented in the application.
+
+For example, a reusable registration form could simply communicate that registration has completed. The parent view can then decide how to respond to that event, including performing any necessary navigation.
 
 With the router available through the environment, a view such as RegisterScreen can access it without receiving it explicitly through its initializer:
 
@@ -455,12 +463,125 @@ This makes navigation logic much easier to test than navigation decisions buried
 
 We can continue adding tests for the remaining rules, such as verifying that an in-state student navigates to the courses screen and a student without a status navigates to the profile screen. At that point, the important registration navigation paths can be covered with fast unit tests instead of slower UI tests.
 
+### Scaling Navigation Logic with a Registration Coordinator
+
+For this example, keeping `onRegister(_:)` inside the `Router` works well. The navigation rules are small, easy to understand, and easy to test.
+
+As the application grows, however, we should be careful not to move every navigation decision into the `Router`. Otherwise, the router can slowly become responsible for registration, authentication, onboarding, checkout, subscriptions, and many other workflows.
+
+In a larger application, feature-specific navigation rules can be moved into a coordinator.
+
+For example, a `RegistrationCoordinator` can determine where the user should go after registration:
+
+```swift
+struct RegistrationCoordinator {
+    
+    func destination(for user: User) -> Route {
+        switch user.role {
+        case .student:
+            switch user.studentStatus {
+            case .inState:
+                return .student(.courses)
+                
+            case .outOfState, .international:
+                return .student(.agreement)
+                
+            case .none:
+                return .student(.profile)
+            }
+            
+        case .faculty:
+            return .faculty(.dashboard)
+        }
+    }
+}
+```
+
+The `Router` can then remain focused on managing the navigation path:
+
+```swift
+@Observable
+class Router {
+    
+    var routes: [Route] = []
+    
+    func navigate(to route: Route) {
+        routes.append(route)
+    }
+}
+```
+
+The `RegisterScreen` can use the coordinator to determine the next destination and then ask the router to perform the navigation:
+
+```swift
+struct RegisterScreen: View {
+    
+    @Environment(Router.self) private var router
+    
+    private let registrationCoordinator = RegistrationCoordinator()
+    
+    var body: some View {
+        Button("Register") {
+            register()
+        }
+    }
+    
+    private func register() {
+        
+        // Register the user
+        
+        let user = User(
+            name: "John Doe",
+            role: .student,
+            studentStatus: .inState
+        )
+        
+        let route = registrationCoordinator.destination(for: user)
+        router.navigate(to: route)
+    }
+}
+```
+
+This gives each type a more focused responsibility. The `RegistrationCoordinator` decides **where the user should go after registration**, while the `Router` is responsible for **performing the navigation**.
+
+It also makes the registration navigation rules easy to test independently:
+
+```swift
+@Test
+func `Faculty registration destination is dashboard`() {
+    
+    let coordinator = RegistrationCoordinator()
+    let user = User(
+        name: "John Doe",
+        role: .faculty
+    )
+    
+    let route = coordinator.destination(for: user)
+    
+    #expect(route == .faculty(.dashboard))
+}
+```
+
+This does not mean every application needs a coordinator. For a smaller application, keeping a method such as `onRegister(_:)` directly on the `Router` can be perfectly reasonable.
+
+The coordinator becomes useful when the navigation rules for a feature start growing and you want to prevent the router from becoming responsible for too many application workflows.
+
 ### Conclusion 
 
 Navigation is often treated as a UI concern, but the decisions that determine where a user should go can be part of our application logic.
 
-By representing destinations as routes and moving navigation decisions into the Router, we make those decisions much easier to test. Instead of launching the application and verifying screens through UI tests, we can simply provide the router with the appropriate input and verify the resulting route.
+By representing destinations as routes, we turn navigation into something that can be inspected and tested. Instead of launching the application and verifying every navigation scenario through UI tests, we can provide the appropriate input and verify that the expected route was produced.
 
-This also allows our SwiftUI views to remain focused on presenting the interface and responding to user interactions rather than containing navigation rules.
+For smaller applications, keeping navigation decisions directly in the Router can work perfectly well. As those decisions become more complex, they can be moved into feature-specific coordinators, allowing the router to remain focused on managing the navigation path.
 
-Not every navigation action needs a unit test. Pushing a settings screen when the user taps a Settings button is usually straightforward. But when navigation depends on user roles, permissions, account status, registration state, or other business rules, treating that navigation as testable logic can make the application easier to maintain and much easier to verify.
+This does not mean that every navigation action needs additional abstractions or unit tests. If tapping a student always opens the student details screen, calling router.navigate(to:) directly may be all you need.
+
+The value of testing navigation becomes much more apparent when the destination depends on user roles, permissions, account status, registration state, or other business rules. In those situations, separating the navigation decision from the UI gives us code that is easier to understand, easier to change, and most importantly, easier to test.
+
+### Learn More at AzamSharp School
+
+If you enjoyed this article and want to continue learning, check out **AzamSharp School**.
+
+You will find practical courses, live workshops, books, and one-on-one coaching covering SwiftUI, SwiftData, iOS architecture, testing, AI, machine learning, and more.
+
+Visit [AzamSharp School](https://azamsharp.school) to explore all available resources.

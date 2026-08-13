@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Unit Testing Navigation Logic in SwiftUI](_posts/2026-08-13-unit-testing-navigation-logic-in-swiftui.md)
+
+Build SwiftUI navigation that is not only clean, but testable. Learn how to move navigation decisions out of your views, unit test real-world routing rules with Swift Testing, and use Coordinators when your navigation flows start to grow.
+
 ### [Why Soft Skills Matter More Than Technical Skills in the Age of AI](_posts/2026-08-12-why-soft-skills-matter-more-in-age-of-ai.md)
 AI is changing how we build software, but writing code is only one part of being a developer. As AI makes code easier to generate, skills like communication, critical thinking, collaboration, and understanding the business become even more valuable. In this article, I share why I believe these skills will help developers stand out in the age of AI.
 
