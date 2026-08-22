@@ -9,6 +9,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Protecting SwiftUI Views with Authentication](_posts/2026-08-22-protecting-swiftui-views-with-authentication.md)
+Learn how to protect SwiftUI views using a reusable authentication container. This article explores how to conditionally display protected content, present login as a sheet, handle dismissal, return users to their previously selected tab, and implement the same behavior using a custom view modifier.
+
 ### [Unit Testing Navigation Logic in SwiftUI](_posts/2026-08-13-unit-testing-navigation-logic-in-swiftui.md)
 
 Build SwiftUI navigation that is not only clean, but testable. Learn how to move navigation decisions out of your views, unit test real-world routing rules with Swift Testing, and use Coordinators when your navigation flows start to grow.
