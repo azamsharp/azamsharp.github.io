@@ -387,3 +387,11 @@ The RequiresAuthentication container has a simple responsibility: display the re
 You can implement the same idea using a view modifier, but I prefer the container because it makes the authentication boundary explicit and easy to recognize at the call site.
 
 Keep in mind that this approach only controls what is displayed in the SwiftUI application. Your server must still validate every protected request. Hiding a screen is part of the user experience, not a replacement for securing the backend.
+
+### Continue Learning with AzamSharp School
+
+Become an AzamSharp School member and get access to more than 250 hours of practical courses covering SwiftUI, SwiftData, testing, architecture, AI, machine learning, and more.
+
+Your membership also includes access to AzamSharp books, live workshops, office hours, and new content added regularly.
+
+[Join AzamSharp School](https://azamsharp.school)
