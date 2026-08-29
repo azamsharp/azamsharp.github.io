@@ -979,6 +979,9 @@ This gives us a simple flow:
 
 By separating these responsibilities, we can reuse the same `HTTPClient` throughout the application without repeating networking code in every screen.
 
+### Source code
+You can download the source code [here](https://gist.github.com/azamsharpschool/f11edc52f17710d6eba683ae6d31a51a)
+
 ### Conclusion 
 In this article, we created a reusable networking layer using `URLSession`, `async/await`, and Swift generics.
 
