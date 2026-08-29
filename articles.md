@@ -9,6 +9,18 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Building a Reusable HTTP Client in Swift with async/await](_posts/2026-08-29-building-a-reusable-http-client-in-swift.md)
+
+Most applications need to communicate with a server. We may need to register a user, log in to an account, load courses, or submit information. Although URLSession provides everything we need to perform these requests, using it directly throughout the application can quickly lead to repeated code.
+
+For every request, we usually perform the same steps. We create a URLRequest, configure the HTTP method and headers, send the request, inspect the status code, and decode the returned data. We must also decide how to handle client errors, server errors, and decoding failures.
+
+Instead of repeating this logic for every endpoint, we can move it into a reusable HTTPClient.
+
+In this article, we will build a small networking layer using URLSession and Swift concurrency. We will create a generic Resource type to describe API requests, represent different HTTP methods, handle network errors, and decode responses into strongly typed Swift models.
+
+By the end, we will use the same HTTPClient to perform both GET and POST requests and integrate it with a SwiftUI application.
+
 ### [Protecting SwiftUI Views with Authentication](_posts/2026-08-22-protecting-swiftui-views-with-authentication.md)
 Learn how to protect SwiftUI views using a reusable authentication container. This article explores how to conditionally display protected content, present login as a sheet, handle dismissal, return users to their previously selected tab, and implement the same behavior using a custom view modifier.
 
