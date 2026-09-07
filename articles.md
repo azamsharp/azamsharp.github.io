@@ -9,6 +9,15 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Working with Images Using Foundation Models](_posts/2026-09-06-working-with-images-using-foundation-models.md)
+
+Foundation Models are not limited to text. Starting with iOS 27, the Foundation Models framework can also work with images, allowing us to include visual content in our prompts and conversations.
+
+Instead of simply classifying an image, we can ask questions about what the model sees, generate structured information, and continue with follow-up questions.
+
+In this article, we will build a Plant Assistant that identifies plants from images and allows users to ask questions about plant care. Along the way, we will learn how to use image attachments, structured generation, and conversational sessions with Foundation Models.
+
+
 ### [Building a Reusable HTTP Client in Swift with async/await](_posts/2026-08-29-building-a-reusable-http-client-in-swift.md)
 
 Most applications need to communicate with a server. We may need to register a user, log in to an account, load courses, or submit information. Although URLSession provides everything we need to perform these requests, using it directly throughout the application can quickly lead to repeated code.
