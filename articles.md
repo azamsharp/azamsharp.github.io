@@ -9,6 +9,12 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Getting Started with Jev: Choice, Score, and Noul Explained](_posts/2026-09-19-getting-started-with-jev.md)
+
+Jev by TypeSafe is getting a lot of attention right now. Social media, especially Twitter, is filled with demos of people using Jev in many different and interesting ways. But if you are coming from traditional LLMs like ChatGPT, Claude, or Gemini, it may not be immediately clear what Jev does or when you should use it.
+
+In this article, we will look at what Jev is and how it can be used for decision-making and structured output. We will also explore the three types of questions supported by Jev. These include **Choice, Score, and Noul**, which we will explore using practical, real-world examples.
+
 ### [Working with Images Using Foundation Models](_posts/2026-09-06-working-with-images-using-foundation-models.md)
 
 Foundation Models are not limited to text. Starting with iOS 27, the Foundation Models framework can also work with images, allowing us to include visual content in our prompts and conversations.

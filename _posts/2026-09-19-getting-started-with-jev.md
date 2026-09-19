@@ -1,8 +1,8 @@
-# Getting Started with JEV: Choice, Score, and Noul Explained
+# Getting Started with Jev: Choice, Score, and Noul Explained
 
-JEV by TypeSafe is getting a lot of attention right now. Social media, especially Twitter, is filled with demos of people using JEV in many different and interesting ways. But if you are coming from traditional LLMs like ChatGPT, Claude, or Gemini, it may not be immediately clear what JEV does or when you should use it.
+Jev by TypeSafe is getting a lot of attention right now. Social media, especially Twitter, is filled with demos of people using Jev in many different and interesting ways. But if you are coming from traditional LLMs like ChatGPT, Claude, or Gemini, it may not be immediately clear what Jev does or when you should use it.
 
-In this article, we will look at what JEV is and how it can be used for decision-making and structured output. We will also explore the three types of questions supported by JEV. These include **Choice, Score, and Noul**, which we will explore using practical, real-world examples.
+In this article, we will look at what Jev is and how it can be used for decision-making and structured output. We will also explore the three types of questions supported by Jev. These include **Choice, Score, and Noul**, which we will explore using practical, real-world examples.
 
 <!-- Book Banner: SwiftUI Architecture Book -->
 <div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
@@ -155,11 +155,11 @@ In this article, we will look at what JEV is and how it can be used for decision
   }
 </style>
 
-### What is JEV?
+### What is Jev?
 
-Let's start with what JEV is not. JEV is not an LLM like ChatGPT, Claude, or Gemini. It does not produce text output. In other words, if you send your request to JEV asking, "List all 50 states in America," it will not return you a list of 50 states. That is not the point of JEV. For those kinds of questions, you can use your LLM of choice.
+Let's start with what Jev is not. Jev is not an LLM like ChatGPT, Claude, or Gemini. It does not produce text output. In other words, if you send your request to Jev asking, "List all 50 states in America," it will not return you a list of 50 states. That is not the point of Jev. For those kinds of questions, you can use your LLM of choice.
 
-JEV is an AI model that is good at decision-making and providing structured output. JEV supports three different types of questions. These include:
+Jev is an AI model that is good at decision-making and providing structured output. Jev supports three different types of questions. These include:
 
 1. Choice - Choose an option from a list.
 2. Score - Score the state based on a provided rubric.
@@ -173,7 +173,7 @@ Consider a scenario where your company provides support through a chatbot on its
 
 If the customer asks, "I returned the item last week. Why is my refund not processed?" which assistant do you think would be good at answering this specific question? If you answered **billing**, then you are correct.
 
-That is the purpose of the JEV model: to make this decision and route the request/prompt to the correct assistant/profile. Below, you can see one of the requests to the JEV model.
+That is the purpose of the Jev model: to make this decision and route the request/prompt to the correct assistant/profile. Below, you can see one of the requests to the Jev model.
 
 ```json
 {
@@ -224,9 +224,9 @@ Noul questions produce a numeric value. If the value is greater than or equal to
 
 ### Conclusion
 
-JEV provides a different way of working with AI. Instead of asking the model to generate text, we can use it to make decisions and return structured output based on the criteria we provide.
+Jev provides a different way of working with AI. Instead of asking the model to generate text, we can use it to make decisions and return structured output based on the criteria we provide.
 
-In this article, we looked at the three types of questions supported by JEV. Choice can be used to select an option from a list, Score can be used to evaluate something based on a rubric, and Noul can be used to determine whether a statement is true or false.
+In this article, we looked at the three types of questions supported by Jev. Choice can be used to select an option from a list, Score can be used to evaluate something based on a rubric, and Noul can be used to determine whether a statement is true or false.
 
 These simple question types can be used in many different real-world scenarios, including routing requests, measuring customer frustration, evaluating resumes, and much more.
 
