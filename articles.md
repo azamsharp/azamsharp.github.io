@@ -9,7 +9,7 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
-### [Implementing Server-Side Sorting in SwiftUI](_posts/implementing-server-side-sorting-in-swiftui.md)
+### [Implementing Server-Side Sorting in SwiftUI](_posts/2026-10-13-implementing-server-side-sorting-in-swiftui.md)
 Learn how to implement server-side sorting in SwiftUI using Express.js and the `@Observable` macro. We will build a sorting API, manage hotel data using `HotelStore`, and create a SwiftUI sorting interface that allows users to select, clear, and confirm their sorting preferences.
 
 ### [Getting Started with Jev: Choice, Score, and Noul Explained](_posts/2026-09-19-getting-started-with-jev.md)
