@@ -9,6 +9,9 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Implementing Server-Side Sorting in SwiftUI](_posts/implementing-server-side-sorting-in-swiftui.md)
+Learn how to implement server-side sorting in SwiftUI using Express.js and the `@Observable` macro. We will build a sorting API, manage hotel data using `HotelStore`, and create a SwiftUI sorting interface that allows users to select, clear, and confirm their sorting preferences.
+
 ### [Getting Started with Jev: Choice, Score, and Noul Explained](_posts/2026-09-19-getting-started-with-jev.md)
 
 Jev by TypeSafe is getting a lot of attention right now. Social media, especially Twitter, is filled with demos of people using Jev in many different and interesting ways. But if you are coming from traditional LLMs like ChatGPT, Claude, or Gemini, it may not be immediately clear what Jev does or when you should use it.
