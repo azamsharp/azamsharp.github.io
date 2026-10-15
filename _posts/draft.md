@@ -1,12 +1,10 @@
-# Implementing Server-Side Sorting in SwiftUI
+# Implementing Server-Side Filtering in SwiftUI
 
-When building applications, it is common to display a list of items and allow users to sort them based on different criteria. For example, in a hotel booking application, users may want to sort hotels by price or guest ratings.
+In the previous article, we learned how to implement server-side sorting in a SwiftUI application. Sorting allows users to organize hotels based on price, ratings, and other criteria. But what if users only want to see hotels that provide breakfast, parking, or free Wi-Fi?
 
-There are different ways to implement sorting. One approach is to fetch all the records from the server and sort them locally on the client. This works fine for smaller datasets, but as the number of records grows, fetching everything just to sort it is not a good idea. A better approach is to let the server handle sorting and return the results in the requested order.
+In this article, we will extend our existing application to support server-side filtering. We will start by updating our Express.js server to filter hotels based on the provided query string parameters. Next, we will implement a `FilterView` in SwiftUI, allowing users to select multiple filters and apply them to the hotel listings.
 
-In this article, we will learn how to implement server-side sorting using Express.js and SwiftUI. We will start by building an API that supports different sorting options through query parameters. Next, we will implement the SwiftUI client using the @Observable macro to manage our hotel data. Finally, we will create a sorting interface that allows users to select, clear, and confirm their sorting preferences.
-
-Let's get started!
+We will also see how to combine filtering with our existing sorting functionality so users can narrow down the results and sort them based on their preferences.
 
 <!-- Book Banner: SwiftUI Architecture Book -->
 <div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
@@ -159,147 +157,88 @@ Let's get started!
   }
 </style>
 
-### Building the Sorting API with Express.js
+# Building the Server Filtering 
 
-These days, you have countless options when it comes to implementing a server. Even in the Swift ecosystem, you have frameworks like Vapor and Hummingbird. My personal favorite is Express.js, mainly because I have taught it for a long time and I also enjoy the dynamic nature of JavaScript.
+Let's start with our server, which is already configured to perform sorting. We will extend the existing implementation to support filtering. Users will be able to filter hotels based on different criteria, such as whether the hotel provides breakfast, parking, Wi-Fi, or airport shuttle services.
 
-One thing I like about using JavaScript on the server is that I don't have to create separate DTO objects for every response. I can simply return anonymous objects. I personally like this flexibility.
+All these options will be passed to the server using query string parameters.
 
-For our hotel application, we will implement an API endpoint that allows clients to sort hotels based on different criteria, such as price and guest ratings. The client will specify the sorting option using a query string parameter, and the server will be responsible for sorting the results before returning them.
+For example, the following URL will return hotels that provide breakfast, parking, and Wi-Fi.
 
-Below, you can find the implementation of the /api/hotels route, which supports different sorting options.
+`http://localhost:8080/api/hotels?breakfast=true&parking=true&wifiIncluded=true`
 
-``` swift 
+Keep in mind that only hotels that satisfy all three conditions will be returned. If a hotel provides breakfast and parking but does not offer Wi-Fi, it will not be included in the results.
+
+Below, you can find the server implementation:
+
+``` js 
+const FILTER_OPTIONS = [
+    "breakfast",
+    "parking",
+    "wifiIncluded",
+    "airportShuttle"
+]
+
 app.get("/api/hotels", (req, res) => {
 
     // get the sort options 
     const { sort } = req.query
-    const sortedHotels = sortHotels(filteredHotels, sort)
-    res.json(sortedHotels)
+
+    let filteredHotels = filterHotels(hotels, req.query)
+    filteredHotels = sortHotels(filteredHotels, sort)
+
+    res.json(filteredHotels)
 })
 
-const sortHotels = (hotels, sort) => {
-    switch (sort) {
-        case "priceLowToHigh":
-            hotels.sort((a, b) => a.price - b.price)
-            break
-        case "priceHighToLow":
-            hotels.sort((a, b) => b.price - a.price)
-            break
-        case "guestRating":
-            hotels.sort((a, b) => b.guestRating - a.guestRating);
-            break
-    }
+const filterHotels = (hotels, query) => {
 
-    return hotels 
-}
+    let results = [...hotels]
 
-```
-
-The query string parameter determines how the hotels are sorted. For example, http://localhost:8080/api/hotels?sort=priceLowToHigh will return hotels sorted by price in ascending order, from lowest to highest.
-
-Now that our server is working as expected, we can move on to implementing the SwiftUI client.
-
-### Building the SwiftUI Hotel App
-
-We will start by implementing our HotelStore, which will be responsible for managing the state of hotels along with the business and domain logic associated with them.
-
-> Unlike traditional View Models, you don't need to create a separate HotelStore for each screen. HotelStore is designed around the bounded context of hotel management and can be shared across multiple screens that work with hotel-related entities and operations.
-
-The implementation of HotelStore is shown below:
-
-``` swift 
-@Observable
-class HotelStore {
-    
-    private(set) var hotels: [Hotel] = []
-    let httpClient: HTTPClient
-    
-    init(httpClient: HTTPClient) {
-        self.httpClient = httpClient
-    }
-    
-    func loadHotels(sortOption: SortOption? = nil) async throws {
-        let resource = Resource(url: Constants.URLs.hotels(sort: sortOption), responseType: [Hotel].self)
-        hotels = try await httpClient.fetch(resource: resource)
-    }
-}
-```
-
-HotelStore has a dependency on HTTPClient, which is responsible for performing network requests. The loadHotels function also accepts an optional SortOption, allowing us to construct the appropriate URL based on the selected sorting option.
-
-The Constants.URLs.hotels function is responsible for constructing the URL with the necessary query string parameters. In a future article, we will extend this function to support filtering and pagination.
-
-Inside our SwiftUI view, we can access HotelStore through the environment.
-
-> Another option is to pass HotelStore as a dependency through the initializer. I personally prefer using the environment because I often end up using the same store across multiple screens. Passing the store through the initializer of every screen can become cumbersome.
-
-The implementation of HotelListScreen is shown below:
-
-``` swift 
-struct HotelListScreen: View {
-    
-    @Environment(HotelStore.self) private var hotelStore
-    @State private var showSortSheet: Bool = false
-    
-    @State private var sortOption: SortOption?
-    
-    var body: some View {
-        List {
-            
-            HStack {
-                Spacer()
-                Button("Sort") {
-                    showSortSheet = true
-                }
-            }
-            
-            ForEach(hotelStore.hotels) { hotel in
-                HotelCellView(hotel: hotel)
-            }
+    FILTER_OPTIONS.forEach(filter => {
+        if (query[filter] === "true") {
+            results = results.filter(hotel => hotel[filter])
         }
-        .sheet(isPresented: $showSortSheet, content: {
-            SortView(initialSelection: sortOption, onDone: { option in
-                sortOption = option
-                Task { await loadHotels() }
-            }).presentationDetents([.fraction(0.25)])
-        })
-        .task {
-            await loadHotels()
-        }.navigationTitle("Hotels")
-    }
-    
-    private func loadHotels() async {
-        do {
-            try await hotelStore.loadHotels(sortOption: sortOption)
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
+    })
+
+    return results
 }
 ```
 
-You might be wondering why we pass sortOption to the loadHotels function instead of creating a separate function for sorting. You can definitely take that approach, but I personally prefer this design, which is inspired by the Sequelize ORM in JavaScript.
+The filterHotels function is responsible for filtering the hotels based on the query string parameters. We start by creating a copy of the hotels array and then iterate through the FILTER_OPTIONS array to check which filters have been provided.
 
-The idea is simple. You can call loadHotels without passing any options to fetch the default set of hotels (limited to 10 records by default), or you can provide options to customize the results. As we add more features, the same function will support sorting, filtering, and pagination without requiring separate functions for each operation.
+If the value of a filter is "true", we apply that filter to the results. Since we are updating the results after each filter, only hotels that satisfy all the selected conditions will be returned.
 
-The user selects the sorting option through SortView. The implementation is shown below:
+The nice thing about this approach is that we don't have to write separate filtering logic for each option. If we decide to support additional filters in the future, we can simply add them to the FILTER_OPTIONS array, provided the corresponding property exists on our hotel model.
+
+Once the filtering is complete, we pass the filtered hotels to the sortHotels function so the results can also be sorted based on the user's selection.
+
+> For larger applications, it would be a good idea to organize the server-side code using the MVC (Model View Controller) pattern. For this article, I have kept everything inside the app.js file to keep things simple.
+
+Now that our server supports filtering, let's move to the SwiftUI client and see how we can allow users to select and apply filters.
+
+### Adding Filtering to SwiftUI Client 
+
+Now that our server supports filtering, let's move to the SwiftUI client and implement the user interface for selecting filters.
+
+We will create a FilterView that displays all the available filtering options and allows users to select multiple filters. Just like our SortView, we will also provide an option to close the view without applying any changes.
+
+Here is the complete implementation of FilterView.
 
 ``` swift 
-struct SortView: View {
+struct FilterView: View {
     
-    @State private var selectedSortOption: SortOption?
+    @State private var selectedFilters: Set<FilterOption>
+    let onDone: (Set<FilterOption>) -> Void
+    
     @Environment(\.dismiss) private var dismiss
     
-    let onDone: (SortOption?) -> Void
-    
-    init(initialSelection: SortOption? = nil, onDone: @escaping (SortOption?) -> Void) {
-        _selectedSortOption = State(initialValue: initialSelection)
+    init(initialFilters: Set<FilterOption>, onDone: @escaping (Set<FilterOption>) -> Void) {
+        _selectedFilters = State(initialValue: initialFilters)
         self.onDone = onDone
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             
             HStack {
                 Button("Close") {
@@ -309,61 +248,135 @@ struct SortView: View {
                 Spacer()
                 
                 Button("Clear") {
-                    selectedSortOption = nil
+                    selectedFilters = []
                 }
                 
             }.padding([.bottom], 10)
             
-            ForEach(SortOption.allCases) { sortOption in
-                Button {
-                    selectedSortOption = sortOption
-                } label: {
-                    HStack {
-                        Image(systemName: selectedSortOption == sortOption
-                              ? "largecircle.fill.circle" : "circle")
-
-                        Text(sortOption.title)
+            ForEach(FilterOption.allCases) { option in
+                HStack {
+                    Image(systemName: selectedFilters.contains(option) ? "checkmark.square.fill": "square")
+                    Text(option.title)
+                }.contentShape(Rectangle())
+                .onTapGesture {
+                    if selectedFilters.contains(option) {
+                        selectedFilters.remove(option)
+                    } else {
+                        selectedFilters.insert(option)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
                 }
-                .buttonStyle(.plain)
             }
             
             Button("Done") {
-                onDone(selectedSortOption)
+                onDone(selectedFilters)
                 dismiss()
-                
-            }.frame(maxWidth: .infinity, alignment: .leading)
-            .padding([.top], 20)
-            .buttonStyle(.borderedProminent)
+            }.buttonStyle(.borderedProminent)
             
         }.padding()
     }
 }
 ```
 
-The interesting part of this implementation is the use of a closure instead of passing an @Binding from the parent. The main reason I decided not to use @Binding is that I want users to be able to cancel their sorting selections without affecting the currently applied sort option.
+Just like SortView, we pass initialFilters from the parent so that FilterView can initialize its state with the previously selected filters. We are also using a closure to send the selected filters back to the parent when the user taps the Done button. This allows users to cancel their selections without affecting the filters already applied.
 
-If we directly bind the selected sort option to the parent's state, every selection will immediately update that state, even if the user decides to cancel.
+One important thing to note is that we are using a Set to represent the selected filters. Since users can select multiple filters, we could have used an array, but a Set is more suitable for this scenario because it does not allow duplicate values. It also makes it easy to check whether a particular filter is selected using the contains function.
 
-One way to solve this is to introduce a separate draftSortOption in the parent and pass it as a binding to SortView. That approach works perfectly fine, but I prefer a simpler solution.
+> Just like SortView, our FilterView also includes Close and Clear buttons. Whether these buttons should be part of the individual views or handled by the parent depends on how you plan to use these views in your application.
 
-In our implementation, SortView manages its own temporary selection using @State. When the user taps the Done button, we pass the selected sort option back to the parent through a closure. If the user closes the sheet without tapping Done, the original sort option remains unchanged.
+Now, let's update our HotelStore to support the selected filters.
 
-### Resources 
+``` swift 
+ func loadHotels(sortOption: SortOption? = nil, filters: Set<FilterOption>? = nil) async throws {
+    let resource = Resource(url: Constants.URLs.hotels(sort: sortOption, filters: filters), responseType: [Hotel].self)
+    hotels = try await httpClient.fetch(resource: resource)
+    }
+```
 
-- [Hummingbird Fundamentals - Build REST APIs in Swift](https://azamsharp.teachable.com/p/hummingbird-fundamentals)
+We have added filters as a second optional argument to the loadHotels function. The selected filters, along with the sort option, are passed to the URL generator, which creates a URL containing the appropriate query string parameters.
 
-- [Full Stack iOS Development Using Swift & Vapor](https://azamsharp.teachable.com/p/swiftui-vapor-full-stack-ios-development-bootcamp)
+This allows us to use the same endpoint for both sorting and filtering without making any additional changes to the server.
+
+Below, you can see the updated implementation of the hotels function inside the Constants.URLs struct.
+
+``` swift 
+struct Constants {
+
+    struct URLs {
+
+        static let base = URL(string: "http://localhost:8080/api/")!
+
+        static func hotels(sort: SortOption? = nil,filters: Set<FilterOption>? = nil) -> URL {
+
+            let url = base.appending(path: "hotels")
+
+            var queryItems: [URLQueryItem] = []
+
+            if let sort {
+                queryItems.append(
+                    URLQueryItem(
+                        name: "sort",
+                        value: sort.rawValue
+                    )
+                )
+            }
+
+            if let filters {
+
+                for option in filters {
+                    queryItems.append(
+                        URLQueryItem(
+                            name: option.rawValue,
+                            value: "true"
+                        )
+                    )
+                }
+            }
+
+            return url.appending(queryItems: queryItems)
+        }
+    }
+}
+```
+
+Finally, in HotelListScreen, we have replaced the showSortSheet boolean with an enum since we now have two different sheets to display: SortView and FilterView. Using an enum allows us to manage multiple sheets using a single .sheet modifier.
+
+``` swift 
+  .sheet(item: $activeSheet, content: { sheet in
+            switch sheet {
+                case .filter:
+                FilterView(initialFilters: filters) { filters in
+                    self.filters = filters
+                    Task { await loadHotels() }
+                }.presentationDetents([.fraction(0.25)])
+                case .sort:
+                SortView(initialSelection: sortOption) { option in
+                    sortOption = option
+                    Task { await loadHotels() }
+                }.presentationDetents([.fraction(0.25)])
+            }
+        })
+```
+
+When the user taps the Done button, the closure is called with the selected filters or sort option. We update the corresponding property in HotelListScreen and then call the loadHotels function to fetch the updated results from the server.
+
+The loadHotels function uses the current filters and sort option to construct the URL with the appropriate query string parameters. This allows us to apply both sorting and filtering in a single HTTP request.
+
+One thing you might be wondering is why we are explicitly calling loadHotels after updating the filters or sort option. We could also use the .task(id:) modifier to automatically reload the hotels when these values change. Both approaches work, but for this example, I prefer to explicitly call loadHotels when the user confirms their selection by tapping the Done button.
+
+### Source Code 
+
+You can download the source code from GitHub: 
+[https://github.com/azamsharpschool/HotelApp](https://github.com/azamsharpschool/HotelApp)
 
 ### Conclusion 
 
-In this article, we learned how to implement server-side sorting in a SwiftUI application. Instead of fetching all the records and sorting them on the client, we delegated the sorting responsibility to the server. This approach becomes especially useful when working with large datasets.
+In this article, we learned how to implement server-side filtering in a SwiftUI application. We started by updating our Express.js server to accept filter options through query string parameters. We then implemented a `FilterView`, allowing users to select multiple filters and apply them to the hotel listings.
 
-We also explored how to use @Observable to manage our hotel data and how to build a sorting interface using SwiftUI sheets. One interesting design decision was using a closure instead of @Binding, allowing users to confirm or cancel their selections without immediately updating the parent state.
+One interesting part of our implementation is the use of a `Set` to manage the selected filters. Since users can select multiple options, a `Set` works nicely because it automatically prevents duplicate values. We also used a closure to communicate the selected filters back to the parent view, allowing users to cancel their selections without affecting the existing filters.
 
-In the next article, we will extend our implementation to support server-side filtering and pagination. This will allow users to narrow down their search results and load hotels in smaller batches instead of fetching everything at once.
+Finally, we updated our `HotelStore` and URL generation logic to send the selected filters to the server. The nice thing about this approach is that filtering and sorting can work together without requiring separate endpoints.
+
+In the next article, we will extend our application even further by implementing server-side pagination, allowing users to load hotels in smaller batches instead of fetching all the results at once.
 
 ### Continue Learning with AzamSharp School
 
@@ -372,6 +385,4 @@ Become an AzamSharp School member and get access to more than 250 hours of pract
 Your membership also includes access to AzamSharp books, live workshops, office hours, and new content added regularly.
 
 [Join AzamSharp School](https://azamsharp.school?utm_source=chatgpt.com)
-
-
 
