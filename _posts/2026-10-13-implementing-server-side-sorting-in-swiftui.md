@@ -372,7 +372,7 @@ Become an AzamSharp School member and get access to more than 250 hours of pract
 
 Your membership also includes access to AzamSharp books, live workshops, office hours, and new content added regularly.
 
-[Join AzamSharp School](https://azamsharp.school?utm_source=chatgpt.com)
+[Join AzamSharp School](https://azamsharp.school)
 
 
 

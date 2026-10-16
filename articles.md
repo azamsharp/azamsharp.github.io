@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Implementing Infinite Scrolling in SwiftUI with ExpressJS](_posts/2026-10-16-implementing-infinite-scrolling-in-swiftui-expressjs.md)
+
+Infinite scrolling allows applications to load additional data as users scroll through a list, instead of fetching all records at once. In this article, we will implement infinite scrolling in SwiftUI with an ExpressJS backend using server-side pagination. We will also explore how to manage pagination alongside sorting and filtering to provide a smooth and efficient browsing experience.
+
 ### [Implementing Server-Side Filtering in SwiftUI](_posts/2026-10-15-implementing-server-side-filtering-in-swiftui.md)
 
 In this article, we will extend our SwiftUI hotel application to support server-side filtering. We will learn how to filter hotels based on amenities such as breakfast, parking, and Wi-Fi, build a reusable filtering interface in SwiftUI, and send selected filters to an Express.js server using query string parameters. We will also see how filtering and sorting can work together to provide more relevant results.

@@ -1,10 +1,20 @@
-# Implementing Server-Side Filtering in SwiftUI
+# Implementing Infinite Scrolling in SwiftUI + ExpressJS 
 
-In the previous article, we learned how to implement server-side sorting in a SwiftUI application. Sorting allows users to organize hotels based on price, ratings, and other criteria. But what if users only want to see hotels that provide breakfast, parking, or free Wi-Fi?
+When working with a large dataset, it is usually not a good idea to download all the records in a single request. Not only does this increase the amount of data transferred over the network, but it can also negatively impact the performance of the application.
 
-In this article, we will extend our existing application to support server-side filtering. We will start by updating our Express.js server to filter hotels based on the provided query string parameters. Next, we will implement a `FilterView` in SwiftUI, allowing users to select multiple filters and apply them to the hotel listings.
+One way to solve this problem is through pagination, where the server returns a small subset of records instead of the entire dataset. On the client side, we can take this a step further by implementing infinite scrolling, which allows us to fetch additional records as the user scrolls through the list.
 
-We will also see how to combine filtering with our existing sorting functionality so users can narrow down the results and sort them based on their preferences.
+In this article, we will implement infinite scrolling in our SwiftUI hotel application using an ExpressJS backend. We will also learn how to handle pagination when the user changes the sorting and filtering options.
+
+### Prerequisites
+
+This article builds on our previous implementations of server-side sorting and filtering in SwiftUI. If you have not followed along with those articles, I recommend checking them out before continuing.
+
+- **[Implementing Server-Side Sorting in SwiftUI](https://azamsharp.com/2026/10/13/implementing-server-side-sorting-in-swiftui.html)** — Learn how to sort hotels using an ExpressJS backend and manage sorting preferences in SwiftUI.
+
+- **[Implementing Server-Side Filtering in SwiftUI](https://azamsharp.com/2026/10/15/implementing-server-side-filtering-in-swiftui.html)** — Learn how to filter hotels based on amenities and combine filtering with sorting to display relevant results.
+
+In this article, we will extend the same hotel application by adding pagination and infinite scrolling, allowing users to load additional hotels as they scroll through the list.
 
 <!-- Book Banner: SwiftUI Architecture Book -->
 <div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
@@ -157,211 +167,140 @@ We will also see how to combine filtering with our existing sorting functionalit
   }
 </style>
 
-# Building the Server Filtering 
+### Implementing Pagination on the Server
 
-Let's start with our server, which is already configured to perform sorting. We will extend the existing implementation to support filtering. Users will be able to filter hotels based on different criteria, such as whether the hotel provides breakfast, parking, Wi-Fi, or airport shuttle services.
+For infinite scrolling to work, we first need to implement pagination on the server. The server is responsible for extracting the page and limit query string parameters and returning a subset of hotels based on those values.
 
-All these options will be passed to the server using query string parameters.
+Let's start by implementing the paginateHotels function, as shown below:
 
-For example, the following URL will return hotels that provide breakfast, parking, and Wi-Fi.
+``` swift 
+const paginateHotels = (pageNumber, pageLimit, hotels) => {
 
-`http://localhost:8080/api/hotels?breakfast=true&parking=true&wifiIncluded=true`
+    let startIndex = (pageNumber - 1) * pageLimit
+    let endIndex = startIndex + pageLimit
+    
+    const paginatedHotels = hotels.slice(startIndex, endIndex)
+    return paginatedHotels
+}
+```
 
-Keep in mind that only hotels that satisfy all three conditions will be returned. If a hotel provides breakfast and parking but does not offer Wi-Fi, it will not be included in the results.
+The implementation is quite straightforward. We calculate the starting index based on the requested page number and page limit. We then use the JavaScript slice function to return only the hotels that fall within that range.
 
-Below, you can find the server implementation:
+For example, consider the following URL:
 
-``` js 
-const FILTER_OPTIONS = [
-    "breakfast",
-    "parking",
-    "wifiIncluded",
-    "airportShuttle"
-]
+`http://localhost:8080/api/hotels?page=3&limit=5`
 
+In this case, we are requesting page 3 with a limit of 5 hotels per page. This means the server will return records 11–15, assuming there are enough records available.
+
+Now, let's take a look at the complete implementation of the endpoint:
+
+``` swift 
 app.get("/api/hotels", (req, res) => {
 
     // get the sort options 
-    const { sort } = req.query
+    const { sort, page = 1, limit = 10 } = req.query
+
+    const pageNumber = Number(page)
+    const pageLimit = Math.min(Number(limit), 50)
 
     let filteredHotels = filterHotels(hotels, req.query)
     filteredHotels = sortHotels(filteredHotels, sort)
-
+    
+    // paginate 
+    filteredHotels = paginateHotels(pageNumber, pageLimit, filteredHotels)
     res.json(filteredHotels)
 })
 
-const filterHotels = (hotels, query) => {
+const paginateHotels = (pageNumber, pageLimit, hotels) => {
 
-    let results = [...hotels]
-
-    FILTER_OPTIONS.forEach(filter => {
-        if (query[filter] === "true") {
-            results = results.filter(hotel => hotel[filter])
-        }
-    })
-
-    return results
+    let startIndex = (pageNumber - 1) * pageLimit
+    let endIndex = startIndex + pageLimit
+    
+    const paginatedHotels = hotels.slice(startIndex, endIndex)
+    return paginatedHotels
 }
 ```
 
-The filterHotels function is responsible for filtering the hotels based on the query string parameters. We start by creating a copy of the hotels array and then iterate through the FILTER_OPTIONS array to check which filters have been provided.
+Notice that we first apply the filters and sorting options before performing pagination. This is important because we want to paginate the filtered and sorted results, not the original collection of hotels.
 
-If the value of a filter is "true", we apply that filter to the results. Since we are updating the results after each filter, only hotels that satisfy all the selected conditions will be returned.
+We also limit the maximum number of hotels returned in a single request to 50. This prevents the client from requesting an unnecessarily large number of records.
 
-The nice thing about this approach is that we don't have to write separate filtering logic for each option. If we decide to support additional filters in the future, we can simply add them to the FILTER_OPTIONS array, provided the corresponding property exists on our hotel model.
+For a production application, we should also validate that page and limit are positive integers before using them.
 
-Once the filtering is complete, we pass the filtered hotels to the sortHotels function so the results can also be sorted based on the user's selection.
+Now that our server supports pagination, let's move to the client side and see how we can use it to implement infinite scrolling in SwiftUI.
 
-> For larger applications, it would be a good idea to organize the server-side code using the MVC (Model View Controller) pattern. For this article, I have kept everything inside the app.js file to keep things simple.
+### Handling Pagination on the Client Side
 
-Now that our server supports filtering, let's move to the SwiftUI client and see how we can allow users to select and apply filters.
+Infinite scrolling works by downloading additional data as the user scrolls down the screen. You can think of it as on-demand loading, where we only fetch more hotels when they are needed instead of downloading the entire collection in the initial request.
 
-### Adding Filtering to SwiftUI Client 
+Infinite scrolling is commonly used by social media applications like Twitter, Facebook, Instagram, and TikTok, where additional content is continuously loaded as the user scrolls through the feed.
 
-Now that our server supports filtering, let's move to the SwiftUI client and implement the user interface for selecting filters.
+The first thing we need to figure out is when to make the next request to the server. Ideally, we want to fetch additional hotels when the user reaches the end of the currently loaded list.
 
-We will create a FilterView that displays all the available filtering options and allows users to select multiple filters. Just like our SortView, we will also provide an option to close the view without applying any changes.
+One way to accomplish this is by comparing the current hotel's ID with the ID of the last hotel in the collection. If both IDs match, we know that the last hotel cell has appeared, and we can request the next page.
 
-Here is the complete implementation of FilterView.
+This is shown in the implementation below:
 
 ``` swift 
-struct FilterView: View {
-    
-    @State private var selectedFilters: Set<FilterOption>
-    let onDone: (Set<FilterOption>) -> Void
-    
-    @Environment(\.dismiss) private var dismiss
-    
-    init(initialFilters: Set<FilterOption>, onDone: @escaping (Set<FilterOption>) -> Void) {
-        _selectedFilters = State(initialValue: initialFilters)
-        self.onDone = onDone
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            
-            HStack {
-                Button("Close") {
-                    dismiss()
-                }
-                
-                Spacer()
-                
-                Button("Clear") {
-                    selectedFilters = []
-                }
-                
-            }.padding([.bottom], 10)
-            
-            ForEach(FilterOption.allCases) { option in
-                HStack {
-                    Image(systemName: selectedFilters.contains(option) ? "checkmark.square.fill": "square")
-                    Text(option.title)
-                }.contentShape(Rectangle())
-                .onTapGesture {
-                    if selectedFilters.contains(option) {
-                        selectedFilters.remove(option)
-                    } else {
-                        selectedFilters.insert(option)
+ ForEach(hotelStore.hotels) { hotel in
+                HotelCellView(hotel: hotel)
+                    .task {
+                        if hotel.id == hotelStore.hotels.last?.id {
+                            await loadHotels()
+                        }
                     }
-                }
             }
-            
-            Button("Done") {
-                onDone(selectedFilters)
-                dismiss()
-            }.buttonStyle(.borderedProminent)
-            
-        }.padding()
-    }
-}
 ```
 
-Just like SortView, we pass initialFilters from the parent so that FilterView can initialize its state with the previously selected filters. We are also using a closure to send the selected filters back to the parent when the user taps the Done button. This allows users to cancel their selections without affecting the filters already applied.
+As you can see, we have attached a task modifier to HotelCellView. SwiftUI executes the task when the view appears. Inside the task, we check whether the current hotel is the last hotel in the collection. If it is, we call the loadHotels function to fetch the next page from the server.
 
-One important thing to note is that we are using a Set to represent the selected filters. Since users can select multiple filters, we could have used an array, but a Set is more suitable for this scenario because it does not allow duplicate values. It also makes it easy to check whether a particular filter is selected using the contains function.
+Keep in mind that the task modifier is tied to the view's lifecycle and may execute more than once as views appear again. This means our store should prevent duplicate requests.
 
-> Just like SortView, our FilterView also includes Close and Clear buttons. Whether these buttons should be part of the individual views or handled by the parent depends on how you plan to use these views in your application.
+When using a List, SwiftUI creates and manages rows lazily, so it does not need to create every row at once. This helps improve performance when displaying large collections of hotels. However, it does not mean that only the rows currently visible on the screen are instantiated.
 
-Now, let's update our HotelStore to support the selected filters.
-
-``` swift 
- func loadHotels(sortOption: SortOption? = nil, filters: Set<FilterOption>? = nil) async throws {
-    let resource = Resource(url: Constants.URLs.hotels(sort: sortOption, filters: filters), responseType: [Hotel].self)
-    hotels = try await httpClient.fetch(resource: resource)
-    }
-```
-
-We have added filters as a second optional argument to the loadHotels function. The selected filters, along with the sort option, are passed to the URL generator, which creates a URL containing the appropriate query string parameters.
-
-This allows us to use the same endpoint for both sorting and filtering without making any additional changes to the server.
-
-Below, you can see the updated implementation of the hotels function inside the Constants.URLs struct.
+Now, let's take a look at the updated loadHotels function in HotelStore.
 
 ``` swift 
-struct Constants {
-
-    struct URLs {
-
-        static let base = URL(string: "http://localhost:8080/api/")!
-
-        static func hotels(sort: SortOption? = nil,filters: Set<FilterOption>? = nil) -> URL {
-
-            let url = base.appending(path: "hotels")
-
-            var queryItems: [URLQueryItem] = []
-
-            if let sort {
-                queryItems.append(
-                    URLQueryItem(
-                        name: "sort",
-                        value: sort.rawValue
-                    )
-                )
-            }
-
-            if let filters {
-
-                for option in filters {
-                    queryItems.append(
-                        URLQueryItem(
-                            name: option.rawValue,
-                            value: "true"
-                        )
-                    )
-                }
-            }
-
-            return url.appending(queryItems: queryItems)
+func loadHotels(sortOption: SortOption? = nil, filters: Set<FilterOption>? = nil, pageSize: Int = 10) async throws {
+        
+         let queryChanged = (self.sortOption != sortOption) || (self.filters != filters) || (self.pageSize != pageSize)
+        let page = queryChanged ? 1: currentPage
+        
+        guard queryChanged || hasMoreHotels else { return }
+        
+        let resource = Resource(url: Constants.URLs.hotels(sort: sortOption, filters: filters, page: page, pageSize: pageSize), responseType: [Hotel].self)
+        print(resource.url)
+        let newHotels = try await httpClient.fetch(resource: resource)
+        
+        if page == 1 {
+            hotels = newHotels
+        } else {
+            hotels.append(contentsOf: newHotels)
         }
+        
+        self.sortOption = sortOption
+        self.filters = filters
+        
+        currentPage = page + 1
+        hasMoreHotels = newHotels.count == pageSize
     }
-}
 ```
 
-Finally, in HotelListScreen, we have replaced the showSortSheet boolean with an enum since we now have two different sheets to display: SortView and FilterView. Using an enum allows us to manage multiple sheets using a single .sheet modifier.
+There are a few interesting things happening in this implementation.
 
-``` swift 
-  .sheet(item: $activeSheet, content: { sheet in
-            switch sheet {
-                case .filter:
-                FilterView(initialFilters: filters) { filters in
-                    self.filters = filters
-                    Task { await loadHotels() }
-                }.presentationDetents([.fraction(0.25)])
-                case .sort:
-                SortView(initialSelection: sortOption) { option in
-                    sortOption = option
-                    Task { await loadHotels() }
-                }.presentationDetents([.fraction(0.25)])
-            }
-        })
-```
+First, we check whether the sorting, filtering or page size have changed. If they have, we reset the page number to 1. This is important because the new sorting, filtering or page size options may produce a completely different collection of hotels, and we want to start displaying those results from the beginning.
 
-When the user taps the Done button, the closure is called with the selected filters or sort option. We update the corresponding property in HotelListScreen and then call the loadHotels function to fetch the updated results from the server.
+Next, we check the hasMoreHotels property to determine whether we should make another request. If there are no additional hotels to fetch and the query has not changed, we simply return without making a network request.
 
-The loadHotels function uses the current filters and sort option to construct the URL with the appropriate query string parameters. This allows us to apply both sorting and filtering in a single HTTP request.
+Once the server returns the hotels, we check the page number. If the page number is 1, we replace the existing hotels with the new results. Otherwise, we append the newly downloaded hotels to the existing collection.
 
-One thing you might be wondering is why we are explicitly calling loadHotels after updating the filters or sort option. We could also use the .task(id:) modifier to automatically reload the hotels when these values change. Both approaches work, but for this example, I prefer to explicitly call loadHotels when the user confirms their selection by tapping the Done button.
+Finally, we increment currentPage so the next request fetches the following page. We also update hasMoreHotels by comparing the number of returned hotels with the requested page size.
+
+If the server returns fewer hotels than the requested page size, we assume that there are no additional hotels available.
+
+There are also two improvements worth considering before using this implementation in a production application. The first is to track whether a request is already in progress using an isLoading property. This prevents multiple requests from being triggered when the last hotel cell appears more than once. The second is to include pageSize when checking whether the query has changed. Otherwise, changing the page size could result in skipped or duplicated hotels.
+
+With these pieces in place, we have the basic functionality needed to support infinite scrolling in our SwiftUI application.
 
 ### Source Code 
 
@@ -370,13 +309,8 @@ You can download the source code from GitHub:
 
 ### Conclusion 
 
-In this article, we learned how to implement server-side filtering in a SwiftUI application. We started by updating our Express.js server to accept filter options through query string parameters. We then implemented a `FilterView`, allowing users to select multiple filters and apply them to the hotel listings.
-
-One interesting part of our implementation is the use of a `Set` to manage the selected filters. Since users can select multiple options, a `Set` works nicely because it automatically prevents duplicate values. We also used a closure to communicate the selected filters back to the parent view, allowing users to cancel their selections without affecting the existing filters.
-
-Finally, we updated our `HotelStore` and URL generation logic to send the selected filters to the server. The nice thing about this approach is that filtering and sorting can work together without requiring separate endpoints.
-
-In the next article, we will extend our application even further by implementing server-side pagination, allowing users to load hotels in smaller batches instead of fetching all the results at once.
+Infinite scrolling is a great way to load data on demand without requiring users to manually navigate between pages. By implementing pagination on the server and detecting when the user reaches the end of the list in SwiftUI, we can create a seamless scrolling experience.
+We also learned how to reset pagination when sorting or filtering options change, ensuring that the user always sees the correct results. This approach is not limited to hotels and can be applied to products, recipes, social media feeds, or any application that displays a large collection of records.
 
 ### Continue Learning with AzamSharp School
 
@@ -384,5 +318,4 @@ Become an AzamSharp School member and get access to more than 250 hours of pract
 
 Your membership also includes access to AzamSharp books, live workshops, office hours, and new content added regularly.
 
-[Join AzamSharp School](https://azamsharp.school?utm_source=chatgpt.com)
-
+[Join AzamSharp School](https://azamsharp.school)
