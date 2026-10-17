@@ -8,6 +8,16 @@ Currently, our `loadHotels` function accepts several individual parameters. Alth
 
 In this article, we will simplify our implementation by grouping these options into a single `HotelQuery` structure. We will also see how this change makes our `HotelStore` API cleaner and reduces the amount of state we need to manage in our SwiftUI views.
 
+## Prerequisites
+
+This article builds on our previous implementations of server-side sorting, filtering, and pagination in SwiftUI. If you are new to this series, I recommend reading the following articles before continuing:
+
+- [Implementing Server-Side Sorting in SwiftUI](https://azamsharp.com/2026/10/13/implementing-server-side-sorting-in-swiftui.html) — Implement sorting options and send the selected sort order to an Express.js server.
+- [Implementing Server-Side Filtering in SwiftUI](https://azamsharp.com/2026/10/15/implementing-server-side-filtering-in-swiftui.html) — Filter hotels based on selected amenities using query string parameters.
+- [Implementing Server-Side Pagination in SwiftUI](https://azamsharp.com/2026/10/16/implementing-server-side-pagination-in-swiftui.html) — Load hotels incrementally as the user scrolls through the list.
+
+In this article, we will build on these implementations and simplify how sorting, filtering, and pagination options are managed by introducing a `HotelQuery` structure.
+
 <!-- Book Banner: SwiftUI Architecture Book -->
 <div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
   <div class="azam-book-banner__inner">
