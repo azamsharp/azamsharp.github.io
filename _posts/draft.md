@@ -1,20 +1,12 @@
-# Implementing Infinite Scrolling in SwiftUI + ExpressJS 
+# Simplifying Sorting, Filtering, and Pagination in SwiftUI Using HotelQuery
 
-When working with a large dataset, it is usually not a good idea to download all the records in a single request. Not only does this increase the amount of data transferred over the network, but it can also negatively impact the performance of the application.
+In the previous articles, we implemented server-side sorting, filtering, and pagination in our SwiftUI hotel application. Each feature works independently, but they also work together to control which hotels are returned from the server.
 
-One way to solve this problem is through pagination, where the server returns a small subset of records instead of the entire dataset. On the client side, we can take this a step further by implementing infinite scrolling, which allows us to fetch additional records as the user scrolls through the list.
+As we continue adding features, we need to make sure that our code remains simple and easy to maintain. One area that can benefit from improvement is how we pass sorting, filtering, and pagination options to our `HotelStore`.
 
-In this article, we will implement infinite scrolling in our SwiftUI hotel application using an ExpressJS backend. We will also learn how to handle pagination when the user changes the sorting and filtering options.
+Currently, our `loadHotels` function accepts several individual parameters. Although this approach works, it can become difficult to manage as we introduce more options.
 
-### Prerequisites
-
-This article builds on our previous implementations of server-side sorting and filtering in SwiftUI. If you have not followed along with those articles, I recommend checking them out before continuing.
-
-- **[Implementing Server-Side Sorting in SwiftUI](https://azamsharp.com/2026/10/13/implementing-server-side-sorting-in-swiftui.html)** — Learn how to sort hotels using an ExpressJS backend and manage sorting preferences in SwiftUI.
-
-- **[Implementing Server-Side Filtering in SwiftUI](https://azamsharp.com/2026/10/15/implementing-server-side-filtering-in-swiftui.html)** — Learn how to filter hotels based on amenities and combine filtering with sorting to display relevant results.
-
-In this article, we will extend the same hotel application by adding pagination and infinite scrolling, allowing users to load additional hotels as they scroll through the list.
+In this article, we will simplify our implementation by grouping these options into a single `HotelQuery` structure. We will also see how this change makes our `HotelStore` API cleaner and reduces the amount of state we need to manage in our SwiftUI views.
 
 <!-- Book Banner: SwiftUI Architecture Book -->
 <div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
@@ -167,152 +159,417 @@ In this article, we will extend the same hotel application by adding pagination 
   }
 </style>
 
-### Implementing Pagination on the Server
+## Grouping Options into HotelQuery
 
-For infinite scrolling to work, we first need to implement pagination on the server. The server is responsible for extracting the page and limit query string parameters and returning a subset of hotels based on those values.
+At present, we have `sortOption`, `filters`, `page`, and `limit` passed to the `loadHotels` function as individual parameters. There is nothing inherently wrong with this approach, but as the number of parameters increases, the function becomes harder to use.
 
-Let's start by implementing the paginateHotels function, as shown below:
+Instead of passing these values individually, we can group the related options into a common structure called `HotelQuery`.
 
-``` swift 
-const paginateHotels = (pageNumber, pageLimit, hotels) => {
+The implementation of `HotelQuery` is shown below:
 
-    let startIndex = (pageNumber - 1) * pageLimit
-    let endIndex = startIndex + pageLimit
-    
-    const paginatedHotels = hotels.slice(startIndex, endIndex)
-    return paginatedHotels
+```swift
+struct HotelQuery: Equatable {
+    var sort: SortOption?
+    var filters: Set<FilterOption> = []
+    var pageSize: Int = 10
 }
 ```
 
-The implementation is quite straightforward. We calculate the starting index based on the requested page number and page limit. We then use the JavaScript slice function to return only the hotels that fall within that range.
+The `HotelQuery` structure represents the options that determine which hotels should be returned from the server.
 
-For example, consider the following URL:
+The `sort` property determines how the hotels should be ordered. The `filters` property contains the selected filtering options, and `pageSize` determines the maximum number of hotels returned in a single request.
 
-`http://localhost:8080/api/hotels?page=3&limit=5`
+You may have noticed that we did not include the current page number in `HotelQuery`.
 
-In this case, we are requesting page 3 with a limit of 5 hotels per page. This means the server will return records 11–15, assuming there are enough records available.
+This is intentional.
 
-Now, let's take a look at the complete implementation of the endpoint:
+The current page number is not really a selection made by the user. It is part of the pagination state managed by `HotelStore`. The user can change the sorting options, apply filters, or select a different page size, but the store is responsible for keeping track of which page should be loaded next.
 
-``` swift 
-app.get("/api/hotels", (req, res) => {
+By keeping the page number inside `HotelStore`, we can separate the options selected by the user from the internal state required to perform pagination.
 
-    // get the sort options 
-    const { sort, page = 1, limit = 10 } = req.query
+Another important detail is that `HotelQuery` conforms to `Equatable`. This allows us to compare two queries and determine whether the user has changed any of the options.
 
-    const pageNumber = Number(page)
-    const pageLimit = Math.min(Number(limit), 50)
+For example:
 
-    let filteredHotels = filterHotels(hotels, req.query)
-    filteredHotels = sortHotels(filteredHotels, sort)
-    
-    // paginate 
-    filteredHotels = paginateHotels(pageNumber, pageLimit, filteredHotels)
-    res.json(filteredHotels)
-})
+```swift
+let query1 = HotelQuery()
+let query2 = HotelQuery(pageSize: 20)
 
-const paginateHotels = (pageNumber, pageLimit, hotels) => {
-
-    let startIndex = (pageNumber - 1) * pageLimit
-    let endIndex = startIndex + pageLimit
-    
-    const paginatedHotels = hotels.slice(startIndex, endIndex)
-    return paginatedHotels
-}
+print(query1 == query2) // false
 ```
 
-Notice that we first apply the filters and sorting options before performing pagination. This is important because we want to paginate the filtered and sorted results, not the original collection of hotels.
+This comparison becomes particularly useful when implementing pagination because changing any query option should cause the store to load hotels from the first page.
 
-We also limit the maximum number of hotels returned in a single request to 50. This prevents the client from requesting an unnecessarily large number of records.
+**Note:** For synthesized `Equatable` conformance to work, `SortOption` and `FilterOption` must also conform to `Equatable`. In our implementation, `FilterOption` is also `Hashable` because it is stored in a `Set`.
 
-For a production application, we should also validate that page and limit are positive integers before using them.
+## Updating HotelStore to Use HotelQuery
 
-Now that our server supports pagination, let's move to the client side and see how we can use it to implement infinite scrolling in SwiftUI.
+Now that we have introduced `HotelQuery`, we can update our `HotelStore` implementation to accept a single query argument.
 
-### Handling Pagination on the Client Side
+The updated `loadHotels` function is shown below:
 
-Infinite scrolling works by downloading additional data as the user scrolls down the screen. You can think of it as on-demand loading, where we only fetch more hotels when they are needed instead of downloading the entire collection in the initial request.
+```swift
+func loadHotels(_ query: HotelQuery) async throws {
+    guard !isLoading else { return }
 
-Infinite scrolling is commonly used by social media applications like Twitter, Facebook, Instagram, and TikTok, where additional content is continuously loaded as the user scrolls through the feed.
+    let queryChanged = self.query != query
+    let page = queryChanged ? 1 : currentPage
 
-The first thing we need to figure out is when to make the next request to the server. Ideally, we want to fetch additional hotels when the user reaches the end of the currently loaded list.
+    guard queryChanged || hasMoreHotels else { return }
 
-One way to accomplish this is by comparing the current hotel's ID with the ID of the last hotel in the collection. If both IDs match, we know that the last hotel cell has appeared, and we can request the next page.
+    isLoading = true
+    defer { isLoading = false }
 
-This is shown in the implementation below:
+    let resource = Resource(
+        url: Constants.URLs.hotels(query: query, page: page),
+        responseType: [Hotel].self
+    )
 
-``` swift 
- ForEach(hotelStore.hotels) { hotel in
-                HotelCellView(hotel: hotel)
-                    .task {
-                        if hotel.id == hotelStore.hotels.last?.id {
-                            await loadHotels()
-                        }
-                    }
-            }
-```
+    let newHotels = try await httpClient.fetch(resource: resource)
 
-As you can see, we have attached a task modifier to HotelCellView. SwiftUI executes the task when the view appears. Inside the task, we check whether the current hotel is the last hotel in the collection. If it is, we call the loadHotels function to fetch the next page from the server.
-
-Keep in mind that the task modifier is tied to the view's lifecycle and may execute more than once as views appear again. This means our store should prevent duplicate requests.
-
-When using a List, SwiftUI creates and manages rows lazily, so it does not need to create every row at once. This helps improve performance when displaying large collections of hotels. However, it does not mean that only the rows currently visible on the screen are instantiated.
-
-Now, let's take a look at the updated loadHotels function in HotelStore.
-
-``` swift 
-func loadHotels(sortOption: SortOption? = nil, filters: Set<FilterOption>? = nil, pageSize: Int = 10) async throws {
-        
-         let queryChanged = (self.sortOption != sortOption) || (self.filters != filters) || (self.pageSize != pageSize)
-        let page = queryChanged ? 1: currentPage
-        
-        guard queryChanged || hasMoreHotels else { return }
-        
-        let resource = Resource(url: Constants.URLs.hotels(sort: sortOption, filters: filters, page: page, pageSize: pageSize), responseType: [Hotel].self)
-        print(resource.url)
-        let newHotels = try await httpClient.fetch(resource: resource)
-        
-        if page == 1 {
-            hotels = newHotels
-        } else {
-            hotels.append(contentsOf: newHotels)
-        }
-        
-        self.sortOption = sortOption
-        self.filters = filters
-        
-        currentPage = page + 1
-        hasMoreHotels = newHotels.count == pageSize
+    if page == 1 {
+        hotels = newHotels
+    } else {
+        hotels.append(contentsOf: newHotels)
     }
+
+    self.query = query
+    currentPage = page + 1
+    hasMoreHotels = newHotels.count == query.pageSize
+}
 ```
 
-There are a few interesting things happening in this implementation.
+As you can see, we have replaced multiple arguments with a single `HotelQuery` argument. This may seem like a small change, but it simplifies the API and makes it easier to introduce additional query options in the future.
 
-First, we check whether the sorting, filtering or page size have changed. If they have, we reset the page number to 1. This is important because the new sorting, filtering or page size options may produce a completely different collection of hotels, and we want to start displaying those results from the beginning.
+Let's take a closer look at how the function works.
 
-Next, we check the hasMoreHotels property to determine whether we should make another request. If there are no additional hotels to fetch and the query has not changed, we simply return without making a network request.
+### Detecting Changes to the Query
 
-Once the server returns the hotels, we check the page number. If the page number is 1, we replace the existing hotels with the new results. Otherwise, we append the newly downloaded hotels to the existing collection.
+One of the first things we do inside `loadHotels` is compare the incoming query with the previously used query.
 
-Finally, we increment currentPage so the next request fetches the following page. We also update hasMoreHotels by comparing the number of returned hotels with the requested page size.
+```swift
+let queryChanged = self.query != query
+let page = queryChanged ? 1 : currentPage
+```
 
-If the server returns fewer hotels than the requested page size, we assume that there are no additional hotels available.
+If the query has changed, we reset the page number to `1`. Otherwise, we continue loading from the current page.
 
-There are also two improvements worth considering before using this implementation in a production application. The first is to track whether a request is already in progress using an isLoading property. This prevents multiple requests from being triggered when the last hotel cell appears more than once. The second is to include pageSize when checking whether the query has changed. Otherwise, changing the page size could result in skipped or duplicated hotels.
+For example, imagine that the user is browsing hotels sorted by price. After scrolling through several pages, the user decides to sort the hotels by guest rating instead.
 
-With these pieces in place, we have the basic functionality needed to support infinite scrolling in our SwiftUI application.
+Since the sorting option has changed, we should not continue loading hotels from the previous page number. Instead, we need to start from the first page using the newly selected sorting option.
 
-### Source Code 
+The same behavior applies when the user changes filters or the page size.
 
-You can download the source code from GitHub: 
-[https://github.com/azamsharpschool/HotelApp](https://github.com/azamsharpschool/HotelApp)
+This is one of the main benefits of using `HotelQuery`. Instead of checking each option individually, we can simply compare the entire query.
 
-### Conclusion 
+### Preventing Unnecessary Requests
 
-Infinite scrolling is a great way to load data on demand without requiring users to manually navigate between pages. By implementing pagination on the server and detecting when the user reaches the end of the list in SwiftUI, we can create a seamless scrolling experience.
-We also learned how to reset pagination when sorting or filtering options change, ensuring that the user always sees the correct results. This approach is not limited to hotels and can be applied to products, recipes, social media feeds, or any application that displays a large collection of records.
+Next, we check whether another request is already in progress.
 
-### Continue Learning with AzamSharp School
+```swift
+guard !isLoading else { return }
+```
+
+This prevents multiple requests from being started at the same time.
+
+We also check whether we need to load more hotels.
+
+```swift
+guard queryChanged || hasMoreHotels else { return }
+```
+
+If the query has changed, we need to load hotels from the first page, even if the previous query had already reached the end of its results.
+
+If the query has not changed, we only continue when more hotels are available.
+
+This allows the same function to handle both loading a new set of results and loading additional pages.
+
+### Replacing or Appending Hotels
+
+Once we receive the response from the server, we decide whether to replace the existing hotels or append the new results.
+
+```swift
+if page == 1 {
+    hotels = newHotels
+} else {
+    hotels.append(contentsOf: newHotels)
+}
+```
+
+When the page number is `1`, we replace the existing hotels. This happens when the query changes or when hotels are loaded for the first time.
+
+For subsequent pages, we append the newly fetched hotels to the existing collection.
+
+Finally, we update the pagination state.
+
+```swift
+self.query = query
+currentPage = page + 1
+hasMoreHotels = newHotels.count == query.pageSize
+```
+
+The `hasMoreHotels` property is determined by comparing the number of returned hotels with the requested page size.
+
+If the server returns fewer hotels than requested, we assume that there are no additional pages.
+
+Keep in mind that receiving exactly `pageSize` hotels does not guarantee that another page exists. It only means that another request may be necessary. A more sophisticated API could return additional pagination metadata, such as `hasNextPage` or `totalCount`, to make this determination more accurate.
+
+Also, the current implementation prevents overlapping requests by returning when `isLoading` is true. For this simple application, that is a reasonable starting point. In a production application, we may also want to handle a query change that occurs while an earlier request is still in progress, so that the latest selection is not ignored.
+
+## Updating the URL Builder
+
+Now that we have introduced `HotelQuery`, we can also simplify our URL builder. Previously, we passed sorting, filtering, and pagination options as individual arguments. We can now pass a single `HotelQuery` along with the page number.
+
+The updated implementation is shown below:
+
+```swift
+struct Constants {
+
+    struct URLs {
+
+        static let base = URL(string: "http://localhost:8080/api/")!
+
+        static func hotels(query: HotelQuery, page: Int = 1) -> URL {
+
+            let url = base.appending(path: "hotels")
+
+            var queryItems: [URLQueryItem] = [
+                URLQueryItem(name: "page", value: String(page)),
+                URLQueryItem(name: "limit", value: String(query.pageSize))
+            ]
+
+            if let sort = query.sort {
+                queryItems.append(
+                    URLQueryItem(
+                        name: "sort",
+                        value: sort.rawValue
+                    )
+                )
+            }
+
+            for option in query.filters {
+                queryItems.append(
+                    URLQueryItem(
+                        name: option.rawValue,
+                        value: "true"
+                    )
+                )
+            }
+
+            return url.appending(queryItems: queryItems)
+        }
+    }
+}
+```
+
+As you can see, the URL builder now accepts `HotelQuery` and uses its properties to construct the query string.
+
+We start by adding the page number and page size. If a sorting option is selected, we append it to the query string. Finally, we loop through the selected filters and append each one as a separate query parameter.
+
+For example, if the user selects sorting by price and enables breakfast and parking filters, the resulting URL may look like this:
+
+```text
+http://localhost:8080/api/hotels?page=1&limit=10&sort=priceLowToHigh&breakfast=true&parking=true
+```
+
+Notice that we are still passing the page number separately. This is because the page number is managed internally by `HotelStore`, while `HotelQuery` represents the options selected by the user.
+
+Another benefit of this approach is that the URL builder does not need to know anything about `HotelStore` or `HotelListScreen`. It simply accepts a query and returns the appropriate URL.
+
+If we decide to add additional query options in the future, we can update `HotelQuery` and the URL builder without changing the signature of our `loadHotels` function.
+
+## Simplifying HotelListScreen
+
+Now that `HotelStore` accepts a `HotelQuery`, we can simplify how we manage sorting and filtering options inside `HotelListScreen`.
+
+Previously, we maintained separate state properties for sorting and filtering.
+
+```swift
+@State private var sortOption: SortOption?
+@State private var filters: Set<FilterOption> = []
+```
+
+There is nothing wrong with maintaining these properties separately, but since they are related to the same hotel query, we can group them into a single state property.
+
+```swift
+@State private var query = HotelQuery()
+```
+
+This means that `HotelListScreen` now has a single source of truth for the options used to fetch hotels.
+
+Let's see how this affects our sheet implementation.
+
+```swift
+struct HotelListScreen: View {
+
+    @Environment(HotelStore.self) private var hotelStore
+
+    @State private var activeSheet: Sheet?
+    @State private var query = HotelQuery()
+
+    // other code
+
+    var body: some View {
+        // List and other UI
+
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+            case .filter:
+                FilterView(initialFilters: query.filters) { filters in
+                    query.filters = filters
+                    Task { await loadHotels() }
+                }
+                .presentationDetents([.fraction(0.25)])
+
+            case .sort:
+                SortView(initialSelection: query.sort) { option in
+                    query.sort = option
+                    Task { await loadHotels() }
+                }
+                .presentationDetents([.fraction(0.25)])
+            }
+        }
+    }
+
+    private func loadHotels() async {
+        do {
+            try await hotelStore.loadHotels(query)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+}
+```
+
+*The code above focuses on the query-related implementation. The remaining list UI and sheet definitions are omitted for brevity.*
+
+The interesting part is how the selected sorting and filtering options are updated.
+
+When the user confirms their filtering options, we update the `filters` property of `HotelQuery`.
+
+```swift
+query.filters = filters
+Task { await loadHotels() }
+```
+
+Similarly, when the user confirms a sorting option, we update the `sort` property.
+
+```swift
+query.sort = option
+Task { await loadHotels() }
+```
+
+Both operations call the same `loadHotels` function, which passes the complete query to `HotelStore`.
+
+```swift
+private func loadHotels() async {
+    do {
+        try await hotelStore.loadHotels(query)
+    } catch {
+        print(error.localizedDescription)
+    }
+}
+```
+
+The view does not need to determine whether sorting or filtering has changed. It simply passes the current query to the store.
+
+The store is responsible for comparing the query, resetting pagination when necessary, and fetching the appropriate hotels.
+
+This is a much cleaner separation of responsibilities.
+
+## Why Do We Have HotelQuery in Both HotelListScreen and HotelStore?
+
+You might have noticed that we have a `HotelQuery` property in both `HotelListScreen` and `HotelStore`.
+
+In `HotelListScreen`, we have the following:
+
+```swift
+@State private var query = HotelQuery()
+```
+
+And in `HotelStore`, we also maintain a query:
+
+```swift
+private var query = HotelQuery()
+```
+
+At first glance, this may look like we are duplicating state. But these two properties serve different purposes.
+
+The `HotelQuery` inside `HotelListScreen` represents the user's current selections. When the user changes sorting, applies filters, or modifies the page size, we update this query and pass it to `HotelStore`.
+
+The `HotelQuery` inside `HotelStore`, on the other hand, is used to keep track of the query associated with the previously loaded hotels.
+
+This allows us to compare the incoming query with the stored query.
+
+```swift
+let queryChanged = self.query != query
+let page = queryChanged ? 1 : currentPage
+```
+
+If the query has changed, we start loading hotels from the first page. Otherwise, we continue loading the next page.
+
+Once the hotels have been successfully fetched, we update the stored query.
+
+```swift
+self.query = query
+```
+
+Notice that we only update the stored query after the request succeeds. This is important because if the request fails, we don't want to update the query associated with our existing results.
+
+Another important detail is that the query inside `HotelStore` is marked as `private`. This means that the view cannot directly modify it. The only way to provide new query options is through the `loadHotels` function.
+
+I like this approach because it keeps the responsibilities clear. The view manages the user's selections, while the store keeps track of which query was used to load the hotels and manages the pagination state.
+
+Although both properties use the same `HotelQuery` type, they represent different information and are used for different purposes.
+
+## Making HotelQuery Easier to Extend
+
+Another benefit of introducing `HotelQuery` is that it gives us a convenient place to add new options.
+
+For example, suppose we decide to introduce a search feature that allows users to search hotels by name.
+
+We can simply add a new property to `HotelQuery`.
+
+```swift
+struct HotelQuery: Equatable {
+    var searchText: String = ""
+    var sort: SortOption?
+    var filters: Set<FilterOption> = []
+    var pageSize: Int = 10
+}
+```
+
+Since `HotelQuery` conforms to `Equatable`, changing `searchText` will automatically cause the new query to compare differently from the previous one.
+
+This means our existing pagination logic can detect the change and start loading hotels from the first page.
+
+We would still need to update the URL builder and the server to support the search parameter, but we would not need to change the signature of `HotelStore.loadHotels`.
+
+```swift
+func loadHotels(_ query: HotelQuery) async throws
+```
+
+This is one of the advantages of grouping related parameters into a dedicated type. We can extend the query without continually changing the function signatures throughout our application.
+
+It is also worth mentioning that `HotelQuery` is specific to our hotel application. If we were building a product catalog, we could introduce a `ProductQuery` with properties relevant to products.
+
+Although both queries may share sorting, filtering, and pagination concepts, that does not necessarily mean we should immediately introduce a generic query abstraction.
+
+I prefer starting with a simple, concrete implementation and introducing abstractions only when there is a clear need for them.
+
+## Conclusion
+
+In this article, we simplified our SwiftUI hotel application by introducing a `HotelQuery` structure to group sorting, filtering, and pagination options.
+
+Instead of passing several individual parameters to `HotelStore`, we now pass a single query that represents the user's current selections.
+
+This small change provides several benefits. It simplifies the `HotelStore` API, reduces the number of state properties in `HotelListScreen`, and makes it easier to introduce additional query options in the future.
+
+More importantly, it allows us to clearly separate the responsibilities of our application. The view manages the selected options, the store manages data loading and pagination, and the URL builder converts the query into parameters understood by the server.
+
+As you continue building SwiftUI applications, look for opportunities to group related values into meaningful types. Not every collection of parameters needs its own structure, but when those parameters represent a single concept, introducing a dedicated type can make the code easier to understand and maintain.
+
+## Continue Learning with AzamSharp School
 
 Become an AzamSharp School member and get access to more than 250 hours of practical courses covering SwiftUI, SwiftData, testing, architecture, AI, machine learning, and more.
 

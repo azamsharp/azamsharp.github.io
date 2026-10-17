@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Simplifying Sorting, Filtering, and Pagination in SwiftUI Using HotelQuery](_posts/2026-10-17-simplifying-sorting-filtering-and-pagination-in-swiftui-using-hotelquery.md)
+
+In this article, we simplify sorting, filtering, and pagination in SwiftUI by introducing a `HotelQuery` structure. We explore how grouping related options into a single type improves the `HotelStore` API, simplifies state management, and makes it easier to extend the application with additional query options.
+
 ### [Implementing Infinite Scrolling in SwiftUI with ExpressJS](_posts/2026-10-16-implementing-infinite-scrolling-in-swiftui-expressjs.md)
 
 Infinite scrolling allows applications to load additional data as users scroll through a list, instead of fetching all records at once. In this article, we will implement infinite scrolling in SwiftUI with an ExpressJS backend using server-side pagination. We will also explore how to manage pagination alongside sorting and filtering to provide a smooth and efficient browsing experience.
