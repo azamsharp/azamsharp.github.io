@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Get help with HomeUpkeep, the home maintenance tracking and reminder app.">
+  <title>HomeUpkeep | Support</title>
+
+  <style>
+    :root {
+      --green: #147d67;
+      --dark-green: #075447;
+      --light-green: #eaf7f2;
+      --text: #23332f;
+      --muted: #64736e;
+      --border: #dce9e3;
+      --background: #f7faf8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont,
+                   "Segoe UI", sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      background: linear-gradient(
+        135deg,
+        var(--dark-green),
+        var(--green),
+        #20a58a
+      );
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    header h1 {
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      margin: 0 0 12px;
+      letter-spacing: -1px;
+    }
+
+    header p {
+      max-width: 550px;
+      margin: 0 auto;
+      opacity: 0.92;
+      font-size: 1.1rem;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 50px 20px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      color: var(--dark-green);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin-top: 0;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .button {
+      display: inline-block;
+      background: var(--green);
+      color: white;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .button:hover {
+      background: var(--dark-green);
+      color: white;
+      text-decoration: none;
+    }
+
+    .button.secondary {
+      background: var(--light-green);
+      color: var(--dark-green);
+    }
+
+    .button.secondary:hover {
+      background: #d8eee5;
+    }
+
+    .faq-item {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .faq-item:first-of-type {
+      padding-top: 0;
+    }
+
+    .faq-item p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 35px 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      margin: 0 10px;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 60px 20px;
+      }
+
+      .container {
+        padding: 25px 16px;
+      }
+
+      .card {
+        padding: 22px;
+      }
+
+      .button {
+        display: block;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>HomeUpkeep Support</h1>
+    <p>
+      Need help keeping your home maintenance organized?
+      We're here to help.
+    </p>
+  </header>
+
+  <main class="container">
+
+    <section class="card">
+      <h2>Welcome to HomeUpkeep</h2>
+
+      <p>
+        HomeUpkeep helps you stay on top of home maintenance
+        with recurring tasks, timely reminders, equipment
+        tracking, warranty information, and a maintenance
+        calendar.
+      </p>
+
+      <p>
+        Whether you have a question, need technical assistance,
+        or want to suggest a feature, we're happy to hear
+        from you.
+      </p>
+
+      <a
+        class="button secondary"
+        href="https://apps.apple.com/us/app/homeupkeep-track-maintenance/id6827563970"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View HomeUpkeep on the App Store
+      </a>
+    </section>
+
+    <section class="card">
+      <h2>Contact Support</h2>
+
+      <p>
+        If you're experiencing an issue or have a question
+        about HomeUpkeep, please contact us by email.
+      </p>
+
+      <p>
+        <strong>Email:</strong>
+        <a href="mailto:azamsharp@gmail.com">
+          azamsharp@gmail.com
+        </a>
+      </p>
+
+      <p class="muted">
+        When reporting a problem, please include your
+        device model, iOS or iPadOS version, and a brief
+        description of the issue. Screenshots are helpful
+        when available.
+      </p>
+
+      <a
+        class="button"
+        href="mailto:azamsharp@gmail.com?subject=HomeUpkeep%20Support"
+      >
+        Email Support
+      </a>
+    </section>
+
+    <section class="card">
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq-item">
+        <h3>How do I create a maintenance task?</h3>
+        <p>
+          Open HomeUpkeep and add a new maintenance task.
+          Enter the task details, choose a schedule,
+          and configure reminders as needed.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does HomeUpkeep include suggested tasks?</h3>
+        <p>
+          Yes. HomeUpkeep includes a catalog of more
+          than 70 suggested home maintenance tasks.
+          You can browse the catalog and add tasks
+          relevant to your home.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How do reminders work?</h3>
+        <p>
+          HomeUpkeep can notify you when maintenance
+          tasks are due. Make sure notifications
+          are enabled for HomeUpkeep in your device's
+          Settings.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Can I track appliances and equipment?</h3>
+        <p>
+          Yes. You can keep equipment details such as
+          brand, model number, installation date,
+          warranty information, photos, and related
+          maintenance tasks.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does HomeUpkeep support iCloud syncing?</h3>
+        <p>
+          HomeUpkeep supports syncing compatible app
+          data through iCloud. Make sure you're signed
+          in to iCloud on your devices and that iCloud
+          access is enabled for the app.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How do I manage or cancel my subscription?</h3>
+        <p>
+          Open your device's Settings, tap your Apple
+          Account, and select Subscriptions. Choose
+          HomeUpkeep to manage or cancel your subscription.
+        </p>
+        <p>
+          <a href="https://support.apple.com/en-us/118428"
+             target="_blank"
+             rel="noopener noreferrer">
+            Apple's subscription cancellation instructions
+          </a>
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How do I request a refund?</h3>
+        <p>
+          Purchases are processed by Apple. You can
+          request a refund through Apple's official
+          refund website.
+        </p>
+        <p>
+          <a href="https://reportaproblem.apple.com/"
+             target="_blank"
+             rel="noopener noreferrer">
+            Request a refund from Apple
+          </a>
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How can I suggest a feature?</h3>
+        <p>
+          We'd love to hear your ideas. Send your
+          suggestions to
+          <a href="mailto:azamsharp@gmail.com?subject=HomeUpkeep%20Feature%20Request">
+            azamsharp@gmail.com
+          </a>.
+        </p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Privacy and Terms</h2>
+
+      <p>
+        Your privacy is important to us. You can review
+        our Privacy Policy and the terms governing your
+        use of HomeUpkeep below.
+      </p>
+
+      <p>
+        <a href="https://azamsharp.com/homeupkeep/privacy-policy/">
+          Privacy Policy
+        </a>
+      </p>
+
+      <p>
+        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+           target="_blank"
+           rel="noopener noreferrer">
+          Terms of Use (Apple Standard EULA)
+        </a>
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 AzamSharp. All rights reserved.</p>
+
+    <p>
+      <a href="https://azamsharp.com/homeupkeep/privacy-policy/">
+        Privacy Policy
+      </a>
+      |
+      <a href="https://apps.apple.com/us/app/homeupkeep-track-maintenance/id6827563970">
+        App Store
+      </a>
+      |
+      <a href="mailto:azamsharp@gmail.com">
+        Contact
+      </a>
+    </p>
+  </footer>
+
+</body>
+</html>
