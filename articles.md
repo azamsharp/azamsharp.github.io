@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Typing Is Not Typing, Typing Is Understanding](_posts/2026-10-31-typing-is-not-typing-typing-is-understanding.md)
+
+AI can generate working code in seconds, but what do developers lose when they stop writing code themselves? In this article, I explore why manually writing code is more than just typing syntax. It is an opportunity to think, experiment, make mistakes, and develop a deeper understanding of software. As AI removes the struggle from programming, are we also giving up valuable opportunities to learn and grow as developers?
+
 ### [Simplifying Sorting, Filtering, and Pagination in SwiftUI Using HotelQuery](_posts/2026-10-17-simplifying-sorting-filtering-and-pagination-in-swiftui-using-hotelquery.md)
 
 In this article, we simplify sorting, filtering, and pagination in SwiftUI by introducing a `HotelQuery` structure. We explore how grouping related options into a single type improves the `HotelStore` API, simplifies state management, and makes it easier to extend the application with additional query options.
