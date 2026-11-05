@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Learning to Learn in the Age of AI](_posts/2026-11-05-learning-to-learn-in-the-age-of-ai.md)
+
+AI can generate entire implementations in seconds, but what happens to our ability to learn when we no longer struggle to solve problems? In this article, I share my journey from learning GW BASIC in the 90s to programming in the age of AI. I explore why struggle is an important part of learning, how relying too much on AI can limit our understanding, and how we can use AI to become better developers without outsourcing our thinking.
+
 ### [Simplifying Sorting, Filtering, and Pagination in SwiftUI Using HotelQuery](_posts/2026-10-17-simplifying-sorting-filtering-and-pagination-in-swiftui-using-hotelquery.md)
 
 In this article, we simplify sorting, filtering, and pagination in SwiftUI by introducing a `HotelQuery` structure. We explore how grouping related options into a single type improves the `HotelStore` API, simplifies state management, and makes it easier to extend the application with additional query options.

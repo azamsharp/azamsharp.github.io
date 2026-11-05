@@ -1,12 +1,78 @@
-# Simplifying Sorting, Filtering, and Pagination in SwiftUI Using HotelQuery
+# Learning to Learn in the Age of AI
 
-In the previous articles, we implemented server-side sorting, filtering, and pagination in our SwiftUI hotel application. Each feature works independently, but they also work together to control which hotels are returned from the server.
+I started learning programming back in the early 90s. The World Wide Web had just been introduced, but it would still be a few years before I had access to the internet.
 
-As we continue adding features, we need to make sure that our code remains simple and easy to maintain. One area that can benefit from improvement is how we pass sorting, filtering, and pagination options to our `HotelStore`.
+Luckily, books were available, and I spent most of my time reading programming books and manually typing code, one instruction at a time, into the editor. One of the first programming languages I learned was GW BASIC. I still remember creating a simple program that displayed a face that would switch between happy and sad.
 
-Currently, our `loadHotels` function accepts several individual parameters. Although this approach works, it can become difficult to manage as we introduce more options.
+A few years later, I finally got access to the internet, and a few years after that, Google arrived. Technology was advancing rapidly, but developers still had to struggle to find and implement solutions.
 
-In this article, we will simplify our implementation by grouping these options into a single `HotelQuery` structure. We will also see how this change makes our `HotelStore` API cleaner and reduces the amount of state we need to manage in our SwiftUI views.
+For example, imagine you were building an application that displayed a map, and you wanted to cluster different markers together. You would have to read documentation, search Stack Overflow, or explore other online resources to figure out how to implement it.
+
+Sometimes, you would find the exact answer you were looking for. Other times, you would find something similar and have to think through how to apply that solution to your particular situation.
+
+Fast forward to today, and AI can generate an entire implementation in just a few seconds. This is great because you save a lot of time and suddenly become a 10X developer. But at the same time, you may not have struggled at all. All it took was a single prompt, and your work was done.
+
+**But if AI does all the work, what exactly are we learning?**
+
+I have been teaching in one form or another since before 2002, and one thing I strongly believe is that **if you are not struggling, you are not learning.** This is especially true when you are trying to learn something new.
+
+When I was teaching at a physical campus, I would always tell my students to break down a problem into smaller tasks. For each task, give yourself 15 to 20 minutes of pure struggle before asking for help.
+
+That is when real learning happens.
+
+You might try nine different approaches, and none of them work. Finally, on your tenth attempt, you find a solution. But you did not fail nine times. You discovered nine different approaches that did not work.
+
+As Thomas Edison is often quoted as saying:
+
+> I have not failed. I've just found 10,000 ways that won't work.
+
+Today, AI has made it easier than ever to avoid that struggle. Even worse, some developers have stopped reviewing AI generated code. They simply assume that because AI wrote the code and it works, it must be good.
+
+Unfortunately, my experience has been that while AI is very good at generating code, it does not always account for the long term consequences of its decisions. It can produce a working implementation without considering how that implementation will affect the architecture, maintainability, or future development of the application.
+
+Generating code is not the same as engineering software.
+
+So, should we stop using AI?
+
+**No.**
+
+AI is a powerful technology, but with great power comes great responsibility. We should use AI to enhance and amplify our learning instead of replacing it.
+
+Instead of asking AI to generate the complete solution, ask it to point you toward the documentation for the framework you are trying to learn. You can even explicitly tell AI not to provide a solution, but instead to share relevant code samples from the documentation.
+
+You can also ask for a hint rather than working code. That hint might give you just enough information to investigate further and move one step closer to solving the problem yourself.
+
+There is also an important difference between using AI to become more productive and using AI to become a better programmer.
+
+We often measure the success of AI by how much time it saves us. But when it comes to learning, saving time should not always be the goal. Sometimes, spending an hour understanding a problem is more valuable than solving it in five minutes.
+
+One analogy I find helpful is going to the gym. Imagine hiring a personal trainer, but instead of exercising yourself, you let the trainer lift all the weights while you sit on the sidelines.
+
+No matter how much your trainer exercises, you are not going to lose weight or build muscle. Your trainer might get stronger, but you won't.
+
+The same idea applies to your brain.
+
+Your brain also needs exercise, and one way to exercise it is by working through problems yourself. You need to think critically about different scenarios, explore possible solutions, and understand how your decisions affect the final implementation.
+
+This does not mean you should struggle with everything. There is a difference between productive struggle and unnecessary frustration. Spending hours dealing with a configuration issue may not teach you much, but spending time understanding why your application has a race condition can make you a better developer.
+
+The goal is not to make programming unnecessarily difficult. The goal is to make sure we are still learning.
+
+The next time you are working on a problem, break it down into smaller tasks. Spend 15 to 20 minutes working through each task before waving the white flag and asking AI for help.
+
+During that time, you can still use AI to look up references, documentation, code samples, or even ask for hints. Just resist the temptation to ask it to generate the complete solution.
+
+Those 15 to 20 minutes might feel frustrating, especially when you know AI could solve the problem in seconds. But that struggle is an investment in yourself.
+
+When I was learning GW BASIC, I spent hours writing simple programs and figuring out why things did not work. Today, AI could generate those same programs in seconds.
+
+But I don't consider those hours wasted. They taught me how to think, experiment, solve problems, and keep going when things did not work.
+
+I am not suggesting that we should stop using AI or go back to the way we programmed in the 90s. I am suggesting that we should be intentional about how we use AI, especially when our goal is to learn.
+
+There is a great quote that captures this idea perfectly:
+
+**"You can outsource your thinking, but you cannot outsource your understanding."**
 
 <!-- Book Banner: SwiftUI Architecture Book -->
 <div class="azam-book-banner" role="region" aria-label="SwiftUI Architecture Book Banner">
@@ -158,421 +224,3 @@ In this article, we will simplify our implementation by grouping these options i
     }
   }
 </style>
-
-## Grouping Options into HotelQuery
-
-At present, we have `sortOption`, `filters`, `page`, and `limit` passed to the `loadHotels` function as individual parameters. There is nothing inherently wrong with this approach, but as the number of parameters increases, the function becomes harder to use.
-
-Instead of passing these values individually, we can group the related options into a common structure called `HotelQuery`.
-
-The implementation of `HotelQuery` is shown below:
-
-```swift
-struct HotelQuery: Equatable {
-    var sort: SortOption?
-    var filters: Set<FilterOption> = []
-    var pageSize: Int = 10
-}
-```
-
-The `HotelQuery` structure represents the options that determine which hotels should be returned from the server.
-
-The `sort` property determines how the hotels should be ordered. The `filters` property contains the selected filtering options, and `pageSize` determines the maximum number of hotels returned in a single request.
-
-You may have noticed that we did not include the current page number in `HotelQuery`.
-
-This is intentional.
-
-The current page number is not really a selection made by the user. It is part of the pagination state managed by `HotelStore`. The user can change the sorting options, apply filters, or select a different page size, but the store is responsible for keeping track of which page should be loaded next.
-
-By keeping the page number inside `HotelStore`, we can separate the options selected by the user from the internal state required to perform pagination.
-
-Another important detail is that `HotelQuery` conforms to `Equatable`. This allows us to compare two queries and determine whether the user has changed any of the options.
-
-For example:
-
-```swift
-let query1 = HotelQuery()
-let query2 = HotelQuery(pageSize: 20)
-
-print(query1 == query2) // false
-```
-
-This comparison becomes particularly useful when implementing pagination because changing any query option should cause the store to load hotels from the first page.
-
-**Note:** For synthesized `Equatable` conformance to work, `SortOption` and `FilterOption` must also conform to `Equatable`. In our implementation, `FilterOption` is also `Hashable` because it is stored in a `Set`.
-
-## Updating HotelStore to Use HotelQuery
-
-Now that we have introduced `HotelQuery`, we can update our `HotelStore` implementation to accept a single query argument.
-
-The updated `loadHotels` function is shown below:
-
-```swift
-func loadHotels(_ query: HotelQuery) async throws {
-    guard !isLoading else { return }
-
-    let queryChanged = self.query != query
-    let page = queryChanged ? 1 : currentPage
-
-    guard queryChanged || hasMoreHotels else { return }
-
-    isLoading = true
-    defer { isLoading = false }
-
-    let resource = Resource(
-        url: Constants.URLs.hotels(query: query, page: page),
-        responseType: [Hotel].self
-    )
-
-    let newHotels = try await httpClient.fetch(resource: resource)
-
-    if page == 1 {
-        hotels = newHotels
-    } else {
-        hotels.append(contentsOf: newHotels)
-    }
-
-    self.query = query
-    currentPage = page + 1
-    hasMoreHotels = newHotels.count == query.pageSize
-}
-```
-
-As you can see, we have replaced multiple arguments with a single `HotelQuery` argument. This may seem like a small change, but it simplifies the API and makes it easier to introduce additional query options in the future.
-
-Let's take a closer look at how the function works.
-
-### Detecting Changes to the Query
-
-One of the first things we do inside `loadHotels` is compare the incoming query with the previously used query.
-
-```swift
-let queryChanged = self.query != query
-let page = queryChanged ? 1 : currentPage
-```
-
-If the query has changed, we reset the page number to `1`. Otherwise, we continue loading from the current page.
-
-For example, imagine that the user is browsing hotels sorted by price. After scrolling through several pages, the user decides to sort the hotels by guest rating instead.
-
-Since the sorting option has changed, we should not continue loading hotels from the previous page number. Instead, we need to start from the first page using the newly selected sorting option.
-
-The same behavior applies when the user changes filters or the page size.
-
-This is one of the main benefits of using `HotelQuery`. Instead of checking each option individually, we can simply compare the entire query.
-
-### Preventing Unnecessary Requests
-
-Next, we check whether another request is already in progress.
-
-```swift
-guard !isLoading else { return }
-```
-
-This prevents multiple requests from being started at the same time.
-
-We also check whether we need to load more hotels.
-
-```swift
-guard queryChanged || hasMoreHotels else { return }
-```
-
-If the query has changed, we need to load hotels from the first page, even if the previous query had already reached the end of its results.
-
-If the query has not changed, we only continue when more hotels are available.
-
-This allows the same function to handle both loading a new set of results and loading additional pages.
-
-### Replacing or Appending Hotels
-
-Once we receive the response from the server, we decide whether to replace the existing hotels or append the new results.
-
-```swift
-if page == 1 {
-    hotels = newHotels
-} else {
-    hotels.append(contentsOf: newHotels)
-}
-```
-
-When the page number is `1`, we replace the existing hotels. This happens when the query changes or when hotels are loaded for the first time.
-
-For subsequent pages, we append the newly fetched hotels to the existing collection.
-
-Finally, we update the pagination state.
-
-```swift
-self.query = query
-currentPage = page + 1
-hasMoreHotels = newHotels.count == query.pageSize
-```
-
-The `hasMoreHotels` property is determined by comparing the number of returned hotels with the requested page size.
-
-If the server returns fewer hotels than requested, we assume that there are no additional pages.
-
-Keep in mind that receiving exactly `pageSize` hotels does not guarantee that another page exists. It only means that another request may be necessary. A more sophisticated API could return additional pagination metadata, such as `hasNextPage` or `totalCount`, to make this determination more accurate.
-
-Also, the current implementation prevents overlapping requests by returning when `isLoading` is true. For this simple application, that is a reasonable starting point. In a production application, we may also want to handle a query change that occurs while an earlier request is still in progress, so that the latest selection is not ignored.
-
-## Updating the URL Builder
-
-Now that we have introduced `HotelQuery`, we can also simplify our URL builder. Previously, we passed sorting, filtering, and pagination options as individual arguments. We can now pass a single `HotelQuery` along with the page number.
-
-The updated implementation is shown below:
-
-```swift
-struct Constants {
-
-    struct URLs {
-
-        static let base = URL(string: "http://localhost:8080/api/")!
-
-        static func hotels(query: HotelQuery, page: Int = 1) -> URL {
-
-            let url = base.appending(path: "hotels")
-
-            var queryItems: [URLQueryItem] = [
-                URLQueryItem(name: "page", value: String(page)),
-                URLQueryItem(name: "limit", value: String(query.pageSize))
-            ]
-
-            if let sort = query.sort {
-                queryItems.append(
-                    URLQueryItem(
-                        name: "sort",
-                        value: sort.rawValue
-                    )
-                )
-            }
-
-            for option in query.filters {
-                queryItems.append(
-                    URLQueryItem(
-                        name: option.rawValue,
-                        value: "true"
-                    )
-                )
-            }
-
-            return url.appending(queryItems: queryItems)
-        }
-    }
-}
-```
-
-As you can see, the URL builder now accepts `HotelQuery` and uses its properties to construct the query string.
-
-We start by adding the page number and page size. If a sorting option is selected, we append it to the query string. Finally, we loop through the selected filters and append each one as a separate query parameter.
-
-For example, if the user selects sorting by price and enables breakfast and parking filters, the resulting URL may look like this:
-
-```text
-http://localhost:8080/api/hotels?page=1&limit=10&sort=priceLowToHigh&breakfast=true&parking=true
-```
-
-Notice that we are still passing the page number separately. This is because the page number is managed internally by `HotelStore`, while `HotelQuery` represents the options selected by the user.
-
-Another benefit of this approach is that the URL builder does not need to know anything about `HotelStore` or `HotelListScreen`. It simply accepts a query and returns the appropriate URL.
-
-If we decide to add additional query options in the future, we can update `HotelQuery` and the URL builder without changing the signature of our `loadHotels` function.
-
-## Simplifying HotelListScreen
-
-Now that `HotelStore` accepts a `HotelQuery`, we can simplify how we manage sorting and filtering options inside `HotelListScreen`.
-
-Previously, we maintained separate state properties for sorting and filtering.
-
-```swift
-@State private var sortOption: SortOption?
-@State private var filters: Set<FilterOption> = []
-```
-
-There is nothing wrong with maintaining these properties separately, but since they are related to the same hotel query, we can group them into a single state property.
-
-```swift
-@State private var query = HotelQuery()
-```
-
-This means that `HotelListScreen` now has a single source of truth for the options used to fetch hotels.
-
-Let's see how this affects our sheet implementation.
-
-```swift
-struct HotelListScreen: View {
-
-    @Environment(HotelStore.self) private var hotelStore
-
-    @State private var activeSheet: Sheet?
-    @State private var query = HotelQuery()
-
-    // other code
-
-    var body: some View {
-        // List and other UI
-
-        .sheet(item: $activeSheet) { sheet in
-            switch sheet {
-            case .filter:
-                FilterView(initialFilters: query.filters) { filters in
-                    query.filters = filters
-                    Task { await loadHotels() }
-                }
-                .presentationDetents([.fraction(0.25)])
-
-            case .sort:
-                SortView(initialSelection: query.sort) { option in
-                    query.sort = option
-                    Task { await loadHotels() }
-                }
-                .presentationDetents([.fraction(0.25)])
-            }
-        }
-    }
-
-    private func loadHotels() async {
-        do {
-            try await hotelStore.loadHotels(query)
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-}
-```
-
-*The code above focuses on the query-related implementation. The remaining list UI and sheet definitions are omitted for brevity.*
-
-The interesting part is how the selected sorting and filtering options are updated.
-
-When the user confirms their filtering options, we update the `filters` property of `HotelQuery`.
-
-```swift
-query.filters = filters
-Task { await loadHotels() }
-```
-
-Similarly, when the user confirms a sorting option, we update the `sort` property.
-
-```swift
-query.sort = option
-Task { await loadHotels() }
-```
-
-Both operations call the same `loadHotels` function, which passes the complete query to `HotelStore`.
-
-```swift
-private func loadHotels() async {
-    do {
-        try await hotelStore.loadHotels(query)
-    } catch {
-        print(error.localizedDescription)
-    }
-}
-```
-
-The view does not need to determine whether sorting or filtering has changed. It simply passes the current query to the store.
-
-The store is responsible for comparing the query, resetting pagination when necessary, and fetching the appropriate hotels.
-
-This is a much cleaner separation of responsibilities.
-
-## Why Do We Have HotelQuery in Both HotelListScreen and HotelStore?
-
-You might have noticed that we have a `HotelQuery` property in both `HotelListScreen` and `HotelStore`.
-
-In `HotelListScreen`, we have the following:
-
-```swift
-@State private var query = HotelQuery()
-```
-
-And in `HotelStore`, we also maintain a query:
-
-```swift
-private var query = HotelQuery()
-```
-
-At first glance, this may look like we are duplicating state. But these two properties serve different purposes.
-
-The `HotelQuery` inside `HotelListScreen` represents the user's current selections. When the user changes sorting, applies filters, or modifies the page size, we update this query and pass it to `HotelStore`.
-
-The `HotelQuery` inside `HotelStore`, on the other hand, is used to keep track of the query associated with the previously loaded hotels.
-
-This allows us to compare the incoming query with the stored query.
-
-```swift
-let queryChanged = self.query != query
-let page = queryChanged ? 1 : currentPage
-```
-
-If the query has changed, we start loading hotels from the first page. Otherwise, we continue loading the next page.
-
-Once the hotels have been successfully fetched, we update the stored query.
-
-```swift
-self.query = query
-```
-
-Notice that we only update the stored query after the request succeeds. This is important because if the request fails, we don't want to update the query associated with our existing results.
-
-Another important detail is that the query inside `HotelStore` is marked as `private`. This means that the view cannot directly modify it. The only way to provide new query options is through the `loadHotels` function.
-
-I like this approach because it keeps the responsibilities clear. The view manages the user's selections, while the store keeps track of which query was used to load the hotels and manages the pagination state.
-
-Although both properties use the same `HotelQuery` type, they represent different information and are used for different purposes.
-
-## Making HotelQuery Easier to Extend
-
-Another benefit of introducing `HotelQuery` is that it gives us a convenient place to add new options.
-
-For example, suppose we decide to introduce a search feature that allows users to search hotels by name.
-
-We can simply add a new property to `HotelQuery`.
-
-```swift
-struct HotelQuery: Equatable {
-    var searchText: String = ""
-    var sort: SortOption?
-    var filters: Set<FilterOption> = []
-    var pageSize: Int = 10
-}
-```
-
-Since `HotelQuery` conforms to `Equatable`, changing `searchText` will automatically cause the new query to compare differently from the previous one.
-
-This means our existing pagination logic can detect the change and start loading hotels from the first page.
-
-We would still need to update the URL builder and the server to support the search parameter, but we would not need to change the signature of `HotelStore.loadHotels`.
-
-```swift
-func loadHotels(_ query: HotelQuery) async throws
-```
-
-This is one of the advantages of grouping related parameters into a dedicated type. We can extend the query without continually changing the function signatures throughout our application.
-
-It is also worth mentioning that `HotelQuery` is specific to our hotel application. If we were building a product catalog, we could introduce a `ProductQuery` with properties relevant to products.
-
-Although both queries may share sorting, filtering, and pagination concepts, that does not necessarily mean we should immediately introduce a generic query abstraction.
-
-I prefer starting with a simple, concrete implementation and introducing abstractions only when there is a clear need for them.
-
-## Conclusion
-
-In this article, we simplified our SwiftUI hotel application by introducing a `HotelQuery` structure to group sorting, filtering, and pagination options.
-
-Instead of passing several individual parameters to `HotelStore`, we now pass a single query that represents the user's current selections.
-
-This small change provides several benefits. It simplifies the `HotelStore` API, reduces the number of state properties in `HotelListScreen`, and makes it easier to introduce additional query options in the future.
-
-More importantly, it allows us to clearly separate the responsibilities of our application. The view manages the selected options, the store manages data loading and pagination, and the URL builder converts the query into parameters understood by the server.
-
-As you continue building SwiftUI applications, look for opportunities to group related values into meaningful types. Not every collection of parameters needs its own structure, but when those parameters represent a single concept, introducing a dedicated type can make the code easier to understand and maintain.
-
-## Continue Learning with AzamSharp School
-
-Become an AzamSharp School member and get access to more than 250 hours of practical courses covering SwiftUI, SwiftData, testing, architecture, AI, machine learning, and more.
-
-Your membership also includes access to AzamSharp books, live workshops, office hours, and new content added regularly.
-
-[Join AzamSharp School](https://azamsharp.school)
