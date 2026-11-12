@@ -295,7 +295,6 @@ But what would happen if Codex had to create a new struct?
 
 I asked Codex to create a new SwiftUI view that displays a Toggle for enabling dark mode. Here is the code it generated:
 
-```swift
 struct SettingsView: View {
     @State private var isDarkModeEnabled = false
 
@@ -311,25 +310,28 @@ struct SettingsView: View {
         )
     }
 }
-```
 
-Notice that Codex created `SettingsView` instead of `SSettingsView`. This time, it was creating a new struct, so the previous explanation about preserving existing code did not apply. It simply did not follow the naming convention.
+Codex created SettingsView, which actually follows the naming convention because the name already begins with the letter S. Initially, I overlooked this and expected it to generate SSettingsView. But my instruction only required struct names to begin with S, not to add an additional S prefix.
 
-I started another conversation and explicitly asked Codex to read `AGENTS.md` and follow all project naming conventions. This time, it created `SDarkModeView`, which followed the instructions.
+I started another conversation and explicitly asked Codex to read AGENTS.md and follow all project naming conventions. This time, it created SDarkModeView, which also satisfied the rule.
 
-This made me wonder whether we always need to remind Codex to read `AGENTS.md`. To test this, I started another request without mentioning the file or any naming conventions.
+Both results were valid, although the naming patterns were different. This made me realize that if I wanted every struct to have a specific prefix, I should have written a more precise instruction. For example, I could have required every Swift struct name to begin with the prefix AZ instead of simply requiring the first letter to be S.
+
+This made me wonder whether we always need to remind Codex to read AGENTS.md. To test this, I started another request without mentioning the file or any naming conventions.
 
 My prompt was:
 
-> Create a SwiftUI view that displays a list of books.
+Create a SwiftUI view that displays a list of books.
 
 Codex inspected the project conventions and responded:
 
-> The project requires every Swift struct name to begin with S, so I'll follow that convention for both the book model and views.
+The project requires every Swift struct name to begin with S, so I'll follow that convention for both the book model and views.
 
-It then created a view called `SBookListView`. This time, Codex followed the convention without me explicitly asking it to reread `AGENTS.md`.
+It then created a view called SBookListView. Once again, Codex followed the convention, this time without me explicitly asking it to reread AGENTS.md.
 
-At this point, I had seen different results. Sometimes Codex followed the instructions, and sometimes it didn't. But I wanted to test one more thing. What happens if I change the naming convention during the same conversation?
+At this point, Codex had generated SettingsView, SDarkModeView, and SBookListView. All three names satisfied the convention because they began with S. However, the results also showed that my instruction was somewhat ambiguous. It did not specify whether Codex should add a prefix or simply ensure that the name started with the required letter.
+
+But I wanted to test one more thing. What happens if I change the naming convention during the same conversation?
 
 ## Updating AGENTS.md During an Active Conversation
 
