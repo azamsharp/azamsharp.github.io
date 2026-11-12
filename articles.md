@@ -9,6 +9,10 @@
 [Speaking](/speaking)
 [Contact](/contact)
 
+### [Working with AGENTS.md: What I Learned](_posts/2026-11-12-working-with-agents-md-what-i-learned.md)
+
+An `AGENTS.md` file allows developers to define coding conventions and architectural guidelines for AI coding agents. But how well do agents actually follow these instructions? In this article, I share my experience using `AGENTS.md` with Codex in Xcode. Through several experiments, I explore how agents follow naming conventions, respond to updated instructions, and handle existing code that no longer follows the guidelines. Along the way, I discovered some interesting behaviors that are worth understanding before relying on `AGENTS.md` in your own projects.
+
 ### [Learning to Learn in the Age of AI](_posts/2026-11-05-learning-to-learn-in-the-age-of-ai.md)
 
 AI can generate entire implementations in seconds, but what happens to our ability to learn when we no longer struggle to solve problems? In this article, I share my journey from learning GW BASIC in the 90s to programming in the age of AI. I explore why struggle is an important part of learning, how relying too much on AI can limit our understanding, and how we can use AI to become better developers without outsourcing our thinking.
