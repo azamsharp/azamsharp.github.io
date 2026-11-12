@@ -438,16 +438,6 @@ One thing to keep in mind is that `AGENTS.md` does not automatically enforce con
 
 Also, just because your project builds successfully does not mean it follows all the conventions defined in `AGENTS.md`. A successful build tells us that the code compiles, not whether it follows your architectural decisions or naming conventions.
 
-## What About SwiftUI Specialist?
-
-Another thing I noticed during these experiments was that Codex frequently displayed an activity called **SwiftUI Specialist**.
-
-For example, when I asked it to create the book list, Codex mentioned that it was using SwiftUI specialist guidance. It also attempted to locate reference files related to that guidance.
-
-I have not yet figured out exactly where this specialist comes from or how it interacts with my `AGENTS.md` file. But this is something worth keeping in mind because an AI coding agent may be using instructions from several places, including project guidelines, existing code, specialized skills, and your current prompt.
-
-So, when Codex generates code, `AGENTS.md` may not be the only thing influencing its decisions.
-
 ## What Did I Learn?
 
 After running these experiments, I learned that Codex can follow conventions defined in `AGENTS.md`, even when those conventions go against standard Swift practices. I also found that Codex can reread the file during an active conversation and pick up updated instructions without requiring a new conversation.
